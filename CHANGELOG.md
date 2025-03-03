@@ -1,3 +1,16 @@
+### [0.261.0](https://github.com/taiga-family/toolkit/compare/v0.260.0...v0.261.0) (2025-03-03)
+
+### 🐞 Bug Fixes
+
+- update dependency prettier to ^3.5.3 (#907)
+  [(26d6d33)](https://github.com/taiga-family/toolkit/commit/26d6d33d42dcc6b58703ee6d78b223d0d39441f8)
+- update dependency sort-package-json to ^2.15.1 (#906)
+  [(39fd156)](https://github.com/taiga-family/toolkit/commit/39fd156f91636132a3c9d2a49c12984e1ffa1f66)
+- update dependency eslint-plugin-de-morgan to &gt;=1.2.0 (#905)
+  [(54b94e6)](https://github.com/taiga-family/toolkit/commit/54b94e6b6310104db7fedffb18725326a2606ed1)
+- update dependency stylelint to ^16.15.0 (#904)
+  [(6c9c79a)](https://github.com/taiga-family/toolkit/commit/6c9c79a19f4c62ebd1951d1106ddb2040fcd7656)
+
 ### [0.260.0](https://github.com/taiga-family/toolkit/compare/v0.259.0...v0.260.0) (2025-02-28)
 
 ### 🐞 Bug Fixes
