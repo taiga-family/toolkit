@@ -1,3 +1,30 @@
+### [0.262.0](https://github.com/taiga-family/toolkit/compare/v0.261.0...v0.262.0) (2025-03-09)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-perfectionist to &gt;=4.10.1 (#920)
+  [(5b89749)](https://github.com/taiga-family/toolkit/commit/5b8974927ccb6523372b7d168d76f249f11864eb)
+- update dependency angular-eslint to &gt;=19.2.1 (#919)
+  [(e3b7252)](https://github.com/taiga-family/toolkit/commit/e3b7252f25462073d4896ae44a19fdc31cf11db9)
+- update dependency eslint-plugin-perfectionist to &gt;=4.10.0 (#918)
+  [(c50d8ca)](https://github.com/taiga-family/toolkit/commit/c50d8ca02c8059d3a023d436f7fc5f3c5d8aefc8)
+- update dependency eslint to &gt;=9.22.0 (#917)
+  [(b9bdbe5)](https://github.com/taiga-family/toolkit/commit/b9bdbe55b24478ffd75e1acf4d0fb9e0c464a46d)
+- update commitlint to ^19.8.0 (#916)
+  [(807318f)](https://github.com/taiga-family/toolkit/commit/807318f718b8ac121c82e7b7ea7ac471d240b4b0)
+- update dependency eslint-config-prettier to &gt;=10.1.1 (#915)
+  [(604a008)](https://github.com/taiga-family/toolkit/commit/604a008224eb3a9abd3199352c0bf093d5e32884)
+- update dependency eslint-config-prettier to &gt;=10.1.0 (#914)
+  [(19b548e)](https://github.com/taiga-family/toolkit/commit/19b548e613c39bab95a6ffae426df4b787986ea4)
+- update dependency typescript-eslint to &gt;=8.26.0 (#912)
+  [(4bbe228)](https://github.com/taiga-family/toolkit/commit/4bbe22857b4e9df212fb59bb63863afdb3ec93af)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.26.0 (#911)
+  [(ae5287b)](https://github.com/taiga-family/toolkit/commit/ae5287be4799b8fe428ebe7b30a5ad8f0f8e9607)
+- update dependency angular-eslint to &gt;=19.2.0 (#910)
+  [(816d683)](https://github.com/taiga-family/toolkit/commit/816d683516bddec9013f80b8bc3bbde37c7168e4)
+- update @stylistic/\* deps to &gt;=4.2.0 (#909)
+  [(75a35de)](https://github.com/taiga-family/toolkit/commit/75a35dedd818b8f36a69483936f98697d521a404)
+
 ### [0.261.0](https://github.com/taiga-family/toolkit/compare/v0.260.0...v0.261.0) (2025-03-03)
 
 ### 🐞 Bug Fixes
