@@ -14,11 +14,6 @@
         "after:bump": "npx nx build syncer && node projects/syncer/bin/src/index.js",
         "release": "npx nx run-many --target publish --all"
     },
-    "commitlint": {
-        "extends": [
-            "@taiga-ui/commitlint-config"
-        ]
-    },
     "lint-staged": {
         "*.less": [
             "stylelint --fix"
