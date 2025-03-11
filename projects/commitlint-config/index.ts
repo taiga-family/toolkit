@@ -1,23 +1,12 @@
-import fs from 'node:fs';
-
 import conventional from '@commitlint/config-conventional';
+
+import {getGitDiffLines} from './utils/get-git-diff-lines';
+import {getTypes} from './utils/get-types';
 
 export default {
     extends: ['@commitlint/config-conventional'],
     rules: {
         'scope-enum': () => {
-            function getTypes(dir) {
-                try {
-                    const {readdirSync, statSync} = fs;
-
-                    return readdirSync(dir).filter((entity) =>
-                        statSync(`${dir}/${entity}`).isDirectory(),
-                    );
-                } catch {
-                    return [];
-                }
-            }
-
             return [
                 2,
                 'always',
@@ -35,9 +24,19 @@ export default {
             ];
         },
         'type-enum': () => {
-            const [level, applicable, types] = conventional.rules['type-enum'];
+            const staged = getGitDiffLines();
+            const demoChanges = staged.filter(
+                (path) =>
+                    path.startsWith('projects/demo') || path.startsWith('apps/demo'),
+            );
 
-            return [level, applicable, [...types, 'deprecate']];
+            const [level, applicable, types] = conventional.rules['type-enum'];
+            const prefixes =
+                demoChanges.length === staged.length
+                    ? ['chore']
+                    : [...types, 'deprecate'];
+
+            return [level, applicable, prefixes];
         },
     },
 };

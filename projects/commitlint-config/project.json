@@ -5,11 +5,30 @@
     "projectType": "library",
     "sourceRoot": "projects/commitlint-config",
     "targets": {
+        "build": {
+            "executor": "@nx/rollup:rollup",
+            "outputs": ["{workspaceRoot}/dist/{projectName}"],
+            "options": {
+                "main": "projects/{projectName}/index.ts",
+                "outputPath": "{workspaceRoot}/dist/{projectName}",
+                "tsConfig": "projects/{projectName}/tsconfig.lib.json",
+                "assets": ["projects/{projectName}/README.md"],
+                "generateExportsField": true,
+                "format": ["esm"]
+            }
+        },
         "publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
-            }
+                "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
+            },
+            "dependsOn": [
+                {
+                    "target": "build",
+                    "params": "ignore",
+                    "dependencies": false
+                }
+            ]
         }
     }
 }
