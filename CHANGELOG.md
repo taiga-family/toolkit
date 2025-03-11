@@ -1,3 +1,17 @@
+### [0.263.0](https://github.com/taiga-family/toolkit/compare/v0.262.0...v0.263.0) (2025-03-11)
+
+### 🚀 Features
+
+- **commitlint-config**: use `chore` commit prefix when git has changes inside demo project (#924)
+  [(129d4aa)](https://github.com/taiga-family/toolkit/commit/129d4aaedb9d9936ade2c6be38bd4614d8121584)
+
+### 🐞 Bug Fixes
+
+- update dependency typescript-eslint to &gt;=8.26.1 (#923)
+  [(9cb4231)](https://github.com/taiga-family/toolkit/commit/9cb42314f026b341e7f48196ad9cc9dbc55d99eb)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.26.1 (#922)
+  [(50c0fab)](https://github.com/taiga-family/toolkit/commit/50c0fab6c1a41f2c0aecc90bcf8796fe5e6d8fb9)
+
 ### [0.262.0](https://github.com/taiga-family/toolkit/compare/v0.261.0...v0.262.0) (2025-03-09)
 
 ### 🐞 Bug Fixes
