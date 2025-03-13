@@ -1,3 +1,10 @@
+### [0.264.0](https://github.com/taiga-family/toolkit/compare/v0.263.0...v0.264.0) (2025-03-13)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: use strict rules (#925)
+  [(25b0e99)](https://github.com/taiga-family/toolkit/commit/25b0e99764f36e9a71caf1d1d32157be07f71860)
+
 ### [0.263.0](https://github.com/taiga-family/toolkit/compare/v0.262.0...v0.263.0) (2025-03-11)
 
 ### 🚀 Features
