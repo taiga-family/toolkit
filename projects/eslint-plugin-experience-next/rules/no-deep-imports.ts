@@ -31,7 +31,7 @@ const config: Rule.RuleModule = {
 
         const isInsideTheSameEntryPoint = (source: string): boolean => {
             const filePath = path
-                .relative(context.getCwd(), context.getFilename())
+                .relative(context.cwd, context.filename)
                 .replaceAll(/\\+/g, '/');
 
             const [currentFileProjectName] =

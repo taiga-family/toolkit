@@ -6,8 +6,8 @@ const config: Rule.RuleModule = {
             ClassDeclaration(node) {
                 const decorators = Array.from((node as any).decorators ?? []);
 
-                decorators.forEach((decorator) => {
-                    const expression = (decorator as any).expression;
+                decorators.forEach((decorator: any) => {
+                    const {expression} = decorator;
                     const decoratorArguments = Array.from(expression.arguments ?? []);
 
                     for (const argument of decoratorArguments) {

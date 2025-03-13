@@ -9,7 +9,7 @@ const config: Rule.RuleModule = {
                 const decorators: any[] = Array.from((node as any).decorators ?? []);
 
                 decorators.forEach((decorator) => {
-                    const expression = decorator.expression;
+                    const {expression} = decorator;
                     const decoratorName = expression.callee?.name ?? '';
 
                     if (decoratorName in (ORDER || {})) {
@@ -43,9 +43,12 @@ const config: Rule.RuleModule = {
                                                 (prop: any) => prop.key.name === key,
                                             ),
                                         );
-                                        const newDecoratorArgument = `{${sortedDecoratorProperties.map(
-                                            ({range}: any) => fileContent.slice(...range),
-                                        )}}`;
+
+                                        const newDecoratorArgument = `{${sortedDecoratorProperties
+                                            .map(({range}: any) =>
+                                                fileContent.slice(...range),
+                                            )
+                                            .toString()}}`;
 
                                         return fixer.replaceTextRange(
                                             argument.range,
