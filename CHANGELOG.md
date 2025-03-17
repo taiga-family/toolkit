@@ -1,3 +1,12 @@
+### [0.265.0](https://github.com/taiga-family/toolkit/compare/v0.264.0...v0.265.0) (2025-03-15)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^16.16.0 (#929)
+  [(f9a3883)](https://github.com/taiga-family/toolkit/commit/f9a38834080cdbe9fd70ffee144bfee88fb9fd80)
+- update dependency eslint-plugin-de-morgan to &gt;=1.2.1 (#928)
+  [(86c00bc)](https://github.com/taiga-family/toolkit/commit/86c00bc43522cb82718fd93c5d6c5ad26851f772)
+
 ### [0.264.0](https://github.com/taiga-family/toolkit/compare/v0.263.0...v0.264.0) (2025-03-13)
 
 ### 🐞 Bug Fixes
