@@ -37,10 +37,10 @@
         ]
     },
     "devDependencies": {
-        "@nx/rollup": "20.6.1",
-        "@nx/workspace": "20.6.1",
+        "@nx/rollup": "20.6.2",
+        "@nx/workspace": "20.6.2",
         "lint-staged": "15.5.0",
-        "nx": "20.6.1",
+        "nx": "20.6.2",
         "typescript": "5.7.3"
     },
     "cspell": {
