@@ -893,6 +893,29 @@ export default tseslint.config(
         rules: {
             '@typescript-eslint/no-confusing-void-expression': 'off',
             '@typescript-eslint/no-meaningless-void-operator': 'off',
+            '@angular-eslint/template/button-has-type': [
+                'error',
+                {
+                    ignoreWithDirectives: ['tuiAccordion', 'tuiOption', 'tuiTab'],
+                },
+            ],
+            '@angular-eslint/template/elements-content': [
+                'error',
+                {
+                    allowList: [
+                        'aria-label',
+                        'innerHtml',
+                        'textContent',
+                        'innerHTML',
+                        'innerText',
+                        'outerHTML',
+                        'title',
+                        'tuiFile',
+                        'tuiTag',
+                        'tuiHint',
+                    ],
+                },
+            ],
             '@angular-eslint/template/interactive-supports-focus': 'off',
             '@angular-eslint/template/label-has-associated-control': 'off',
             '@angular-eslint/template/no-distracting-elements': 'error',

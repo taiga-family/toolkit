@@ -2,13 +2,13 @@ import type {Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
     create(context) {
-        const ORDER = context.options[0] || {};
+        const ORDER: any = context.options[0] || {};
 
         return {
             ClassDeclaration(node) {
                 const decorators: any[] = Array.from((node as any).decorators ?? []);
 
-                decorators.forEach((decorator) => {
+                decorators.forEach((decorator: any) => {
                     const {expression} = decorator;
                     const decoratorName = expression.callee?.name ?? '';
 
