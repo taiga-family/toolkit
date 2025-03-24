@@ -1,3 +1,12 @@
+### [0.267.0](https://github.com/taiga-family/toolkit/compare/v0.266.0...v0.267.0) (2025-03-24)
+
+### 🐞 Bug Fixes
+
+- update dependency ts-jest to v29.3.0 (#940)
+  [(65c59b3)](https://github.com/taiga-family/toolkit/commit/65c59b3ae611e01981b1d2a9eb881843a8c1018f)
+- update dependency eslint-plugin-prettier to &gt;=5.2.4 (#939)
+  [(78f2052)](https://github.com/taiga-family/toolkit/commit/78f2052defb75f78ef0343845794bab98df7b4f7)
+
 ### [0.266.0](https://github.com/taiga-family/toolkit/compare/v0.265.0...v0.266.0) (2025-03-23)
 
 ### 🐞 Bug Fixes
