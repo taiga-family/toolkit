@@ -10,7 +10,7 @@ const ERROR_MESSAGE = 'Import via root level entry point are prohibited for this
 
 const config: Rule.RuleModule = {
     create(context) {
-        const {importFilter} = (context.options[0] || {}) as any;
+        const {importFilter} = context.options[0] || {};
 
         return {
             [`ImportDeclaration[source.value=${getFilterRegExp(importFilter)}]`](
