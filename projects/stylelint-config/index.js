@@ -101,7 +101,13 @@ module.exports = {
         'declaration-block-no-redundant-longhand-properties': [
             true,
             {
-                ignoreShorthands: ['inset', 'overflow', 'margin-inline', 'inset-block'],
+                ignoreShorthands: [
+                    'inset',
+                    'overflow',
+                    'margin-inline',
+                    'padding-inline',
+                    'inset-block',
+                ],
             },
         ],
         'declaration-empty-line-before': [
