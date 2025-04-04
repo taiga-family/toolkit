@@ -1,3 +1,24 @@
+### [0.269.0](https://github.com/taiga-family/toolkit/compare/v0.268.0...v0.269.0) (2025-04-04)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: do not use longhand for padding-inline (#961)
+  [(6b476ef)](https://github.com/taiga-family/toolkit/commit/6b476ef3bf50d5a1819eb1dd5ab3aca2c2f42f75)
+- update dependency eslint-plugin-prettier to &gt;=5.2.6 (#959)
+  [(7034985)](https://github.com/taiga-family/toolkit/commit/70349859ed78cca8d6ef6fd3d7924e09506a5a06)
+- update dependency eslint-plugin-perfectionist to &gt;=4.11.0 (#958)
+  [(cbb06a9)](https://github.com/taiga-family/toolkit/commit/cbb06a9e318f18fe5185f4ef9936765f410a6603)
+- update dependency @eslint/compat to &gt;=1.2.8 (#957)
+  [(4ab6ca0)](https://github.com/taiga-family/toolkit/commit/4ab6ca03fa7b202320c0f28f164b0d94160b8688)
+- update dependency jest-preset-angular to v14.5.4 (#956)
+  [(b21e0cb)](https://github.com/taiga-family/toolkit/commit/b21e0cbb8acf7f6db28c8eddebc5560df18169a5)
+- update dependency typescript-eslint to &gt;=8.29.0 (#955)
+  [(38b21e0)](https://github.com/taiga-family/toolkit/commit/38b21e05fa7b183090da99cdd9c1fb30c9e15b4d)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.29.0 (#954)
+  [(30c81ab)](https://github.com/taiga-family/toolkit/commit/30c81abe6c00055165dd6d5886717e1eb7df68ee)
+- update dependency ts-jest to v29.3.1 (#952)
+  [(d2cf3c0)](https://github.com/taiga-family/toolkit/commit/d2cf3c0d7cbfb93a765b43c799f8128757f082e1)
+
 ### [0.268.0](https://github.com/taiga-family/toolkit/compare/v0.267.0...v0.268.0) (2025-03-29)
 
 ### 🐞 Bug Fixes
