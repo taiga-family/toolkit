@@ -9,7 +9,7 @@
         "@smarttools/eslint-plugin-rxjs": ">=1.0.18",
         "@stylistic/eslint-plugin": ">=4.2.0",
         "@stylistic/eslint-plugin-ts": ">=4.2.0",
-        "@typescript-eslint/eslint-plugin": ">=8.29.0",
+        "@typescript-eslint/eslint-plugin": ">=8.29.1",
         "angular-eslint": ">=19.3.0",
         "eslint": ">=9.24.0",
         "eslint-config-prettier": ">=10.1.1",
