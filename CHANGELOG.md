@@ -1,3 +1,10 @@
+### [0.271.0](https://github.com/taiga-family/toolkit/compare/v0.270.0...v0.271.0) (2025-04-07)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: do not use longhand for padding-block (#965)
+  [(46c60d2)](https://github.com/taiga-family/toolkit/commit/46c60d29f01b6237350581b0493a50a01dca772c)
+
 ### [0.270.0](https://github.com/taiga-family/toolkit/compare/v0.269.0...v0.270.0) (2025-04-06)
 
 ### 🐞 Bug Fixes
