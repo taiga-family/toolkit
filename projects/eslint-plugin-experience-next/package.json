@@ -6,7 +6,7 @@
     "main": "index.ts",
     "peerDependencies": {
         "@eslint/compat": ">=1.2.8",
-        "@smarttools/eslint-plugin-rxjs": ">=1.0.18",
+        "@smarttools/eslint-plugin-rxjs": ">=1.0.19",
         "@stylistic/eslint-plugin": ">=4.2.0",
         "@stylistic/eslint-plugin-ts": ">=4.2.0",
         "@typescript-eslint/eslint-plugin": ">=8.29.1",
