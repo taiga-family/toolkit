@@ -1,3 +1,23 @@
+### [0.272.0](https://github.com/taiga-family/toolkit/compare/v0.271.0...v0.272.0) (2025-04-13)
+
+### 🚀 Features
+
+- **tsconfig**: add `es2019.array` to `lib` (`Array.prototype.{flat|flatMap}`) (#970)
+  [(397599f)](https://github.com/taiga-family/toolkit/commit/397599f23a80ef17dff53f4b0f0c9bed3b86abd3)
+
+### 🐞 Bug Fixes
+
+- update dependency ts-jest to v29.3.2 (#973)
+  [(6839817)](https://github.com/taiga-family/toolkit/commit/68398170a94a6f49e46e75599539ac200af97010)
+- update dependency @smarttools/eslint-plugin-rxjs to &gt;=1.0.19 (#972)
+  [(aabc96e)](https://github.com/taiga-family/toolkit/commit/aabc96e3ab960b0ef79d655d1db9d2a398b29a9f)
+- update dependency eslint-config-prettier to &gt;=10.1.2 (#969)
+  [(05b1dcb)](https://github.com/taiga-family/toolkit/commit/05b1dcb13b1e2c7b2b68c7cd009e199520637ef8)
+- update dependency typescript-eslint to &gt;=8.29.1 (#967)
+  [(d347243)](https://github.com/taiga-family/toolkit/commit/d3472433fe6bbed45c432c9a6d72da2a5b019fd8)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.29.1 (#966)
+  [(ac728ef)](https://github.com/taiga-family/toolkit/commit/ac728ef9d933e55217d5e77ac390f2d57d87ebb9)
+
 ### [0.271.0](https://github.com/taiga-family/toolkit/compare/v0.270.0...v0.271.0) (2025-04-07)
 
 ### 🐞 Bug Fixes
