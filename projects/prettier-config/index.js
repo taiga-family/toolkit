@@ -15,23 +15,6 @@ const attributeOptions = {
 };
 
 module.exports = {
-    printWidth: 120,
-    tabWidth: 4,
-    plugins: [
-        require.resolve('stylelint-prettier'),
-        require.resolve('prettier-plugin-organize-attributes'),
-    ],
-    $schema: 'https://json.schemastore.org/prettierrc',
-    arrowParens: 'always',
-    bracketSpacing: false,
-    endOfLine: 'lf',
-    htmlWhitespaceSensitivity: 'ignore',
-    proseWrap: 'always',
-    semi: true,
-    singleAttributePerLine: true,
-    singleQuote: true,
-    trailingComma: 'all',
-    useTabs: false,
     overrides: [
         {
             files: ['*.json'],
@@ -106,4 +89,21 @@ module.exports = {
             ),
         },
     ],
+    printWidth: 120,
+    tabWidth: 4,
+    plugins: [
+        require.resolve('stylelint-prettier'),
+        require.resolve('prettier-plugin-organize-attributes'),
+    ],
+    $schema: 'https://json.schemastore.org/prettierrc',
+    arrowParens: 'always',
+    bracketSpacing: false,
+    endOfLine: 'lf',
+    htmlWhitespaceSensitivity: 'ignore',
+    proseWrap: 'always',
+    semi: true,
+    singleAttributePerLine: true,
+    singleQuote: true,
+    trailingComma: 'all',
+    useTabs: false,
 };
