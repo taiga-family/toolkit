@@ -704,6 +704,11 @@ export default tseslint.config(
                 },
                 {
                     message:
+                        'Always prefer using HostAttributeToken over @Attribute. See: https://angular.dev/api/core/HostAttributeToken',
+                    selector: "Identifier[name='Attribute']",
+                },
+                {
+                    message:
                         'Always prefer using the host property over @HostBinding. That decorator exists exclusively for backwards compatibility',
                     selector: "Identifier[name='HostBinding']",
                 },
