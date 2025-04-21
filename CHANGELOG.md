@@ -1,3 +1,28 @@
+### [0.273.0](https://github.com/taiga-family/toolkit/compare/v0.272.0...v0.273.0) (2025-04-20)
+
+### 🐞 Bug Fixes
+
+- update dependency cspell to ^8.19.2 (#985)
+  [(cbcfd42)](https://github.com/taiga-family/toolkit/commit/cbcfd428d2c29c6ef071ab162d11f6675fa1e384)
+- update dependency eslint to &gt;=9.25.0 (#984)
+  [(ad429fe)](https://github.com/taiga-family/toolkit/commit/ad429fe8300a9beaf0b8a1d560bca80010f164eb)
+- update dependency cspell to ^8.19.1 (#983)
+  [(42c53ef)](https://github.com/taiga-family/toolkit/commit/42c53ef6fc534a9f9043dc543d4595bdd7f22307)
+- update dependency @release-it/conventional-changelog to v10.0.1 (#982)
+  [(f7eed95)](https://github.com/taiga-family/toolkit/commit/f7eed95b5f251f89261a2dd2274c74d51ffcf0fb)
+- update dependency @cspell/dict-ru_ru to ^2.3.0 (#981)
+  [(2f6b1e1)](https://github.com/taiga-family/toolkit/commit/2f6b1e1b92f30197ed1afdc9637eab8fed9c0ce9)
+- update dependency cspell to ^8.19.0 (#980)
+  [(26c605b)](https://github.com/taiga-family/toolkit/commit/26c605b98db7c4f866594fef67a8adee9de843a8)
+- update dependency jest-preset-angular to v14.5.5 (#979)
+  [(868f2df)](https://github.com/taiga-family/toolkit/commit/868f2dff9b5e2955b25dce1389a26927d03e31c2)
+- update dependency typescript-eslint to &gt;=8.30.1 (#978)
+  [(fd548ae)](https://github.com/taiga-family/toolkit/commit/fd548ae608a61369dc56d149a32a50d3984971dc)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.30.1 (#976)
+  [(0c34749)](https://github.com/taiga-family/toolkit/commit/0c34749e2752eb3bb9c7bb631e9ab8acf928a496)
+- update dependency typescript-eslint to &gt;=8.30.0 (#977)
+  [(a374dd3)](https://github.com/taiga-family/toolkit/commit/a374dd38a0e16b800209d5bbfa501a8343938aa5)
+
 ### [0.272.0](https://github.com/taiga-family/toolkit/compare/v0.271.0...v0.272.0) (2025-04-13)
 
 ### 🚀 Features
