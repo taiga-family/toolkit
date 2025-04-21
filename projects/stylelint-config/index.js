@@ -20,6 +20,7 @@ module.exports = {
     rules: {
         'color-no-invalid-hex': true,
         'comment-whitespace-inside': 'always',
+        'declaration-block-no-shorthand-property-overrides': true,
         'named-grid-areas-no-invalid': true,
         'no-invalid-double-slash-comments': true,
         'no-invalid-position-at-import-rule': null,
@@ -278,6 +279,5 @@ module.exports = {
         ],
         'value-no-vendor-prefix': true,
         'no-duplicate-at-import-rules': true,
-        'declaration-block-no-shorthand-property-overrides': true,
     },
 };

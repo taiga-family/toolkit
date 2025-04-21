@@ -22,6 +22,7 @@ export default [
                 {
                     customGroups: {
                         id: 'id',
+                        overrides: 'overrides',
                         env: 'env',
                         files: 'files',
                         parser: 'parser',
@@ -29,7 +30,6 @@ export default [
                         extends: 'extends',
                         $schema: '$schema',
                         rules: 'rules',
-                        overrides: 'overrides',
                     },
                     groups: [
                         '$schema',

@@ -307,7 +307,6 @@ export default tseslint.config(
             '@typescript-eslint/explicit-member-accessibility': [
                 'error',
                 {
-                    accessibility: 'explicit',
                     overrides: {
                         accessors: 'explicit',
                         constructors: 'no-public',
@@ -315,6 +314,7 @@ export default tseslint.config(
                         parameterProperties: 'explicit',
                         properties: 'explicit',
                     },
+                    accessibility: 'explicit',
                 },
             ],
             '@typescript-eslint/max-params': ['error', {countVoidThis: true, max: 5}],
