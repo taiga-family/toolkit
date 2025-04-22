@@ -151,10 +151,6 @@ export default tseslint.config(
                 angularVersion >= modernAngularRules.defaultStandalone ? 'off' : 'error',
             '@angular-eslint/relative-url-prefix': 'error',
             '@angular-eslint/sort-lifecycle-methods': 'error',
-            '@angular-eslint/template/eqeqeq': [
-                'error',
-                {allowNullOrUndefined: true},
-            ],
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
             '@stylistic/padding-line-between-statements': [
@@ -925,6 +921,7 @@ export default tseslint.config(
                     ],
                 },
             ],
+            '@angular-eslint/template/eqeqeq': ['error', {allowNullOrUndefined: true}],
             '@angular-eslint/template/interactive-supports-focus': 'off',
             '@angular-eslint/template/label-has-associated-control': 'off',
             '@angular-eslint/template/no-distracting-elements': 'error',
