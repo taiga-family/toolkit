@@ -1,3 +1,10 @@
+### [0.275.0](https://github.com/taiga-family/toolkit/compare/v0.274.0...v0.275.0) (2025-04-22)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: restrict Attribute import from angular core (#992)
+  [(efcba46)](https://github.com/taiga-family/toolkit/commit/efcba46c25468cdd8ae15c0038a3d579586d4173)
+
 ### [0.274.0](https://github.com/taiga-family/toolkit/compare/v0.273.0...v0.274.0) (2025-04-22)
 
 ### 🚀 Features
