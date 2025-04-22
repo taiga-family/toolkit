@@ -1,3 +1,21 @@
+### [0.274.0](https://github.com/taiga-family/toolkit/compare/v0.273.0...v0.274.0) (2025-04-22)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: do not use `Attribute` decorator (#986)
+  [(5d48ef2)](https://github.com/taiga-family/toolkit/commit/5d48ef258c9e1ba2e6e7e9f03e3f01404f895d46)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-perfectionist to &gt;=4.12.0 (#990)
+  [(8ccb87d)](https://github.com/taiga-family/toolkit/commit/8ccb87df175524afb6a6a697938f262f87af556e)
+- update dependency typescript-eslint to &gt;=8.31.0 (#991)
+  [(29a1f7a)](https://github.com/taiga-family/toolkit/commit/29a1f7a1f047ad0c5ee113fb8f9367bee948fa5c)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.31.0 (#989)
+  [(0f0ce00)](https://github.com/taiga-family/toolkit/commit/0f0ce008b6f766564356f85ed9ef11d9cf89c5a2)
+- update dependency eslint to &gt;=9.25.1 (#988)
+  [(f605b3f)](https://github.com/taiga-family/toolkit/commit/f605b3f4e96fbfe2db1a0579bb1b714c74c63497)
+
 ### [0.273.0](https://github.com/taiga-family/toolkit/compare/v0.272.0...v0.273.0) (2025-04-20)
 
 ### 🐞 Bug Fixes
