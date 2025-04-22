@@ -682,6 +682,12 @@ export default tseslint.config(
                             importNames: ['POLYMORPHEUS_CONTEXT'],
                             message: 'Please use `injectContext()` function instead',
                         },
+                        {
+                            group: ['@angular/core'],
+                            importNames: ['Attribute'],
+                            message:
+                                'Always prefer using HostAttributeToken over @Attribute. See: https://angular.dev/api/core/HostAttributeToken',
+                        },
                     ],
                 },
             ],
@@ -701,11 +707,6 @@ export default tseslint.config(
                     message:
                         'Always prefer using the host property over @HostListener. That decorator exists exclusively for backwards compatibility',
                     selector: "Identifier[name='HostListener']",
-                },
-                {
-                    message:
-                        'Always prefer using HostAttributeToken over @Attribute. See: https://angular.dev/api/core/HostAttributeToken',
-                    selector: "Identifier[name='Attribute']",
                 },
                 {
                     message:
