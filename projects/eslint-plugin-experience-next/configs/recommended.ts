@@ -151,6 +151,10 @@ export default tseslint.config(
                 angularVersion >= modernAngularRules.defaultStandalone ? 'off' : 'error',
             '@angular-eslint/relative-url-prefix': 'error',
             '@angular-eslint/sort-lifecycle-methods': 'error',
+            '@angular-eslint/template/eqeqeq': [
+                'error',
+                {allowNullOrUndefined: true},
+            ],
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
             '@stylistic/padding-line-between-statements': [
