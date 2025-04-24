@@ -18,7 +18,7 @@
         "eslint-plugin-file-progress": ">=3.0.2",
         "eslint-plugin-import": ">=2.31.0",
         "eslint-plugin-jest": ">=28.11.0",
-        "eslint-plugin-perfectionist": ">=4.12.2",
+        "eslint-plugin-perfectionist": ">=4.12.3",
         "eslint-plugin-playwright": ">=2.2.0",
         "eslint-plugin-prettier": ">=5.2.6",
         "eslint-plugin-promise": ">=7.2.1",
