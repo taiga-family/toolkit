@@ -1,3 +1,22 @@
+### [0.276.0](https://github.com/taiga-family/toolkit/compare/v0.275.0...v0.276.0) (2025-04-27)
+
+### 🐞 Bug Fixes
+
+- update dependency cspell to ^8.19.3 (#1000)
+  [(88e5b3a)](https://github.com/taiga-family/toolkit/commit/88e5b3a77b13e2606631aa836347587981f2d193)
+- update dependency stylelint to ^16.19.1 (#999)
+  [(68fe3e2)](https://github.com/taiga-family/toolkit/commit/68fe3e20f6629fb1d843cd0c6aa615ba5976f4e4)
+- update dependency eslint-plugin-perfectionist to &gt;=4.12.3 (#997)
+  [(00e1659)](https://github.com/taiga-family/toolkit/commit/00e1659bee5c5b2e622b56ddec6868e674d9a0c5)
+- update dependency eslint-plugin-perfectionist to &gt;=4.12.2 (#996)
+  [(8312595)](https://github.com/taiga-family/toolkit/commit/831259532abd78d3f10cbacc5a8253a15af67657)
+- update dependency glob to v11.0.2 (#995)
+  [(fcf511a)](https://github.com/taiga-family/toolkit/commit/fcf511a3f5f9030b24d1be33c15d125c3cbf0b78)
+- update dependency stylelint to ^16.19.0 (#994)
+  [(44d1fc3)](https://github.com/taiga-family/toolkit/commit/44d1fc34a0b0409bd1d5d4b70630c921fea362a9)
+- update dependency eslint-plugin-perfectionist to &gt;=4.12.1 (#993)
+  [(d53ff89)](https://github.com/taiga-family/toolkit/commit/d53ff8907eb88c3cc023d028c6d8b48eda667765)
+
 ### [0.275.0](https://github.com/taiga-family/toolkit/compare/v0.274.0...v0.275.0) (2025-04-22)
 
 ### 🐞 Bug Fixes
