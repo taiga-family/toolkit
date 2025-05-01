@@ -5,7 +5,7 @@
     "license": "Apache-2.0",
     "main": "index.ts",
     "peerDependencies": {
-        "@eslint/compat": ">=1.2.8",
+        "@eslint/compat": ">=1.2.9",
         "@smarttools/eslint-plugin-rxjs": ">=1.0.19",
         "@stylistic/eslint-plugin": ">=4.2.0",
         "@stylistic/eslint-plugin-ts": ">=4.2.0",
