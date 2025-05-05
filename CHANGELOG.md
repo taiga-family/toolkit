@@ -1,3 +1,22 @@
+### [0.277.0](https://github.com/taiga-family/toolkit/compare/v0.276.0...v0.277.0) (2025-05-04)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-prettier to &gt;=5.3.1 (#1008)
+  [(3f9468f)](https://github.com/taiga-family/toolkit/commit/3f9468f9bf8148cc9076ec942af961f70a961cfa)
+- update dependency eslint-plugin-prettier to &gt;=5.3.0 (#1007)
+  [(b59f62e)](https://github.com/taiga-family/toolkit/commit/b59f62ee043664e5ecc72cf55b6b5440c879caa1)
+- update dependency cspell to ^8.19.4 (#1006)
+  [(c07d28e)](https://github.com/taiga-family/toolkit/commit/c07d28e7709b08362a8bea28594646baa83800ec)
+- update dependency eslint to &gt;=9.26.0 (#1005)
+  [(aa4982f)](https://github.com/taiga-family/toolkit/commit/aa4982f38f965eee8a924eb63bac8b4d9ee7d7d8)
+- update dependency @eslint/compat to &gt;=1.2.9 (#1004)
+  [(016c6fe)](https://github.com/taiga-family/toolkit/commit/016c6fe93bc5764198b6f96ac87a3efee6d4f924)
+- update dependency typescript-eslint to &gt;=8.31.1 (#1003)
+  [(aeda447)](https://github.com/taiga-family/toolkit/commit/aeda447dfcd19d488d0b1cfb2f5a4d54a0f93706)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.31.1 (#1002)
+  [(5bd889e)](https://github.com/taiga-family/toolkit/commit/5bd889e62526dfe24fefd4ffb38316b4e9f8c83c)
+
 ### [0.276.0](https://github.com/taiga-family/toolkit/compare/v0.275.0...v0.276.0) (2025-04-27)
 
 ### 🐞 Bug Fixes
