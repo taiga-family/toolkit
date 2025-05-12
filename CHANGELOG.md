@@ -1,3 +1,24 @@
+### [0.278.0](https://github.com/taiga-family/toolkit/compare/v0.277.0...v0.278.0) (2025-05-09)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-config-prettier to &gt;=10.1.5 (#1018)
+  [(4cf45db)](https://github.com/taiga-family/toolkit/commit/4cf45db8c407cfba615691349e8d60641a6fb987)
+- update dependency angular-eslint to &gt;=19.4.0 (#1017)
+  [(d196698)](https://github.com/taiga-family/toolkit/commit/d196698eee476e019c1a89a8866b75b541586357)
+- update commitlint to ^19.8.1 (#1016)
+  [(59dc3e0)](https://github.com/taiga-family/toolkit/commit/59dc3e04f41045ce894238199789a4467d9cb305)
+- update dependency globals to &gt;=16.1.0 (#1015)
+  [(fcb9043)](https://github.com/taiga-family/toolkit/commit/fcb9043e194cbfc2c0247205dcab83197800e92f)
+- update dependency eslint-config-prettier to &gt;=10.1.3 (#1014)
+  [(d88bef0)](https://github.com/taiga-family/toolkit/commit/d88bef0e6ecdc798a942a995ac57724479ebb2cf)
+- update dependency typescript-eslint to &gt;=8.32.0 (#1012)
+  [(0f5f1fb)](https://github.com/taiga-family/toolkit/commit/0f5f1fb74414337d61c1fd3940f1894eabc44732)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.32.0 (#1011)
+  [(ea52b1c)](https://github.com/taiga-family/toolkit/commit/ea52b1c5eb439174adebe4fd1c8a9b18d8eff138)
+- update dependency eslint-plugin-prettier to &gt;=5.4.0 (#1010)
+  [(55b4d44)](https://github.com/taiga-family/toolkit/commit/55b4d4480596c0ea7641e7c818e1ba5598a73552)
+
 ### [0.277.0](https://github.com/taiga-family/toolkit/compare/v0.276.0...v0.277.0) (2025-05-04)
 
 ### 🐞 Bug Fixes
