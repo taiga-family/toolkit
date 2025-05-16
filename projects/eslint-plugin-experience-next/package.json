@@ -11,7 +11,7 @@
         "@stylistic/eslint-plugin-ts": ">=4.2.0",
         "@typescript-eslint/eslint-plugin": ">=8.32.1",
         "angular-eslint": ">=19.4.0",
-        "eslint": ">=9.26.0",
+        "eslint": ">=9.27.0",
         "eslint-config-prettier": ">=10.1.5",
         "eslint-plugin-de-morgan": ">=1.2.1",
         "eslint-plugin-decorator-position": ">=6.0.0",
@@ -24,7 +24,7 @@
         "eslint-plugin-promise": ">=7.2.1",
         "eslint-plugin-simple-import-sort": ">=12.1.1",
         "eslint-plugin-sonarjs": ">=3.0.2",
-        "eslint-plugin-unicorn": ">=58.0.0",
+        "eslint-plugin-unicorn": ">=59.0.1",
         "eslint-plugin-unused-imports": ">=4.1.4",
         "globals": ">=16.1.0",
         "typescript-eslint": ">=8.32.1"
