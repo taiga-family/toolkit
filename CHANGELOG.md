@@ -1,3 +1,20 @@
+### [0.279.0](https://github.com/taiga-family/toolkit/compare/v0.278.0...v0.279.0) (2025-05-16)
+
+### 🐞 Bug Fixes
+
+- update eslint (#1026)
+  [(41aa18d)](https://github.com/taiga-family/toolkit/commit/41aa18db432aff139d4dadb13d20ace7343f3441)
+- update dependency ts-jest to v29.3.4 (#1025)
+  [(ab68266)](https://github.com/taiga-family/toolkit/commit/ab68266aca4c9187ceb76ae233901cb1ea0b3b6c)
+- update dependency ts-jest to v29.3.3 (#1023)
+  [(61f84aa)](https://github.com/taiga-family/toolkit/commit/61f84aa655deb770457347dc7efc5bff0fafc728)
+- update dependency eslint-plugin-perfectionist to &gt;=4.13.0 (#1022)
+  [(8dba252)](https://github.com/taiga-family/toolkit/commit/8dba2526ed59082dca952dfd0977c614526b8ad7)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.32.1 (#1020)
+  [(3767e93)](https://github.com/taiga-family/toolkit/commit/3767e9312f9d38ce59791a5ada5f5e8f2c8f9923)
+- update dependency typescript-eslint to &gt;=8.32.1 (#1021)
+  [(408380b)](https://github.com/taiga-family/toolkit/commit/408380b0b407bfc4e1d6f042e82ebbc06ea7f65b)
+
 ### [0.278.0](https://github.com/taiga-family/toolkit/compare/v0.277.0...v0.278.0) (2025-05-09)
 
 ### 🐞 Bug Fixes
