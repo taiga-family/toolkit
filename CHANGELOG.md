@@ -1,3 +1,16 @@
+### [0.280.0](https://github.com/taiga-family/toolkit/compare/v0.279.0...v0.280.0) (2025-05-25)
+
+### 🐞 Bug Fixes
+
+- update dependency globals to &gt;=16.2.0 (#1031)
+  [(edcc236)](https://github.com/taiga-family/toolkit/commit/edcc2366a61008acd9ef82340d2ffa751b98bf5b)
+- update dependency angular-eslint to &gt;=19.5.0 (#1030)
+  [(bc3b087)](https://github.com/taiga-family/toolkit/commit/bc3b087f48ae4ea78b0a041f8171feeeac3ed065)
+- update @stylistic/\* deps to &gt;=4.4.0 (#1029)
+  [(b0088e0)](https://github.com/taiga-family/toolkit/commit/b0088e0b266a17349856a9c9faadfbec08c3c0fc)
+- update @stylistic/\* deps to &gt;=4.3.0 (#1028)
+  [(ee50c75)](https://github.com/taiga-family/toolkit/commit/ee50c75b7b7510034ae88f1af0e2efb0ebe18d7f)
+
 ### [0.279.0](https://github.com/taiga-family/toolkit/compare/v0.278.0...v0.279.0) (2025-05-16)
 
 ### 🐞 Bug Fixes
