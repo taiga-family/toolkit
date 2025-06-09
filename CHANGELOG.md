@@ -1,3 +1,30 @@
+### [0.282.0](https://github.com/taiga-family/toolkit/compare/v0.281.0...v0.282.0) (2025-06-07)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-de-morgan to &gt;=1.3.0 (#1052)
+  [(d974b20)](https://github.com/taiga-family/toolkit/commit/d974b20a2867f18b6afb900e0d27fe7f4823d52d)
+- update dependency eslint-plugin-jest to &gt;=28.13.0 (#1051)
+  [(7b5a9db)](https://github.com/taiga-family/toolkit/commit/7b5a9dbb87a7d1750460c41066ff4bc4b53ac92b)
+- update dependency angular-eslint to &gt;=19.8.0 (#1050)
+  [(65ce4a9)](https://github.com/taiga-family/toolkit/commit/65ce4a9b335af7fd7ea429492d95fc52fab255bd)
+- update dependency @smarttools/eslint-plugin-rxjs to &gt;=1.0.20 (#1049)
+  [(5f91540)](https://github.com/taiga-family/toolkit/commit/5f915401f59463f67b7ed88f3dcc0dc0ac81d107)
+- update @stylistic/\* deps to &gt;=4.4.1 (#1048)
+  [(20af87c)](https://github.com/taiga-family/toolkit/commit/20af87c5165a454ed619dd0e2b62c2335411b48d)
+- update dependency eslint-plugin-perfectionist to &gt;=4.14.0 (#1047)
+  [(e53a0d1)](https://github.com/taiga-family/toolkit/commit/e53a0d17663b2b31c2c361d4ca06541fd0ed36b8)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.33.1 (#1044)
+  [(68c69d5)](https://github.com/taiga-family/toolkit/commit/68c69d5c6c8bc32b06a32327abc8701aa94f9e72)
+- update dependency angular-eslint to &gt;=19.7.1 (#1046)
+  [(60fb145)](https://github.com/taiga-family/toolkit/commit/60fb145316d4510d38d734b4494db78c22061959)
+- update dependency typescript-eslint to &gt;=8.33.1 (#1045)
+  [(8baa653)](https://github.com/taiga-family/toolkit/commit/8baa653fa5fefaa5c63f9c3dea0db1ecd283207f)
+- update dependency angular-eslint to &gt;=19.7.0 (#1043)
+  [(afbc5b2)](https://github.com/taiga-family/toolkit/commit/afbc5b282b739937c807c6c8286b544dfd4e547e)
+- update dependency jest-preset-angular to v14.6.0 (#1042)
+  [(9ac1b91)](https://github.com/taiga-family/toolkit/commit/9ac1b912bfea1d677a1b8324b26332ff94ae306e)
+
 ### [0.281.0](https://github.com/taiga-family/toolkit/compare/v0.280.0...v0.281.0) (2025-05-31)
 
 ### 🐞 Bug Fixes
