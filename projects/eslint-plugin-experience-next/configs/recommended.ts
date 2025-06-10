@@ -1020,6 +1020,7 @@ export default tseslint.config(
              * Expected to be running in 'ProxyZone', but it was not found
              */
             'jest/valid-title': 'error',
+            'jest/prefer-ending-with-an-expect': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'jest/prefer-lowercase-title': [
                 'error',
