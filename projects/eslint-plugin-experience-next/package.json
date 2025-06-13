@@ -17,7 +17,7 @@
         "eslint-plugin-decorator-position": ">=6.0.0",
         "eslint-plugin-file-progress": ">=3.0.2",
         "eslint-plugin-import": ">=2.31.0",
-        "eslint-plugin-jest": ">=28.13.3",
+        "eslint-plugin-jest": ">=28.13.5",
         "eslint-plugin-perfectionist": ">=4.14.0",
         "eslint-plugin-playwright": ">=2.2.0",
         "eslint-plugin-prettier": ">=5.4.1",
