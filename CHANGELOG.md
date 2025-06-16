@@ -1,3 +1,24 @@
+### [0.283.0](https://github.com/taiga-family/toolkit/compare/v0.282.0...v0.283.0) (2025-06-13)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-jest to &gt;=28.13.5 (#1062)
+  [(36c216f)](https://github.com/taiga-family/toolkit/commit/36c216fbadbe6af3a457358d48918cfaee4879ff)
+- update dependency glob to v11.0.3 (#1061)
+  [(91181cc)](https://github.com/taiga-family/toolkit/commit/91181cc95e01d71ff2b4279b100806e18ff2d528)
+- update dependency ts-jest to v29.4.0 (#1060)
+  [(6137dfd)](https://github.com/taiga-family/toolkit/commit/6137dfd5ae68b2c5d918dfd83987befe4f3d8fa3)
+- update dependency @eslint/compat to &gt;=1.3.0 (#1059)
+  [(144f516)](https://github.com/taiga-family/toolkit/commit/144f516ae250f550494cb5baa67d365efba9a4bb)
+- update dependency postcss to ^8.5.5 (#1058)
+  [(d209276)](https://github.com/taiga-family/toolkit/commit/d209276dbe4fa0610960fc7ccd208dca8bc6e2f5)
+- update dependency eslint-plugin-jest to &gt;=28.13.3 (#1057)
+  [(4a63917)](https://github.com/taiga-family/toolkit/commit/4a6391767355225a431f2ae09bf54e9da716b17a)
+- **eslint-plugin-experience-next**: disable `jest/prefer-ending-with-an-expect` (#1056)
+  [(d10911c)](https://github.com/taiga-family/toolkit/commit/d10911cada7e9ebb6c81613fe1212b670c9924f8)
+- update dependency typescript-eslint to &gt;=8.34.0 (#1055)
+  [(3b0e4af)](https://github.com/taiga-family/toolkit/commit/3b0e4af652df007a87f5e9e0e05c924abd499a8c)
+
 ### [0.282.0](https://github.com/taiga-family/toolkit/compare/v0.281.0...v0.282.0) (2025-06-07)
 
 ### 🐞 Bug Fixes
