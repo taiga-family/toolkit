@@ -1,3 +1,10 @@
+### [0.284.0](https://github.com/taiga-family/toolkit/compare/v0.283.0...v0.284.0) (2025-06-23)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: wrong rules on html files (#1064)
+  [(6cb28d3)](https://github.com/taiga-family/toolkit/commit/6cb28d3503a1bca8095998d4115fe441feea56ff)
+
 ### [0.283.0](https://github.com/taiga-family/toolkit/compare/v0.282.0...v0.283.0) (2025-06-13)
 
 ### 🐞 Bug Fixes
