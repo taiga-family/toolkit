@@ -28,7 +28,7 @@
         "eslint-plugin-unused-imports": ">=4.1.4",
         "glob": "*",
         "globals": ">=16.2.0",
-        "typescript-eslint": ">=8.34.1"
+        "typescript-eslint": ">=8.35.0"
     },
     "publishConfig": {
         "access": "public"
