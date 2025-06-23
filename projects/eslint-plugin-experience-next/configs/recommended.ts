@@ -1,7 +1,6 @@
 import eslint from '@eslint/js';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
-import stylisticTs from '@stylistic/eslint-plugin-ts';
 import angular from 'angular-eslint';
 import progress from 'eslint-plugin-file-progress';
 import jest from 'eslint-plugin-jest';
@@ -100,7 +99,6 @@ export default tseslint.config(
         files: ['**/*.ts', '**/*.js'],
         plugins: {
             '@stylistic': stylistic,
-            '@stylistic/ts': stylisticTs,
             'decorator-position': require('eslint-plugin-decorator-position'),
             perfectionist: require('eslint-plugin-perfectionist'),
             prettier,
@@ -153,6 +151,13 @@ export default tseslint.config(
             '@angular-eslint/sort-lifecycle-methods': 'error',
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
+            '@stylistic/function-call-spacing': 'error',
+            '@stylistic/lines-between-class-members': [
+                'error',
+                'always',
+                {exceptAfterOverload: true, exceptAfterSingleLine: true},
+            ],
+            '@stylistic/member-delimiter-style': 'error',
             '@stylistic/padding-line-between-statements': [
                 'error',
                 {blankLine: 'always', next: 'block', prev: '*'},
@@ -174,21 +179,14 @@ export default tseslint.config(
                 {blankLine: 'any', next: '*', prev: ['case', 'default']},
                 {blankLine: 'any', next: 'directive', prev: 'directive'},
             ],
-            '@stylistic/ts/func-call-spacing': 'error',
-            '@stylistic/ts/lines-between-class-members': [
-                'error',
-                'always',
-                {exceptAfterOverload: true, exceptAfterSingleLine: true},
-            ],
-            '@stylistic/ts/member-delimiter-style': 'error',
-            '@stylistic/ts/quotes': [
+            '@stylistic/quotes': [
                 'error',
                 'single',
                 {
                     avoidEscape: true,
                 },
             ],
-            '@stylistic/ts/type-annotation-spacing': 'error',
+            '@stylistic/type-annotation-spacing': 'error',
             '@taiga-ui/experience-next/decorator-key-sort': [
                 'error',
                 {
@@ -948,6 +946,7 @@ export default tseslint.config(
             '@typescript-eslint/no-unnecessary-template-expression': 'off',
             '@typescript-eslint/no-unnecessary-type-arguments': 'off',
             '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+            '@typescript-eslint/no-unnecessary-type-conversion': 'off', // https://github.com/taiga-family/taiga-ui/issues/11111
             '@typescript-eslint/no-unnecessary-type-parameters': 'off',
             '@typescript-eslint/no-unsafe-argument': 'off',
             '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -1096,6 +1095,7 @@ export default tseslint.config(
             '@angular-eslint/no-output-rename': 'off',
             '@angular-eslint/no-outputs-metadata-property': 'off',
             '@angular-eslint/no-pipe-impure': 'off',
+            '@angular-eslint/prefer-inject': 'off', // https://github.com/angular-eslint/angular-eslint/issues/2539
             '@angular-eslint/sort-ngmodule-metadata-arrays': 'off',
             '@angular-eslint/template/click-events-have-key-events': 'off',
             '@angular-eslint/use-component-selector': 'off',

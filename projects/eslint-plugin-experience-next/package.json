@@ -8,7 +8,7 @@
         "@eslint/compat": ">=1.3.0",
         "@smarttools/eslint-plugin-rxjs": ">=1.0.20",
         "@stylistic/eslint-plugin": ">=4.4.1",
-        "@stylistic/eslint-plugin-ts": ">=4.4.1",
+        "@types/glob": "*",
         "@typescript-eslint/eslint-plugin": ">=8.33.1",
         "angular-eslint": ">=19.8.0",
         "eslint": ">=9.28.0",
@@ -26,6 +26,7 @@
         "eslint-plugin-sonarjs": ">=3.0.2",
         "eslint-plugin-unicorn": ">=59.0.1",
         "eslint-plugin-unused-imports": ">=4.1.4",
+        "glob": "*",
         "globals": ">=16.2.0",
         "typescript-eslint": ">=8.34.0"
     },
