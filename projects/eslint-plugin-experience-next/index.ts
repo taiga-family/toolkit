@@ -5,6 +5,7 @@ import type {ConfigArray} from 'typescript-eslint';
 import recommended from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import decoratorKeySort from './rules/decorator-key-sort';
+import componentHostKeySort from './rules/host-key-sort';
 import injectionTokenDescription from './rules/injection-token-description';
 import noDeepImports from './rules/no-deep-imports';
 import noImplicitPublic from './rules/no-implicit-public';
@@ -25,6 +26,7 @@ const plugin = {
         version: pkg.version,
     },
     rules: {
+        'component-host-key-sort': componentHostKeySort,
         'decorator-key-sort': decoratorKeySort,
         'injection-token-description': injectionTokenDescription,
         'no-deep-imports': noDeepImports,

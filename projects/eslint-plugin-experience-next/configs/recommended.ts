@@ -187,6 +187,7 @@ export default tseslint.config(
                 },
             ],
             '@stylistic/type-annotation-spacing': 'error',
+            '@taiga-ui/experience-next/component-host-key-sort': 'error',
             '@taiga-ui/experience-next/decorator-key-sort': [
                 'error',
                 {
