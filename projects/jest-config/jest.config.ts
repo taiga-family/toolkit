@@ -48,7 +48,6 @@ export default {
             require.resolve('jest-preset-angular'),
             {
                 diagnostics: true,
-                isolatedModules: true,
                 stringifyContentPathRegex: String.raw`\.html$`,
                 tsconfig: resolve(process.cwd(), 'tsconfig.spec.json'),
             },
