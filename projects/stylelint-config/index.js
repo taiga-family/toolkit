@@ -185,9 +185,9 @@ module.exports = {
             'border-right', // use border-inline-end
             'border-top', // use border-block-start
             'border-bottom', // use border-block-end
-            'border-inline', // shorthand works in Safari 13+
-            'padding-inline', // shorthand works in Safari 13+
-            'margin-inline', // shorthand works in Safari 13+
+            'border-inline', // shorthand works in Safari 14+
+            'padding-inline', // shorthand works in Safari 14+
+            'margin-inline', // shorthand works in Safari 14+
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
         'property-no-unknown': [
