@@ -25,7 +25,7 @@ Add to your `tsconfig.json`:
     target: 'es2018',
     lib: ['es2018'],
     typeRoots: ['./node_modules/@types', './node_modules/@taiga-ui/tsconfig'],
-    types: ['ng-dev-mode'],
+    types: ['node', 'ng-dev-mode'],
   },
 }
 ```
