@@ -1,3 +1,51 @@
+### [0.285.0](https://github.com/taiga-family/toolkit/compare/v0.284.0...v0.285.0) (2025-06-29)
+
+### 🚀 Features
+
+- **jest-config**: drop deprecated ts-jest option (#1069)
+  [(19cd839)](https://github.com/taiga-family/toolkit/commit/19cd839f223625b8e38805f8709f97266d2e3784)
+
+### 🐞 Bug Fixes
+
+- update dependency @stylistic/eslint-plugin to &gt;=5.1.0 (#1085)
+  [(806206b)](https://github.com/taiga-family/toolkit/commit/806206ba04458df99f5b55a509d02b966db49ae1)
+- update dependency eslint to &gt;=9.30.0 (#1084)
+  [(df25de7)](https://github.com/taiga-family/toolkit/commit/df25de7d4c08307978e080daf36abe208dd6022c)
+- update dependency prettier to ^3.6.2 (#1083)
+  [(2328d98)](https://github.com/taiga-family/toolkit/commit/2328d984d058ffe064988539ff78db6f221ac30f)
+- update dependency eslint-plugin-sonarjs to &gt;=3.0.4 (#1082)
+  [(fad9501)](https://github.com/taiga-family/toolkit/commit/fad950162a876133895759f02855442e7af872a5)
+- update dependency @stylistic/stylelint-plugin to ^3.1.3 (#1080)
+  [(1e979b4)](https://github.com/taiga-family/toolkit/commit/1e979b405438c0ad7cfcafee72a08598184d3631)
+- update dependency @eslint/compat to &gt;=1.3.1 (#1079)
+  [(f7cec2f)](https://github.com/taiga-family/toolkit/commit/f7cec2fe61895b13ebee93b9c659ad9b82f9b298)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.35.0 (#1074)
+  [(e8a031d)](https://github.com/taiga-family/toolkit/commit/e8a031d13fc223e9c991475dcb9adbccb699cf72)
+- update dependency eslint-plugin-prettier to &gt;=5.5.1 (#1077)
+  [(c6745ab)](https://github.com/taiga-family/toolkit/commit/c6745abd9fe557e0d53db0eeecb15055fca1458b)
+- update dependency prettier to ^3.6.1 (#1076)
+  [(1e010c3)](https://github.com/taiga-family/toolkit/commit/1e010c382872f6817929a07e8ab0f2b82a4da29c)
+- update dependency typescript-eslint to &gt;=8.35.0 (#1075)
+  [(c9c46ff)](https://github.com/taiga-family/toolkit/commit/c9c46ff3e9972dab3572ebfd1597c20c652493b5)
+- update dependency typescript-eslint to &gt;=8.34.1 (#1072)
+  [(25e2d58)](https://github.com/taiga-family/toolkit/commit/25e2d58e2b62b444e4eb73aa29ee62025ea81cb2)
+- update dependency stylelint to ^16.21.0 (#1071)
+  [(216a9e7)](https://github.com/taiga-family/toolkit/commit/216a9e7054c5213911b0dfb4112388033fa766b6)
+- update dependency prettier to ^3.6.0 (#1070)
+  [(af6b28a)](https://github.com/taiga-family/toolkit/commit/af6b28aee44800a43b1f45b8eadbb365b6b1aa61)
+- update dependency eslint-plugin-jest to &gt;=29.0.1 (#1067)
+  [(ca986c7)](https://github.com/taiga-family/toolkit/commit/ca986c735484220bbac77002f9c3f71a100b04bd)
+- update dependency postcss to ^8.5.6 (#1068)
+  [(675eb4f)](https://github.com/taiga-family/toolkit/commit/675eb4f7b1adfe79fd4ac60b341f7c70bbf897e4)
+- update dependency angular-eslint to &gt;=20.1.1 (#1066)
+  [(2cef44f)](https://github.com/taiga-family/toolkit/commit/2cef44ffc02567026a178ad0a53970a9a4e1bddc)
+- update dependency @stylistic/eslint-plugin to &gt;=5.0.0 (#1065)
+  [(18eeb99)](https://github.com/taiga-family/toolkit/commit/18eeb997ad0cc0e4753cb386a68a345cba2674ac)
+- update eslint (#1063)
+  [(04c0fd2)](https://github.com/taiga-family/toolkit/commit/04c0fd2f0ca81318e20c984510dc645b229e7ee6)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.34.1 (#1054)
+  [(1fc1fbf)](https://github.com/taiga-family/toolkit/commit/1fc1fbfe9b46c92ffb75690f7cab5cd1fa59fcc0)
+
 ### [0.284.0](https://github.com/taiga-family/toolkit/compare/v0.283.0...v0.284.0) (2025-06-23)
 
 ### 🐞 Bug Fixes
