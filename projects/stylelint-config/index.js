@@ -173,9 +173,21 @@ module.exports = {
             },
         ],
         'property-disallowed-list': [
-            'border-inline',
-            'padding-inline',
-            'margin-inline',
+            'margin-left', // use margin-inline-start
+            'margin-right', // use margin-inline-end
+            'margin-top', // use margin-block-start
+            'margin-bottom', // use margin-block-end
+            'padding-left', // use padding-inline-start
+            'padding-right', // use padding-inline-end
+            'padding-top', // use padding-block-start
+            'padding-bottom', // use padding-block-end
+            'border-left', // use border-inline-start
+            'border-right', // use border-inline-end
+            'border-top', // use border-block-start
+            'border-bottom', // use border-block-end
+            'border-inline', // shorthand works in Safari 14+
+            'padding-inline', // shorthand works in Safari 14+
+            'margin-inline', // shorthand works in Safari 14+
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
         'property-no-unknown': [
