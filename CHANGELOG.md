@@ -1,3 +1,16 @@
+### [0.286.0](https://github.com/taiga-family/toolkit/compare/v0.285.0...v0.286.0) (2025-07-02)
+
+### 🐞 Bug Fixes
+
+- delete redundunt regexp to ignore (#1093)
+  [(759fc19)](https://github.com/taiga-family/toolkit/commit/759fc1934eaa23d27e2bbaadac74f9817195b874)
+- update dependency eslint to &gt;=9.30.1 (#1092)
+  [(0d22181)](https://github.com/taiga-family/toolkit/commit/0d22181cf7aa899fbb416afaa2f0a923a1c9a646)
+- update dependency globals to &gt;=16.3.0 (#1091)
+  [(145abdb)](https://github.com/taiga-family/toolkit/commit/145abdb41e7eb90e23d1eddab2aff1e12b439170)
+- update dependency typescript-eslint to &gt;=8.35.1 (#1089)
+  [(cc88f91)](https://github.com/taiga-family/toolkit/commit/cc88f911e6d56568c90520afef179fd1a367f4d7)
+
 ### [0.285.0](https://github.com/taiga-family/toolkit/compare/v0.284.0...v0.285.0) (2025-06-29)
 
 ### 🚀 Features
