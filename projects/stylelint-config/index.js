@@ -173,18 +173,40 @@ module.exports = {
             },
         ],
         'property-disallowed-list': [
+            'left', // use inset-inline-start, Safari 14+
+            'right', // use inset-inline-end, Safari 14+
+            'top', // use inset-block-start, Safari 14+
+            'bottom', // use inset-block-end, Safari 14+
+            'width', // use inline-size
+            'height', // use inline-size
+            'min-width', // use min-inline-size
+            'max-width', // use max-inline-size
+            'min-height', // use min-block-size
+            'max-height', // use max-block-size
             'margin-left', // use margin-inline-start
             'margin-right', // use margin-inline-end
             'margin-top', // use margin-block-start
             'margin-bottom', // use margin-block-end
+            // 'scroll-margin-left', // use scroll-margin-inline-start
+            // 'scroll-margin-right', // use scroll-margin-inline-end
+            // 'scroll-margin-top', // use scroll-margin-block-start
+            // 'scroll-margin-bottom', // use scroll-margin-block-end
             'padding-left', // use padding-inline-start
             'padding-right', // use padding-inline-end
             'padding-top', // use padding-block-start
             'padding-bottom', // use padding-block-end
+            // 'scroll-padding-left', // use scroll-padding-inline-start
+            // 'scroll-padding-right', // use scroll-padding-inline-end
+            // 'scroll-padding-top', // use scroll-padding-block-start
+            // 'scroll-padding-bottom', // use scroll-padding-block-end
             'border-left', // use border-inline-start
             'border-right', // use border-inline-end
             'border-top', // use border-block-start
             'border-bottom', // use border-block-end
+            'border-top-left-radius', // use border-start-start-radius, Safari 15+
+            'border-top-right-radius', // use border-start-end-radius, Safari 15+
+            'border-bottom-left-radius', // use border-end-start-radius, Safari 15+
+            'border-bottom-right-radius', // use border-end-end-radius, Safari 15+
             'border-inline', // shorthand works in Safari 14+
             'padding-inline', // shorthand works in Safari 14+
             'margin-inline', // shorthand works in Safari 14+
