@@ -1,3 +1,15 @@
+### [0.287.0](https://github.com/taiga-family/toolkit/compare/v0.286.0...v0.287.0) (2025-07-02)
+
+### 🚀 Features
+
+- **stylelint-config**: use accessibility css properties (#1081)
+  [(e9c1ec1)](https://github.com/taiga-family/toolkit/commit/e9c1ec12c1c626742d58bbec704f0d33ba70040a)
+
+### 🐞 Bug Fixes
+
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.35.1 (#1088)
+  [(8173a4a)](https://github.com/taiga-family/toolkit/commit/8173a4afba93511d4db5fe17f7ad717788256759)
+
 ### [0.286.0](https://github.com/taiga-family/toolkit/compare/v0.285.0...v0.286.0) (2025-07-02)
 
 ### 🐞 Bug Fixes
