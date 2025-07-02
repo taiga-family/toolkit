@@ -22,7 +22,6 @@ module.exports = {
         String.raw`\%2F.+`,
         String.raw`\%2C.+`,
         String.raw`\ɵ.+`,
-        String.raw`\ыва.+`,
     ],
     import: [
         './configs/locales/latin.json',
