@@ -222,6 +222,9 @@ module.exports = {
             },
         ],
         'property-disallowed-list': [
+            'border-inline', // shorthand works in Safari 14.5+
+            'padding-inline', // shorthand works in Safari 14.5+
+            'margin-inline', // shorthand works in Safari 14.5+
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
         'property-no-unknown': [
