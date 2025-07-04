@@ -21,7 +21,8 @@
         "stylelint-config-standard": "^37.0.0",
         "stylelint-order": "^6.0.4",
         "stylelint-rem-over-px": "^1.0.2",
-        "stylelint-use-logical": "^2.1.2"
+        "stylelint-use-logical": "^2.1.2",
+        "stylelint-plugin-logical-css": "1.2.3"
     },
     "publishConfig": {
         "access": "public"
