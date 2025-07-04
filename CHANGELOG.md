@@ -1,3 +1,15 @@
+### [0.288.0](https://github.com/taiga-family/toolkit/compare/v0.287.0...v0.288.0) (2025-07-04)
+
+### 🚀 Features
+
+- **stylelint-config**: use `stylelint-plugin-logical-css` (#1098)
+  [(a8e229f)](https://github.com/taiga-family/toolkit/commit/a8e229f1c074e1acfaeb7e1007eaffbbeb8ef37f)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^16.21.1 (#1097)
+  [(0d6719f)](https://github.com/taiga-family/toolkit/commit/0d6719f3ea469df27d48982ee22e350f25d43bf4)
+
 ### [0.287.0](https://github.com/taiga-family/toolkit/compare/v0.286.0...v0.287.0) (2025-07-02)
 
 ### 🚀 Features
