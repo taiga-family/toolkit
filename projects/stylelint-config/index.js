@@ -3,6 +3,7 @@ module.exports = {
         'stylelint-order',
         'stylelint-rem-over-px',
         'stylelint-use-logical',
+        'stylelint-plugin-logical-css',
         '@stylistic/stylelint-plugin',
     ],
     extends: ['@stylistic/stylelint-config'],
@@ -172,22 +173,58 @@ module.exports = {
                 unspecified: 'bottom',
             },
         ],
+        'plugin/use-logical-properties-and-values': [
+            true,
+            {
+                ignore: [
+                    'border-top', // Safari 14.5+
+                    'border-bottom', // Safari 14.5+
+                    'border-top-color', // Safari 14.5+
+                    'border-bottom-color', // Safari 14.5+
+                    'border-top-style', // Safari 14.5+
+                    'border-bottom-style', // Safari 14.5+
+                    'border-top-width', // Safari 14.5+
+                    'border-bottom-width', // Safari 14.5+
+                    'border-left', // Safari 14.5+
+                    'border-right', // Safari 14.5+
+                    'border-left-color', // Safari 14.5+
+                    'border-right-color', // Safari 14.5+
+                    'border-left-style', // Safari 14.5+
+                    'border-right-style', // Safari 14.5+
+                    'border-left-width', // Safari 14.5+
+                    'border-right-width', // Safari 14.5+
+                    'top', // Safari 14.5+
+                    'bottom', // Safari 14.5+
+                    'left', // Safari 14.5+
+                    'right', // Safari 14.5+
+                    'scroll-margin-bottom', // Safari 15+
+                    'scroll-margin-top', // Safari 15+
+                    'scroll-margin-left', // Safari 15+
+                    'scroll-margin-right', // Safari 15+
+                    'scroll-padding-bottom', // Safari 15+
+                    'scroll-padding-top', // Safari 15+
+                    'scroll-padding-left', // Safari 15+
+                    'scroll-padding-right', // Safari 15+
+                    'border-bottom-left-radius', // Safari 15+ & Chrome 89+
+                    'border-bottom-right-radius', // Safari 15+ & Chrome 89+
+                    'border-top-left-radius', // Safari 15+ & Chrome 89+
+                    'border-top-right-radius', // Safari 15+ & Chrome 89+
+                    'clear', //  Safari 15+ & Chrome 118+
+                    'float', //  Safari 15+ & Chrome 118+
+                    'overscroll-behavior-x', // Safari 16+
+                    'overscroll-behavior-y', // Safari 16+
+                    'contain-intrinsic-height', //  Safari 17+ & Chrome 95+
+                    'contain-intrinsic-width', //  Safari 17+ & Chrome 95+
+                    'overflow-y', // Safari 26+ & Chrome 135+
+                    'overflow-x', // Safari 26+ & Chrome 135+
+                    'resize', // Chrome 118+ & Safari NaN+
+                ],
+            },
+        ],
         'property-disallowed-list': [
-            'margin-left', // use margin-inline-start
-            'margin-right', // use margin-inline-end
-            'margin-top', // use margin-block-start
-            'margin-bottom', // use margin-block-end
-            'padding-left', // use padding-inline-start
-            'padding-right', // use padding-inline-end
-            'padding-top', // use padding-block-start
-            'padding-bottom', // use padding-block-end
-            'border-left', // use border-inline-start
-            'border-right', // use border-inline-end
-            'border-top', // use border-block-start
-            'border-bottom', // use border-block-end
-            'border-inline', // shorthand works in Safari 14+
-            'padding-inline', // shorthand works in Safari 14+
-            'margin-inline', // shorthand works in Safari 14+
+            'border-inline', // shorthand works in Safari 14.5+
+            'padding-inline', // shorthand works in Safari 14.5+
+            'margin-inline', // shorthand works in Safari 14.5+
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
         'property-no-unknown': [
