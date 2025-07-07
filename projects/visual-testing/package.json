@@ -1,0 +1,23 @@
+{
+    "name": "@taiga-ui/visual-testing",
+    "version": "0.288.0",
+    "description": "Taiga UI CLI tool for combine playwright failed screenshots",
+    "keywords": [
+        "playwright"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/taiga-family/configurations.git"
+    },
+    "license": "Apache-2.0",
+    "main": "./bin/src/index.js",
+    "bin": {
+        "combine-playwright-failed-screenshots": "./bin/src/index.js"
+    },
+    "devDependencies": {
+        "canvas": "^3.1.2"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

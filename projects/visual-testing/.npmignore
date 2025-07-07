@@ -1,0 +1,4 @@
+node_modules
+project.json
+tsconfig*.json
+src
