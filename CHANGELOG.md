@@ -1,3 +1,17 @@
+### [0.289.0](https://github.com/taiga-family/toolkit/compare/v0.288.0...v0.289.0) (2025-07-09)
+
+### 🚀 Features
+
+- **stylelint-config**: ignore float css property (#1104)
+  [(977f552)](https://github.com/taiga-family/toolkit/commit/977f552473be6500b6a0c17cf54f5f566a3c5790)
+
+### 🐞 Bug Fixes
+
+- update dependency @prettier/plugin-xml to ^3.4.2 (#1103)
+  [(8ae56fa)](https://github.com/taiga-family/toolkit/commit/8ae56fadf0fc17cc98487d43512ad65c62dacda7)
+- update dependency typescript-eslint to &gt;=8.36.0 (#1102)
+  [(ceddc8c)](https://github.com/taiga-family/toolkit/commit/ceddc8c8592ed3ba563e309cb8568cf11a4645be)
+
 ### [0.288.0](https://github.com/taiga-family/toolkit/compare/v0.287.0...v0.288.0) (2025-07-04)
 
 ### 🚀 Features
