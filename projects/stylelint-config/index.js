@@ -75,6 +75,7 @@ module.exports = {
             {
                 direction: 'ltr',
                 except: [
+                    'float', // Safari 15+
                     /^margin/i,
                     /^padding/i,
                     /^border-/i,
