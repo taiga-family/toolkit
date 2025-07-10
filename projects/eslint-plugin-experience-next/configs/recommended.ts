@@ -36,6 +36,7 @@ const modernAngularRules = {
     modernStyles: 17,
     preferControlFlow: 17,
     preferSignals: 17,
+    templateLiteral: 19,
 };
 
 try {
@@ -134,10 +135,12 @@ export default tseslint.config(
             '@angular-eslint/contextual-decorator': 'error',
             '@angular-eslint/contextual-lifecycle': 'error',
             '@angular-eslint/directive-selector': 'error',
+            '@angular-eslint/no-async-lifecycle-method': 'error',
             '@angular-eslint/no-attribute-decorator': 'error',
             '@angular-eslint/no-conflicting-lifecycle': 'error',
             '@angular-eslint/no-duplicates-in-metadata-arrays': 'error',
             '@angular-eslint/no-empty-lifecycle-method': 'error',
+            '@angular-eslint/no-experimental': 'error',
             '@angular-eslint/no-input-prefix': 'error',
             '@angular-eslint/no-output-on-prefix': 'error',
             '@angular-eslint/no-queries-metadata-property': 'error',
@@ -923,12 +926,20 @@ export default tseslint.config(
             '@angular-eslint/template/eqeqeq': ['error', {allowNullOrUndefined: true}],
             '@angular-eslint/template/interactive-supports-focus': 'off',
             '@angular-eslint/template/label-has-associated-control': 'off',
+            '@angular-eslint/template/mouse-events-have-key-events': 'error',
             '@angular-eslint/template/no-distracting-elements': 'error',
             '@angular-eslint/template/no-duplicate-attributes': 'error',
+            '@angular-eslint/template/no-interpolation-in-attributes':
+                modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/no-negated-async': 'off',
+            '@angular-eslint/template/prefer-at-empty':
+                angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
+            '@angular-eslint/template/prefer-contextual-for-variables': 'error',
             '@angular-eslint/template/prefer-control-flow':
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/prefer-self-closing-tags': 'error',
+            '@angular-eslint/template/prefer-template-literal':
+                modernAngularRules.templateLiteral ? 'error' : 'off',
             '@typescript-eslint/await-thenable': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/consistent-type-exports': 'off',
