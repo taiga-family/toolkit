@@ -1,3 +1,19 @@
+### [0.290.0](https://github.com/taiga-family/toolkit/compare/v0.289.0...v0.290.0) (2025-07-10)
+
+### 🚀 Features
+
+- **tsconfig**: patch typeRoots (#1106)
+  [(63ea960)](https://github.com/taiga-family/toolkit/commit/63ea960fe71ec67e95c55a2d399a0cf2b9dbc153)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: enable no-uncalled-signals rule (#1107)
+  [(8c08df8)](https://github.com/taiga-family/toolkit/commit/8c08df8aa33f768fafd5a2631bff5f95b4442e92)
+- update dependency @typescript-eslint/eslint-plugin to &gt;=8.36.0 (#1101)
+  [(1b50dcd)](https://github.com/taiga-family/toolkit/commit/1b50dcd141fa962b1a690b8213242e8779d832aa)
+- update cspell (#1105)
+  [(7420b16)](https://github.com/taiga-family/toolkit/commit/7420b16885aeaf1029770e7ff44bf9ac098c6784)
+
 ### [0.289.0](https://github.com/taiga-family/toolkit/compare/v0.288.0...v0.289.0) (2025-07-09)
 
 ### 🚀 Features
