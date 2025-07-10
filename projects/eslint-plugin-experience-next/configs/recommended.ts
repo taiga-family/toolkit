@@ -141,6 +141,7 @@ export default tseslint.config(
             '@angular-eslint/no-input-prefix': 'error',
             '@angular-eslint/no-output-on-prefix': 'error',
             '@angular-eslint/no-queries-metadata-property': 'error',
+            '@angular-eslint/no-uncalled-signals': 'error',
             '@angular-eslint/prefer-on-push-component-change-detection': 'error',
             '@angular-eslint/prefer-output-readonly': 'error',
             '@angular-eslint/prefer-signals':
