@@ -4,6 +4,7 @@
 **/.angular
 **/.nx
 **/bin
+coverage
 
 # IDEA
 .idea

@@ -39,9 +39,11 @@
     "devDependencies": {
         "@nx/rollup": "20.8.2",
         "@nx/workspace": "20.8.2",
+        "jest-preset-angular": "14.6.0",
         "lint-staged": "15.5.2",
         "nx": "20.8.2",
-        "typescript": "5.7.3"
+        "ts-node": "10.9.2",
+        "typescript": "5.8.3"
     },
     "cspell": {
         "import": [

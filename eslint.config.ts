@@ -12,6 +12,7 @@ export default [
             '**/jest.config.js',
             '**/eslint.config.js',
             '.release-it.js',
+            '**/*.spec.js',
         ],
     },
     {

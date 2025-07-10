@@ -1,4 +1,5 @@
 /// <reference lib="es2021" />
+import {existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 
 import type {JestConfigWithTsJest} from 'ts-jest';
@@ -11,6 +12,11 @@ process.env.TS_JEST_DISABLE_VER_CHECKER = 'true';
 const {compilerOptions} = require(resolve(process.cwd(), 'tsconfig.json'));
 const maxParallel = require('node:os').cpus().length / 2;
 
+const setupJestFile = resolve(
+    process.cwd(),
+    './node_modules/@taiga-ui/testing/setup-jest/index.ts',
+);
+
 export default {
     bail: 1,
     cacheDirectory: '<rootDir>/node_modules/.cache/jest',
@@ -22,7 +28,7 @@ export default {
     extensionsToTreatAsEsm: ['.ts'],
     maxConcurrency: maxParallel,
     maxWorkers: maxParallel,
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths ?? {}, {
         prefix: `<rootDir>/${compilerOptions.baseUrl}/`
             .replaceAll('./', '/')
             .replaceAll(/\/\/+/g, '/'),
@@ -32,9 +38,9 @@ export default {
     preset: 'jest-preset-angular',
     reporters: ['default'],
     rootDir: process.cwd(),
-    setupFilesAfterEnv: [
-        resolve(process.cwd(), './node_modules/@taiga-ui/testing/setup-jest/index.ts'),
-    ],
+    setupFilesAfterEnv: existsSync(setupJestFile)
+        ? [resolve(process.cwd(), './node_modules/@taiga-ui/testing/setup-jest/index.ts')]
+        : [],
     testEnvironment: 'jsdom',
     testMatch: ['<rootDir>/projects/**/*.spec.ts'],
     testPathIgnorePatterns: [
