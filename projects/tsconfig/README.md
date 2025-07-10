@@ -24,16 +24,12 @@ Add to your `tsconfig.json`:
     outDir: 'dist',
     target: 'es2018',
     lib: ['es2018'],
-    typeRoots: ['./node_modules/@types', './node_modules/@taiga-ui/tsconfig'],
-    types: ['node', 'ng-dev-mode'],
   },
 }
 ```
 
-or:
+This package also has a type for `ngDevMode`:
 
 ```ts
-/// <reference types="@taiga-ui/tsconfig/ng-dev-mode" />
-
 ngDevMode && console.log('My log');
 ```
