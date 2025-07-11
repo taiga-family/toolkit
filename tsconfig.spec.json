@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "exclude": [],
+    "include": ["**/*.spec.ts", "**/*.d.ts"],
+    "compilerOptions": {
+        "types": ["jest", "node", "webpack-env"],
+        "sourceMap": true
+    }
+}

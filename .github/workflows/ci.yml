@@ -31,6 +31,19 @@ jobs:
         with:
           token: ${{ secrets.TAIGA_FAMILY_BOT_PAT }}
 
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    name: Unit tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: taiga-family/ci/actions/setup/variables@v1.132.0
+      - uses: taiga-family/ci/actions/setup/node@v1.132.0
+      - run: npx jest .
+
   release-it-check:
     runs-on: ubuntu-latest
     steps:
