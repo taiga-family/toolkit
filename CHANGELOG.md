@@ -1,3 +1,10 @@
+### [0.291.0](https://github.com/taiga-family/toolkit/compare/v0.290.0...v0.291.0) (2025-07-11)
+
+### 🐞 Bug Fixes
+
+- revert tsconfig.json (#1112)
+  [(851c75c)](https://github.com/taiga-family/toolkit/commit/851c75cabc4604576ac33e6c0101455fda986a4a)
+
 ### [0.290.0](https://github.com/taiga-family/toolkit/compare/v0.289.0...v0.290.0) (2025-07-10)
 
 ### 🚀 Features
