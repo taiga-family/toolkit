@@ -40,8 +40,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: taiga-family/ci/actions/setup/variables@v1.132.0
-      - uses: taiga-family/ci/actions/setup/node@v1.132.0
+      - uses: taiga-family/ci/actions/setup/variables@v1.133.0
+      - uses: taiga-family/ci/actions/setup/node@v1.133.0
       - run: npx jest .
 
   release-it-check:
