@@ -50,8 +50,8 @@
             "es2021.string",
             "dom"
         ],
-        "typeRoots": ["node_modules/@types", "node_modules/@taiga-ui/tsconfig"],
-        "types": ["node", "ng-dev-mode"],
+        "typeRoots": ["node_modules/@types"],
+        "types": ["node"],
         "skipLibCheck": true,
         "downlevelIteration": true,
         "skipDefaultLibCheck": true,
