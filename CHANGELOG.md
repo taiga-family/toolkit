@@ -1,3 +1,10 @@
+### [0.292.0](https://github.com/taiga-family/toolkit/compare/v0.291.0...v0.292.0) (2025-07-12)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint to &gt;=9.31.0 (#1114)
+  [(46e95fb)](https://github.com/taiga-family/toolkit/commit/46e95fbf43bf54123db2aab91279543a2cd2c76c)
+
 ### [0.291.0](https://github.com/taiga-family/toolkit/compare/v0.290.0...v0.291.0) (2025-07-11)
 
 ### 🐞 Bug Fixes
