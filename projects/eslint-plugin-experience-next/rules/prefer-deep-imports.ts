@@ -60,8 +60,12 @@ const config: Rule.RuleModule = {
                             },
                         );
 
+                        if (!importDeclaration.range) {
+                            return null;
+                        }
+
                         return fixer.replaceTextRange(
-                            importDeclaration.range!,
+                            importDeclaration.range,
                             newImports.join('\n'),
                         );
                     },
