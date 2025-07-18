@@ -1,3 +1,27 @@
+### [0.293.0](https://github.com/taiga-family/toolkit/compare/v0.292.0...v0.293.0) (2025-07-18)
+
+### 🚀 Features
+
+- null safety (#1118)
+  [(eeea8c9)](https://github.com/taiga-family/toolkit/commit/eeea8c92270df989b97a503c80969982e0963eec)
+- **release-it-config**: upgrade to v19 (#1122)
+  [(686b3ec)](https://github.com/taiga-family/toolkit/commit/686b3ec7ba59712629c8864bd9f520fb5fbe9d49)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: enable some angular rules (#1111)
+  [(6c16d8b)](https://github.com/taiga-family/toolkit/commit/6c16d8bf2eee9d2ca3bbdb3a50b27dbe100c0ede)
+- update dependency stylelint to ^16.22.0 (#1121)
+  [(03c1434)](https://github.com/taiga-family/toolkit/commit/03c14341992d9791cb3b789fcb410c1878595faf)
+- update dependency @smarttools/eslint-plugin-rxjs to &gt;=1.0.22 (#1120)
+  [(4a145c2)](https://github.com/taiga-family/toolkit/commit/4a145c24c4125b5b9e2e8b3bed8eecc8e05fc5d4)
+- update dependency @smarttools/eslint-plugin-rxjs to &gt;=1.0.21 (#1119)
+  [(eb424ba)](https://github.com/taiga-family/toolkit/commit/eb424ba6c9993f02fc8eb161a91ed0cee15567d6)
+- update dependency @stylistic/eslint-plugin to &gt;=5.2.0 (#1117)
+  [(9804be3)](https://github.com/taiga-family/toolkit/commit/9804be329f631ca18fe5a99d399f947dc92f7e8a)
+- update dependency typescript-eslint to &gt;=8.37.0 (#1116)
+  [(7fdfe0c)](https://github.com/taiga-family/toolkit/commit/7fdfe0ce141acb220478fe89061b96f34d29b336)
+
 ### [0.292.0](https://github.com/taiga-family/toolkit/compare/v0.291.0...v0.292.0) (2025-07-12)
 
 ### 🐞 Bug Fixes
