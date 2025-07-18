@@ -5,6 +5,10 @@
         {
             "matchDepTypes": ["dependencies", "peerDependencies", "optionalDependencies"],
             "semanticCommitType": "fix"
+        },
+        {
+            "enabled": true,
+            "matchUpdateTypes": ["major"]
         }
     ]
 }
