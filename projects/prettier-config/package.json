@@ -17,7 +17,7 @@
         "prettier": "^3.6.2",
         "prettier-package-json": "^2.8.0",
         "prettier-plugin-organize-attributes": "^1.0.0",
-        "sort-package-json": "^2.15.1",
+        "sort-package-json": "^3.4.0",
         "stylelint-prettier": "^5.0.3"
     },
     "publishConfig": {
