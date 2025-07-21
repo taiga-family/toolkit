@@ -15,3 +15,5 @@ dist
 projects/jest-config/*.d.ts
 projects/jest-config/*.js
 projects/eslint-plugin-experience-next/*.js
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
