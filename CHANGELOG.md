@@ -1,3 +1,16 @@
+### [0.294.0](https://github.com/taiga-family/toolkit/compare/v0.293.0...v0.294.0) (2025-07-19)
+
+### 🐞 Bug Fixes
+
+- update cspell (#1127)
+  [(b21f370)](https://github.com/taiga-family/toolkit/commit/b21f37038619ebbad43bd1b9c4b332c6324b6d95)
+- update dependency eslint-plugin-prettier to &gt;=5.5.3 (#1126)
+  [(dddf7a9)](https://github.com/taiga-family/toolkit/commit/dddf7a9daf4a3837c838b6f7f94249a4c5ff8ecb)
+- update dependency eslint-plugin-prettier to &gt;=5.5.2 (#1125)
+  [(70ce4ef)](https://github.com/taiga-family/toolkit/commit/70ce4ef6f7bb29bc3f3f0817dbc2e2c5a804f867)
+- update dependency eslint-config-prettier to &gt;=10.1.7 (#1124)
+  [(03ddff3)](https://github.com/taiga-family/toolkit/commit/03ddff33d6e7bf771bbfd1294fca03b4ea4cf7d9)
+
 ### [0.293.0](https://github.com/taiga-family/toolkit/compare/v0.292.0...v0.293.0) (2025-07-18)
 
 ### 🚀 Features
