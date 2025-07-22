@@ -1,3 +1,22 @@
+### [0.295.0](https://github.com/taiga-family/toolkit/compare/v0.294.0...v0.295.0) (2025-07-22)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: now parse5 support only ES Module (#1137)
+  [(55cca43)](https://github.com/taiga-family/toolkit/commit/55cca43ce34e14441e178f2612f115fe4d3ffc01)
+- update dependency jest-preset-angular to v15 (#1139)
+  [(ab873ce)](https://github.com/taiga-family/toolkit/commit/ab873ce1766a0e680a6b3129bb840fdbbd7c0285)
+- update dependency @stylistic/eslint-plugin to &gt;=5.2.2 (#1138)
+  [(c7a7fd5)](https://github.com/taiga-family/toolkit/commit/c7a7fd52398b05997dba0222523bac139a794160)
+- update dependency jest to v30 (#1136)
+  [(6d92133)](https://github.com/taiga-family/toolkit/commit/6d92133dc2673da7e72d673e2ac598ae2b41b613)
+- update dependency jest-preset-angular to v14.6.1 (#1135)
+  [(340d404)](https://github.com/taiga-family/toolkit/commit/340d4040031b5e3130fa1ee9065d89991a0054e1)
+- update dependency typescript-eslint to &gt;=8.38.0 (#1134)
+  [(26e69d8)](https://github.com/taiga-family/toolkit/commit/26e69d80d4e95fcb31b6890829017534604488f5)
+- update dependency @stylistic/eslint-plugin to &gt;=5.2.1 (#1132)
+  [(c687aac)](https://github.com/taiga-family/toolkit/commit/c687aac10e1200bb7bc7cb6c4cc3d623be757df1)
+
 ### [0.294.0](https://github.com/taiga-family/toolkit/compare/v0.293.0...v0.294.0) (2025-07-19)
 
 ### 🐞 Bug Fixes
