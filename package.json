@@ -37,11 +37,11 @@
         ]
     },
     "devDependencies": {
-        "@nx/rollup": "21.3.5",
-        "@nx/workspace": "21.3.5",
+        "@nx/rollup": "21.3.6",
+        "@nx/workspace": "21.3.6",
         "jest-preset-angular": "15.0.0",
         "lint-staged": "16.1.2",
-        "nx": "21.3.5",
+        "nx": "21.3.6",
         "ts-node": "10.9.2",
         "typescript": "5.8.3"
     },
