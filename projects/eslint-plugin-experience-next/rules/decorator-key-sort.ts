@@ -20,10 +20,9 @@ const config: Rule.RuleModule = {
 
                         for (const argument of decoratorArguments) {
                             const properties = Array.from(argument.properties ?? []);
-                            const current =
-                                properties
-                                    .map((prop: any) => prop.key?.name)
-                                    .filter(Boolean) || [];
+                            const current = properties
+                                .map((prop: any) => prop.key?.name)
+                                .filter(Boolean);
 
                             const correct = getCorrectOrderRelative(orderList, current);
 
