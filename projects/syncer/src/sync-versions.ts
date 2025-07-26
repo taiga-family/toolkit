@@ -82,15 +82,18 @@ export function tuiBumpDeps(options: BumpDepsOptions): void {
             tuiIsMatchedPackageName({ignorePackageNames, matchPackageNames, name: key}),
         )
         .forEach((key) => {
-            if (typeof deps[key] === 'string') {
+            const value = deps[key] as
+                | Record<string, Record<string, string>>
+                | string
+                | undefined;
+
+            if (typeof value === 'string') {
                 deps[key] = isPeerDependency
-                    ? deps[key]?.replace(prevVersion, newVersion)
+                    ? value.replace(prevVersion, newVersion)
                     : `^${newVersion}`;
             } else if (deps[key]?.hasOwnProperty('requires')) {
                 tuiBumpDeps({
-                    deps:
-                        (deps[key] as Record<string, Record<string, string>>)?.requires ??
-                        {},
+                    deps: value?.requires ?? {},
                     ignorePackageNames,
                     isPeerDependency,
                     matchPackageNames,

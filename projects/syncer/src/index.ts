@@ -10,7 +10,7 @@ interface SyncerOptions {
     ignorePackageNames: readonly string[];
 }
 
-const packageJson: Record<string, any> = require(
+const packageJson: Record<string, any> | undefined = require(
     path.resolve(process.cwd(), './package.json'),
 );
 
@@ -21,7 +21,7 @@ if (syncerOptions) {
         ignorePackageNames: syncerOptions.ignorePackageNames,
         includePaths: syncerOptions.includePaths,
         matchPackageNames: syncerOptions.matchPackageNames,
-        newVersion: packageJson.version,
+        newVersion: packageJson?.version,
     });
 } else {
     throw new Error(`Syncer options not found: ${JSON.stringify(packageJson)}`);

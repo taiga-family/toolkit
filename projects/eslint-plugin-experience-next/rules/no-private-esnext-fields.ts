@@ -4,7 +4,7 @@ const config: Rule.RuleModule = {
     create(context) {
         return {
             ClassDeclaration: function reportUnwantedName(node) {
-                const members = Array.from(node?.body?.body ?? []);
+                const members = Array.from(node.body.body);
 
                 members.forEach((member) => {
                     if ((member as any)?.key?.type === 'PrivateIdentifier') {

@@ -9,7 +9,7 @@ exports.parsers = {
         ...parser,
         /**
          * @param {string} text
-         * @param {{ filepath: string; }} options
+         * @param {{ filepath: string | undefined; }} options
          */
         async parse(text, options) {
             if (options.filepath?.endsWith('package-lock.json')) {
