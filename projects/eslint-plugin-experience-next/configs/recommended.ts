@@ -931,7 +931,7 @@ export default tseslint.config(
             '@angular-eslint/template/no-distracting-elements': 'error',
             '@angular-eslint/template/no-duplicate-attributes': 'error',
             '@angular-eslint/template/no-interpolation-in-attributes':
-                modernAngularRules.preferControlFlow ? 'error' : 'off',
+                angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/no-negated-async': 'off',
             '@angular-eslint/template/prefer-at-empty':
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
@@ -940,7 +940,7 @@ export default tseslint.config(
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/prefer-self-closing-tags': 'error',
             '@angular-eslint/template/prefer-template-literal':
-                modernAngularRules.templateLiteral ? 'error' : 'off',
+                angularVersion >= modernAngularRules.templateLiteral ? 'error' : 'off',
             '@typescript-eslint/await-thenable': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/consistent-type-exports': 'off',
