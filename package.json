@@ -11,6 +11,7 @@
         "prettier": "prettier !package-lock.json . --ignore-path .gitignore",
         "cspell": "cspell --relative --dot --gitignore .",
         "lint": "eslint .",
+        "test": "jest .",
         "after:bump": "npx nx build syncer && node projects/syncer/bin/src/index.js",
         "release": "npx nx run-many --target publish --all"
     },
