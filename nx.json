@@ -13,6 +13,9 @@
         ],
         "production": ["default"]
     },
+    "tui": {
+        "enabled": false
+    },
     "parallel": 1,
     "targetDefaults": {
         "test": {
