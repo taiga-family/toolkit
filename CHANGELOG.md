@@ -1,3 +1,18 @@
+### [0.296.0](https://github.com/taiga-family/toolkit/compare/v0.295.0...v0.296.0) (2025-07-28)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-playwright to &gt;=2.2.1 (#1150)
+  [(652bdce)](https://github.com/taiga-family/toolkit/commit/652bdce557606f27c9b605840fcf12fed6ce3560)
+- update dependency eslint to &gt;=9.32.0 (#1148)
+  [(7db3415)](https://github.com/taiga-family/toolkit/commit/7db34152b0fd49d69372e6ec6e4b481736918e8a)
+- update dependency @stylistic/stylelint-config to ^3.0.1 (#1145)
+  [(8ac294a)](https://github.com/taiga-family/toolkit/commit/8ac294aeae4609d5f5813d1b41e7b44dff9faed4)
+- update dependency @stylistic/stylelint-config to v3 (#1141)
+  [(ff2af05)](https://github.com/taiga-family/toolkit/commit/ff2af058d93b7ef691c9147df75f8050ea04f2c1)
+- update dependency @stylistic/stylelint-plugin to v4 (#1140)
+  [(3e5e554)](https://github.com/taiga-family/toolkit/commit/3e5e5540e0eafd93923cb90041ddf9c3d2b1430d)
+
 ### [0.295.0](https://github.com/taiga-family/toolkit/compare/v0.294.0...v0.295.0) (2025-07-22)
 
 ### 🐞 Bug Fixes
