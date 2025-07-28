@@ -38,6 +38,7 @@ export default {
     preset: 'jest-preset-angular',
     reporters: ['default'],
     rootDir: process.cwd(),
+    setupFiles: [require.resolve('./polyfill')],
     setupFilesAfterEnv: existsSync(setupJestFile)
         ? [resolve(process.cwd(), './node_modules/@taiga-ui/testing/setup-jest/index.ts')]
         : [],

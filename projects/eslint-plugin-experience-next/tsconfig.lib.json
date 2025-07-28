@@ -1,6 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "include": ["./*.ts"],
+    "exclude": ["*.spec.ts"],
     "compilerOptions": {
         "baseUrl": ".",
         "checkJs": false,
