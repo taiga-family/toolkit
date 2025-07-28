@@ -27,6 +27,11 @@ jobs:
               npm run prettier -- --check
               npm run lint
           fi
+
+          npx eslint '**/*.html' \
+                    --config projects/eslint-plugin-experience-next/configs/html-eslint.ts \
+                    --no-error-on-unmatched-pattern
+
       - uses: taiga-family/ci/actions/auto/push@v1.136.0
         with:
           token: ${{ secrets.TAIGA_FAMILY_BOT_PAT }}
