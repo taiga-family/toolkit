@@ -23,8 +23,9 @@ export default tseslint.config([
         },
     },
     {
-        files: ['*.ts'],
+        files: ['**/*.ts'],
         rules: {
+            '@taiga-ui/experience-next/array-as-const': 'error',
             '@taiga-ui/experience-next/strict-tui-doc-example': 'error',
             '@typescript-eslint/naming-convention': [
                 'error',
