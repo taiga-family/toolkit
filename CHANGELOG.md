@@ -1,3 +1,12 @@
+### [0.297.0](https://github.com/taiga-family/toolkit/compare/v0.296.0...v0.297.0) (2025-07-28)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: use some rules for only modern angular (#1128)
+  [(c29b043)](https://github.com/taiga-family/toolkit/commit/c29b0431cd849d86f57dcf604b28dad6fe56f61c)
+- **eslint-plugin-experience-next**: add html-eslint config (#1151)
+  [(2c1e713)](https://github.com/taiga-family/toolkit/commit/2c1e7135bb9120756ca52b8c0cf2b6bb118217f7)
+
 ### [0.296.0](https://github.com/taiga-family/toolkit/compare/v0.295.0...v0.296.0) (2025-07-28)
 
 ### 🐞 Bug Fixes
