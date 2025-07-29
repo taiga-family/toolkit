@@ -1,3 +1,12 @@
+### [0.298.0](https://github.com/taiga-family/toolkit/compare/v0.297.0...v0.298.0) (2025-07-29)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^16.23.0 (#1156)
+  [(42c7b49)](https://github.com/taiga-family/toolkit/commit/42c7b49576bed23fbb20779932427711f9288a84)
+- **eslint-plugin-experience-next**: exported array of class references should be marked with `as const` (#1152)
+  [(8318849)](https://github.com/taiga-family/toolkit/commit/83188494f6fb4f3f46961a6f7b1c541cbc3dc14d)
+
 ### [0.297.0](https://github.com/taiga-family/toolkit/compare/v0.296.0...v0.297.0) (2025-07-28)
 
 ### 🐞 Bug Fixes
