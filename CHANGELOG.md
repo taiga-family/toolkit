@@ -1,3 +1,10 @@
+### [0.300.0](https://github.com/taiga-family/toolkit/compare/v0.299.0...v0.300.0) (2025-07-29)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: export html config
+  [(d6eb111)](https://github.com/taiga-family/toolkit/commit/d6eb1117f331d673b6288ff8cbbb178d2e6f4d61)
+
 ### [0.299.0](https://github.com/taiga-family/toolkit/compare/v0.298.0...v0.299.0) (2025-07-29)
 
 ### 🐞 Bug Fixes
