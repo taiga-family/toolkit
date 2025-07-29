@@ -1,3 +1,10 @@
+### [0.299.0](https://github.com/taiga-family/toolkit/compare/v0.298.0...v0.299.0) (2025-07-29)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint-config-standard to v39 (#1157)
+  [(ba22382)](https://github.com/taiga-family/toolkit/commit/ba22382de036fc4f2ddfed6acf3289d53c8cbfdc)
+
 ### [0.298.0](https://github.com/taiga-family/toolkit/compare/v0.297.0...v0.298.0) (2025-07-29)
 
 ### 🐞 Bug Fixes
