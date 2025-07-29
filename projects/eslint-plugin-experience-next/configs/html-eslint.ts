@@ -3,11 +3,6 @@ import htmlParser from '@html-eslint/parser';
 
 export default [
     {
-        ...html.configs['flat/recommended'],
-        files: ['**/*.html'],
-        plugins: {
-            '@html-eslint': html,
-        },
         ignores: [
             '**/tests-report/**',
             '**/snapshots/**',
@@ -16,6 +11,14 @@ export default [
             '**/node_modules/**',
             '**/coverage/**',
         ],
+    },
+    {
+        ...html.configs['flat/recommended'],
+        files: ['**/*.html'],
+        plugins: {
+            '@html-eslint': html,
+        },
+
         languageOptions: {
             parser: htmlParser,
         },
@@ -27,10 +30,10 @@ export default [
             '@html-eslint/no-restricted-attr-values': [
                 'error',
                 {
-                    attrPatterns: ['iconStart', 'iconEnd'],
+                    attrPatterns: ['iconStart', 'iconEnd', 'icon'],
                     attrValuePatterns: ['@tui'],
                     message:
-                        'Icons must be configured, for example: <button tuiIconButton [iconStart]="options.iconStart" [iconEnd]="options.iconEnd" />',
+                        'Icons must be configured, for example: \n<button tuiIconButton [iconStart]="options.iconStart" [iconEnd]="options.iconEnd" /> \n<tui-icon [icon]="options.icon" />',
                 },
             ],
             '@html-eslint/require-closing-tags': 'off', // prettier conflicts

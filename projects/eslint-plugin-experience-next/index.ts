@@ -2,6 +2,7 @@ import type {Linter} from 'eslint';
 import {readFileSync} from 'fs';
 import type {ConfigArray} from 'typescript-eslint';
 
+import htmlEslint from './configs/html-eslint';
 import recommended from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import arrayAsConst from './rules/array-as-const';
@@ -20,6 +21,7 @@ const plugin = {
     configs: {} as unknown as {
         readonly recommended: ConfigArray;
         readonly ['taiga-specific']: ConfigArray;
+        readonly ['html-eslint']: ConfigArray;
     },
     meta: {
         name: pkg.name,
@@ -41,18 +43,16 @@ const plugin = {
 // https://eslint.org/docs/latest/extend/plugins
 // assign configs here so we can reference `plugin`
 Object.assign(plugin.configs, {
+    ['html-eslint']: [
+        {files: ['**/*.html'], plugins: {'@taiga-ui/experience-next': plugin}},
+        ...htmlEslint,
+    ],
     recommended: [
-        {
-            files: ['**/*.ts', '**/*.js'],
-            plugins: {'@taiga-ui/experience-next': plugin},
-        },
+        {files: ['**/*.ts', '**/*.js'], plugins: {'@taiga-ui/experience-next': plugin}},
         ...recommended,
     ],
     ['taiga-specific']: [
-        {
-            files: ['**/*.ts', '**/*.js'],
-            plugins: {'@taiga-ui/experience-next': plugin},
-        },
+        {files: ['**/*.ts', '**/*.js'], plugins: {'@taiga-ui/experience-next': plugin}},
         ...taigaSpecific,
     ],
 } as Linter.Config);
