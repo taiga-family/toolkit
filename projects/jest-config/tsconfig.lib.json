@@ -1,6 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "include": ["./*.ts"],
+    "exclude": ["./tests/*.spec.ts"],
     "compilerOptions": {
         "rootDir": ".",
         "baseUrl": ".",
