@@ -6,7 +6,7 @@ const config: Rule.RuleModule = {
 
         return {
             ClassDeclaration(node) {
-                if (node.id?.name) {
+                if (node.id.name) {
                     classesInFile.set(node.id.name, true);
                 }
             },
@@ -47,13 +47,7 @@ const config: Rule.RuleModule = {
             },
             ImportDeclaration(node) {
                 for (const specifier of node.specifiers) {
-                    if (
-                        specifier.type === 'ImportSpecifier' ||
-                        specifier.type === 'ImportDefaultSpecifier' ||
-                        specifier.type === 'ImportNamespaceSpecifier'
-                    ) {
-                        classesInFile.set(specifier.local.name, true);
-                    }
+                    classesInFile.set(specifier.local.name, true);
                 }
             },
         };
