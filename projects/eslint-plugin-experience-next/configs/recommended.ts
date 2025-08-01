@@ -782,6 +782,7 @@ export default tseslint.config(
                 },
             ],
             'no-return-assign': ['error', 'always'],
+            'no-unneeded-ternary': 'error',
             'no-useless-concat': 'error',
             'no-useless-escape': 'error',
             'no-useless-rename': [
@@ -970,7 +971,6 @@ export default tseslint.config(
             '@typescript-eslint/prefer-destructuring': 'off',
             '@typescript-eslint/prefer-find': 'off',
             '@typescript-eslint/prefer-includes': 'off',
-            '@typescript-eslint/prefer-optional-chain': 'off',
             '@typescript-eslint/prefer-promise-reject-errors': 'off',
             '@typescript-eslint/prefer-readonly': 'off',
             '@typescript-eslint/prefer-reduce-type-parameter': 'off',
@@ -1130,7 +1130,6 @@ export default tseslint.config(
             '@typescript-eslint/no-non-null-assertion': 'off',
             '@typescript-eslint/no-require-imports': 'off',
             '@typescript-eslint/no-shadow': 'off',
-            '@typescript-eslint/no-unnecessary-condition': 'off',
             '@typescript-eslint/no-unnecessary-template-expression': 'off',
             '@typescript-eslint/no-unnecessary-type-parameters': 'off',
             '@typescript-eslint/no-unsafe-argument': 'off',
