@@ -6,6 +6,7 @@ import htmlEslint from './configs/html-eslint';
 import recommended from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import arrayAsConst from './rules/array-as-const';
+import classPropertyNaming from './rules/class-property-naming';
 import decoratorKeySort from './rules/decorator-key-sort';
 import injectionTokenDescription from './rules/injection-token-description';
 import noDeepImports from './rules/no-deep-imports';
@@ -29,6 +30,7 @@ const plugin = {
     },
     rules: {
         'array-as-const': arrayAsConst,
+        'class-property-naming': classPropertyNaming,
         'decorator-key-sort': decoratorKeySort,
         'injection-token-description': injectionTokenDescription,
         'no-deep-imports': noDeepImports,
@@ -56,5 +58,7 @@ Object.assign(plugin.configs, {
         ...taigaSpecific,
     ],
 } as Linter.Config);
+
+export {RECOMMENDED_NAMING_CONVENTION} from './configs/recommended';
 
 export default plugin;

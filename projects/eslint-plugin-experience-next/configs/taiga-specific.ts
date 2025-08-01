@@ -26,6 +26,14 @@ export default tseslint.config([
         files: ['**/*.ts'],
         rules: {
             '@taiga-ui/experience-next/array-as-const': 'error',
+            '@taiga-ui/experience-next/class-property-naming': [
+                'error',
+                [
+                    [{property: 'el', whenTypeIs: ['Element']}],
+                    [{property: 'win', whenTypeIs: ['Window']}],
+                    [{property: 'doc', whenTypeIs: ['Document']}],
+                ],
+            ],
             '@taiga-ui/experience-next/strict-tui-doc-example': 'error',
             '@typescript-eslint/naming-convention': [
                 'error',
