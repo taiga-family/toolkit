@@ -9,6 +9,7 @@ export default [
             // all but one of the files, only keeping the one file
             // with the highest priority extension
             '**/jest-preset.js',
+            '**/polyfill.js',
             '**/jest.config.js',
             '**/eslint.config.js',
             '.release-it.js',
