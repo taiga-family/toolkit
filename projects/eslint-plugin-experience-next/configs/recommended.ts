@@ -14,6 +14,8 @@ import globals from 'globals';
 import {createRequire} from 'module';
 import tseslint from 'typescript-eslint';
 
+import {TUI_RECOMMENDED_NAMING_CONVENTION} from '../rules/convention';
+
 const require = createRequire(import.meta.url);
 
 let angularVersion = 16;
@@ -369,84 +371,7 @@ export default tseslint.config(
                     ],
                 },
             ],
-            '@typescript-eslint/naming-convention': [
-                'error',
-                {
-                    format: ['PascalCase', 'UPPER_CASE'],
-                    selector: 'typeLike',
-                },
-                {
-                    format: ['PascalCase'],
-                    modifiers: ['exported'],
-                    selector: 'class',
-                },
-                {
-                    format: ['PascalCase'],
-                    modifiers: ['exported', 'abstract'],
-                    selector: 'class',
-                },
-                {
-                    format: ['camelCase'],
-                    modifiers: ['exported'],
-                    selector: 'function',
-                },
-                {
-                    format: ['PascalCase'],
-                    modifiers: ['exported'],
-                    selector: 'interface',
-                },
-                {
-                    format: ['PascalCase'],
-                    modifiers: ['exported'],
-                    selector: 'typeAlias',
-                },
-                {
-                    format: null,
-                    modifiers: ['destructured'],
-                    selector: 'variable',
-                },
-                {
-                    filter: '__non_webpack_require__',
-                    format: null,
-                    selector: 'variable',
-                },
-                {
-                    format: ['camelCase', 'UPPER_CASE'],
-                    selector: 'variable',
-                },
-                {
-                    format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
-                    modifiers: ['global'],
-                    selector: 'variable',
-                },
-                {
-                    format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
-                    modifiers: ['exported'],
-                    selector: 'variable',
-                },
-                {
-                    format: ['PascalCase'],
-                    modifiers: ['abstract'],
-                    selector: 'class',
-                },
-                {
-                    format: ['StrictPascalCase'],
-                    modifiers: ['exported'],
-                    selector: 'enum',
-                },
-                {
-                    format: ['PascalCase'],
-                    selector: 'enumMember',
-                },
-                {
-                    format: ['camelCase'],
-                    selector: 'classMethod',
-                },
-                {
-                    format: ['camelCase', 'UPPER_CASE'],
-                    selector: 'classProperty',
-                },
-            ],
+            '@typescript-eslint/naming-convention': TUI_RECOMMENDED_NAMING_CONVENTION,
             '@typescript-eslint/no-confusing-non-null-assertion': 'error',
             '@typescript-eslint/no-duplicate-enum-values': 'error',
             '@typescript-eslint/no-duplicate-type-constituents': 'error',

@@ -57,4 +57,6 @@ Object.assign(plugin.configs, {
     ],
 } as Linter.Config);
 
+export {TUI_RECOMMENDED_NAMING_CONVENTION} from './rules/convention';
+
 export default plugin;
