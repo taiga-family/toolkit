@@ -1,3 +1,25 @@
+### [0.301.0](https://github.com/taiga-family/toolkit/compare/v0.300.0...v0.301.0) (2025-08-03)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: strict boolean rules (#1159)
+  [(f2a3723)](https://github.com/taiga-family/toolkit/commit/f2a37237337ee2c90527d25a04f1019afabfda98)
+
+### 🐞 Bug Fixes
+
+- update dependency ts-jest to v29.4.1 (#1167)
+  [(fae426b)](https://github.com/taiga-family/toolkit/commit/fae426bd7f5f7040c70bd240c2aedea968327495)
+- update dependency eslint-plugin-de-morgan to &gt;=1.3.1 (#1166)
+  [(efa6e91)](https://github.com/taiga-family/toolkit/commit/efa6e91c5d3f414d4d246454b12ceb2dec533b28)
+- **eslint-plugin-experience-next**: enable prefer-optional-chain (#1146)
+  [(a5f5f47)](https://github.com/taiga-family/toolkit/commit/a5f5f47fae2d16cc8e501cfd608992deb596463c)
+- update dependency @html-eslint/parser to &gt;=0.44.0 (#1163)
+  [(31571b3)](https://github.com/taiga-family/toolkit/commit/31571b3ca17d06ea2682b78be6c8363594f2517b)
+- update dependency @html-eslint/eslint-plugin to &gt;=0.44.0 (#1162)
+  [(9a12688)](https://github.com/taiga-family/toolkit/commit/9a126883c3b87955351d1f947be07de6545358fe)
+- update dependency eslint-plugin-playwright to &gt;=2.2.2 (#1160)
+  [(6d0c567)](https://github.com/taiga-family/toolkit/commit/6d0c5674e338c0090404704498eb95aaaa408bc8)
+
 ### [0.300.0](https://github.com/taiga-family/toolkit/compare/v0.299.0...v0.300.0) (2025-07-29)
 
 ### 🐞 Bug Fixes
