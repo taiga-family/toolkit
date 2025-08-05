@@ -10,7 +10,6 @@
         "module": "commonjs",
         "declaration": true,
         "incremental": null,
-        "verbatimModuleSyntax": false,
         "types": ["node", "jest"]
     }
 }
