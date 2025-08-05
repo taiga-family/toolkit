@@ -1,4 +1,3 @@
-// @ts-ignore, cannot find module @typescript-eslint/parser or its corresponding type declarations
 import * as tsParser from '@typescript-eslint/parser';
 import {RuleTester} from 'eslint';
 
