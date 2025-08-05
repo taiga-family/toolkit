@@ -563,6 +563,7 @@
         "scrollend",
         "opensearchservice",
         "antialiasing",
-        "smarttools"
+        "smarttools",
+        "nodenext"
     ]
 }
