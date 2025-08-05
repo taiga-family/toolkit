@@ -11,7 +11,7 @@ if (typeof globalThis.setImmediate !== 'function') {
 
 if (typeof globalThis.clearImmediate !== 'function') {
     globalThis.clearImmediate = ((timeoutId: number | undefined) =>
-        clearInterval(timeoutId)) as unknown as typeof globalThis.clearImmediate;
+        clearTimeout(timeoutId)) as unknown as typeof globalThis.clearImmediate;
 }
 
 /**
