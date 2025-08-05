@@ -1,3 +1,21 @@
+### [0.302.0](https://github.com/taiga-family/toolkit/compare/v0.301.0...v0.302.0) (2025-08-05)
+
+### 🚀 Features
+
+- **jest-config**: add setImmediate and clearImmediate polyfill (#1172)
+  [(d7bb813)](https://github.com/taiga-family/toolkit/commit/d7bb8134ce9209d47b2e2dbf4de2149ef5adaaed)
+- **cspell-config**: add `nodenext` word (#1174)
+  [(0e3ee99)](https://github.com/taiga-family/toolkit/commit/0e3ee99397cae7645bdddcd4b3689a828b50245f)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: export recommended naming convention
+  [(1d8440b)](https://github.com/taiga-family/toolkit/commit/1d8440b3c07fc80f8472050d5e39e44105aab780)
+- **eslint-plugin-experience-next**: support class property naming recommendation (#1165)
+  [(f4903bc)](https://github.com/taiga-family/toolkit/commit/f4903bc9dc0395722d2019f47bc11e26591aa3a7)
+- update dependency typescript-eslint to ^8.39.0 (#1171)
+  [(66d63fe)](https://github.com/taiga-family/toolkit/commit/66d63fe56947d9667a9c5e9889be4594be9a6cc8)
+
 ### [0.301.0](https://github.com/taiga-family/toolkit/compare/v0.300.0...v0.301.0) (2025-08-03)
 
 ### 🚀 Features
