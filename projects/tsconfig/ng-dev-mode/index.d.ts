@@ -16,4 +16,4 @@
  * This will be provided through Terser global definitions by Angular CLI. This will
  * help to tree-shake away the code unneeded for production bundles.
  */
-declare const ngDevMode: boolean | {} | undefined | null;
+declare const ngDevMode: boolean;
