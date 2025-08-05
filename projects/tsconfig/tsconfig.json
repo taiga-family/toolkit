@@ -85,7 +85,7 @@
         "noEmitOnError": true,
         "allowJs": true,
         "checkJs": true,
-        "verbatimModuleSyntax": true,
+        "verbatimModuleSyntax": false,
         "disableSizeLimit": true,
         "strictNullChecks": true,
         "preserveSymlinks": true,
@@ -102,8 +102,7 @@
         "transpileOnly": true,
         "compilerOptions": {
             "types": ["node"],
-            "module": "commonjs",
-            "verbatimModuleSyntax": false
+            "module": "commonjs"
         }
     }
 }

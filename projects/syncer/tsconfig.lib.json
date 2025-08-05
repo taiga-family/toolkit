@@ -7,7 +7,6 @@
         "outDir": "bin",
         "incremental": false,
         "tsBuildInfoFile": null,
-        "module": "commonjs",
-        "verbatimModuleSyntax": false
+        "module": "commonjs"
     }
 }
