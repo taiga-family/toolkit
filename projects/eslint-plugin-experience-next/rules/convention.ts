@@ -1,7 +1,4 @@
-import type {Linter} from 'eslint';
-
-export const TUI_RECOMMENDED_NAMING_CONVENTION: Linter.RuleEntry = [
-    'error',
+export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     {
         format: ['PascalCase', 'UPPER_CASE'],
         selector: 'typeLike',
@@ -77,10 +74,9 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION: Linter.RuleEntry = [
         format: ['camelCase', 'UPPER_CASE'],
         selector: 'classProperty',
     },
-];
+] as const;
 
-export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION: Linter.RuleEntry = [
-    'error',
+export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION = [
     {
         format: ['PascalCase', 'UPPER_CASE'],
         selector: 'typeLike',
@@ -158,4 +154,4 @@ export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION: Linter.RuleEntry = [
         format: ['camelCase'],
         selector: 'classProperty',
     },
-];
+] as const;

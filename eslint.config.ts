@@ -1,7 +1,10 @@
-import taiga from '@taiga-ui/eslint-plugin-experience-next';
+import taiga, {
+    TUI_RECOMMENDED_NAMING_CONVENTION as recommended,
+} from '@taiga-ui/eslint-plugin-experience-next';
 
 export default [
     ...taiga.configs.recommended,
+    ...taiga.configs['taiga-specific'],
     {
         ignores: [
             // TypeScript will ignore files with duplicate filenames in the same folder
@@ -19,6 +22,7 @@ export default [
     {
         files: ['**/*.js', '**/*.ts'],
         rules: {
+            '@typescript-eslint/naming-convention': ['error', ...recommended],
             'perfectionist/sort-objects': [
                 'error',
                 {

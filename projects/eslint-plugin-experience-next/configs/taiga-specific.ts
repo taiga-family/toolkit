@@ -32,7 +32,10 @@ export default tseslint.config([
         rules: {
             '@taiga-ui/experience-next/array-as-const': 'error',
             '@taiga-ui/experience-next/strict-tui-doc-example': 'error',
-            '@typescript-eslint/naming-convention': TUI_CUSTOM_TAIGA_NAMING_CONVENTION,
+            '@typescript-eslint/naming-convention': [
+                'error',
+                ...TUI_CUSTOM_TAIGA_NAMING_CONVENTION,
+            ],
         },
     },
     {
@@ -43,7 +46,10 @@ export default tseslint.config([
             '**/apps/**/*.ts',
         ],
         rules: {
-            '@typescript-eslint/naming-convention': TUI_RECOMMENDED_NAMING_CONVENTION,
+            '@typescript-eslint/naming-convention': [
+                'error',
+                ...TUI_RECOMMENDED_NAMING_CONVENTION,
+            ],
         },
     },
 ]);
