@@ -1,3 +1,12 @@
+### [0.303.0](https://github.com/taiga-family/toolkit/compare/v0.302.0...v0.303.0) (2025-08-05)
+
+### 🐞 Bug Fixes
+
+- **tsconfig**: compatibility ng-dev-mode with strict boolean checker (#1179)
+  [(f1def4b)](https://github.com/taiga-family/toolkit/commit/f1def4b4f9afa914b5d3395690491f0d7a7278e7)
+- **eslint-plugin-experience-next**: error while loading rule in html (#1178)
+  [(b2e3705)](https://github.com/taiga-family/toolkit/commit/b2e3705b2cb5640e181b4bbcc63b537381951228)
+
 ### [0.302.0](https://github.com/taiga-family/toolkit/compare/v0.301.0...v0.302.0) (2025-08-05)
 
 ### 🚀 Features
