@@ -564,6 +564,7 @@
         "opensearchservice",
         "antialiasing",
         "smarttools",
-        "nodenext"
+        "nodenext",
+        "TSESTree"
     ]
 }
