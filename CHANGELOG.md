@@ -1,3 +1,10 @@
+### [0.304.0](https://github.com/taiga-family/toolkit/compare/v0.303.0...v0.304.0) (2025-08-05)
+
+### 🚀 Features
+
+- **tsconfig**: drop not recommended verbatim module syntax by Angular team (#1180)
+  [(e6c662c)](https://github.com/taiga-family/toolkit/commit/e6c662ca53897e815d4d6b7260d05fe8989e12ea)
+
 ### [0.303.0](https://github.com/taiga-family/toolkit/compare/v0.302.0...v0.303.0) (2025-08-05)
 
 ### 🐞 Bug Fixes
