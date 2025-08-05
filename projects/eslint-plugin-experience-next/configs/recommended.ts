@@ -371,7 +371,10 @@ export default tseslint.config(
                     ],
                 },
             ],
-            '@typescript-eslint/naming-convention': TUI_RECOMMENDED_NAMING_CONVENTION,
+            '@typescript-eslint/naming-convention': [
+                'error',
+                ...TUI_RECOMMENDED_NAMING_CONVENTION,
+            ],
             '@typescript-eslint/no-confusing-non-null-assertion': 'error',
             '@typescript-eslint/no-duplicate-enum-values': 'error',
             '@typescript-eslint/no-duplicate-type-constituents': 'error',

@@ -2,7 +2,7 @@ import type {Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
     create(context) {
-        const ORDER: any = context.options[0] || {};
+        const order: any = context.options[0] || {};
 
         return {
             ClassDeclaration(node) {
@@ -12,8 +12,8 @@ const config: Rule.RuleModule = {
                     const {expression} = decorator;
                     const decoratorName = expression.callee?.name ?? '';
 
-                    if (decoratorName in (ORDER || {})) {
-                        const orderList = ORDER[decoratorName];
+                    if (decoratorName in (order || {})) {
+                        const orderList = order[decoratorName];
                         const decoratorArguments: any[] = Array.from(
                             expression.arguments ?? [],
                         );
