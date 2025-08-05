@@ -5,7 +5,7 @@
     "license": "Apache-2.0",
     "main": "index.ts",
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "^8.39.0",
+        "@typescript-eslint/rule-tester": "8.39.0",
         "glob": "11.0.3"
     },
     "peerDependencies": {
