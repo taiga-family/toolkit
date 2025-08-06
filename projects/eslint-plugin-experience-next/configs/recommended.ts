@@ -504,20 +504,6 @@ export default tseslint.config(
             '@typescript-eslint/require-await': 'error',
             '@typescript-eslint/restrict-plus-operands': 'error',
             '@typescript-eslint/sort-type-constituents': 'error',
-            '@typescript-eslint/strict-boolean-expressions': [
-                'error',
-                {
-                    allowAny: true,
-                    allowNullableBoolean: true,
-                    allowNullableEnum: false,
-                    allowNullableNumber: true,
-                    allowNullableObject: true,
-                    allowNullableString: true,
-                    allowNumber: true,
-                    allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: false,
-                    allowString: true,
-                },
-            ],
             '@typescript-eslint/switch-exhaustiveness-check': [
                 'error',
                 {
@@ -930,7 +916,6 @@ export default tseslint.config(
             '@typescript-eslint/restrict-plus-operands': 'off',
             '@typescript-eslint/restrict-template-expressions': 'off',
             '@typescript-eslint/return-await': 'off',
-            '@typescript-eslint/strict-boolean-expressions': 'off',
             '@typescript-eslint/switch-exhaustiveness-check': 'off',
             '@typescript-eslint/unbound-method': 'off',
             '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
@@ -1090,6 +1075,7 @@ export default tseslint.config(
             '@typescript-eslint/prefer-nullish-coalescing': 'off',
             '@typescript-eslint/prefer-readonly-parameter-types': 'off',
             '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/strict-boolean-expressions': 'off', // @see https://github.com/taiga-family/toolkit/issues/1181
             '@typescript-eslint/unbound-method': 'off',
             camelcase: 'off',
             'class-methods-use-this': 'off',
