@@ -1,4 +1,4 @@
-import type {Rule} from 'eslint';
+import {type Rule} from 'eslint';
 
 const MESSAGE_ID = 'invalid-injection-token-description';
 const ERROR_MESSAGE = "InjectionToken's description should contain token's name";

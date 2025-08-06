@@ -129,7 +129,7 @@ export default tseslint.config(
         },
         processor: angular.processInlineTemplates,
         rules: {
-            '@typescript-eslint/no-import-type-side-effects': 'error',
+            '@typescript-eslint/no-import-type-side-effects': 'off', // verbatimModuleSyntax should be false
             'no-void': ['error', {allowAsStatement: true}],
             'sonarjs/no-identical-functions': 'error',
             '@angular-eslint/consistent-component-styles':
@@ -280,13 +280,7 @@ export default tseslint.config(
                 'error',
                 {
                     disallowTypeAnnotations: false,
-                    /*
-                       One important difference is that import { type x } from 'x'
-                       will be compiled to import 'x', so x will be included in
-                       a bundle and any side effects of the code will run.
-                       Import type { x } from 'x' will not edit any import.
-                     */
-                    fixStyle: 'separate-type-imports',
+                    fixStyle: 'inline-type-imports',
                     prefer: 'type-imports',
                 },
             ],
@@ -545,12 +539,12 @@ export default tseslint.config(
                 },
             ],
             'guard-for-in': 'error',
-            'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+            'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
             'import/first': 'error',
             'import/newline-after-import': ['error', {count: 1}],
             'import/no-absolute-path': 'error',
             'import/no-cycle': 'error',
-            'import/no-duplicates': 'error',
+            'import/no-duplicates': ['error', {'prefer-inline': true}],
             'import/no-mutable-exports': 'error',
             'import/no-self-import': 'error',
             'import/no-useless-path-segments': [
