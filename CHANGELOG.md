@@ -1,3 +1,10 @@
+### [0.308.0](https://github.com/taiga-family/toolkit/compare/v0.307.0...v0.308.0) (2025-08-06)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: revert
+  [(2f4aeb8)](https://github.com/taiga-family/toolkit/commit/2f4aeb88d302758782b17ffb440260c206f79758)
+
 ### [0.307.0](https://github.com/taiga-family/toolkit/compare/v0.306.0...v0.307.0) (2025-08-06)
 
 ### 🐞 Bug Fixes
