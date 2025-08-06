@@ -1,5 +1,4 @@
-import type {TSESTree} from '@typescript-eslint/utils';
-import {AST_NODE_TYPES, ESLintUtils} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
 import {getFieldTypes} from './utils/get-field-types';
 import {intersect} from './utils/intersect';

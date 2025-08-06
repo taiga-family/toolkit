@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import type {Rule} from 'eslint';
+import {type Rule} from 'eslint';
 
 const MESSAGE_ID = 'no-deep-imports';
 const ERROR_MESSAGE = 'Deep imports of Taiga UI packages are prohibited';

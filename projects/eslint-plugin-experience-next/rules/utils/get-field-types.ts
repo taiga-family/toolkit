@@ -1,5 +1,4 @@
-import type {TypeChecker} from 'typescript';
-import ts from 'typescript';
+import ts, {type TypeChecker} from 'typescript';
 
 export function getFieldTypes(type: ts.Type, checker: TypeChecker): string[] {
     const typeNames: string[] = [];

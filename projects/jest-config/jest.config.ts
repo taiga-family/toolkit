@@ -2,8 +2,7 @@
 import {existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 
-import type {JestConfigWithTsJest} from 'ts-jest';
-import {pathsToModuleNameMapper} from 'ts-jest';
+import {type JestConfigWithTsJest, pathsToModuleNameMapper} from 'ts-jest';
 
 process.env.TZ = 'Europe/Moscow';
 process.env.FORCE_COLOR = 'true';

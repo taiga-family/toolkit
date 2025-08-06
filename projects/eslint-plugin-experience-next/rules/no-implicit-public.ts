@@ -1,5 +1,5 @@
-import type {RuleContext} from '@eslint/core';
-import type {Rule} from 'eslint';
+import {type RuleContext} from '@eslint/core';
+import {type Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
     create(context) {

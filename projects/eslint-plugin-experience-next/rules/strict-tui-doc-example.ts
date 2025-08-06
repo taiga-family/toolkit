@@ -1,5 +1,5 @@
-import type {RuleTextEdit} from '@eslint/core';
-import type {Rule} from 'eslint';
+import {type RuleTextEdit} from '@eslint/core';
+import {type Rule} from 'eslint';
 
 import {getTypeName} from './utils/get-type-name';
 

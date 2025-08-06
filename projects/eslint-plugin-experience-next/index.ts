@@ -1,6 +1,6 @@
-import type {Linter} from 'eslint';
+import {type Linter} from 'eslint';
 import {readFileSync} from 'fs';
-import type {ConfigArray} from 'typescript-eslint';
+import {type ConfigArray} from 'typescript-eslint';
 
 import htmlEslint from './configs/html-eslint';
 import recommended from './configs/recommended';

@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 
-import type {RuleTextEdit} from '@eslint/core';
-import type {Rule} from 'eslint';
-import type {ImportDeclaration} from 'estree';
+import {type RuleTextEdit} from '@eslint/core';
+import {type Rule} from 'eslint';
+import {type ImportDeclaration} from 'estree';
 import {globSync} from 'glob';
 
 const MESSAGE_ID = 'prefer-deep-imports';
