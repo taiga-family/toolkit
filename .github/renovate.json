@@ -9,6 +9,11 @@
         {
             "enabled": true,
             "matchUpdateTypes": ["major"]
+        },
+        {
+            "matchPackageNames": ["@types/jest", "jest", "jest-preset-angular", "ts-jest"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
         }
     ]
 }
