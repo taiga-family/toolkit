@@ -1,3 +1,12 @@
+### [0.306.0](https://github.com/taiga-family/toolkit/compare/v0.305.0...v0.306.0) (2025-08-06)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: revert jest-angular-preset (#1185)
+  [(f1784ab)](https://github.com/taiga-family/toolkit/commit/f1784ab77b78727536ad8ecd42890131400f9860)
+- update dependency eslint-plugin-prettier to ^5.5.4 (#1184)
+  [(b658e47)](https://github.com/taiga-family/toolkit/commit/b658e47dbbf7203a3a6e9e78219eabecacb4764f)
+
 ### [0.305.0](https://github.com/taiga-family/toolkit/compare/v0.304.0...v0.305.0) (2025-08-06)
 
 ### 🚀 Features
