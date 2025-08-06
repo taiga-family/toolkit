@@ -1,3 +1,15 @@
+### [0.305.0](https://github.com/taiga-family/toolkit/compare/v0.304.0...v0.305.0) (2025-08-06)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: restrict import type (#1183)
+  [(607d120)](https://github.com/taiga-family/toolkit/commit/607d1203bcc38b597bdaed2c285b2bc49defc6fb)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: disable strict boolean rule forever (#1182)
+  [(08ea9e4)](https://github.com/taiga-family/toolkit/commit/08ea9e42025a1879abf919658af10e12fbcebde9)
+
 ### [0.304.0](https://github.com/taiga-family/toolkit/compare/v0.303.0...v0.304.0) (2025-08-05)
 
 ### 🚀 Features
