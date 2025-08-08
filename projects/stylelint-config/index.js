@@ -44,6 +44,7 @@ module.exports = {
             'media',
             'supports',
             'font-face',
+            'property', // CSS Houdini
         ],
         'at-rule-empty-line-before': [
             'always',
