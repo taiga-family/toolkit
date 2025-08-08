@@ -13,7 +13,7 @@
         "@html-eslint/eslint-plugin": "^0.44.0",
         "@html-eslint/parser": "^0.44.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
-        "@stylistic/eslint-plugin": "^5.2.2",
+        "@stylistic/eslint-plugin": "^5.2.3",
         "@types/glob": "*",
         "angular-eslint": "^20.1.1",
         "eslint": "^9.32.0",
