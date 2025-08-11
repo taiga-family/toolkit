@@ -9,7 +9,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.3.0
+      - uses: actions/checkout@v5.0.0
         with:
           persist-credentials: false
       - uses: taiga-family/ci/actions/setup/variables@v1.139.0
@@ -44,7 +44,7 @@ jobs:
     name: Unit tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4.3.0
+      - uses: actions/checkout@v5.0.0
       - uses: taiga-family/ci/actions/setup/variables@v1.139.0
       - uses: taiga-family/ci/actions/setup/node@v1.139.0
       - run: npm test
@@ -52,7 +52,7 @@ jobs:
   release-it-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.3.0
+      - uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
           fetch-tags: true
