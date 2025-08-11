@@ -1,3 +1,21 @@
+### [0.309.0](https://github.com/taiga-family/toolkit/compare/v0.308.0...v0.309.0) (2025-08-09)
+
+### 🚀 Features
+
+- **stylelint-config**: support new rule (#1191)
+  [(961b999)](https://github.com/taiga-family/toolkit/commit/961b999f8d4a63b06eb6d417e68235c6caa0f2e8)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint to ^9.33.0 (#1193)
+  [(4e46a1f)](https://github.com/taiga-family/toolkit/commit/4e46a1f70ca48976a3199e7368bd7cfdbdb253dc)
+- update dependency @eslint/compat to ^1.3.2 (#1189)
+  [(629011b)](https://github.com/taiga-family/toolkit/commit/629011b4c0038a804e2a83bac4b6876bedd5575c)
+- update dependency @stylistic/eslint-plugin to ^5.2.3 (#1190)
+  [(013c9cb)](https://github.com/taiga-family/toolkit/commit/013c9cb51afcc1fe75410157a8b70d67a8a2bcf8)
+- update dependency stylelint to ^16.23.1 (#1188)
+  [(f695e24)](https://github.com/taiga-family/toolkit/commit/f695e24148e357d176fe8571b9280f3d6c25063b)
+
 ### [0.308.0](https://github.com/taiga-family/toolkit/compare/v0.307.0...v0.308.0) (2025-08-06)
 
 ### 🐞 Bug Fixes
