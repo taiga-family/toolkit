@@ -924,7 +924,7 @@ export default tseslint.config(
             'playwright/no-networkidle': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/no-force-option': 'error',
-            'playwright/no-skipped-test': 'error',
+            'playwright/no-skipped-test': 'off',
             'playwright/no-wait-for-selector': 'off',
             'playwright/no-wait-for-timeout': 'off',
         },
