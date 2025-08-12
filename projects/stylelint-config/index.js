@@ -298,6 +298,7 @@ module.exports = {
                     '/^cdk-/',
                     '/^app-/',
                     '/^tui-/',
+                    '/^ng-/',
                 ],
             },
         ],
