@@ -9,12 +9,14 @@
             "executor": "@nx/rollup:rollup",
             "outputs": ["{workspaceRoot}/dist/{projectName}"],
             "options": {
-                "main": "projects/{projectName}/index.ts",
                 "outputPath": "{workspaceRoot}/dist/{projectName}",
+                "entryFile": "projects/{projectName}/index.ts",
                 "tsConfig": "projects/{projectName}/tsconfig.lib.json",
                 "assets": ["projects/{projectName}/README.md"],
-                "generateExportsField": true,
-                "format": ["esm"]
+                "compiler": "tsc",
+                "external": "all",
+                "format": ["esm", "cjs"],
+                "generateExportsField": true
             }
         },
         "publish": {
