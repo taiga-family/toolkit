@@ -11,7 +11,7 @@
     "peerDependencies": {
         "@eslint/compat": "^1.3.2",
         "@html-eslint/eslint-plugin": "^0.45.0",
-        "@html-eslint/parser": "^0.44.0",
+        "@html-eslint/parser": "^0.45.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.2.3",
         "@types/glob": "*",
