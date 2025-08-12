@@ -10,7 +10,7 @@
             "outputs": ["{workspaceRoot}/dist/{projectName}"],
             "options": {
                 "outputPath": "{workspaceRoot}/dist/{projectName}",
-                "entryFile": "projects/{projectName}/index.ts",
+                "main": "projects/{projectName}/index.ts",
                 "tsConfig": "projects/{projectName}/tsconfig.lib.json",
                 "assets": ["projects/{projectName}/README.md"],
                 "compiler": "tsc",
