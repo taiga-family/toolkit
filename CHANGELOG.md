@@ -1,3 +1,14 @@
+### [0.310.0](https://github.com/taiga-family/toolkit/compare/v0.309.0...v0.310.0) (2025-08-12)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: support ng-component selector (#1200)
+  [(6938730)](https://github.com/taiga-family/toolkit/commit/693873039d080f3ea0340b8d16a10e498533e18e)
+- update @typescript-eslint/\* deps to v8.39.1 (#1199)
+  [(61efe94)](https://github.com/taiga-family/toolkit/commit/61efe94d98ff4cfcc357d8539510e5237d92bfad)
+- **eslint-plugin-experience-next**: disable no-skipped-test (#1197)
+  [(2cbef8a)](https://github.com/taiga-family/toolkit/commit/2cbef8a7a3f997ab6443ae96f8ef2c927ee3e3f1)
+
 ### [0.309.0](https://github.com/taiga-family/toolkit/compare/v0.308.0...v0.309.0) (2025-08-09)
 
 ### 🚀 Features
