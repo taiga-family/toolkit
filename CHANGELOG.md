@@ -1,3 +1,14 @@
+### [0.311.0](https://github.com/taiga-family/toolkit/compare/v0.310.0...v0.311.0) (2025-08-14)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: granular ignores of px (#1198)
+  [(53b8f6f)](https://github.com/taiga-family/toolkit/commit/53b8f6fac25c2229616658e36e8329ea9d6524e5)
+- update dependency @html-eslint/parser to ^0.45.0 (#1203)
+  [(03722e9)](https://github.com/taiga-family/toolkit/commit/03722e98f76c579cebc459c4305ac9eb7a696cb4)
+- update dependency @html-eslint/eslint-plugin to ^0.45.0 (#1202)
+  [(884afd6)](https://github.com/taiga-family/toolkit/commit/884afd64bd9d91e2a8e6e5ba346f1f1b5cfbb2c7)
+
 ### [0.310.0](https://github.com/taiga-family/toolkit/compare/v0.309.0...v0.310.0) (2025-08-12)
 
 ### 🐞 Bug Fixes
