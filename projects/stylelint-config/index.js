@@ -241,6 +241,7 @@ module.exports = {
             {
                 fontSize: 16,
                 ignore: [
+                    '-2px',
                     '-1px',
                     '0.1px',
                     '0.2px',
@@ -252,6 +253,7 @@ module.exports = {
                     '0.8px',
                     '0.9px',
                     '1px',
+                    '2px',
                     'font 16px',
                 ],
                 ignoreAtRules: ['media'],
