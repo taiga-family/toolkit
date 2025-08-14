@@ -1,3 +1,10 @@
+### [0.312.0](https://github.com/taiga-family/toolkit/compare/v0.311.0...v0.312.0) (2025-08-14)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: use 2px instead of rem (#1207)
+  [(6a5f0e9)](https://github.com/taiga-family/toolkit/commit/6a5f0e9002a7eab955f68e9f27deb4931e6c4f3c)
+
 ### [0.311.0](https://github.com/taiga-family/toolkit/compare/v0.310.0...v0.311.0) (2025-08-14)
 
 ### 🐞 Bug Fixes
