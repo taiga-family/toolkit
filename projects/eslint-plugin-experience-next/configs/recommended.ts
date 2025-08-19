@@ -808,6 +808,7 @@ export default tseslint.config(
             'unicorn/no-unnecessary-polyfills': 'error',
             'unicorn/no-useless-spread': 'error',
             'unicorn/prefer-logical-operator-over-ternary': 'error',
+            'unicorn/prefer-query-selector': 'error',
             'unicorn/prefer-set-size': 'error',
             'unicorn/prefer-string-raw': 'error',
             'unicorn/prefer-string-replace-all': 'error',
