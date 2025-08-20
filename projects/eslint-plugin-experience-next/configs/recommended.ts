@@ -829,7 +829,12 @@ export default tseslint.config(
             '@angular-eslint/template/button-has-type': [
                 'error',
                 {
-                    ignoreWithDirectives: ['tuiAccordion', 'tuiOption', 'tuiStep', 'tuiTab'],
+                    ignoreWithDirectives: [
+                        'tuiAccordion',
+                        'tuiOption',
+                        'tuiStep',
+                        'tuiTab',
+                    ],
                 },
             ],
             '@angular-eslint/template/elements-content': [
