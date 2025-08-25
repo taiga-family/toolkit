@@ -1,3 +1,17 @@
+### [0.315.0](https://github.com/taiga-family/toolkit/compare/v0.314.0...v0.315.0) (2025-08-25)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: enable recommended unicorn rules (#1217)
+  [(8bc5bdb)](https://github.com/taiga-family/toolkit/commit/8bc5bdb13ed0ed70ebab0db10c7e48d8698ba6d1)
+- **eslint-plugin-experience-next**: ignore `tuiStep` (#1218)
+  [(1783f8b)](https://github.com/taiga-family/toolkit/commit/1783f8ba4eff6eccdd0df18e7d3947468e7a9521)
+
+### 🐞 Bug Fixes
+
+- update dependency @html-eslint/eslint-plugin to ^0.46.0 (#1223)
+  [(3bd9ee4)](https://github.com/taiga-family/toolkit/commit/3bd9ee446f7ad9f59b0a7a5ee4b68d4c308c9b60)
+
 ### [0.314.0](https://github.com/taiga-family/toolkit/compare/v0.313.0...v0.314.0) (2025-08-23)
 
 ### 🐞 Bug Fixes
