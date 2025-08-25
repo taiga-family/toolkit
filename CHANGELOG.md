@@ -1,3 +1,17 @@
+### [0.316.0](https://github.com/taiga-family/toolkit/compare/v0.315.0...v0.316.0) (2025-08-25)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: drop legacy configuration (#1226)
+  [(2ccd370)](https://github.com/taiga-family/toolkit/commit/2ccd37009b58b8afee84aa34653fd0d92348311c)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-sonarjs to ^3.0.5 (#1225)
+  [(5ed8c0d)](https://github.com/taiga-family/toolkit/commit/5ed8c0daae2ef7b3b67a30ab12b704badc8e69aa)
+- update dependency @html-eslint/parser to ^0.46.0 (#1224)
+  [(44dd055)](https://github.com/taiga-family/toolkit/commit/44dd0559a7b6ef8e6ad79a3df3c0fff6c7137d1e)
+
 ### [0.315.0](https://github.com/taiga-family/toolkit/compare/v0.314.0...v0.315.0) (2025-08-25)
 
 ### 🚀 Features
