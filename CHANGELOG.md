@@ -1,3 +1,16 @@
+### [0.314.0](https://github.com/taiga-family/toolkit/compare/v0.313.0...v0.314.0) (2025-08-23)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint to ^9.34.0 (#1222)
+  [(fb6b1fa)](https://github.com/taiga-family/toolkit/commit/fb6b1fa18baadd91ffa17f1b3c71e4f5af24f310)
+- update dependency angular-eslint to ^20.2.0 (#1221)
+  [(14b9769)](https://github.com/taiga-family/toolkit/commit/14b9769807449624d7444106cbad56a954745285)
+- update @typescript-eslint/\* deps to v8.40.0 (#1216)
+  [(8393eb4)](https://github.com/taiga-family/toolkit/commit/8393eb43dcc98d3d40c3c41bf93371942e6ea531)
+- update dependency eslint-plugin-unused-imports to ^4.2.0 (#1214)
+  [(2d7aa06)](https://github.com/taiga-family/toolkit/commit/2d7aa063dc8b44fb18eb76cdecd163d7ce0c70e6)
+
 ### [0.313.0](https://github.com/taiga-family/toolkit/compare/v0.312.0...v0.313.0) (2025-08-14)
 
 ### [0.312.0](https://github.com/taiga-family/toolkit/compare/v0.311.0...v0.312.0) (2025-08-14)
