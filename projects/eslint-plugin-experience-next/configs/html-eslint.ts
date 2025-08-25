@@ -15,19 +15,17 @@ export default [
     {
         ...html.configs.recommended,
         files: ['**/*.html'],
-        plugins: {
-            '@html-eslint': html,
-        },
-
+        plugins: {html},
+        language: 'html/html',
         languageOptions: {
             parser: htmlParser,
         },
         rules: {
             ...html.configs.recommended.rules,
-            '@html-eslint/indent': 'off', // prettier conflicts
-            '@html-eslint/no-extra-spacing-attrs': 'off', // prettier conflicts
-            '@html-eslint/no-multiple-h1': 'off',
-            '@html-eslint/no-restricted-attr-values': [
+            'html/indent': 'off', // prettier conflicts
+            'html/no-extra-spacing-attrs': 'off', // prettier conflicts
+            'html/no-multiple-h1': 'off',
+            'html/no-restricted-attr-values': [
                 'error',
                 {
                     attrPatterns: ['iconStart', 'iconEnd', 'icon'],
@@ -36,20 +34,20 @@ export default [
                         'Icons must be configured, for example: \n<button tuiIconButton [iconStart]="options.iconStart" [iconEnd]="options.iconEnd" /> \n<tui-icon [icon]="options.icon" />',
                 },
             ],
-            '@html-eslint/require-closing-tags': 'off', // prettier conflicts
-            '@html-eslint/require-img-alt': [
+            'html/require-closing-tags': 'off', // prettier conflicts
+            'html/require-img-alt': [
                 'error',
                 {
                     substitute: ['[alt]', '[attr.alt]'],
                 },
             ],
-            '@html-eslint/use-baseline': 'off',
+            'html/use-baseline': 'off',
         },
     },
     {
         files: ['**/demo/**/*.html'],
         rules: {
-            '@html-eslint/no-restricted-attr-values': 'off',
+            'html/no-restricted-attr-values': 'off',
         },
     },
 ];
