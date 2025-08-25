@@ -13,7 +13,7 @@ export default [
         ],
     },
     {
-        ...html.configs['flat/recommended'],
+        ...html.configs.recommended,
         files: ['**/*.html'],
         plugins: {
             '@html-eslint': html,
@@ -23,7 +23,7 @@ export default [
             parser: htmlParser,
         },
         rules: {
-            ...html.configs['flat/recommended'].rules,
+            ...html.configs.recommended.rules,
             '@html-eslint/indent': 'off', // prettier conflicts
             '@html-eslint/no-extra-spacing-attrs': 'off', // prettier conflicts
             '@html-eslint/no-multiple-h1': 'off',
