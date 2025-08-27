@@ -1,3 +1,21 @@
+### [0.317.0](https://github.com/taiga-family/toolkit/compare/v0.316.0...v0.317.0) (2025-08-27)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: ban `object` type (#1234)
+  [(92f48fc)](https://github.com/taiga-family/toolkit/commit/92f48fc6ece751c23e282eef530cb9ff69d2e33a)
+- **tsconfig**: enable sourceMap by default (#1233)
+  [(df193c6)](https://github.com/taiga-family/toolkit/commit/df193c66a57beee42084cecb652e59055f8e39a6)
+
+### 🐞 Bug Fixes
+
+- **release-it-config**: failed git prune (#1227)
+  [(eb231b9)](https://github.com/taiga-family/toolkit/commit/eb231b9b4d8c1a64e2117456cae26a76aefe9d61)
+- update dependency @html-eslint/eslint-plugin to ^0.46.1 (#1231)
+  [(29ff044)](https://github.com/taiga-family/toolkit/commit/29ff044dfdf8917a978d35590caf5f2c9f18f6bd)
+- update @typescript-eslint/\* deps to v8.41.0 (#1230)
+  [(ce199e5)](https://github.com/taiga-family/toolkit/commit/ce199e58df03ec99ecd1af72e83cde82211f9ca7)
+
 ### [0.316.0](https://github.com/taiga-family/toolkit/compare/v0.315.0...v0.316.0) (2025-08-25)
 
 ### 🚀 Features
