@@ -418,10 +418,7 @@ export default tseslint.config(
                             fixWith: 'number',
                             message: 'Use number instead',
                         },
-                        object: {
-                            fixWith: 'Record<string, unknown>',
-                            message:
-                                'Use a more specific type or interface instead, e.g., `Record<string, unknown>`',
+                                '`object` will be automatically replaced with `Record<string, unknown>`. Consider using a more specific type or interface if appropriate.',
                         },
                         Object: {
                             fixWith: 'Record<string, unknown>',
