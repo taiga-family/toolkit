@@ -42,7 +42,7 @@ module.exports = {
             'echo "new version is v${version}"',
             `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`,
             'npx prettier CHANGELOG.md --write > /dev/null',
-            'git fetch --prune --prune-tags origin', // cleanup git workspace
+            'git fetch --prune --prune-tags origin > /dev/null || echo ""', // cleanup git workspace
             'git add CHANGELOG.md',
             'npx syncer || echo ""',
             'npm run after:bump -s || echo ""',
