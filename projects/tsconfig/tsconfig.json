@@ -94,8 +94,9 @@
         "strictPropertyInitialization": true,
         "incremental": true,
         "isolatedModules": true,
-        "sourceMap": false,
-        "inlineSourceMap": false
+        "sourceMap": true,
+        "inlineSourceMap": false,
+        "inlineSources": false
     },
     "ts-node": {
         "files": true,
