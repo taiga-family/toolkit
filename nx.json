@@ -5,9 +5,8 @@
         "default": ["{projectRoot}/**/*", "sharedGlobals"],
         "sharedGlobals": [
             "{workspaceRoot}/package-lock.json",
+            "{workspaceRoot}/tsconfig*.json",
             "{workspaceRoot}/nx.json",
-            "{workspaceRoot}/tsconfig.*.json",
-            "{workspaceRoot}/tsconfig.json",
             "{workspaceRoot}/*.yml",
             "{workspaceRoot}/*.md"
         ],
