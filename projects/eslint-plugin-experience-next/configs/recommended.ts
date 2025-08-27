@@ -420,10 +420,7 @@ export default tseslint.config(
                         },
                                 '`object` will be automatically replaced with `Record<string, unknown>`. Consider using a more specific type or interface if appropriate.',
                         },
-                        Object: {
-                            fixWith: 'Record<string, unknown>',
-                            message:
-                                'The `Object` type actually means `any non-nullish value`, so it is marginally better than `unknown`.\n- If you want a type meaning `any object`, you probably want `object` instead.\n- If you want a type meaning `any value`, you probably want `unknown` instead.',
+                                'The `Object` type actually means `any non-nullish value`, so it is marginally better than `unknown`.\n- If you want a type meaning "any object", use a more specific type or interface, e.g., `Record<string, unknown>`.\n- If you want a type meaning "any value", you probably want `unknown` instead.',
                         },
                         String: {
                             fixWith: 'string',
