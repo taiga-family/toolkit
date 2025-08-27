@@ -418,7 +418,13 @@ export default tseslint.config(
                             fixWith: 'number',
                             message: 'Use number instead',
                         },
+                        object: {
+                            fixWith: 'Record<string, unknown>',
+                            message:
+                                'Use a more specific type or interface instead, e.g., `Record<string, unknown>`',
+                        },
                         Object: {
+                            fixWith: 'Record<string, unknown>',
                             message:
                                 'The `Object` type actually means `any non-nullish value`, so it is marginally better than `unknown`.\n- If you want a type meaning `any object`, you probably want `object` instead.\n- If you want a type meaning `any value`, you probably want `unknown` instead.',
                         },
@@ -431,6 +437,7 @@ export default tseslint.config(
                             message: 'Use symbol instead',
                         },
                         '{}': {
+                            fixWith: 'Record<string, never>',
                             message:
                                 '`{}` actually means `any non-nullish value`.\n- If you want a type meaning `any object`, you probably want `object` instead.\n- If you want a type meaning `any value`, you probably want `unknown` instead.\n- If you want a type meaning `empty object`, you probably want `Record<string, never>` instead.',
                         },
