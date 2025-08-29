@@ -5,27 +5,23 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         selector: 'class',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported', 'abstract'],
+        modifiers: ['abstract'],
         selector: 'class',
     },
     {
         format: ['camelCase'],
-        modifiers: ['exported'],
         selector: 'function',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         selector: 'interface',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         selector: 'typeAlias',
     },
     {
@@ -49,7 +45,6 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     },
     {
         format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
-        modifiers: ['exported'],
         selector: 'variable',
     },
     {
@@ -59,7 +54,6 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     },
     {
         format: ['StrictPascalCase'],
-        modifiers: ['exported'],
         selector: 'enum',
     },
     {
@@ -83,31 +77,27 @@ export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION = [
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         prefix: ['Tui'],
         selector: 'class',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported', 'abstract'],
+        modifiers: ['abstract'],
         prefix: ['AbstractTui', 'Tui'],
         selector: 'class',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         prefix: ['tui'],
         selector: 'function',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         prefix: ['Tui'],
         selector: 'interface',
     },
     {
         format: ['PascalCase'],
-        modifiers: ['exported'],
         prefix: ['Tui'],
         selector: 'typeAlias',
     },
@@ -127,7 +117,6 @@ export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION = [
     },
     {
         format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
-        modifiers: ['exported'],
         selector: 'variable',
     },
     {
@@ -138,7 +127,6 @@ export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION = [
     },
     {
         format: ['StrictPascalCase'],
-        modifiers: ['exported'],
         prefix: ['Tui'],
         selector: 'enum',
     },
