@@ -15,6 +15,10 @@ import {createRequire} from 'module';
 import tseslint from 'typescript-eslint';
 
 import {TUI_RECOMMENDED_NAMING_CONVENTION} from '../rules/convention';
+import {
+    TUI_NO_RESTRICTED_ANGULAR_MODERN_IMPORTS,
+    TUI_NO_RESTRICTED_IMPORTS,
+} from '../rules/no-restricted-imports';
 
 const require = createRequire(import.meta.url);
 
@@ -593,28 +597,11 @@ export default tseslint.config(
             'no-restricted-imports': [
                 'error',
                 {
-                    patterns: [
-                        {
-                            group: ['rxjs/operators'],
-                            message: "Don't use 'rxjs/operators' instead of 'rxjs'",
-                        },
-                        {
-                            group: ['@angular/**'],
-                            importNames: ['Inject'],
-                            message: 'Please use `inject(Type)` function instead',
-                        },
-                        {
-                            group: ['@taiga-ui/polymorpheus'],
-                            importNames: ['POLYMORPHEUS_CONTEXT'],
-                            message: 'Please use `injectContext()` function instead',
-                        },
-                        {
-                            group: ['@angular/core'],
-                            importNames: ['Attribute'],
-                            message:
-                                'Always prefer using HostAttributeToken over @Attribute. See: https://angular.dev/api/core/HostAttributeToken',
-                        },
-                    ],
+                    patterns: TUI_NO_RESTRICTED_IMPORTS.concat(
+                        angularVersion >= modernAngularRules.preferControlFlow
+                            ? TUI_NO_RESTRICTED_ANGULAR_MODERN_IMPORTS
+                            : [],
+                    ),
                 },
             ],
             'no-restricted-syntax': [
