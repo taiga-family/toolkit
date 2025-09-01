@@ -1,3 +1,12 @@
+### [0.320.0](https://github.com/taiga-family/toolkit/compare/v0.319.0...v0.320.0) (2025-09-01)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: revert restrict non-exported naming (#1243)
+  [(73c5a80)](https://github.com/taiga-family/toolkit/commit/73c5a80ccca534e4c3ad4056e28db1cf09c3ae21)
+- update dependency @stylistic/eslint-plugin to ^5.3.1 (#1242)
+  [(c7ca00f)](https://github.com/taiga-family/toolkit/commit/c7ca00fb4bad03877c87f978a936f99ff6e8a03e)
+
 ### [0.319.0](https://github.com/taiga-family/toolkit/compare/v0.318.0...v0.319.0) (2025-09-01)
 
 ### 🚀 Features
