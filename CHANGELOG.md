@@ -1,3 +1,15 @@
+### [0.319.0](https://github.com/taiga-family/toolkit/compare/v0.318.0...v0.319.0) (2025-09-01)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: check convention for non-exported entities (#1238)
+  [(7b86f10)](https://github.com/taiga-family/toolkit/commit/7b86f109cf7c0454c8ae7f078e23e169e83d560b)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: revert restrict object type (#1240)
+  [(60f0141)](https://github.com/taiga-family/toolkit/commit/60f0141c548217f02cbb9b247672a2a37b809d57)
+
 ### [0.318.0](https://github.com/taiga-family/toolkit/compare/v0.317.0...v0.318.0) (2025-08-31)
 
 ### 🐞 Bug Fixes
