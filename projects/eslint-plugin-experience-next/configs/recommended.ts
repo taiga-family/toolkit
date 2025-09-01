@@ -418,10 +418,6 @@ export default tseslint.config(
                             fixWith: 'number',
                             message: 'Use number instead',
                         },
-                        object: {
-                            fixWith: 'Record<string, unknown>',
-                            message: 'Use `Record<string, unknown>` instead',
-                        },
                         String: {
                             fixWith: 'string',
                             message: 'Use string instead',
