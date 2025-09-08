@@ -1,3 +1,22 @@
+### [0.321.0](https://github.com/taiga-family/toolkit/compare/v0.320.0...v0.321.0) (2025-09-07)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^16.24.0 (#1252)
+  [(29920e4)](https://github.com/taiga-family/toolkit/commit/29920e4a6cd42cf94d26fe6312b8b612d8fdfc4e)
+- update dependency eslint-plugin-unicorn to ^61.0.1 (#1251)
+  [(fe35768)](https://github.com/taiga-family/toolkit/commit/fe3576836d21679358e22d0d5f066b74dc16c2a9)
+- update dependency eslint-plugin-unicorn to v61 (#1250)
+  [(159235f)](https://github.com/taiga-family/toolkit/commit/159235ff38386eda989dc0745ebf868bef07db07)
+- update dependency eslint to ^9.35.0 (#1249)
+  [(ca8448d)](https://github.com/taiga-family/toolkit/commit/ca8448d740514ea57f9ca185825fe73feadcda53)
+- update dependency @html-eslint/eslint-plugin to ^0.46.2 (#1247)
+  [(8e8e06a)](https://github.com/taiga-family/toolkit/commit/8e8e06abfd709eed0e7757790252769d350ec753)
+- update dependency @html-eslint/parser to ^0.46.2 (#1248)
+  [(ded01a5)](https://github.com/taiga-family/toolkit/commit/ded01a54d29ff2b0c0524053a81c1abbfe0985fb)
+- update @typescript-eslint/\* deps to v8.42.0 (#1246)
+  [(e86a0e3)](https://github.com/taiga-family/toolkit/commit/e86a0e3d7c914262e8ac89e940b9111343311ced)
+
 ### [0.320.0](https://github.com/taiga-family/toolkit/compare/v0.319.0...v0.320.0) (2025-09-01)
 
 ### 🐞 Bug Fixes
