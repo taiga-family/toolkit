@@ -3,6 +3,11 @@
     "exclude": [],
     "include": ["**/*.spec.ts", "**/*.d.ts"],
     "compilerOptions": {
-        "types": ["jest", "node", "webpack-env"]
+        "types": ["jest", "node", "webpack-env"],
+        "paths": {
+            "@typescript-eslint/parser": [
+                "./node_modules/@typescript-eslint/parser/dist/index.d.ts"
+            ]
+        }
     }
 }

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 
 import {type RuleTextEdit} from '@eslint/core';
 import {type Rule} from 'eslint';
@@ -33,14 +34,29 @@ const config: Rule.RuleModule = {
                         const importedEntitiesSourceFiles = importedEntities.map(
                             ({imported}: any) =>
                                 allTsFiles
-                                    .find((path: string) => {
-                                        const fileContent = fs.readFileSync(path, 'utf8');
+                                    .find((filePath: string) => {
+                                        const fileContent = fs.readFileSync(
+                                            filePath,
+                                            'utf8',
+                                        );
+                                        // Support patterns:
+                                        // export class|interface|enum|const|function Name
+                                        // export abstract class Name
+                                        // export default class Name
+                                        // export { Name } / export {Name as Alias}
+                                        const directPattern = new RegExp(
+                                            `(?<=export\\s+(?:default\\s+)?(?:abstract\\s+)?(?:class|interface|enum|const|let|var|function|type)\\s+)${imported.name}(?=\n|\r|\s|<|\{|\(|:)`,
+                                        );
+                                        const namedExportPattern = new RegExp(
+                                            `export\\s*\\{[^}]*\\b${imported.name}\\b[^}]*}`,
+                                        );
 
-                                        return new RegExp(
-                                            `(?<=export\\s(default\\s)?(abstract\\s)?\\w+\\s)\\b${imported.name}\\b`,
-                                        ).exec(fileContent);
+                                        return (
+                                            directPattern.test(fileContent) ||
+                                            namedExportPattern.test(fileContent)
+                                        );
                                     })
-                                    ?.replaceAll(/\\+/g, '/'), // Windows path to Unix path,
+                                    ?.replaceAll(/\\+/g, '/'), // Normalize Windows path to POSIX
                         );
                         const entryPoints =
                             importedEntitiesSourceFiles.map(findNearestEntryPoint);
@@ -49,14 +65,16 @@ const config: Rule.RuleModule = {
                             return null; // to prevent `import {A,B,C} from 'undefined';`
                         }
 
+                        const isTypeOnly =
+                            (importDeclaration as any)?.importKind === 'type';
                         const newImports = importedEntities.map(
                             ({imported, local}: any, i) => {
                                 const importedEntity =
                                     imported.name === local.name
                                         ? imported.name
-                                        : `${imported.name} as ${local.name}`; // import {TUI_TEXTFIELD_OPTIONS as OPTIONS} from '@taiga-ui/core';
+                                        : `${imported.name} as ${local.name}`;
 
-                                return `import ${(importDeclaration as any)?.importKind === 'type ' ? 'type' : ''}{${importedEntity}} from '${entryPoints[i]}';`;
+                                return `import ${isTypeOnly ? 'type ' : ''}{${importedEntity}} from '${entryPoints[i]}';`;
                             },
                         );
 
@@ -100,17 +118,35 @@ const config: Rule.RuleModule = {
 };
 
 function findNearestEntryPoint(filePath?: string): string {
-    const pathSegments = (filePath ?? '').split('/');
+    const normalized = toPosix(filePath ?? '');
 
-    for (let i = pathSegments.length - 1; i >= 0; i--) {
+    if (!normalized) {
+        return '';
+    }
+
+    const pathSegments = normalized.split('/');
+
+    for (let i = pathSegments.length; i > 0; i--) {
         const possibleEntryPoint = pathSegments.slice(0, i).join('/');
+        const ngPackageJson = path.join(
+            toSystemPath(possibleEntryPoint),
+            'ng-package.json',
+        );
 
-        if (fs.existsSync(`${possibleEntryPoint}/ng-package.json`)) {
-            return possibleEntryPoint.replace(/^node_modules\//, '');
+        if (fs.existsSync(ngPackageJson)) {
+            return possibleEntryPoint.replace(/^node_modules[\\/]/, '');
         }
     }
 
     return '';
+}
+
+function toPosix(p: string): string {
+    return p.replaceAll(/\\+/g, '/');
+}
+
+function toSystemPath(p: string): string {
+    return path.sep === '/' ? p : p.replaceAll('/', path.sep);
 }
 
 function getFilterRegExp(filter: any): string {
