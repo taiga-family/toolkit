@@ -36,6 +36,7 @@ const config: Rule.RuleModule = {
 
             const [currentFileProjectName] =
                 (currentProject && new RegExp(currentProject, 'g').exec(filePath)) || [];
+
             const [importSourceProjectName] =
                 source.match(new RegExp(projectName, 'g')) || [];
 

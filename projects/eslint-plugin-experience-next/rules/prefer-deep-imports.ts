@@ -33,14 +33,14 @@ const config: Rule.RuleModule = {
                         const importedEntitiesSourceFiles = importedEntities.map(
                             ({imported}: any) =>
                                 allTsFiles
-                                    .find((filePath: string) => {
-                                        const fileContent = fs.readFileSync(filePath, 'utf8');
+                                    .find((path: string) => {
+                                        const fileContent = fs.readFileSync(path, 'utf8');
 
                                         return new RegExp(
                                             `(?<=export\\s(default\\s)?(abstract\\s)?\\w+\\s)\\b${imported.name}\\b`,
                                         ).exec(fileContent);
                                     })
-                                    ?.replaceAll(/\\+/g, '/'),
+                                    ?.replaceAll(/\\+/g, '/'), // Windows path to Unix path,
                         );
                         const entryPoints =
                             importedEntitiesSourceFiles.map(findNearestEntryPoint);
@@ -56,7 +56,7 @@ const config: Rule.RuleModule = {
                                 const importedEntity =
                                     imported.name === local.name
                                         ? imported.name
-                                        : `${imported.name} as ${local.name}`;
+                                        : `${imported.name} as ${local.name}`; // import {TUI_TEXTFIELD_OPTIONS as OPTIONS} from '@taiga-ui/core';
 
                                 return `import ${isTypeOnly ? 'type ' : ''}{${importedEntity}} from '${entryPoints[i]}';`;
                             },
