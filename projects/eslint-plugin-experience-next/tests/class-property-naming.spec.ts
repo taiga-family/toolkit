@@ -1,11 +1,10 @@
-import * as tsParser from '@typescript-eslint/parser';
-import {RuleTester} from '@typescript-eslint/rule-tester';
-
 import rule from '../rules/class-property-naming';
+
+const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
 const ruleTester = new RuleTester({
     languageOptions: {
-        parser: tsParser,
+        parser: require('@typescript-eslint/parser'),
         parserOptions: {
             projectService: {
                 allowDefaultProject: ['*.ts*'],

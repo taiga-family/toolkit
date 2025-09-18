@@ -1,15 +1,15 @@
 import {rules} from '@typescript-eslint/eslint-plugin';
-import * as tsParser from '@typescript-eslint/parser';
-import {RuleTester} from '@typescript-eslint/rule-tester';
 
 import {
     TUI_CUSTOM_TAIGA_NAMING_CONVENTION as custom,
     TUI_RECOMMENDED_NAMING_CONVENTION as recommended,
 } from '../rules/convention';
 
+const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
+
 const ruleTester = new RuleTester({
     languageOptions: {
-        parser: tsParser,
+        parser: require('@typescript-eslint/parser'),
         parserOptions: {
             projectService: {
                 allowDefaultProject: ['*.ts*'],

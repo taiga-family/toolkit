@@ -3,6 +3,8 @@
     "exclude": [],
     "include": ["**/*.spec.ts", "**/*.d.ts"],
     "compilerOptions": {
-        "types": ["jest", "node", "webpack-env"]
+        "types": ["jest", "node"],
+        "moduleResolution": "node",
+        "checkJs": false
     }
 }

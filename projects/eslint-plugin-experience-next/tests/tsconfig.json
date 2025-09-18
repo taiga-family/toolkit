@@ -1,7 +1,0 @@
-{
-    "include": ["*.ts"],
-    "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "nodenext"
-    }
-}
