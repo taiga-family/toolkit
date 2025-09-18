@@ -31,32 +31,35 @@ const config: Rule.RuleModule = {
                             },
                         );
 
-                        const importedEntitiesSourceFiles = importedEntities.map(
-                            ({imported}: any) =>
-                                allTsFiles
-                                    .find((filePath: string) => {
-                                        const fileContent = fs.readFileSync(
-                                            filePath,
-                                            'utf8',
-                                        );
-                                        // Support patterns:
-                                        // export class|interface|enum|const|function Name
-                                        // export abstract class Name
-                                        // export default class Name
-                                        // export { Name } / export {Name as Alias}
-                                        const directPattern = new RegExp(
-                                            `(?<=export\\s+(?:default\\s+)?(?:abstract\\s+)?(?:class|interface|enum|const|let|var|function|type)\\s+)${imported.name}(?=\n|\r|\s|<|\{|\(|:)`,
-                                        );
-                                        const namedExportPattern = new RegExp(
-                                            `export\\s*\\{[^}]*\\b${imported.name}\\b[^}]*}`,
-                                        );
+                        const exportedKeywordPattern = /export\s+(?:default\s+)?(?:abstract\s+)?(class|interface|enum|const|let|var|function|type)\s+([A-Za-z0-9_]+)/g;
+                        const importedEntitiesSourceFiles = importedEntities.map(({imported}: any) =>
+                            allTsFiles
+                                .find((filePath: string) => {
+                                    const fileContent = fs.readFileSync(filePath, 'utf8');
+                                    const identifier = imported.name;
 
-                                        return (
-                                            directPattern.test(fileContent) ||
-                                            namedExportPattern.test(fileContent)
+                                    // Fast path: scan direct declarations without lookbehind
+                                    let match: RegExpExecArray | null;
+                                    while ((match = exportedKeywordPattern.exec(fileContent))) {
+                                        if (match[2] === identifier) {
+                                            return true;
+                                        }
+                                    }
+
+                                    // Fallback: named export block
+                                    // (coarse check first to avoid crafting large regexes per identifier)
+                                    if (fileContent.includes(`{ ${identifier}`) || fileContent.includes(`{${identifier}`)) {
+                                        const namedExportPattern = new RegExp(
+                                            String.raw`export\s*\{[^}]*\b${escapeRegExp(identifier)}\b[^}]*}`,
                                         );
-                                    })
-                                    ?.replaceAll(/\\+/g, '/'), // Normalize Windows path to POSIX
+                                        if (namedExportPattern.test(fileContent)) {
+                                            return true;
+                                        }
+                                    }
+
+                                    return false;
+                                })
+                                ?.replaceAll(/\\+/g, '/'), // Normalize Windows path to POSIX
                         );
                         const entryPoints =
                             importedEntitiesSourceFiles.map(findNearestEntryPoint);
@@ -162,3 +165,8 @@ function getFilterRegExp(filter: any): string {
 }
 
 export default config;
+
+// Local helper (avoid pulling extra deps)
+function escapeRegExp(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

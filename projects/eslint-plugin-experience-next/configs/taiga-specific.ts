@@ -13,9 +13,12 @@ const allPackageJSONs = globSync('**/package.json', {
 }).filter((path) => !readJSON(path).private);
 const packageNames = allPackageJSONs.map((path) => readJSON(path).name).filter(Boolean);
 
+// Normalize Windows path separators to POSIX for ESLint file pattern matching
+const packageSourceGlobs = allPackageJSONs.map((p) => p.replace(/\\+/g, '/').replace('package.json', '**/*.ts'));
+
 export default tseslint.config([
     {
-        files: allPackageJSONs.map((path) => path.replace('package.json', '**/*.ts')),
+        files: packageSourceGlobs,
         ignores: ['**/*.spec.ts', '**/*.cy.ts'],
         rules: {
             '@taiga-ui/experience-next/no-deep-imports': 'off',
