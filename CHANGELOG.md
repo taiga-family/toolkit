@@ -1,3 +1,16 @@
+### [0.323.0](https://github.com/taiga-family/toolkit/compare/v0.322.0...v0.323.0) (2025-09-18)
+
+### 🐞 Bug Fixes
+
+- update dependency release-it to v19.0.5 (#1265)
+  [(62a9429)](https://github.com/taiga-family/toolkit/commit/62a942996fb97225685894855bed0d21bc59106d)
+- update dependency ts-jest to v29.4.3 (#1264)
+  [(010fb90)](https://github.com/taiga-family/toolkit/commit/010fb90a70340812db0c48e2bcbb55e7335c8dc9)
+- update dependency ts-jest to v29.4.2 (#1262)
+  [(349af24)](https://github.com/taiga-family/toolkit/commit/349af242dd8f799ee1afc8709c91eb34437adca8)
+- update @typescript-eslint/\* deps to v8.44.0 (#1261)
+  [(37a1dc0)](https://github.com/taiga-family/toolkit/commit/37a1dc05e92e7bbf0f51dc51fb55a93af9487fb4)
+
 ### [0.322.0](https://github.com/taiga-family/toolkit/compare/v0.321.0...v0.322.0) (2025-09-14)
 
 ### 🐞 Bug Fixes

@@ -61,6 +61,7 @@ export default {
     },
     transformIgnorePatterns: [
         'node_modules/(?!@angular|rxjs|ngx-highlightjs|@maskito|parse5|@ng-web-apis|@taiga-ui).+',
+        String.raw`^.+\.js$`,
     ],
     verbose: !process.env.CI,
 } satisfies JestConfigWithTsJest;
