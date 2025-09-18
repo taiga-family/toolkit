@@ -14,7 +14,7 @@ const allPackageJSONs = globSync('**/package.json', {
 const packageNames = allPackageJSONs.map((path) => readJSON(path).name).filter(Boolean);
 
 const packageSourceGlobs = allPackageJSONs.map((p) =>
-    p.replace(/\\+/g, '/').replace('package.json', '**/*.ts'),
+    p.replaceAll(/\\+/g, '/').replace('package.json', '**/*.ts'),
 );
 
 export default tseslint.config([
