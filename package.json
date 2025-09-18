@@ -38,12 +38,12 @@
         ]
     },
     "devDependencies": {
-        "@nx/rollup": "21.4.1",
-        "@nx/workspace": "21.4.1",
+        "@nx/rollup": "21.5.2",
+        "@nx/workspace": "21.5.2",
         "lint-staged": "16.1.6",
-        "nx": "21.4.1",
+        "nx": "21.5.2",
         "ts-node": "10.9.2",
-        "typescript": "5.8.3"
+        "typescript": "5.9.2"
     },
     "cspell": {
         "import": [
