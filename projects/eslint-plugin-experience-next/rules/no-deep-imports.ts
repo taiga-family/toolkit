@@ -30,45 +30,20 @@ const config: Rule.RuleModule = {
             !!source.match(new RegExp(deepImport, 'g'))?.length;
 
         const isInsideTheSameEntryPoint = (source: string): boolean => {
-            // Use official ESLint API getters to ensure cross-platform correctness (context.cwd is not public)
             const filePath = path
-                .relative(context.getCwd(), context.getFilename())
+                .relative(context.cwd, context.filename)
                 .replaceAll(/\\+/g, '/');
 
-            let [currentFileProjectName] =
+            const [currentFileProjectName] =
                 (currentProject && new RegExp(currentProject, 'g').exec(filePath)) || [];
-
-            // Fallback: derive project name from conventional monorepo path structure `projects/<name>/...`
-            if (!currentFileProjectName) {
-                const fallback = /projects\/([\w-]+)\//.exec(filePath)?.[1];
-                if (fallback) {
-                    currentFileProjectName = fallback;
-                }
-            }
-
             const [importSourceProjectName] =
                 source.match(new RegExp(projectName, 'g')) || [];
 
-            if (
+            return Boolean(
                 currentFileProjectName &&
-                importSourceProjectName &&
-                currentFileProjectName === importSourceProjectName
-            ) {
-                return true;
-            }
-
-            // Additional safeguard: compare the base package segment extracted from import with derived project name
-            // Example: import '@taiga-ui/cdk/directives/animated' -> basePackage '@taiga-ui/cdk'
-            const basePackageMatch = /^(@[^/]+\/[\w-]+)/.exec(source)?.[1];
-            if (basePackageMatch && currentFileProjectName) {
-                // Map project name to expected scoped package name form
-                const expectedBase = `@taiga-ui/${currentFileProjectName}`;
-                if (basePackageMatch === expectedBase) {
-                    return true;
-                }
-            }
-
-            return false;
+                    importSourceProjectName &&
+                    currentFileProjectName === importSourceProjectName,
+            );
         };
 
         const shouldIgnore = (source: string): boolean =>

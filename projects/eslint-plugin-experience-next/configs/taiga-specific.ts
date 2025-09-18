@@ -13,8 +13,10 @@ const allPackageJSONs = globSync('**/package.json', {
 }).filter((path) => !readJSON(path).private);
 const packageNames = allPackageJSONs.map((path) => readJSON(path).name).filter(Boolean);
 
-// Normalize Windows path separators to POSIX for ESLint file pattern matching
-const packageSourceGlobs = allPackageJSONs.map((p) => p.replace(/\\+/g, '/').replace('package.json', '**/*.ts'));
+// Minimal necessary normalization: convert backslashes to forward slashes for ESLint pattern matching
+const packageSourceGlobs = allPackageJSONs.map((p) =>
+    p.replace(/\\+/g, '/').replace('package.json', '**/*.ts'),
+);
 
 export default tseslint.config([
     {

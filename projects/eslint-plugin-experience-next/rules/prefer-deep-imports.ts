@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import path from 'node:path';
 
 import {type RuleTextEdit} from '@eslint/core';
 import {type Rule} from 'eslint';
@@ -31,48 +30,17 @@ const config: Rule.RuleModule = {
                             },
                         );
 
-                        const exportedKeywordPattern =
-                            /export\s+(?:default\s+)?(?:abstract\s+)?(class|interface|enum|const|let|var|function|type)\s+([A-Za-z0-9_]+)/g;
                         const importedEntitiesSourceFiles = importedEntities.map(
                             ({imported}: any) =>
                                 allTsFiles
                                     .find((filePath: string) => {
-                                        const fileContent = fs.readFileSync(
-                                            filePath,
-                                            'utf8',
-                                        );
-                                        const identifier = imported.name;
+                                        const fileContent = fs.readFileSync(filePath, 'utf8');
 
-                                        // Fast path: scan direct declarations without lookbehind
-                                        let match: RegExpExecArray | null;
-
-                                        while (
-                                            (match =
-                                                exportedKeywordPattern.exec(fileContent))
-                                        ) {
-                                            if (match[2] === identifier) {
-                                                return true;
-                                            }
-                                        }
-
-                                        // Fallback: named export block
-                                        // (coarse check first to avoid crafting large regexes per identifier)
-                                        if (
-                                            fileContent.includes(`{ ${identifier}`) ||
-                                            fileContent.includes(`{${identifier}`)
-                                        ) {
-                                            const namedExportPattern = new RegExp(
-                                                String.raw`export\s*\{[^}]*\b${escapeRegExp(identifier)}\b[^}]*}`,
-                                            );
-
-                                            if (namedExportPattern.test(fileContent)) {
-                                                return true;
-                                            }
-                                        }
-
-                                        return false;
+                                        return new RegExp(
+                                            `(?<=export\\s(default\\s)?(abstract\\s)?\\w+\\s)\\b${imported.name}\\b`,
+                                        ).exec(fileContent);
                                     })
-                                    ?.replaceAll(/\\+/g, '/'), // Normalize Windows path to POSIX
+                                    ?.replaceAll(/\\+/g, '/'),
                         );
                         const entryPoints =
                             importedEntitiesSourceFiles.map(findNearestEntryPoint);
@@ -134,35 +102,17 @@ const config: Rule.RuleModule = {
 };
 
 function findNearestEntryPoint(filePath?: string): string {
-    const normalized = toPosix(filePath ?? '');
+    const pathSegments = (filePath ?? '').split('/');
 
-    if (!normalized) {
-        return '';
-    }
-
-    const pathSegments = normalized.split('/');
-
-    for (let i = pathSegments.length; i > 0; i--) {
+    for (let i = pathSegments.length - 1; i >= 0; i--) {
         const possibleEntryPoint = pathSegments.slice(0, i).join('/');
-        const ngPackageJson = path.join(
-            toSystemPath(possibleEntryPoint),
-            'ng-package.json',
-        );
 
-        if (fs.existsSync(ngPackageJson)) {
-            return possibleEntryPoint.replace(/^node_modules[\\/]/, '');
+        if (fs.existsSync(`${possibleEntryPoint}/ng-package.json`)) {
+            return possibleEntryPoint.replace(/^node_modules\//, '');
         }
     }
 
     return '';
-}
-
-function toPosix(p: string): string {
-    return p.replaceAll(/\\+/g, '/');
-}
-
-function toSystemPath(p: string): string {
-    return path.sep === '/' ? p : p.replaceAll('/', path.sep);
 }
 
 function getFilterRegExp(filter: any): string {
@@ -178,8 +128,3 @@ function getFilterRegExp(filter: any): string {
 }
 
 export default config;
-
-// Local helper (avoid pulling extra deps)
-function escapeRegExp(str: string): string {
-    return str.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-}
