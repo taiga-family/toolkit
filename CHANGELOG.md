@@ -1,3 +1,10 @@
+### [0.324.0](https://github.com/taiga-family/toolkit/compare/v0.323.0...v0.324.0) (2025-09-19)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: resolve prefer-deep-import rule failure on Windows (#1266)
+  [(86caf02)](https://github.com/taiga-family/toolkit/commit/86caf023ba6dbdfa00bfeeadba423aacccf60580)
+
 ### [0.323.0](https://github.com/taiga-family/toolkit/compare/v0.322.0...v0.323.0) (2025-09-18)
 
 ### 🐞 Bug Fixes
