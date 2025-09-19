@@ -5,6 +5,7 @@ module.exports = {
     caseSensitive: false,
     ignorePaths: [
         '**/LICENSE',
+        '**/audit.txt',
         '**/.github/CODEOWNERS',
         '**/CHANGELOG.md',
         '**/.cspell.json',
