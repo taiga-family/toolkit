@@ -49,6 +49,8 @@ const config: Rule.RuleModule = {
                             return null; // to prevent `import {A,B,C} from 'undefined';`
                         }
 
+                        const isTypeOnly =
+                            (importDeclaration as any)?.importKind === 'type';
                         const newImports = importedEntities.map(
                             ({imported, local}: any, i) => {
                                 const importedEntity =
@@ -56,7 +58,7 @@ const config: Rule.RuleModule = {
                                         ? imported.name
                                         : `${imported.name} as ${local.name}`; // import {TUI_TEXTFIELD_OPTIONS as OPTIONS} from '@taiga-ui/core';
 
-                                return `import ${(importDeclaration as any)?.importKind === 'type ' ? 'type' : ''}{${importedEntity}} from '${entryPoints[i]}';`;
+                                return `import ${isTypeOnly ? 'type ' : ''}{${importedEntity}} from '${entryPoints[i]}';`;
                             },
                         );
 
