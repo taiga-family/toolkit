@@ -1,3 +1,14 @@
+### [0.325.0](https://github.com/taiga-family/toolkit/compare/v0.324.0...v0.325.0) (2025-09-22)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint to ^9.36.0 (#1277)
+  [(ca63ed6)](https://github.com/taiga-family/toolkit/commit/ca63ed671bd70a813de69ada19351ff1509c76b0)
+- update dependency @stylistic/eslint-plugin to ^5.4.0 (#1276)
+  [(5fea3db)](https://github.com/taiga-family/toolkit/commit/5fea3db0b5e40075bac12b0e9d1363889b9e42a6)
+- update dependency ts-jest to v29.4.4 (#1275)
+  [(a62d120)](https://github.com/taiga-family/toolkit/commit/a62d120626592a6f81b5fe01f9c926018adf0dda)
+
 ### [0.324.0](https://github.com/taiga-family/toolkit/compare/v0.323.0...v0.324.0) (2025-09-19)
 
 ### 🐞 Bug Fixes
