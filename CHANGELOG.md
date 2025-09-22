@@ -1,3 +1,10 @@
+### [0.326.0](https://github.com/taiga-family/toolkit/compare/v0.325.0...v0.326.0) (2025-09-22)
+
+### 🐞 Bug Fixes
+
+- **release-it-config**: there are no commits since the latest tag. (#1279)
+  [(b5ebea3)](https://github.com/taiga-family/toolkit/commit/b5ebea3eb3fa1ef286a9c1d39215af6d1acdd40a)
+
 ### [0.325.0](https://github.com/taiga-family/toolkit/compare/v0.324.0...v0.325.0) (2025-09-22)
 
 ### 🐞 Bug Fixes
