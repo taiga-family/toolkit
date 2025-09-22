@@ -50,7 +50,7 @@ module.exports = {
         ],
         'after:release':
             'echo Successfully released ${name} v${version} to ${repo.repository}.',
-        'before:init': 'git fetch --prune --prune-tags origin',
+        'before:init': 'git fetch --prune --prune-tags origin > /dev/null || echo ""',
         'before:release': 'npm run release || echo ""',
     },
     npm: {
