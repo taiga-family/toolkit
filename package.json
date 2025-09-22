@@ -40,7 +40,7 @@
     "devDependencies": {
         "@nx/rollup": "21.4.1",
         "@nx/workspace": "21.4.1",
-        "lint-staged": "16.1.6",
+        "lint-staged": "16.2.0",
         "nx": "21.4.1",
         "ts-node": "10.9.2",
         "typescript": "5.8.3"
