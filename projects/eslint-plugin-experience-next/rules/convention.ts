@@ -29,7 +29,7 @@ export const TUI_CUSTOM_TAIGA_NAMING_CONVENTION = [
     {
         format: ['PascalCase'],
         modifiers: ['exported'],
-        prefix: ['tui'],
+        prefix: ['tui', 'provide'],
         selector: 'function',
     },
 ] as const;
