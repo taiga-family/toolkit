@@ -1,3 +1,17 @@
+### [0.327.0](https://github.com/taiga-family/toolkit/compare/v0.326.0...v0.327.0) (2025-09-24)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: allow function names starting with `provide` prefix (#1287)
+  [(8417bdb)](https://github.com/taiga-family/toolkit/commit/8417bdb29b0acf07f61421b5538bb127f394964e)
+
+### 🐞 Bug Fixes
+
+- update dependency @eslint/compat to ^1.4.0 (#1285)
+  [(95ca6c2)](https://github.com/taiga-family/toolkit/commit/95ca6c20055bd3c44498b3f09265024c783eab3a)
+- update @typescript-eslint/\* deps to v8.44.1 (#1284)
+  [(49e521b)](https://github.com/taiga-family/toolkit/commit/49e521b6511ce1f73f1a01e4301add9877acac6a)
+
 ### [0.326.0](https://github.com/taiga-family/toolkit/compare/v0.325.0...v0.326.0) (2025-09-22)
 
 ### 🐞 Bug Fixes
