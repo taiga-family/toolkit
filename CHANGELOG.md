@@ -1,3 +1,14 @@
+### [0.328.0](https://github.com/taiga-family/toolkit/compare/v0.327.0...v0.328.0) (2025-09-28)
+
+### 🐞 Bug Fixes
+
+- update dependency @html-eslint/parser to ^0.47.0 (#1294)
+  [(ef373b8)](https://github.com/taiga-family/toolkit/commit/ef373b804a8fc7a431ddf86125300a63ef988a38)
+- update dependency @html-eslint/eslint-plugin to ^0.47.0 (#1293)
+  [(0f9921c)](https://github.com/taiga-family/toolkit/commit/0f9921cab3dca815cab44c57e741df199c071e74)
+- update react to v20 (#1290)
+  [(cadb6ef)](https://github.com/taiga-family/toolkit/commit/cadb6efd0433acd5f00ea98cfcdbfea04433d84d)
+
 ### [0.327.0](https://github.com/taiga-family/toolkit/compare/v0.326.0...v0.327.0) (2025-09-24)
 
 ### 🚀 Features
