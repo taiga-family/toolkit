@@ -1,5 +1,7 @@
 import {rules} from '@typescript-eslint/eslint-plugin';
 
+import {TUI_MEMBER_ORDERING_CONVENTION} from '../rules/convention';
+
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
 const ruleTester = new RuleTester({
@@ -14,50 +16,8 @@ const ruleTester = new RuleTester({
 
 const rule = rules['member-ordering'];
 
-// Member ordering configuration from recommended.ts
-const memberOrderingConfig = {
-    default: [
-        'signature',
-        'readonly-signature',
-        'public-static-field',
-        'protected-static-field',
-        '#private-static-field',
-        'private-static-field',
-        'private-decorated-field',
-        'protected-abstract-field',
-        'public-abstract-field',
-        '#private-instance-field',
-        'private-decorated-field',
-        'private-instance-field',
-        ['protected-decorated-field', 'public-decorated-field'],
-        ['protected-instance-field', 'public-instance-field'],
-        'private-constructor',
-        'protected-constructor',
-        'public-constructor',
-        'public-static-method',
-        'protected-static-method',
-        'private-static-method',
-        '#private-static-method',
-        'public-abstract-get',
-        'public-abstract-set',
-        'protected-abstract-get',
-        'protected-abstract-set',
-        'public-abstract-method',
-        'protected-abstract-method',
-        ['public-decorated-set', 'public-decorated-get'],
-        ['public-set', 'public-get'],
-        'public-decorated-method',
-        'public-instance-method',
-        ['protected-decorated-set', 'protected-decorated-get'],
-        ['protected-set', 'protected-get'],
-        'protected-decorated-method',
-        'protected-instance-method',
-        ['private-decorated-set', 'private-decorated-get'],
-        ['private-set', 'private-get'],
-        'private-decorated-method',
-        'private-instance-method',
-        '#private-instance-method',
-    ],
+const config = {
+    default: TUI_MEMBER_ORDERING_CONVENTION,
 };
 
 ruleTester.run('member-ordering with public|protected-instance-field', rule, {
@@ -70,7 +30,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                 }
             `,
             errors: [{messageId: 'incorrectGroupOrder'}],
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -80,7 +40,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                 }
             `,
             errors: [{messageId: 'incorrectGroupOrder'}],
-            options: [memberOrderingConfig],
+            options: [config],
         },
     ],
     valid: [
@@ -91,7 +51,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     public field2 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -100,7 +60,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     protected field2 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -110,7 +70,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     protected field3 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -120,7 +80,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     public field3 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -131,7 +91,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     public field4 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
         {
             code: `
@@ -142,7 +102,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     protected field4 = 'value';
                 }
             `,
-            options: [memberOrderingConfig],
+            options: [config],
         },
     ],
 });
