@@ -1,3 +1,10 @@
+### [0.330.0](https://github.com/taiga-family/toolkit/compare/v0.329.0...v0.330.0) (2025-10-03)
+
+### 🚀 Features
+
+- **browserslist-config**: bump Safari & IOS (#1303)
+  [(ef4a7dd)](https://github.com/taiga-family/toolkit/commit/ef4a7dd7a3cd4b169267d7a76e4087d9943b78b0)
+
 ### [0.329.0](https://github.com/taiga-family/toolkit/compare/v0.328.0...v0.329.0) (2025-10-03)
 
 ### 🚀 Features
