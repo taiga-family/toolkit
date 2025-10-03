@@ -1,3 +1,19 @@
+### [0.329.0](https://github.com/taiga-family/toolkit/compare/v0.328.0...v0.329.0) (2025-10-03)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: change member ordering to allow public|protected-instance-field in any order
+  (#1302) [(1d1b243)](https://github.com/taiga-family/toolkit/commit/1d1b243e5fdf4a3998d2b03084438d664113ea70)
+
+### 🐞 Bug Fixes
+
+- update dependency @commitlint/cli to ^20.1.0 (#1300)
+  [(b51868f)](https://github.com/taiga-family/toolkit/commit/b51868f21e152f0ab88777fa6e2187384a5e9d4c)
+- update @typescript-eslint/\* deps to v8.45.0 (#1298)
+  [(da28437)](https://github.com/taiga-family/toolkit/commit/da284379626a089194041b256645d7e6e045b5d9)
+- update dependency eslint-plugin-de-morgan to v2 (#1297)
+  [(d4e9603)](https://github.com/taiga-family/toolkit/commit/d4e96030bbd97a8f2c6748ff23f95ab02cbbe1b9)
+
 ### [0.328.0](https://github.com/taiga-family/toolkit/compare/v0.327.0...v0.328.0) (2025-09-28)
 
 ### 🐞 Bug Fixes
