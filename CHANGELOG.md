@@ -1,3 +1,12 @@
+### [0.331.0](https://github.com/taiga-family/toolkit/compare/v0.330.0...v0.331.0) (2025-10-03)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: ignore order between decorated public and protected fields (#1305)
+  [(a7d4262)](https://github.com/taiga-family/toolkit/commit/a7d42623a3353ebbe52ed20141ae3b7a7a4faeff)
+- update dependency stylelint to ^16.25.0 (#1306)
+  [(1b2631d)](https://github.com/taiga-family/toolkit/commit/1b2631d960114f05552b8a81d82c20094483bc7a)
+
 ### [0.330.0](https://github.com/taiga-family/toolkit/compare/v0.329.0...v0.330.0) (2025-10-03)
 
 ### 🚀 Features
