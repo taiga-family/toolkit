@@ -14,7 +14,10 @@ import globals from 'globals';
 import {createRequire} from 'module';
 import tseslint from 'typescript-eslint';
 
-import {TUI_RECOMMENDED_NAMING_CONVENTION} from '../rules/convention';
+import {
+    TUI_MEMBER_ORDERING_CONVENTION,
+    TUI_RECOMMENDED_NAMING_CONVENTION,
+} from '../rules/convention';
 
 const require = createRequire(import.meta.url);
 
@@ -318,52 +321,7 @@ export default tseslint.config(
             '@typescript-eslint/max-params': ['error', {countVoidThis: true, max: 5}],
             '@typescript-eslint/member-ordering': [
                 'error',
-                {
-                    default: [
-                        'signature',
-                        'readonly-signature',
-                        'public-static-field',
-                        'protected-static-field',
-                        '#private-static-field',
-                        'private-static-field',
-                        'private-decorated-field',
-                        'protected-abstract-field',
-                        'public-abstract-field',
-                        '#private-instance-field',
-                        'private-decorated-field',
-                        'private-instance-field',
-                        'protected-decorated-field',
-                        'protected-instance-field',
-                        'public-decorated-field',
-                        'public-instance-field',
-                        'private-constructor',
-                        'protected-constructor',
-                        'public-constructor',
-                        'public-static-method',
-                        'protected-static-method',
-                        'private-static-method',
-                        '#private-static-method',
-                        'public-abstract-get',
-                        'public-abstract-set',
-                        'protected-abstract-get',
-                        'protected-abstract-set',
-                        'public-abstract-method',
-                        'protected-abstract-method',
-                        ['public-decorated-set', 'public-decorated-get'],
-                        ['public-set', 'public-get'],
-                        'public-decorated-method',
-                        'public-instance-method',
-                        ['protected-decorated-set', 'protected-decorated-get'],
-                        ['protected-set', 'protected-get'],
-                        'protected-decorated-method',
-                        'protected-instance-method',
-                        ['private-decorated-set', 'private-decorated-get'],
-                        ['private-set', 'private-get'],
-                        'private-decorated-method',
-                        'private-instance-method',
-                        '#private-instance-method',
-                    ],
-                },
+                {default: TUI_MEMBER_ORDERING_CONVENTION},
             ],
             '@typescript-eslint/naming-convention': [
                 'error',
