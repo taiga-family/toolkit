@@ -16,7 +16,7 @@
         "@stylistic/eslint-plugin": "^5.4.0",
         "@types/glob": "*",
         "angular-eslint": "^20.3.0",
-        "eslint": "^9.36.0",
+        "eslint": "^9.37.0",
         "eslint-config-prettier": "^10.1.7",
         "eslint-plugin-de-morgan": "^2.0.0",
         "eslint-plugin-decorator-position": "^6.0.0",
