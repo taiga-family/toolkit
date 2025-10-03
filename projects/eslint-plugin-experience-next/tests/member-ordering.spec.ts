@@ -160,7 +160,7 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
             code: `
                 class TestClass {
                     private field1 = 'value';
-                   
+                   	
                     @Input()
                     protected field2 = 'value';
                     
