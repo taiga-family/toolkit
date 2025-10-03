@@ -42,6 +42,26 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
             errors: [{messageId: 'incorrectGroupOrder'}],
             options: [config],
         },
+        {
+            code: `
+                class TestClass {
+                    @Input() public field1 = 'value';
+                    private field2 = 'value';
+                }
+            `,
+            errors: [{messageId: 'incorrectGroupOrder'}],
+            options: [config],
+        },
+        {
+            code: `
+                class TestClass {
+                    @Input() protected field1 = 'value';
+                    private field2 = 'value';
+                }
+            `,
+            errors: [{messageId: 'incorrectGroupOrder'}],
+            options: [config],
+        },
     ],
     valid: [
         {
@@ -100,6 +120,56 @@ ruleTester.run('member-ordering with public|protected-instance-field', rule, {
                     protected field2 = 'value';
                     public field3 = 'value';
                     protected field4 = 'value';
+                }
+            `,
+            options: [config],
+        },
+        {
+            code: `
+                class TestClass {
+                    private field1 = 'value';
+                    public field2 = 'value';
+                    protected field3 = 'value';
+                    
+                    @Input()
+                    public field4 = 'value';
+                    
+                    @Input()
+                    protected field5 = 'value';
+                }
+            `,
+            options: [config],
+        },
+        {
+            code: `
+                class TestClass {
+                    private field1 = 'value';
+                    protected field2 = 'value';
+                    public field3 = 'value';
+                    
+                    @Input()
+                    protected field4 = 'value';
+                    
+                    @Input()
+                    public field5 = 'value';
+                }
+            `,
+            options: [config],
+        },
+        {
+            code: `
+                class TestClass {
+                    private field1 = 'value';
+                   
+                    @Input()
+                    protected field2 = 'value';
+                    
+                    @Input()
+                    public field3 = 'value';
+                    
+                    public field4 = 'value';
+                    protected field5 = 'value';
+                    
                 }
             `,
             options: [config],
