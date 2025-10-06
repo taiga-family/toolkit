@@ -1,3 +1,12 @@
+### [0.332.0](https://github.com/taiga-family/toolkit/compare/v0.331.0...v0.332.0) (2025-10-04)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-perfectionist to ^4.15.1 (#1308)
+  [(023f016)](https://github.com/taiga-family/toolkit/commit/023f016eaf35f619d07d29b9abbd0c03dc5509b4)
+- update dependency eslint to ^9.37.0 (#1307)
+  [(ad91c60)](https://github.com/taiga-family/toolkit/commit/ad91c606c0e727de658988f25501fa316cc41223)
+
 ### [0.331.0](https://github.com/taiga-family/toolkit/compare/v0.330.0...v0.331.0) (2025-10-03)
 
 ### 🐞 Bug Fixes
