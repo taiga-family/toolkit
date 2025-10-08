@@ -30,7 +30,15 @@
                 "textAttributeNotBinding": "error",
                 "missingNgForOfLet": "error",
                 "invalidBananaInBox": "error",
-                "suffixNotSupported": "error"
+                "suffixNotSupported": "error",
+                "interpolatedSignalNotInvoked": "error",
+                "skipHydrationNotStatic": "error",
+                "unusedStandaloneImports": "error",
+                "uninvokedFunctionInEventBinding": "error",
+                "missingStructuralDirective": "error",
+                "uninvokedFunctionInTextInterpolation": "error",
+                "uninvokedTrackFunction": "error",
+                "controlFlowPreventingContentProjection": "error"
             }
         }
     },
