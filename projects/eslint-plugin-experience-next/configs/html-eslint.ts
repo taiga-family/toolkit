@@ -22,6 +22,7 @@ export default [
         },
         rules: {
             ...html.configs.recommended.rules,
+            '@taiga-ui/experience-next/no-href-with-router-link': 'error',
             'html/indent': 'off', // prettier conflicts
             'html/no-extra-spacing-attrs': 'off', // prettier conflicts
             'html/no-multiple-h1': 'off',

@@ -565,6 +565,8 @@
         "antialiasing",
         "smarttools",
         "nodenext",
-        "TSESTree"
+        "TSESTree",
+        "routerlink",
+        "mylink"
     ]
 }
