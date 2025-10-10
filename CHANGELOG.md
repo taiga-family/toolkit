@@ -1,3 +1,10 @@
+### [0.334.0](https://github.com/taiga-family/toolkit/compare/v0.333.0...v0.334.0) (2025-10-10)
+
+### 🐞 Bug Fixes
+
+- **tsconfig**: compatibility with Angular 19 (#1316)
+  [(43573d6)](https://github.com/taiga-family/toolkit/commit/43573d6d7263c48cc542591735f047bd00a7ebcc)
+
 ### [0.333.0](https://github.com/taiga-family/toolkit/compare/v0.332.0...v0.333.0) (2025-10-10)
 
 ### 🚀 Features
