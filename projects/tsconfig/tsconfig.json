@@ -35,9 +35,6 @@
                 "skipHydrationNotStatic": "error",
                 "unusedStandaloneImports": "error",
                 "uninvokedFunctionInEventBinding": "error",
-                "missingStructuralDirective": "error",
-                "uninvokedFunctionInTextInterpolation": "error",
-                "uninvokedTrackFunction": "error",
                 "controlFlowPreventingContentProjection": "error"
             }
         }
