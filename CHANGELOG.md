@@ -1,3 +1,21 @@
+### [0.333.0](https://github.com/taiga-family/toolkit/compare/v0.332.0...v0.333.0) (2025-10-10)
+
+### 🚀 Features
+
+- **tsconfig**: upgrade ecma script target by new baseline (#1315)
+  [(7bd2e6c)](https://github.com/taiga-family/toolkit/commit/7bd2e6c9352dde1fb7acca88fee961594a07ffde)
+- **tsconfig**: extended diagnostics of Angular 19 (#1312)
+  [(1491138)](https://github.com/taiga-family/toolkit/commit/149113818a2662053caeb3fddc4546c2efb33ce2)
+- **eslint-plugin-experience-next**: restrict using href and routerLink together (#1289)
+  [(2c1918b)](https://github.com/taiga-family/toolkit/commit/2c1918b5b8fec1646433219ff7ca002fffef433d)
+
+### 🐞 Bug Fixes
+
+- update @typescript-eslint/\* deps to v8.46.0 (#1311)
+  [(52c8a3f)](https://github.com/taiga-family/toolkit/commit/52c8a3f22cdf58b0e0f13292cf9306ae986b1cf3)
+- update dependency stylelint-config-standard to ^39.0.1 (#1310)
+  [(78a6caa)](https://github.com/taiga-family/toolkit/commit/78a6caa88ed1807ac381788ddee5442d02422f65)
+
 ### [0.332.0](https://github.com/taiga-family/toolkit/compare/v0.331.0...v0.332.0) (2025-10-04)
 
 ### 🐞 Bug Fixes
