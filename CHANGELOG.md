@@ -1,3 +1,12 @@
+### [0.335.0](https://github.com/taiga-family/toolkit/compare/v0.334.0...v0.335.0) (2025-10-12)
+
+### 🐞 Bug Fixes
+
+- update dependency angular-eslint to ^20.4.0 (#1320)
+  [(033a64f)](https://github.com/taiga-family/toolkit/commit/033a64ff055ce97776c2688d0a42c2e0710af8b7)
+- update dependency ts-jest to v29.4.5 (#1318)
+  [(be4a56b)](https://github.com/taiga-family/toolkit/commit/be4a56b2a5ae9b9ce80387749db2a556ab2b7760)
+
 ### [0.334.0](https://github.com/taiga-family/toolkit/compare/v0.333.0...v0.334.0) (2025-10-10)
 
 ### 🐞 Bug Fixes
