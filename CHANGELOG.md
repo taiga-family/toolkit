@@ -1,3 +1,10 @@
+### [0.336.0](https://github.com/taiga-family/toolkit/compare/v0.335.0...v0.336.0) (2025-10-13)
+
+### 🚀 Features
+
+- **configs**: add single entry points (#1322)
+  [(1aecd81)](https://github.com/taiga-family/toolkit/commit/1aecd81f797eaf926a315d41ce2ea6416a6307b9)
+
 ### [0.335.0](https://github.com/taiga-family/toolkit/compare/v0.334.0...v0.335.0) (2025-10-12)
 
 ### 🐞 Bug Fixes
