@@ -1,3 +1,10 @@
+### [0.339.0](https://github.com/taiga-family/toolkit/compare/v0.338.0...v0.339.0) (2025-10-14)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: implement logical template rule using html-eslint plugin (#1244)
+  [(2864f58)](https://github.com/taiga-family/toolkit/commit/2864f588361d2acd472d0cd826f336c381d228db)
+
 ### [0.338.0](https://github.com/taiga-family/toolkit/compare/v0.337.0...v0.338.0) (2025-10-14)
 
 ### [0.337.0](https://github.com/taiga-family/toolkit/compare/v0.336.0...v0.337.0) (2025-10-14)
