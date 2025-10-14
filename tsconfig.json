@@ -9,6 +9,7 @@
         "incremental": true,
         "esModuleInterop": true,
         "typeRoots": ["node_modules/@types"],
+        "allowImportingTsExtensions": true,
         "types": ["node"]
     },
     "include": ["**/*.ts", "**/*.js"],

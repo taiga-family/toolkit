@@ -1,7 +1,0 @@
-.gitignore
-node_modules
-project.json
-jest.config.ts
-jest-preset.ts
-tsconfig.lib.json
-tests/
