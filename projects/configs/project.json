@@ -8,7 +8,7 @@
         "publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm publish projects/{projectName} --access=public --ignore-scripts"
+                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
             }
         }
     }
