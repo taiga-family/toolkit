@@ -884,6 +884,12 @@ export default tseslint.config(
             ...playwright.configs['flat/recommended'].rules,
             'playwright/no-networkidle': 'off',
             'jest/prefer-importing-jest-globals': 'off',
+            'playwright/expect-expect': [
+                'error',
+                {
+                    assertFunctionNames: ['expect', 'expect.soft'],
+                },
+            ],
             'playwright/no-force-option': 'error',
             'playwright/no-skipped-test': 'off',
             'playwright/no-wait-for-selector': 'off',
