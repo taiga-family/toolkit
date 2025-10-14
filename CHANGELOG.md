@@ -1,3 +1,15 @@
+### [0.337.0](https://github.com/taiga-family/toolkit/compare/v0.336.0...v0.337.0) (2025-10-14)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: introduce explicit assert function names (#1326)
+  [(1f32d6e)](https://github.com/taiga-family/toolkit/commit/1f32d6e74cfc30877c113db5f8dca9accd32fd96)
+
+### 🐞 Bug Fixes
+
+- update @typescript-eslint/\* deps to v8.46.1 (#1324)
+  [(9852151)](https://github.com/taiga-family/toolkit/commit/98521510e79c50af447729098b39a79a2510e6e8)
+
 ### [0.336.0](https://github.com/taiga-family/toolkit/compare/v0.335.0...v0.336.0) (2025-10-13)
 
 ### 🚀 Features
