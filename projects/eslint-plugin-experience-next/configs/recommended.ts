@@ -24,7 +24,9 @@ const require = createRequire(import.meta.url);
 let angularVersion = 16;
 
 const tsconfig =
-    projectJsonExist('tsconfig.eslint.json') || projectJsonExist('tsconfig.json');
+    projectJsonExist('tsconfig.eslint.json') ||
+    projectJsonExist('tsconfig.json') ||
+    projectJsonExist('tsconfig.base.json');
 
 const parserOptions = tsconfig
     ? {
@@ -49,6 +51,8 @@ try {
 
     angularVersion = parseInt(major, 10);
 } catch {}
+
+export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
 export default tseslint.config(
     progress.configs['recommended-ci'],
@@ -102,7 +106,7 @@ export default tseslint.config(
     tseslint.configs.all,
     require('eslint-config-prettier'),
     {
-        files: ['**/*.ts', '**/*.js'],
+        files: ALL_TS_JS_FILES,
         plugins: {
             '@stylistic': stylistic,
             'decorator-position': require('eslint-plugin-decorator-position'),
@@ -973,7 +977,7 @@ export default tseslint.config(
         },
     },
     {
-        files: ['**/*.js'],
+        files: ['**/*.{js,mjs,cjs}'],
         rules: {
             '@typescript-eslint/explicit-function-return-type': 'off',
             'no-template-curly-in-string': 'off',

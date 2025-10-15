@@ -3,7 +3,7 @@
     "version": "0.339.0",
     "description": "An ESLint plugin to enforce a consistent code styles across taiga-ui projects",
     "license": "Apache-2.0",
-    "main": "index.ts",
+    "type": "module",
     "devDependencies": {
         "@typescript-eslint/rule-tester": "8.46.1",
         "glob": "11.0.3"

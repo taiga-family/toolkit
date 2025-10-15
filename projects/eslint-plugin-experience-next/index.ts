@@ -3,7 +3,7 @@ import {readFileSync} from 'fs';
 import {type ConfigArray} from 'typescript-eslint';
 
 import htmlEslint from './configs/html-eslint';
-import recommended from './configs/recommended';
+import recommended, {ALL_TS_JS_FILES} from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import arrayAsConst from './rules/array-as-const';
 import classPropertyNaming from './rules/class-property-naming';
@@ -44,7 +44,7 @@ const plugin = {
     },
 };
 
-// https://eslint.org/docs/latest/extend/plugins
+// https://eslint.org/docs/latest/extend/plugins#configs-in-plugins
 // assign configs here so we can reference `plugin`
 Object.assign(plugin.configs, {
     ['html-eslint']: [
@@ -52,11 +52,11 @@ Object.assign(plugin.configs, {
         ...htmlEslint,
     ],
     recommended: [
-        {files: ['**/*.ts', '**/*.js'], plugins: {'@taiga-ui/experience-next': plugin}},
+        {files: ALL_TS_JS_FILES, plugins: {'@taiga-ui/experience-next': plugin}},
         ...recommended,
     ],
     ['taiga-specific']: [
-        {files: ['**/*.ts', '**/*.js'], plugins: {'@taiga-ui/experience-next': plugin}},
+        {files: ALL_TS_JS_FILES, plugins: {'@taiga-ui/experience-next': plugin}},
         ...taigaSpecific,
     ],
 } as Linter.Config);
