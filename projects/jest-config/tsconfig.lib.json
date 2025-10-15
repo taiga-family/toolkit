@@ -5,11 +5,11 @@
     "compilerOptions": {
         "rootDir": ".",
         "baseUrl": ".",
-        "outDir": ".",
-        "target": "es6",
-        "module": "commonjs",
+        "outDir": "../../dist/jest-config",
         "declaration": true,
         "incremental": null,
-        "types": ["node", "jest"]
+        "moduleResolution": "bundler",
+        "module": "esnext",
+        "allowImportingTsExtensions": false
     }
 }

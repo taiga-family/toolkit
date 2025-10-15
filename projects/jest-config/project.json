@@ -8,13 +8,18 @@
         "build": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npx tsc -p {projectRoot}/tsconfig.lib.json"
+                "commands": [
+                    "npx tsc -p {projectRoot}/tsconfig.lib.json",
+                    "cp {projectRoot}/README.md ./dist/{projectName}",
+                    "cp {projectRoot}/package.json ./dist/{projectName}"
+                ],
+                "parallel": false
             }
         },
         "publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
+                "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
             },
             "dependsOn": [
                 {

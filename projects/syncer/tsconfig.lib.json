@@ -7,6 +7,7 @@
         "outDir": "bin",
         "incremental": false,
         "tsBuildInfoFile": null,
-        "module": "commonjs"
+        "module": "commonjs",
+        "allowImportingTsExtensions": false
     }
 }

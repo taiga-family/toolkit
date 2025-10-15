@@ -43,7 +43,8 @@
         "lint-staged": "16.2.4",
         "nx": "21.6.4",
         "ts-node": "10.9.2",
-        "typescript": "5.8.3"
+        "typescript": "5.8.3",
+        "zone.js": "0.15.1"
     },
     "cspell": {
         "import": [
