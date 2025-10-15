@@ -1,3 +1,5 @@
+import {createRequire} from 'node:module';
+
 import eslint from '@eslint/js';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
@@ -11,7 +13,6 @@ import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
-import {createRequire} from 'module';
 import tseslint from 'typescript-eslint';
 
 import {
@@ -264,6 +265,7 @@ export default tseslint.config(
                     ],
                 },
             ],
+            '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
             '@taiga-ui/experience-next/no-private-esnext-fields': 'error',
             '@taiga-ui/experience-next/standalone-imports-sort': 'error',
@@ -499,6 +501,7 @@ export default tseslint.config(
             ],
             'guard-for-in': 'error',
             'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+            'import/enforce-node-protocol-usage': ['error', 'always'],
             'import/first': 'error',
             'import/newline-after-import': ['error', {count: 1}],
             'import/no-absolute-path': 'error',
