@@ -1,3 +1,17 @@
+### [0.340.0](https://github.com/taiga-family/toolkit/compare/v0.339.0...v0.340.0) (2025-10-15)
+
+### 🚀 Features
+
+- **jest-config**: support jest 30 (#1329)
+  [(ae5eb77)](https://github.com/taiga-family/toolkit/commit/ae5eb779b3b6203bfbed45553f91002713740e95)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: compile only for esm (#1332)
+  [(85b70fa)](https://github.com/taiga-family/toolkit/commit/85b70fa1140e643a5710a96bb926892d4a3cb822)
+- **eslint-plugin-experience-next**: drop annoying message (#1331)
+  [(1d545ee)](https://github.com/taiga-family/toolkit/commit/1d545eef03ebe2e8261958a857cca8840c314dfb)
+
 ### [0.339.0](https://github.com/taiga-family/toolkit/compare/v0.338.0...v0.339.0) (2025-10-14)
 
 ### 🚀 Features
