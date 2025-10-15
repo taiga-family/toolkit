@@ -1,3 +1,10 @@
+### [0.341.0](https://github.com/taiga-family/toolkit/compare/v0.340.0...v0.341.0) (2025-10-15)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: wrong dependency conflict (#1333)
+  [(c4f045a)](https://github.com/taiga-family/toolkit/commit/c4f045a5add0bd19e094ad8a3fcf936043642ecf)
+
 ### [0.340.0](https://github.com/taiga-family/toolkit/compare/v0.339.0...v0.340.0) (2025-10-15)
 
 ### 🚀 Features
