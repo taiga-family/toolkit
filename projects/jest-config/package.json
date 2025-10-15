@@ -20,9 +20,6 @@
         "jest-preset-angular": "15.0.2",
         "ts-jest": "29.4.5"
     },
-    "peerDependencies": {
-        "@taiga-ui/testing": ">=4.58.0"
-    },
     "publishConfig": {
         "access": "public"
     }
