@@ -1,3 +1,10 @@
+### [0.343.0](https://github.com/taiga-family/toolkit/compare/v0.342.0...v0.343.0) (2025-10-15)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: use optional and peer dependencies
+  [(dd0b691)](https://github.com/taiga-family/toolkit/commit/dd0b69106c37dc4438e2af5fbfd13db0a63b4739)
+
 ### [0.342.0](https://github.com/taiga-family/toolkit/compare/v0.341.0...v0.342.0) (2025-10-15)
 
 ### [0.341.0](https://github.com/taiga-family/toolkit/compare/v0.340.0...v0.341.0) (2025-10-15)
