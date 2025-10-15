@@ -1,3 +1,10 @@
+### [0.344.0](https://github.com/taiga-family/toolkit/compare/v0.343.0...v0.344.0) (2025-10-15)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: revert peer deps
+  [(0730fdd)](https://github.com/taiga-family/toolkit/commit/0730fdd241b4a14ae7b3f6ecd30c1c1b882c718d)
+
 ### [0.343.0](https://github.com/taiga-family/toolkit/compare/v0.342.0...v0.343.0) (2025-10-15)
 
 ### 🐞 Bug Fixes
