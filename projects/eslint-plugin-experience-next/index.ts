@@ -10,7 +10,6 @@ import classPropertyNaming from './rules/class-property-naming';
 import decoratorKeySort from './rules/decorator-key-sort';
 import injectionTokenDescription from './rules/injection-token-description';
 import noDeepImports from './rules/no-deep-imports';
-import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
 import noPrivateEsnextFields from './rules/no-private-esnext-fields';
@@ -36,7 +35,6 @@ const plugin = {
         'decorator-key-sort': decoratorKeySort,
         'injection-token-description': injectionTokenDescription,
         'no-deep-imports': noDeepImports,
-        'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
         'no-private-esnext-fields': noPrivateEsnextFields,
