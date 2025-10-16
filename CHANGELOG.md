@@ -1,3 +1,15 @@
+### [0.345.0](https://github.com/taiga-family/toolkit/compare/v0.344.0...v0.345.0) (2025-10-16)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: forbid import bypassing entrypoint
+  [(f84495c)](https://github.com/taiga-family/toolkit/commit/f84495ce7538bb600a63c6b5bf7445e9b13d25ea)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: drop optional dependencies
+  [(881cbb7)](https://github.com/taiga-family/toolkit/commit/881cbb731ce02c9b6c7647a1ae5989f010252a14)
+
 ### [0.344.0](https://github.com/taiga-family/toolkit/compare/v0.343.0...v0.344.0) (2025-10-15)
 
 ### 🐞 Bug Fixes
