@@ -40,10 +40,12 @@
     "devDependencies": {
         "@nx/rollup": "21.6.5",
         "@nx/workspace": "21.6.5",
+        "@taiga-ui/testing": "*",
         "lint-staged": "16.2.4",
         "nx": "21.6.5",
         "ts-node": "10.9.2",
-        "typescript": "5.8.3"
+        "typescript": "5.8.3",
+        "zone.js": "*"
     },
     "cspell": {
         "import": [
