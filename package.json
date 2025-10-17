@@ -25,6 +25,9 @@
             "cspell"
         ]
     },
+    "browserslist": [
+        "extends @taiga-ui/browserslist-config"
+    ],
     "prettier": "@taiga-ui/prettier-config",
     "stylelint": {
         "extends": [
