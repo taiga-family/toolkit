@@ -1,3 +1,10 @@
+### [0.347.0](https://github.com/taiga-family/toolkit/compare/v0.346.0...v0.347.0) (2025-10-17)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: lint the browser compatibility of your code (#1337)
+  [(5c65532)](https://github.com/taiga-family/toolkit/commit/5c65532eda046915445d636583d90e83f2fc01e8)
+
 ### [0.346.0](https://github.com/taiga-family/toolkit/compare/v0.345.0...v0.346.0) (2025-10-16)
 
 ### 🚀 Features
