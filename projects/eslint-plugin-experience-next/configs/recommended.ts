@@ -4,6 +4,7 @@ import eslint from '@eslint/js';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
 import angular from 'angular-eslint';
+import compat from 'eslint-plugin-compat';
 import progress from 'eslint-plugin-file-progress';
 import jest from 'eslint-plugin-jest';
 import playwright from 'eslint-plugin-playwright';
@@ -56,6 +57,7 @@ try {
 export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
 export default tseslint.config(
+    compat.configs['flat/recommended'],
     progress.configs['recommended-ci'],
     require('eslint-plugin-de-morgan').configs.recommended,
     require('eslint-plugin-import').flatConfigs.recommended,
@@ -880,6 +882,7 @@ export default tseslint.config(
         rules: {
             ...playwright.configs['flat/recommended'].rules,
             'playwright/no-networkidle': 'off',
+            'compat/compat': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/expect-expect': [
                 'error',
@@ -900,6 +903,7 @@ export default tseslint.config(
             ...jest.configs['flat/recommended'].rules,
             '@typescript-eslint/no-extraneous-class': 'off',
             '@typescript-eslint/no-shadow': 'off',
+            'compat/compat': 'off',
             'jest/expect-expect': 'off',
             'jest/max-expects': 'off',
             'jest/max-nested-describe': 'off',
@@ -963,6 +967,7 @@ export default tseslint.config(
     {
         files: ['**/*.cy.ts'],
         rules: {
+            'compat/compat': 'off',
             'cypress/no-unnecessary-waiting': 'off',
             'cypress/unsafe-to-chain-command': 'off',
             'max-nested-callbacks': 'off',
