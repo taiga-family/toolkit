@@ -1,3 +1,16 @@
+### [0.348.0](https://github.com/taiga-family/toolkit/compare/v0.347.0...v0.348.0) (2025-10-20)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-unused-imports to ^4.3.0 (#1341)
+  [(3be909f)](https://github.com/taiga-family/toolkit/commit/3be909f5417f9739c112389487a1bd2ab63148e8)
+- update dependency @stylistic/eslint-plugin to ^5.5.0 (#1340)
+  [(bad8ae1)](https://github.com/taiga-family/toolkit/commit/bad8ae1c88e2168cce1b4f5a831543ace5b4c74c)
+- update dependency eslint to ^9.38.0 (#1339)
+  [(44cf464)](https://github.com/taiga-family/toolkit/commit/44cf4646bf41cea4f07a827697e7e9f1b262a545)
+- update dependency jest-preset-angular to ^15.0.3 (#1338)
+  [(acc0636)](https://github.com/taiga-family/toolkit/commit/acc0636f37e31753c3c3fe18385b05900a4c8dab)
+
 ### [0.347.0](https://github.com/taiga-family/toolkit/compare/v0.346.0...v0.347.0) (2025-10-17)
 
 ### 🚀 Features
