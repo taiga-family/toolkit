@@ -45,7 +45,7 @@
         "@nx/workspace": "22.0.0",
         "@taiga-ui/testing": "4.59.0",
         "esbuild": "0.25.11",
-        "lint-staged": "16.2.5",
+        "lint-staged": "16.2.6",
         "nx": "22.0.0",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
