@@ -1,3 +1,21 @@
+### [0.349.0](https://github.com/taiga-family/toolkit/compare/v0.348.0...v0.349.0) (2025-10-23)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: compatibility with Angular 19+ (#1353)
+  [(426de23)](https://github.com/taiga-family/toolkit/commit/426de232abcb263e61e1fdfe38d21fbd1a087bfc)
+- **eslint-plugin-experience-next**: ignore button type within `tuiButtonClose` (#1351)
+  [(a0b2afa)](https://github.com/taiga-family/toolkit/commit/a0b2afa0518838a1c5fc9a5286ca478025cb3ea6)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: remove `properties.standalone` condition for standalone import (#1352)
+  [(f6cbb14)](https://github.com/taiga-family/toolkit/commit/f6cbb149bb2106c74192b79c028c34bfbd73708e)
+- update dependency cspell to ^9.2.2 (#1346)
+  [(5f5dad7)](https://github.com/taiga-family/toolkit/commit/5f5dad7fc54931f80502cab8ccb23e3a50f0f852)
+- update @typescript-eslint/\* deps to v8.46.2 (#1345)
+  [(c6024bd)](https://github.com/taiga-family/toolkit/commit/c6024bdf946e81974dbe333a9851d613e231f9ec)
+
 ### [0.348.0](https://github.com/taiga-family/toolkit/compare/v0.347.0...v0.348.0) (2025-10-20)
 
 ### 🐞 Bug Fixes
