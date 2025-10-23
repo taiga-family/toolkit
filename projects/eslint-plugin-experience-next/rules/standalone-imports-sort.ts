@@ -1,13 +1,23 @@
-import {type Rule} from 'eslint';
+import {type TSESTree} from '@typescript-eslint/types';
+import {type JSSyntaxElement, type Rule} from 'eslint';
+
+const NG_DECORATORS = ['Component', 'Directive', 'NgModule', 'Pipe'];
 
 const config: Rule.RuleModule = {
     create(context) {
         return {
-            ClassDeclaration(node) {
-                const decorators = Array.from((node as any).decorators ?? []);
+            ClassDeclaration(declaration) {
+                const node = declaration as Partial<TSESTree.ClassDeclaration>;
+                const decorators = Array.from(node.decorators ?? []);
 
-                decorators.forEach((decorator: any) => {
-                    const {expression} = decorator;
+                decorators.forEach((decorator) => {
+                    const expression = decorator.expression as any;
+                    const name = expression?.callee?.name ?? '';
+
+                    if (!NG_DECORATORS.includes(name)) {
+                        return;
+                    }
+
                     const decoratorArguments = Array.from(expression.arguments ?? []);
 
                     for (const argument of decoratorArguments) {
@@ -42,7 +52,7 @@ const config: Rule.RuleModule = {
                                             source,
                                         ),
                                     message: `Order in imports should be ${source}`,
-                                    node: expression,
+                                    node: expression as JSSyntaxElement,
                                 });
                             }
                         }
