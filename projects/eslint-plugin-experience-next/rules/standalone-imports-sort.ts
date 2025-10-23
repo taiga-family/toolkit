@@ -19,7 +19,7 @@ const config: Rule.RuleModule = {
                             return mappings;
                         }, {});
 
-                        if (properties.standalone && properties.imports) {
+                        if (properties.imports) {
                             const currentOrder = properties.imports.value.elements.map(
                                 (prop: any) => prop.name,
                             );
