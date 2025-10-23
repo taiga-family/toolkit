@@ -785,6 +785,7 @@ export default tseslint.config(
                 'error',
                 {
                     ignoreWithDirectives: [
+                        'tuiButtonClose',
                         'tuiAccordion',
                         'tuiOption',
                         'tuiStep',
