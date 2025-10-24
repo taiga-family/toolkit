@@ -1,3 +1,10 @@
+### [0.350.0](https://github.com/taiga-family/toolkit/compare/v0.349.0...v0.350.0) (2025-10-24)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: support spread operator (#1354)
+  [(b8ffd77)](https://github.com/taiga-family/toolkit/commit/b8ffd77a78973de7eefd8889aa076350080935db)
+
 ### [0.349.0](https://github.com/taiga-family/toolkit/compare/v0.348.0...v0.349.0) (2025-10-23)
 
 ### 🚀 Features
