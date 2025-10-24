@@ -105,21 +105,21 @@ const config: Rule.RuleModule = {
     },
     meta: {
         fixable: 'code',
-        type: 'problem',
         schema: [
             {
-                type: 'object',
+                additionalProperties: false,
                 properties: {
                     decorators: {
-                        type: 'array',
                         items: {
                             type: 'string',
                         },
+                        type: 'array',
                     },
                 },
-                additionalProperties: false,
+                type: 'object',
             },
         ],
+        type: 'problem',
     },
 };
 
