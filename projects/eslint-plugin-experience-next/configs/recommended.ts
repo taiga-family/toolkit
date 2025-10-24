@@ -270,7 +270,12 @@ export default tseslint.config(
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
             '@taiga-ui/experience-next/no-private-esnext-fields': 'error',
-            '@taiga-ui/experience-next/standalone-imports-sort': 'error',
+            '@taiga-ui/experience-next/standalone-imports-sort': [
+                'error',
+                {
+                    decorators: ['Component', 'Directive', 'NgModule', 'Pipe'],
+                },
+            ],
             '@typescript-eslint/array-type': [
                 'error',
                 {default: 'array-simple', readonly: 'array-simple'},

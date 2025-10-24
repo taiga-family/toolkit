@@ -134,6 +134,32 @@ ruleTester.run('standalone-imports-sort', rule, {
                 class Test {}
             `,
         },
+        {
+            code: `
+                @Component({
+                    imports: [
+                        TuiStringifyContentPipe,
+                        TuiLegacyDropdownOpenMonitorDirective,
+                        ...TuiDropdown,
+                        ...TuiDataList,
+                        ...TuiDataListWrapper,
+                    ]
+                })
+                class Test {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Order in imports should be [TuiLegacyDropdownOpenMonitorDirective, TuiStringifyContentPipe, ...TuiDataList, ...TuiDataListWrapper, ...TuiDropdown]',
+                },
+            ],
+            output: `
+                @Component({
+                    imports: [TuiLegacyDropdownOpenMonitorDirective, TuiStringifyContentPipe, ...TuiDataList, ...TuiDataListWrapper, ...TuiDropdown]
+                })
+                class Test {}
+            `,
+        },
     ],
     valid: [
         {

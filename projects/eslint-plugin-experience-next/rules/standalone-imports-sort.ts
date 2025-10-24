@@ -1,10 +1,16 @@
 import {type TSESTree} from '@typescript-eslint/types';
 import {type JSSyntaxElement, type Rule} from 'eslint';
 
-const NG_DECORATORS = ['Component', 'Directive', 'NgModule', 'Pipe'];
-
 const config: Rule.RuleModule = {
     create(context) {
+        const config = context.options[0] ?? {};
+        const defaultDecorators = config.decorators ?? [
+            'Component',
+            'Directive',
+            'NgModule',
+            'Pipe',
+        ];
+
         return {
             ClassDeclaration(declaration) {
                 const node = declaration as Partial<TSESTree.ClassDeclaration>;
@@ -14,7 +20,7 @@ const config: Rule.RuleModule = {
                     const expression = decorator.expression as any;
                     const name = expression?.callee?.name ?? '';
 
-                    if (!NG_DECORATORS.includes(name)) {
+                    if (!defaultDecorators.includes(name)) {
                         return;
                     }
 
@@ -30,28 +36,64 @@ const config: Rule.RuleModule = {
                         }, {});
 
                         if (properties.imports) {
-                            const currentOrder = properties.imports.value.elements.map(
-                                (prop: any) => prop.name,
+                            const elements = properties.imports.value.elements;
+                            const regularElements = [];
+                            const spreadElements = [];
+
+                            for (const element of elements) {
+                                if (element.type === 'SpreadElement') {
+                                    spreadElements.push(element);
+                                } else {
+                                    regularElements.push(element);
+                                }
+                            }
+
+                            const sortedRegularElements = regularElements
+                                .slice()
+                                .sort((a, b) =>
+                                    (a.name ?? '').localeCompare(b.name ?? ''),
+                                );
+
+                            const sortedSpreadElements = spreadElements
+                                .slice()
+                                .sort((a, b) =>
+                                    (a.argument.name ?? '').localeCompare(
+                                        b.argument.name || '',
+                                    ),
+                                );
+
+                            const newOrder = [
+                                ...sortedRegularElements,
+                                ...sortedSpreadElements,
+                            ];
+
+                            const currentOrder = elements.map((el: any) =>
+                                el.type === 'SpreadElement'
+                                    ? `...${el.argument.name}`
+                                    : el.name,
                             );
 
-                            const newOrder = currentOrder
-                                .slice()
-                                .sort((a: any, b: any) => a.localeCompare(b));
+                            const expectedOrder = newOrder.map((el: any) =>
+                                el.type === 'SpreadElement'
+                                    ? `...${el.argument.name}`
+                                    : el.name,
+                            );
 
                             if (
-                                JSON.stringify(currentOrder) !== JSON.stringify(newOrder)
+                                JSON.stringify(currentOrder) !==
+                                JSON.stringify(expectedOrder)
                             ) {
-                                const source = JSON.stringify(newOrder)
-                                    .replaceAll('"', '')
-                                    .replaceAll(',', ', ');
+                                const source = expectedOrder
+                                    .map((name) => (name === 'null' ? 'null' : name))
+                                    .join(', ');
 
                                 context.report({
                                     fix: (fixer) =>
                                         fixer.replaceTextRange(
                                             properties.imports.value.range,
-                                            source,
+                                            `[${source}]`,
                                         ),
-                                    message: `Order in imports should be ${source}`,
+                                    message: `Order in imports should be [${source}]`,
                                     node: expression as JSSyntaxElement,
                                 });
                             }
@@ -63,6 +105,20 @@ const config: Rule.RuleModule = {
     },
     meta: {
         fixable: 'code',
+        schema: [
+            {
+                additionalProperties: false,
+                properties: {
+                    decorators: {
+                        items: {
+                            type: 'string',
+                        },
+                        type: 'array',
+                    },
+                },
+                type: 'object',
+            },
+        ],
         type: 'problem',
     },
 };
