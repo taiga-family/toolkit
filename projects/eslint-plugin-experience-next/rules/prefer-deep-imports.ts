@@ -37,7 +37,7 @@ const config: Rule.RuleModule = {
                                         const fileContent = fs.readFileSync(path, 'utf8');
 
                                         return new RegExp(
-                                            `(?<=export\\s(default\\s)?(abstract\\s)?\\w+\\s)\\b${imported.name}\\b`,
+                                            String.raw`(?<=export\s(default\s)?(abstract\s)?\w+\s)\b${imported.name}\b`,
                                         ).exec(fileContent);
                                     })
                                     ?.replaceAll(/\\+/g, '/'), // Windows path to Unix path,
@@ -124,7 +124,7 @@ function getFilterRegExp(filter: any): string {
     const [npmScope] = packages[0]?.split('/') ?? [];
     const packageNames = packages.map((p: string) => p.split('/')[1]).filter(Boolean);
 
-    return `/^${npmScope}\\u002F(${packageNames.join('|')})$/`;
+    return String.raw`/^${npmScope}\u002F(${packageNames.join('|')})$/`;
 }
 
 export default config;
