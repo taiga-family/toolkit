@@ -1,3 +1,10 @@
+### [0.351.0](https://github.com/taiga-family/toolkit/compare/v0.350.0...v0.351.0) (2025-10-26)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-unicorn to v62 (#1355)
+  [(5e34c48)](https://github.com/taiga-family/toolkit/commit/5e34c483414c3f61ee0f8e7f4c5756bd4e5ec530)
+
 ### [0.350.0](https://github.com/taiga-family/toolkit/compare/v0.349.0...v0.350.0) (2025-10-24)
 
 ### 🐞 Bug Fixes
