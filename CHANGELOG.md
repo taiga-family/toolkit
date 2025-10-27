@@ -1,3 +1,10 @@
+### [0.352.0](https://github.com/taiga-family/toolkit/compare/v0.351.0...v0.352.0) (2025-10-27)
+
+### 🐞 Bug Fixes
+
+- **configs**: explicit add conventional-changelog-conventionalcommits (#1357)
+  [(2f0c770)](https://github.com/taiga-family/toolkit/commit/2f0c7700e7c5c6fab42ece3e65a71fd503d1ca1d)
+
 ### [0.351.0](https://github.com/taiga-family/toolkit/compare/v0.350.0...v0.351.0) (2025-10-26)
 
 ### 🐞 Bug Fixes
