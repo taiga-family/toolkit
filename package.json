@@ -43,7 +43,7 @@
     "devDependencies": {
         "@nx/rollup": "22.0.1",
         "@nx/workspace": "22.0.1",
-        "@taiga-ui/testing": "4.59.0",
+        "@taiga-ui/testing": "4.60.0",
         "esbuild": "0.25.11",
         "lint-staged": "16.2.6",
         "nx": "22.0.1",
