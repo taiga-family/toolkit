@@ -19,6 +19,7 @@
         "@cspell/dict-html/cspell-ext.json",
         "@cspell/dict-css/cspell-ext.json"
     ],
+    "flagWords": ["blacklist", "whitelist", "master", "slave"],
     "words": [
         "angularjs",
         "ngFor",
