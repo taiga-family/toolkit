@@ -9,15 +9,15 @@ interface BumpDepsOptions {
     isPeerDependency?: boolean;
     newVersion: string;
     prevVersion: string;
-    matchPackageNames: readonly string[];
-    ignorePackageNames: readonly string[];
+    matchPackageNames?: readonly string[];
+    ignorePackageNames?: readonly string[];
 }
 
 interface Options {
     newVersion: string;
     includePaths: readonly string[];
-    matchPackageNames: readonly string[];
-    ignorePackageNames: readonly string[];
+    matchPackageNames?: readonly string[];
+    ignorePackageNames?: readonly string[];
 }
 
 export function tuiSyncVersions(options: Options): void {
@@ -48,9 +48,9 @@ export function tuiSyncVersions(options: Options): void {
         }
 
         tuiUpdatePackageJsonStructure({
-            ignorePackageNames,
+            ignorePackageNames: ignorePackageNames ?? [],
             isPackageLockFile: file.endsWith('-lock.json'),
-            matchPackageNames,
+            matchPackageNames: matchPackageNames ?? [],
             newVersion,
             packageJson,
             prevVersion,
@@ -79,7 +79,11 @@ export function tuiBumpDeps(options: BumpDepsOptions): void {
 
     Object.keys(deps)
         .filter((key) =>
-            tuiIsMatchedPackageName({ignorePackageNames, matchPackageNames, name: key}),
+            tuiIsMatchedPackageName({
+                ignorePackageNames: ignorePackageNames ?? [],
+                matchPackageNames: matchPackageNames ?? [],
+                name: key,
+            }),
         )
         .forEach((key) => {
             const value = deps[key] as
