@@ -1,3 +1,15 @@
+### [0.353.0](https://github.com/taiga-family/toolkit/compare/v0.352.0...v0.353.0) (2025-11-01)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: validate package.json files (#1363)
+  [(0ad3b8d)](https://github.com/taiga-family/toolkit/commit/0ad3b8d9ee0ae8a4d0c4e43e4c9845b9a5a56194)
+
+### 🐞 Bug Fixes
+
+- update dependency angular-eslint to ^20.5.0 (#1358)
+  [(ff036b7)](https://github.com/taiga-family/toolkit/commit/ff036b7d992f85d8c51acf66960261f6d957eef7)
+
 ### [0.352.0](https://github.com/taiga-family/toolkit/compare/v0.351.0...v0.352.0) (2025-10-27)
 
 ### 🐞 Bug Fixes
