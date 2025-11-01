@@ -9,7 +9,7 @@
         "glob": "11.0.3"
     },
     "peerDependencies": {
-        "@eslint/compat": "^1.4.0",
+        "@eslint/compat": "^1.4.1",
         "@html-eslint/eslint-plugin": "^0.47.0",
         "@html-eslint/parser": "^0.47.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
