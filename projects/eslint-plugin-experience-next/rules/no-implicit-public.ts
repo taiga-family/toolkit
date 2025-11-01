@@ -1,4 +1,3 @@
-import {type RuleContext} from '@eslint/core';
 import {type Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
@@ -16,7 +15,7 @@ const config: Rule.RuleModule = {
     },
 };
 
-function checkImplicitPublic(context: RuleContext, node: any): void {
+function checkImplicitPublic(context: Rule.RuleContext, node: any): void {
     const classRef = getClass(node);
 
     if (!classRef || node.kind === 'constructor' || !!node?.accessibility) {

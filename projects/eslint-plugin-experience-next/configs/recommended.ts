@@ -7,6 +7,7 @@ import angular from 'angular-eslint';
 import compat from 'eslint-plugin-compat';
 import progress from 'eslint-plugin-file-progress';
 import jest from 'eslint-plugin-jest';
+import packageJson, {configs as packageJsonConfigs} from 'eslint-plugin-package-json';
 import playwright from 'eslint-plugin-playwright';
 import prettier from 'eslint-plugin-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -985,6 +986,16 @@ export default tseslint.config(
         rules: {
             '@typescript-eslint/explicit-function-return-type': 'off',
             'no-template-curly-in-string': 'off',
+        },
+    },
+    {
+        files: ['**/package.json'],
+        plugins: {'package-json': packageJson},
+        extends: [tseslint.configs.disableTypeChecked, packageJsonConfigs.recommended],
+        rules: {
+            '@typescript-eslint/consistent-type-imports': 'off',
+            'package-json/require-description': ['error', {ignorePrivate: true}],
+            'package-json/require-type': ['off', {ignorePrivate: true}],
         },
     },
     {
