@@ -1,10 +1,9 @@
-import {type RuleTextEdit} from '@eslint/core';
-import {type Rule} from 'eslint';
+import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
 import {getTypeName} from './utils/get-type-name';
 
-const INVALID_KEY_MESSAGE_ID = 'strict-doc-example-extensions-invalid-key';
-const INVALID_VALUE_MESSAGE_ID = 'strict-doc-example-extensions-invalid-value';
+const INVALID_KEY_MESSAGE_ID = 'strict-doc-example-extensions-invalid-key' as const;
+const INVALID_VALUE_MESSAGE_ID = 'strict-doc-example-extensions-invalid-value' as const;
 
 const DOC_EXAMPLE_INTERFACE_NAME = 'TuiDocExample';
 
@@ -17,96 +16,103 @@ const fileNameToExtension: Record<string, string> = {
 };
 
 /**
- * Parses a path into RegExp groups:
- * 1. Everything before the last extension (greedy)
- * 2. The last extension
- * 3. Everything after the last extension (can be empty)
+ * Разбивает путь на группы:
+ * 1. Всё до последнего расширения (жадно)
+ * 2. Расширение
+ * 3. Всё после расширения (например, `?raw`)
+ *
  * @example
- * // returns [`./examples/2/index.html/index`, `.ts`, `?raw`]
  * getPathGroups(`./examples/2/index.html/index.ts?raw`)
- * @param {string} path
- * @returns {RegExpMatchArray | null}
+ * // -> ['...', '.ts', '?raw']
  */
-const getPathGroups = (path: any): RegExpMatchArray | null =>
-    /(.+)(\.(?:ts|less|scss|js|md|css|html))(.*)/.exec(path);
+function getPathGroups(path: string): RegExpMatchArray | null {
+    return /(.+)(\.(?:ts|less|scss|js|md|css|html))(.*)/.exec(path);
+}
 
-const config: Rule.RuleModule = {
+type MessageIds = typeof INVALID_KEY_MESSAGE_ID | typeof INVALID_VALUE_MESSAGE_ID;
+
+const createRule = ESLintUtils.RuleCreator((name) => name);
+
+export const rule = createRule<
+    [], // опций нет
+    MessageIds
+>({
     create(context) {
         return {
-            /**
-             * It would be better to support any object expression, not only within a class,
-             * but it`s pretty complicated to extract the object type since all parents have different interfaces.
-             */
-            'PropertyDefinition[value.type="ObjectExpression"]': (node) => {
+            'PropertyDefinition[value.type="ObjectExpression"]'(
+                node: TSESTree.PropertyDefinition,
+            ) {
                 if (getTypeName(node) !== DOC_EXAMPLE_INTERFACE_NAME) {
                     return;
                 }
 
-                node.value.properties.forEach((prop: any) => {
-                    // It can be either Identifier or Literal.
-                    const objKey = prop.key.name || prop.key.value;
-                    const objValue = prop.value;
+                const obj = node.value as TSESTree.ObjectExpression;
 
-                    if (objValue.type !== 'ImportExpression') {
-                        return;
+                for (const prop of obj.properties) {
+                    if (prop.type !== AST_NODE_TYPES.Property) {
+                        continue;
                     }
 
-                    const {source} = objValue;
+                    let key = '';
 
-                    /**
-                     * Extract an extension from the object key.
-                     * The object key can be a file name or module path.
-                     * At the same time the key can be invalid, that`s why this value can be null.
-                     * @see TuiDocExample
-                     * @type {string|null}
-                     */
+                    if (prop.key.type === AST_NODE_TYPES.Identifier) {
+                        key = prop.key.name;
+                    } else if (prop.key.type === AST_NODE_TYPES.Literal) {
+                        key = String(prop.key.value);
+                    }
+
+                    const value = prop.value;
+
+                    if (value.type !== AST_NODE_TYPES.ImportExpression) {
+                        continue;
+                    }
+
+                    const source = value.source;
+
+                    const sourceValue =
+                        source.type === AST_NODE_TYPES.Literal &&
+                        typeof source.value === 'string'
+                            ? source.value
+                            : '';
+
                     const expectedExtension =
-                        fileNameToExtension[objKey] || getPathGroups(objKey)?.[2];
+                        fileNameToExtension[key] || getPathGroups(key)?.[2];
 
-                    /**
-                     * Split the object value (actually import value) into groups.
-                     * The object value should contain a module path.
-                     */
-                    const actualPathGroups = getPathGroups(source.value) ?? [];
+                    const actualGroups = getPathGroups(sourceValue) ?? [];
+                    const [, beforeExt, actualExt, afterExt] = actualGroups;
 
-                    const [, beforeExtensionPart, actualExtension, afterExtensionPart] =
-                        actualPathGroups;
-
-                    /**
-                     * Both paths must be parsed.
-                     * And both extensions must match each other.
-                     */
                     const mismatchExtensions =
                         !expectedExtension ||
-                        !actualPathGroups.length ||
-                        expectedExtension !== actualExtension;
+                        !actualGroups.length ||
+                        expectedExtension !== actualExt;
 
-                    if (mismatchExtensions) {
-                        const invalidNode = expectedExtension ? source : prop.key;
-
-                        const messageId = expectedExtension
-                            ? INVALID_VALUE_MESSAGE_ID
-                            : INVALID_KEY_MESSAGE_ID;
-
-                        context.report({
-                            fix(fixer): RuleTextEdit | null {
-                                if (expectedExtension && actualPathGroups.length) {
-                                    // It`s safer to use groups instead of finding and replacing.
-                                    const fixedValue = `'${beforeExtensionPart}${expectedExtension}${afterExtensionPart}'`;
-
-                                    return fixer.replaceText(source, fixedValue);
-                                }
-
-                                return null;
-                            },
-                            messageId,
-                            node: invalidNode,
-                        });
+                    if (!mismatchExtensions) {
+                        continue;
                     }
-                });
+
+                    const invalidNode = expectedExtension ? source : prop.key;
+                    const messageId = expectedExtension
+                        ? INVALID_VALUE_MESSAGE_ID
+                        : INVALID_KEY_MESSAGE_ID;
+
+                    context.report({
+                        fix(fixer) {
+                            if (expectedExtension && actualGroups.length) {
+                                const fixedValue = `'${beforeExt}${expectedExtension}${afterExt}'`;
+
+                                return fixer.replaceText(source, fixedValue);
+                            }
+
+                            return null;
+                        },
+                        messageId,
+                        node: invalidNode,
+                    });
+                }
             },
         };
     },
+    defaultOptions: [],
     meta: {
         docs: {
             description: `Ensures that keys and values are valid in a ${DOC_EXAMPLE_INTERFACE_NAME} interface.`,
@@ -118,8 +124,10 @@ const config: Rule.RuleModule = {
             [INVALID_VALUE_MESSAGE_ID]:
                 'The import path extension must match the extension from the object key.',
         },
+        schema: [],
         type: 'problem',
     },
-};
+    name: 'strict-doc-example-extensions',
+});
 
-export default config;
+export default rule;

@@ -1,19 +1,21 @@
 import path from 'node:path';
 
-import {type Rule} from 'eslint';
+import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-const MESSAGE_ID = 'no-deep-imports';
+const MESSAGE_ID = 'no-deep-imports' as const;
 const ERROR_MESSAGE = 'Deep imports of Taiga UI packages are prohibited';
 
 const DEFAULT_OPTIONS = {
     currentProject: '',
     deepImport: String.raw`(?<=^@taiga-ui/[\w-]+)(/.+)$`,
-    ignoreImports: [],
+    ignoreImports: [] as string[],
     importDeclaration: '^@taiga-ui*',
     projectName: String.raw`(?<=^@taiga-ui/)([-\w]+)`,
 };
 
-const config: Rule.RuleModule = {
+const createRule = ESLintUtils.RuleCreator((name) => name);
+
+export const rule = createRule({
     create(context) {
         const {
             currentProject,
@@ -21,15 +23,12 @@ const config: Rule.RuleModule = {
             ignoreImports,
             importDeclaration,
             projectName,
-        } = {
-            ...DEFAULT_OPTIONS,
-            ...(context.options[0] || {}),
-        };
+        } = {...DEFAULT_OPTIONS, ...context.options[0]};
 
-        const isDeepImport = (source: string): boolean =>
-            !!source.match(new RegExp(deepImport, 'g'))?.length;
+        const isDeepImport = (source?: string): boolean =>
+            !!source && new RegExp(deepImport, 'g').test(source);
 
-        const isInsideTheSameEntryPoint = (source: string): boolean => {
+        const isInsideTheSameEntryPoint = (source?: string): boolean => {
             const filePath = path
                 .relative(context.cwd, context.filename)
                 .replaceAll(/\\+/g, '/');
@@ -38,7 +37,7 @@ const config: Rule.RuleModule = {
                 (currentProject && new RegExp(currentProject, 'g').exec(filePath)) || [];
 
             const [importSourceProjectName] =
-                source.match(new RegExp(projectName, 'g')) || [];
+                source?.match(new RegExp(projectName, 'g')) || [];
 
             return Boolean(
                 currentFileProjectName &&
@@ -47,16 +46,18 @@ const config: Rule.RuleModule = {
             );
         };
 
-        const shouldIgnore = (source: string): boolean =>
-            ignoreImports.some((p: string) => source.match(new RegExp(p, 'g')));
+        const shouldIgnore = (source?: string): boolean =>
+            !!source && ignoreImports.some((p) => new RegExp(p, 'g').test(source));
 
         return {
-            [`ImportDeclaration[source.value=/${importDeclaration}/]`]({
-                source: sourceNode,
-            }) {
-                const importSource = sourceNode?.value || '';
+            [`ImportDeclaration[source.value=/${importDeclaration}/]`](
+                node?: TSESTree.ImportDeclaration,
+            ) {
+                const importSource = node?.source.value;
 
                 if (
+                    !node ||
+                    !importSource ||
                     !isDeepImport(importSource) ||
                     isInsideTheSameEntryPoint(importSource) ||
                     shouldIgnore(importSource)
@@ -66,21 +67,24 @@ const config: Rule.RuleModule = {
 
                 context.report({
                     fix: (fixer) => {
-                        const [start, end] = sourceNode.range;
+                        const [start, end] = node.source.range;
 
                         return fixer.replaceTextRange(
-                            [start + 1, end - 1], //  keeps quotes
+                            [start + 1, end - 1], // keep quotes
                             importSource.replaceAll(new RegExp(deepImport, 'g'), ''),
                         );
                     },
                     messageId: MESSAGE_ID,
-                    node: sourceNode,
+                    node: node.source,
                 });
             },
         };
     },
+    defaultOptions: [DEFAULT_OPTIONS],
     meta: {
-        docs: {description: ERROR_MESSAGE},
+        docs: {
+            description: ERROR_MESSAGE,
+        },
         fixable: 'code',
         messages: {
             [MESSAGE_ID]: ERROR_MESSAGE,
@@ -101,14 +105,16 @@ const config: Rule.RuleModule = {
                     ignoreImports: {
                         description:
                             'RegExp string to exclude import declarations which is selected by importDeclaration-option',
-                        items: {
-                            type: 'string',
-                        },
+                        items: {type: 'string'},
                         type: 'array',
                     },
                     importDeclaration: {
                         description:
                             'RegExp string to detect import declarations for which this rule should be applied',
+                        type: 'string',
+                    },
+                    projectName: {
+                        description: 'RegExp string to extract project name from import',
                         type: 'string',
                     },
                 },
@@ -117,6 +123,7 @@ const config: Rule.RuleModule = {
         ],
         type: 'problem',
     },
-};
+    name: 'no-deep-imports',
+});
 
-export default config;
+export default rule;

@@ -1,4 +1,4 @@
-import rule from '../rules/strict-tui-doc-example';
+import {rule} from '../rules/strict-tui-doc-example';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

@@ -1,4 +1,4 @@
-import rule from '../rules/no-implicit-public';
+import {rule} from '../rules/no-implicit-public';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

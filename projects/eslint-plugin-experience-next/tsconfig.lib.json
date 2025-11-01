@@ -9,6 +9,7 @@
         "esModuleInterop": true,
         "moduleResolution": "bundler",
         "module": "esnext",
+        "tsBuildInfoFile": "/dev/null",
         "allowImportingTsExtensions": false
     }
 }
