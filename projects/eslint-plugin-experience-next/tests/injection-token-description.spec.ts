@@ -1,4 +1,4 @@
-import rule from '../rules/injection-token-description';
+import {rule} from '../rules/injection-token-description';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

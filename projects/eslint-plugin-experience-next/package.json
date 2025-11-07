@@ -5,18 +5,18 @@
     "license": "Apache-2.0",
     "type": "module",
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "8.46.2",
+        "@typescript-eslint/rule-tester": "8.46.3",
         "glob": "11.0.3"
     },
     "peerDependencies": {
-        "@eslint/compat": "^1.4.0",
+        "@eslint/compat": "^1.4.1",
         "@html-eslint/eslint-plugin": "^0.47.0",
         "@html-eslint/parser": "^0.47.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.5.0",
         "@types/glob": "*",
-        "angular-eslint": "^20.5.0",
-        "eslint": "^9.38.0",
+        "angular-eslint": "^20.5.1",
+        "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.7",
         "eslint-plugin-compat": "^6.0.2",
         "eslint-plugin-de-morgan": "^2.0.0",
@@ -34,8 +34,8 @@
         "eslint-plugin-unicorn": "^62.0.0",
         "eslint-plugin-unused-imports": "^4.3.0",
         "glob": "*",
-        "globals": "^16.4.0",
-        "typescript-eslint": "^8.46.2"
+        "globals": "^16.5.0",
+        "typescript-eslint": "^8.46.3"
     },
     "publishConfig": {
         "access": "public"

@@ -12,6 +12,7 @@ coverage
 
 # Custom
 dist
+**/.rollup*
 projects/jest-config/*.d.ts
 projects/jest-config/*.js
 projects/eslint-plugin-experience-next/*.js

@@ -568,6 +568,7 @@
         "TSESTree",
         "routerlink",
         "mylink",
-        "uninvoked"
+        "uninvoked",
+        "rollup"
     ]
 }
