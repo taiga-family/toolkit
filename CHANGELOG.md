@@ -1,3 +1,10 @@
+### [0.354.0](https://github.com/taiga-family/toolkit/compare/v0.353.0...v0.354.0) (2025-11-07)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: upgrade eslint (#1366)
+  [(17c9790)](https://github.com/taiga-family/toolkit/commit/17c9790fe913730648fe75be3116300809ef3721)
+
 ### [0.353.0](https://github.com/taiga-family/toolkit/compare/v0.352.0...v0.353.0) (2025-11-01)
 
 ### 🚀 Features
