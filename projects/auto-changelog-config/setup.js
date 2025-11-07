@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-invalid-this */
 module.exports = function (
     /** @type {{ registerHelper: (arg0: string, arg1: { (context: any): any; (context: any): any; }) => void; }} */
     Handlebars,
