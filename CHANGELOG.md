@@ -1,3 +1,20 @@
+### [0.355.0](https://github.com/taiga-family/toolkit/compare/v0.354.0...v0.355.0) (2025-11-07)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: avoid extending all rules globally (#1370)
+  [(4275f47)](https://github.com/taiga-family/toolkit/commit/4275f47df3e5206b82b0a4f054fe73e6184e2c59)
+- update eslint (#1373)
+  [(fb5562a)](https://github.com/taiga-family/toolkit/commit/fb5562a145ff0dba1f8154f3576c800c46b0e6d2)
+- update dependency cspell to ^9.3.0 (#1372)
+  [(46900ff)](https://github.com/taiga-family/toolkit/commit/46900ff1d333f90b8f49a590061f35ad5796cb56)
+- update dependency release-it to ^19.0.6 (#1369)
+  [(41d720f)](https://github.com/taiga-family/toolkit/commit/41d720f37576867f5de7c3e7c50a905a31a87f0e)
+- update dependency @html-eslint/parser to ^0.47.1 (#1368)
+  [(72c94f2)](https://github.com/taiga-family/toolkit/commit/72c94f2629f5d7bec109ef8699936f6c8a420a37)
+- update dependency @html-eslint/eslint-plugin to ^0.47.1 (#1367)
+  [(03c06ff)](https://github.com/taiga-family/toolkit/commit/03c06ffa728b659e741f4c4d5aa94b07275a49b7)
+
 ### [0.354.0](https://github.com/taiga-family/toolkit/compare/v0.353.0...v0.354.0) (2025-11-07)
 
 ### 🚀 Features
