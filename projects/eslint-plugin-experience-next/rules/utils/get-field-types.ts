@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import ts, {type TypeChecker} from 'typescript';
 
 export function getFieldTypes(type: ts.Type, checker: TypeChecker): string[] {
