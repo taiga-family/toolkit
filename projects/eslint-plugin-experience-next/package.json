@@ -15,7 +15,7 @@
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.5.0",
         "@types/glob": "*",
-        "angular-eslint": "^20.5.2",
+        "angular-eslint": "^20.6.0",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.7",
         "eslint-plugin-compat": "^6.0.2",
