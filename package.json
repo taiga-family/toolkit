@@ -41,12 +41,12 @@
         ]
     },
     "devDependencies": {
-        "@nx/rollup": "22.0.2",
-        "@nx/workspace": "22.0.2",
+        "@nx/rollup": "22.0.3",
+        "@nx/workspace": "22.0.3",
         "@taiga-ui/testing": "4.61.0",
         "esbuild": "0.27.0",
         "lint-staged": "16.2.6",
-        "nx": "22.0.2",
+        "nx": "22.0.3",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
         "zone.js": "0.15.1"
