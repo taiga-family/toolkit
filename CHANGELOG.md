@@ -1,3 +1,20 @@
+### [0.356.0](https://github.com/taiga-family/toolkit/compare/v0.355.0...v0.356.0) (2025-11-09)
+
+### 🐞 Bug Fixes
+
+- update dependency angular-eslint to ^20.6.0 (#1383)
+  [(f0a9b8f)](https://github.com/taiga-family/toolkit/commit/f0a9b8f88067e3a651ae5b973970fae9e69df422)
+- update dependency eslint-plugin-package-json to ^0.65.1 (#1381)
+  [(c22d541)](https://github.com/taiga-family/toolkit/commit/c22d541a1b378845909d0ece5ebfbf3624172806)
+- update dependency angular-eslint to ^20.5.2 (#1379)
+  [(b4d6c1d)](https://github.com/taiga-family/toolkit/commit/b4d6c1d8fe79074ce8ed1b3dde23ea4fc8fc5e68)
+- update dependency eslint-plugin-package-json to ^0.65.0 (#1378)
+  [(a2b6826)](https://github.com/taiga-family/toolkit/commit/a2b6826fb6e3828f15a1b0529462c1024ffb0c3c)
+- update dependency @html-eslint/parser to ^0.48.0 (#1377)
+  [(bec9aec)](https://github.com/taiga-family/toolkit/commit/bec9aec2934c558c9d39a5843ae1e06e595382c1)
+- update dependency @html-eslint/eslint-plugin to ^0.48.0 (#1376)
+  [(8f9654e)](https://github.com/taiga-family/toolkit/commit/8f9654eb5efc549c28921f7f8c104fc9ac073365)
+
 ### [0.355.0](https://github.com/taiga-family/toolkit/compare/v0.354.0...v0.355.0) (2025-11-07)
 
 ### 🐞 Bug Fixes
