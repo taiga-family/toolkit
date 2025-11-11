@@ -11,6 +11,10 @@ export const rule = createRule({
                 return;
             }
 
+            if (node.key?.type === AST_NODE_TYPES.PrivateIdentifier) {
+                return;
+            }
+
             const name =
                 node?.key?.name ||
                 node?.parameter?.name ||

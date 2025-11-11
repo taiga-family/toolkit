@@ -43,7 +43,6 @@ export default [
 | injection-token-description | They are required to provide a description for `InjectionToken`                               | ✅  |     |     |
 | no-deep-imports             | Disables deep imports of Taiga UI packages                                                    | ✅  | 🔧  |     |
 | no-implicit-public          | Prevents the use of the public modifier in classes                                            | ✅  | 🔧  |     |
-| no-private-esnext-fields    | Prevents the use of the ESNext private methods                                                | ✅  |     |     |
 | standalone-imports-sort     | Sort imports alphabetically                                                                   | ✅  | 🔧  |     |
 | prefer-deep-imports         | Allow deep imports of Taiga UI packages                                                       |     | 🔧  |     |
 | strict-tui-doc-example      | If you use the addon-doc, there will be a hint that you are importing something incorrectly   |     | 🔧  |     |
