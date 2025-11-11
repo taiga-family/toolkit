@@ -2982,7 +2982,7 @@
 - force sync all versions in npm
   [(44ede9f)](https://github.com/taiga-family/configurations/commit/44ede9f14e54e562babd3312762634d443f6a37a)
 
-### [0.1.0]() (2024-06-04)
+### 0.1.0 (2024-06-04)
 
 ### 🚀 Features
 

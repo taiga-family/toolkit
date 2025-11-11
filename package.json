@@ -67,6 +67,9 @@
         "matchPackageNames": [
             "@taiga-ui/*",
             "taiga-linters"
+        ],
+        "ignorePackageNames": [
+            "@taiga-ui/testing"
         ]
     }
 }
