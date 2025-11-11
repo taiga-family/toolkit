@@ -14,7 +14,6 @@ import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
-import noPrivateEsnextFields from './rules/no-private-esnext-fields';
 import preferDeepImports from './rules/prefer-deep-imports';
 import standaloneImportsSort from './rules/standalone-imports-sort';
 import strictTuiDocExample from './rules/strict-tui-doc-example';
@@ -40,7 +39,6 @@ const plugin = {
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
-        'no-private-esnext-fields': noPrivateEsnextFields,
         'prefer-deep-imports': preferDeepImports,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
