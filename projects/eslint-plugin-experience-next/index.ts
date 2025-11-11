@@ -15,6 +15,7 @@ import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-p
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
 import preferDeepImports from './rules/prefer-deep-imports';
+import shortTuiImports from './rules/short-tui-imports';
 import standaloneImportsSort from './rules/standalone-imports-sort';
 import strictTuiDocExample from './rules/strict-tui-doc-example';
 
@@ -40,6 +41,7 @@ const plugin = {
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
         'prefer-deep-imports': preferDeepImports,
+        'short-tui-imports': shortTuiImports,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
     },

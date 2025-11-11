@@ -276,6 +276,7 @@ export default tseslint.config(
             ],
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
+            '@taiga-ui/experience-next/short-tui-imports': 'error',
             '@taiga-ui/experience-next/standalone-imports-sort': [
                 'error',
                 {
