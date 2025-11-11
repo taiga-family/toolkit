@@ -3,8 +3,6 @@
     "include": ["./*.ts"],
     "compilerOptions": {
         "baseUrl": ".",
-        "checkJs": false,
-        "allowJs": false,
         "esModuleInterop": true,
         "moduleResolution": "bundler",
         "module": "esnext",
