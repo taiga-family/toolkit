@@ -164,6 +164,7 @@ export default tseslint.config(
             '@angular-eslint/no-outputs-metadata-property': 'off',
             '@angular-eslint/no-queries-metadata-property': 'error',
             '@angular-eslint/no-uncalled-signals': 'error',
+            '@angular-eslint/prefer-host-metadata-property': 'error',
             '@angular-eslint/prefer-on-push-component-change-detection': 'error',
             '@angular-eslint/prefer-output-readonly': 'error',
             '@angular-eslint/prefer-signals':
@@ -641,16 +642,6 @@ export default tseslint.config(
                     message:
                         "Don't use TuiDestroyService, please use `takeUntilDestroyed()` function instead.",
                     selector: "Identifier[name='TuiDestroyService']",
-                },
-                {
-                    message:
-                        'Always prefer using the host property over @HostListener. That decorator exists exclusively for backwards compatibility',
-                    selector: "Identifier[name='HostListener']",
-                },
-                {
-                    message:
-                        'Always prefer using the host property over @HostBinding. That decorator exists exclusively for backwards compatibility',
-                    selector: "Identifier[name='HostBinding']",
                 },
                 {
                     message:
