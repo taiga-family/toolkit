@@ -1,3 +1,19 @@
+### [0.357.0](https://github.com/taiga-family/toolkit/compare/v0.356.0...v0.357.0) (2025-11-11)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: enable native private fields (#1390)
+  [(aa082c7)](https://github.com/taiga-family/toolkit/commit/aa082c756c0875c70274280b6705e2cd8ec804ca)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-package-json to ^0.65.3 (#1389)
+  [(a87ade7)](https://github.com/taiga-family/toolkit/commit/a87ade7b4146ef0950685df03ed82055d444f0b7)
+- update dependency eslint-plugin-jest to ^29.1.0 (#1388)
+  [(db27bc8)](https://github.com/taiga-family/toolkit/commit/db27bc82c617edd313fac07938bb070a2868d84d)
+- update @typescript-eslint/\* deps to v8.46.4 (#1386)
+  [(641a119)](https://github.com/taiga-family/toolkit/commit/641a119e753f72c3b4a4379079ed79ca2a607f55)
+
 ### [0.356.0](https://github.com/taiga-family/toolkit/compare/v0.355.0...v0.356.0) (2025-11-09)
 
 ### 🐞 Bug Fixes
