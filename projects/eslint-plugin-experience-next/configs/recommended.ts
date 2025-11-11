@@ -592,6 +592,14 @@ export default tseslint.config(
             'no-empty': ['error', {allowEmptyCatch: true}],
             'no-extra-boolean-cast': 'error',
             'no-implicit-coercion': ['error', {allow: ['!!']}],
+            'no-irregular-whitespace': [
+                'error',
+                {
+                    skipRegExps: false,
+                    skipStrings: false,
+                    skipTemplates: false,
+                },
+            ],
             'no-loop-func': 'error',
             'no-nested-ternary': 'error',
             'no-prototype-builtins': 'off',
@@ -983,6 +991,12 @@ export default tseslint.config(
         rules: {
             'package-json/require-description': ['error', {ignorePrivate: true}],
             'package-json/require-type': ['off', {ignorePrivate: true}],
+        },
+    },
+    {
+        files: ['**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
+        rules: {
+            'no-irregular-whitespace': 'off',
         },
     },
 );
