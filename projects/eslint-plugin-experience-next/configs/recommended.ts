@@ -165,6 +165,7 @@ export default tseslint.config(
             '@angular-eslint/no-queries-metadata-property': 'error',
             '@angular-eslint/no-uncalled-signals': 'error',
             '@angular-eslint/prefer-host-metadata-property': 'error',
+            '@angular-eslint/prefer-inject': 'error',
             '@angular-eslint/prefer-on-push-component-change-detection': 'error',
             '@angular-eslint/prefer-output-readonly': 'error',
             '@angular-eslint/prefer-signals':
@@ -668,30 +669,6 @@ export default tseslint.config(
                         'Provide initial value to .reduce() method. Possible runtime error: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Reduce_of_empty_array_with_no_initial_value',
                     selector:
                         "CallExpression[arguments.length=1] > MemberExpression.callee > Identifier.property[name='reduce']",
-                },
-                {
-                    message: 'Please use `inject(Type)` function instead.',
-                    selector: "Decorator[expression.callee.name='Inject']",
-                },
-                {
-                    message:
-                        'Please use `inject(Type, { self: true })` function instead.',
-                    selector: "Decorator[expression.callee.name='Self']",
-                },
-                {
-                    message:
-                        'Please use `inject(Type, { skipSelf: true })` function instead.',
-                    selector: "Decorator[expression.callee.name='SkipSelf']",
-                },
-                {
-                    message:
-                        'Please use `inject(Type, { optional: true })` function instead.',
-                    selector: "Decorator[expression.callee.name='Optional']",
-                },
-                {
-                    message:
-                        'Please use `inject(Type, { host: true })` function instead.',
-                    selector: "Decorator[expression.callee.name='Host']",
                 },
                 {
                     message: 'Please use `inject(INJECTOR)` instead',
