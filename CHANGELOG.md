@@ -1,3 +1,10 @@
+### [0.358.0](https://github.com/taiga-family/toolkit/compare/v0.357.0...v0.358.0) (2025-11-11)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: ignore nbsp symbols in templates (#1392)
+  [(2aaf38f)](https://github.com/taiga-family/toolkit/commit/2aaf38faa18af3773fb38272831eba807cc3c75e)
+
 ### [0.357.0](https://github.com/taiga-family/toolkit/compare/v0.356.0...v0.357.0) (2025-11-11)
 
 ### 🚀 Features
