@@ -1,6 +1,7 @@
 import {createRequire} from 'node:module';
 
 import eslint from '@eslint/js';
+import markdown from '@eslint/markdown';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
 import angular from 'angular-eslint';
@@ -81,7 +82,6 @@ export default tseslint.config(
             '*.mp4',
             '*.ico',
             '*.xml',
-            '*.md',
             'LICENSE',
             'jest.preset.js',
             '*.config.js',
@@ -963,7 +963,18 @@ export default tseslint.config(
         },
     },
     {
-        files: ['**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
+        files: ['**/*.md'],
+        plugins: {
+            markdown,
+        },
+        extends: [markdown.configs.recommended],
+        language: 'markdown/gfm',
+        rules: {
+            'markdown/require-alt-text': 'off',
+        },
+    },
+    {
+        files: ['**/*.md', '**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
         rules: {
             'no-irregular-whitespace': 'off',
         },

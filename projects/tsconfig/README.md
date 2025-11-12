@@ -3,7 +3,7 @@
 [![image](https://badge.fury.io/js/%40taiga-ui%2Ftsconfig.svg)](https://badge.fury.io/js/%40taiga-ui%2Ftsconfig)
 [![image](https://img.shields.io/npm/dw/@taiga-ui/tsconfig)](https://badge.fury.io/js/%40taiga-ui%2Ftsconfig)
 
-### Quick start
+## Quick start
 
 ```bash
 $ npm install @taiga-ui/tsconfig -D
