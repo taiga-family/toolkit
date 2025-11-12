@@ -37,12 +37,18 @@ export default [
 - 🔧 = fixable
 - 💡 = has suggestions
 
-| Rule                        | Description                                                                                   | ✅  | 🔧  | 💡  |
-| --------------------------- | --------------------------------------------------------------------------------------------- | --- | --- | --- |
-| decorator-key-sort          | Sorts the keys of the object passed to the `@Component/@Injectable/@NgModule/@Pipe` decorator | ✅  | 🔧  |     |
-| injection-token-description | They are required to provide a description for `InjectionToken`                               | ✅  |     |     |
-| no-deep-imports             | Disables deep imports of Taiga UI packages                                                    | ✅  | 🔧  |     |
-| no-implicit-public          | Prevents the use of the public modifier in classes                                            | ✅  | 🔧  |     |
-| standalone-imports-sort     | Sort imports alphabetically                                                                   | ✅  | 🔧  |     |
-| prefer-deep-imports         | Allow deep imports of Taiga UI packages                                                       |     | 🔧  |     |
-| strict-tui-doc-example      | If you use the addon-doc, there will be a hint that you are importing something incorrectly   |     | 🔧  |     |
+| Rule                                | Description                                                                                         | ✅  | 🔧  | 💡  |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- | --- | --- | --- |
+| array-as-const                      | Exported array of class references should be marked with `as const`                                 |     | 🔧  |     |
+| class-property-naming               | Enforce custom naming for class properties based on their type                                      |     | 🔧  |     |
+| decorator-key-sort                  | Sorts the keys of the object passed to the `@Component/@Injectable/@NgModule/@Pipe` decorator       | ✅  | 🔧  |     |
+| injection-token-description         | They are required to provide a description for `InjectionToken`                                     | ✅  |     |     |
+| no-deep-imports                     | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
+| no-deep-imports-to-indexed-packages | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
+| no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
+| no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
+| standalone-imports-sort             | Sort imports alphabetically                                                                         | ✅  | 🔧  |     |
+| prefer-deep-imports                 | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
+| short-tui-imports                   | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
+| standalone-imports-sort             | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
+| strict-tui-doc-example              | If you use the addon-doc, there will be a hint that you are importing something incorrectly         |     | 🔧  |     |
