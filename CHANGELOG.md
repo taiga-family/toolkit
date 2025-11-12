@@ -1,3 +1,19 @@
+### [0.359.0](https://github.com/taiga-family/toolkit/compare/v0.358.0...v0.359.0) (2025-11-12)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add prefer-inject instead of no-restricted-syntax (#1397)
+  [(b73f8df)](https://github.com/taiga-family/toolkit/commit/b73f8df182de6bea773237df2196c9f5798e3f82)
+- **eslint-plugin-experience-next**: add prefer-host-metadata-property instead of no-restricted-syntax (#1396)
+  [(ab0064a)](https://github.com/taiga-family/toolkit/commit/ab0064a13d3f8125db372927067827ab8dabed61)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-package-json to ^0.68.0 (#1399)
+  [(b26c9cd)](https://github.com/taiga-family/toolkit/commit/b26c9cd0b728bf398b89bcf729d7dc8f03682ce8)
+- update dependency eslint-plugin-package-json to ^0.66.0 (#1398)
+  [(e81fd60)](https://github.com/taiga-family/toolkit/commit/e81fd600a8323d8090df9f25351ca6fa2261d059)
+
 ### [0.358.0](https://github.com/taiga-family/toolkit/compare/v0.357.0...v0.358.0) (2025-11-11)
 
 ### 🐞 Bug Fixes
