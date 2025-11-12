@@ -4,7 +4,6 @@
     "include": ["**/*.spec.ts", "**/*.d.ts"],
     "compilerOptions": {
         "types": ["jest", "node"],
-        "moduleResolution": "node",
-        "checkJs": false
+        "moduleResolution": "node"
     }
 }
