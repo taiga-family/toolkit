@@ -1,3 +1,10 @@
+### [0.360.0](https://github.com/taiga-family/toolkit/compare/v0.359.0...v0.360.0) (2025-11-12)
+
+### 🚀 Features
+
+- **tsconfig**: turn off checkJs and allowJs (#1394)
+  [(05b9fa9)](https://github.com/taiga-family/toolkit/commit/05b9fa978880e184875ea73bbfff3c1fbe290d62)
+
 ### [0.359.0](https://github.com/taiga-family/toolkit/compare/v0.358.0...v0.359.0) (2025-11-12)
 
 ### 🚀 Features
