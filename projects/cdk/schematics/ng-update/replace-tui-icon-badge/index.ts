@@ -1,4 +1,4 @@
-import {type Rule, Tree} from '@angular-devkit/schematics';
+import {type Rule} from '@angular-devkit/schematics';
 
 const TUI_ICON_TAG_REGEXP = /<tui-icon\b[^>]*>/gi;
 const BADGE_ATTRIBUTE_REGEXP = /\s\[*tuiBadge(?:\]|\b)(?=[\s=>])/i;
@@ -31,20 +31,26 @@ export function replaceTuiIconBadge(): Rule {
 }
 
 export function migrateTemplate(template: string): string {
-    return template.replace(TUI_ICON_TAG_REGEXP, (iconTag) => {
+    return template.replaceAll(TUI_ICON_TAG_REGEXP, (iconTag) => {
         if (!BADGE_ATTRIBUTE_REGEXP.test(iconTag)) {
             return iconTag;
         }
 
         let updated = iconTag;
 
-        updated = updated.replace(ICON_ATTRIBUTE_REPLACE_REGEXP, (match, whitespace: string) => {
-            return `${whitespace}iconStart`;
-        });
+        updated = updated.replaceAll(
+            ICON_ATTRIBUTE_REPLACE_REGEXP,
+            (match, whitespace: string) => {
+                return `${whitespace}iconStart`;
+            },
+        );
 
-        updated = updated.replace(ICON_INPUT_REPLACE_REGEXP, (match, whitespace: string) => {
-            return `${whitespace}[iconStart]`;
-        });
+        updated = updated.replaceAll(
+            ICON_INPUT_REPLACE_REGEXP,
+            (match, whitespace: string) => {
+                return `${whitespace}[iconStart]`;
+            },
+        );
 
         return updated;
     });

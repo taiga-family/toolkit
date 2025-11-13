@@ -17,15 +17,21 @@ describe('replace-tui-icon-badge schematic', () => {
     }
 
     it('replaces icon attribute with iconStart when tuiBadge is present', async () => {
-        const migrated = await runMigration('<tui-icon tuiBadge icon="tuiIconClose"></tui-icon>');
+        const migrated = await runMigration(
+            '<tui-icon tuiBadge icon="tuiIconClose"></tui-icon>',
+        );
 
         expect(migrated).toBe('<tui-icon tuiBadge iconStart="tuiIconClose"></tui-icon>');
     });
 
     it('replaces [icon] binding with [iconStart]', async () => {
-        const migrated = await runMigration('<tui-icon [tuiBadge]="true" [icon]="icon"></tui-icon>');
+        const migrated = await runMigration(
+            '<tui-icon [tuiBadge]="true" [icon]="icon"></tui-icon>',
+        );
 
-        expect(migrated).toBe('<tui-icon [tuiBadge]="true" [iconStart]="icon"></tui-icon>');
+        expect(migrated).toBe(
+            '<tui-icon [tuiBadge]="true" [iconStart]="icon"></tui-icon>',
+        );
     });
 
     it('does not touch icons without tuiBadge directive', async () => {
