@@ -1,3 +1,23 @@
+### [0.361.0](https://github.com/taiga-family/toolkit/compare/v0.360.0...v0.361.0) (2025-11-13)
+
+### 🚀 Features
+
+- do not run typecheck on js files (#1400)
+  [(720c2d1)](https://github.com/taiga-family/toolkit/commit/720c2d1e453c1debf10710331a0308e534c65d0a)
+- **eslint-plugin-experience-next**: support markdown linting (#1393)
+  [(6ae5fe3)](https://github.com/taiga-family/toolkit/commit/6ae5fe32eff373b87160b7e82cebc5f4fd0b8bcc)
+- **eslint**: forbid taiga component directive imports (#1395)
+  [(239515b)](https://github.com/taiga-family/toolkit/commit/239515b3e30d2ce4ba852c83aa59a3464a5938bc)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-package-json to ^0.71.0 (#1403)
+  [(c5da596)](https://github.com/taiga-family/toolkit/commit/c5da59626e3a735a8b335ceb1f058314a52257ae)
+- update dependency eslint-plugin-package-json to ^0.69.0 (#1402)
+  [(374f406)](https://github.com/taiga-family/toolkit/commit/374f4063bbd302814e29ff0a1b70dd977fa7b2a1)
+- update dependency cspell to ^9.3.1 (#1401)
+  [(6735abb)](https://github.com/taiga-family/toolkit/commit/6735abb0b2bc97348d4f50064208506dfaae237e)
+
 ### [0.360.0](https://github.com/taiga-family/toolkit/compare/v0.359.0...v0.360.0) (2025-11-12)
 
 ### 🚀 Features
