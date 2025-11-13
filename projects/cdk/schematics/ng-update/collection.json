@@ -1,0 +1,9 @@
+{
+    "$schema": "../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+    "schematics": {
+        "replace-tui-icon-badge": {
+            "description": "Replaces deprecated icon inputs with iconStart on tuiBadge icons.",
+            "factory": "./replace-tui-icon-badge/index#replaceTuiIconBadge"
+        }
+    }
+}
