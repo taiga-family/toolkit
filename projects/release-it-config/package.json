@@ -12,7 +12,7 @@
     "license": "Apache-2.0",
     "main": "index.js",
     "peerDependencies": {
-        "@release-it/conventional-changelog": "10.0.1",
+        "@release-it/conventional-changelog": "10.0.2",
         "conventional-changelog-conventionalcommits": "^9.1.0",
         "release-it": "^19.0.6"
     },
