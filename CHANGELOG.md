@@ -1,3 +1,20 @@
+### [0.362.0](https://github.com/taiga-family/toolkit/compare/v0.361.0...v0.362.0) (2025-11-17)
+
+### 🐞 Bug Fixes
+
+- update dependency @release-it/conventional-changelog to v10.0.2 (#1412)
+  [(78cef52)](https://github.com/taiga-family/toolkit/commit/78cef52de6bb804dacccd79d55222035b7c8db3d)
+- update dependency cspell to ^9.3.2 (#1411)
+  [(377eb5d)](https://github.com/taiga-family/toolkit/commit/377eb5d0e08059e3eceda3fdea01a1d326c6a66b)
+- update dependency @eslint/compat to v2 (#1408)
+  [(01c3e4b)](https://github.com/taiga-family/toolkit/commit/01c3e4b903f95d4067b7162c65537a4f861a30c8)
+- update dependency eslint-plugin-package-json to ^0.74.0 (#1407)
+  [(5e4755c)](https://github.com/taiga-family/toolkit/commit/5e4755c4e28d0b30db0ad8d008028efc3c4c1c45)
+- update dependency eslint-plugin-package-json to ^0.73.0 (#1406)
+  [(34441f1)](https://github.com/taiga-family/toolkit/commit/34441f185f91ba089558709967ef5738a427c382)
+- update dependency eslint-plugin-package-json to ^0.72.0 (#1404)
+  [(32be388)](https://github.com/taiga-family/toolkit/commit/32be388e48e5542f0009124299e8b6bd18f4a482)
+
 ### [0.361.0](https://github.com/taiga-family/toolkit/compare/v0.360.0...v0.361.0) (2025-11-13)
 
 ### 🚀 Features

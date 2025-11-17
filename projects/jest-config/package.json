@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/jest-config",
-    "version": "0.361.0",
+    "version": "0.362.0",
     "description": "Taiga UI jest config",
     "keywords": [
         "jest"
