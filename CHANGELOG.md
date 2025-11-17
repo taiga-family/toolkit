@@ -1,3 +1,10 @@
+### [0.363.0](https://github.com/taiga-family/toolkit/compare/v0.362.0...v0.363.0) (2025-11-17)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: improve ignore list (#1415)
+  [(0ca95e0)](https://github.com/taiga-family/toolkit/commit/0ca95e06f3dd01f451d7199c86be05adce5d00c7)
+
 ### [0.362.0](https://github.com/taiga-family/toolkit/compare/v0.361.0...v0.362.0) (2025-11-17)
 
 ### 🐞 Bug Fixes
