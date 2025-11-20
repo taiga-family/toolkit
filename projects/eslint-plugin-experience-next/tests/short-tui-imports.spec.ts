@@ -360,6 +360,25 @@ ruleTester.run('short-tui-imports', rule, {
                 export class Example {}
             `,
         },
+        {
+            code: `
+                import { TuiDataListComponent } from '@taiga-ui/kit';
+                import { TuiSomethingDirective } from '@taiga-ui/kit/a/b';
+                
+                @Component({
+                    imports: [TuiDataListComponent, TuiSomethingDirective],
+                })
+                export class TestComponent {}`,
+            errors: [{messageId: MESSAGE_ID}],
+            output: `
+                import { TuiDataList } from '@taiga-ui/kit';
+                import { TuiSomethingDirective } from '@taiga-ui/kit/a/b';
+                
+                @Component({
+                    imports: [TuiDataList, TuiSomethingDirective],
+                })
+                export class TestComponent {}`,
+        },
     ],
     valid: [
         {
