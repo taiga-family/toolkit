@@ -1,3 +1,27 @@
+### [0.364.0](https://github.com/taiga-family/toolkit/compare/v0.363.0...v0.364.0) (2025-11-20)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-new-array` (#1423)
+  [(3be5c93)](https://github.com/taiga-family/toolkit/commit/3be5c9365466e50f00028e02c122d292d496ae33)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: revert to Jest 29 (#1428)
+  [(7b480a2)](https://github.com/taiga-family/toolkit/commit/7b480a2a941b638a42c8490e914d6e160b9304e6)
+- update dependency glob to v13 (#1424)
+  [(d0b2fa4)](https://github.com/taiga-family/toolkit/commit/d0b2fa49e077524fee510e7a2e3834dc6ff3d5c0)
+- update dependency @stylistic/eslint-plugin to ^5.6.1 (#1422)
+  [(a85a7bf)](https://github.com/taiga-family/toolkit/commit/a85a7bfba4766fdd8c22d67b0e2cf401cd5ea12b)
+- update dependency @stylistic/eslint-plugin to ^5.6.0 (#1421)
+  [(bbc79a6)](https://github.com/taiga-family/toolkit/commit/bbc79a67cc675d4586371e2f33a398a234c884fc)
+- update dependency glob to v12 (#1419)
+  [(fd5e318)](https://github.com/taiga-family/toolkit/commit/fd5e3185ccb416888da8a86002a84a84abf67161)
+- update dependency glob to v11.1.0 (#1418)
+  [(61f88af)](https://github.com/taiga-family/toolkit/commit/61f88aff648230cf2477657d39d97fea302e4987)
+- update @typescript-eslint/\* deps to v8.47.0 (#1417)
+  [(48773bd)](https://github.com/taiga-family/toolkit/commit/48773bdb983e6768f7c22eaeef83c46b61945dd2)
+
 ### [0.363.0](https://github.com/taiga-family/toolkit/compare/v0.362.0...v0.363.0) (2025-11-17)
 
 ### 🐞 Bug Fixes
