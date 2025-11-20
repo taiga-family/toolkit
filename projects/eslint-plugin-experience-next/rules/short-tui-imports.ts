@@ -174,11 +174,12 @@ export const rule = createRule<Options, MessageIds>({
             },
 
             ImportDeclaration(node: TSESTree.ImportDeclaration) {
-                const isNotTaigaImport =
-                    !node.source.value.startsWith('@taiga-ui/') ||
-                    node.specifiers.length === 0;
+                const modulePath = node.source.value satisfies string;
+                const isTopLevelTaiga =
+                    modulePath.startsWith('@taiga-ui/') &&
+                    modulePath.split('/').length === 2;
 
-                if (isNotTaigaImport) {
+                if (!isTopLevelTaiga || node.specifiers.length === 0) {
                     return;
                 }
 
@@ -198,7 +199,7 @@ export const rule = createRule<Options, MessageIds>({
                             importedAs: importedClass,
                             isType:
                                 spec.importKind === 'type' || node.importKind === 'type',
-                            module: node.source.value,
+                            module: modulePath,
                         };
                     }
                 }
