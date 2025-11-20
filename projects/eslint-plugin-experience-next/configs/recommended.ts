@@ -640,6 +640,7 @@ export default tseslint.config(
             'unicorn/no-empty-file': 'error',
             'unicorn/no-magic-array-flat-depth': 'error',
             'unicorn/no-negation-in-equality-check': 'error',
+            'unicorn/no-new-array': 'error',
             'unicorn/no-single-promise-in-promise-methods': 'error',
             'unicorn/no-typeof-undefined': 'error',
             'unicorn/no-unnecessary-polyfills': 'error',
