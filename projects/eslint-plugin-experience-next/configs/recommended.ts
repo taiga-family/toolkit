@@ -953,6 +953,7 @@ export default defineConfig([
         rules: {
             'package-json/require-description': ['error', {ignorePrivate: true}],
             'package-json/require-type': ['off', {ignorePrivate: true}],
+            'package-json/specify-peers-locally': 'off',
         },
     },
     {

@@ -17,9 +17,6 @@
     "dependencies": {
         "glob": "13.0.0"
     },
-    "peerDependencies": {
-        "glob": "*"
-    },
     "publishConfig": {
         "access": "public"
     }
