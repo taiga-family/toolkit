@@ -5,6 +5,7 @@ import markdown from '@eslint/markdown';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
 import angular from 'angular-eslint';
+import {defineConfig} from 'eslint/config';
 import compat from 'eslint-plugin-compat';
 import progress from 'eslint-plugin-file-progress';
 import jest from 'eslint-plugin-jest';
@@ -58,7 +59,7 @@ try {
 
 export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
-export default tseslint.config(
+export default defineConfig([
     progress.configs['recommended-ci'],
     {
         ignores: [
@@ -967,7 +968,7 @@ export default tseslint.config(
             'no-irregular-whitespace': 'off',
         },
     },
-);
+]);
 
 function projectJsonExist(filename: string): string {
     try {
