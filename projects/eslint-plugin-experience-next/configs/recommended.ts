@@ -113,7 +113,11 @@ export default defineConfig([
                 warnOnUnsupportedTypeScriptVersion: false,
                 ...parserOptions,
             },
-            globals: globals.builtin,
+            globals: {
+                ...globals.builtin,
+                ...globals.browser,
+                ...globals.node,
+            },
         },
         rules: {
             '@typescript-eslint/no-confusing-void-expression': 'off',
