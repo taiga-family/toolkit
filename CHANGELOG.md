@@ -1,3 +1,15 @@
+### [0.365.0](https://github.com/taiga-family/toolkit/compare/v0.364.0...v0.365.0) (2025-11-25)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: use `defineConfig` instead of deprecated `tseslint.config` (#1429)
+  [(8d4446c)](https://github.com/taiga-family/toolkit/commit/8d4446c7f3325888e7b16c09ede93316a9c34b24)
+
+### 🐞 Bug Fixes
+
+- update eslint (#1409)
+  [(c2054b6)](https://github.com/taiga-family/toolkit/commit/c2054b689362bc47363a2e2db52c0bba525d4154)
+
 ### [0.364.0](https://github.com/taiga-family/toolkit/compare/v0.363.0...v0.364.0) (2025-11-20)
 
 ### 🚀 Features
