@@ -42,6 +42,7 @@ export default [
 | array-as-const                      | Exported array of class references should be marked with `as const`                                 |     | 🔧  |     |
 | class-property-naming               | Enforce custom naming for class properties based on their type                                      |     | 🔧  |     |
 | decorator-key-sort                  | Sorts the keys of the object passed to the `@Component/@Injectable/@NgModule/@Pipe` decorator       | ✅  | 🔧  |     |
+| flat-exports                        | Spread nested arrays when exporting Angular entity collections                                      |     | 🔧  |     |
 | injection-token-description         | They are required to provide a description for `InjectionToken`                                     | ✅  |     |     |
 | no-deep-imports                     | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
 | no-deep-imports-to-indexed-packages | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |

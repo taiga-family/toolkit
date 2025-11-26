@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 
+import {defineConfig} from 'eslint/config';
 import {globSync} from 'glob';
-import tseslint from 'typescript-eslint';
 
 import {
     TUI_CUSTOM_TAIGA_NAMING_CONVENTION,
@@ -17,7 +17,7 @@ const packageSourceGlobs = allPackageJSONs.map((p) =>
     p.replaceAll(/\\+/g, '/').replace('package.json', '**/*.ts'),
 );
 
-export default tseslint.config([
+export default defineConfig([
     {
         files: packageSourceGlobs,
         ignores: ['**/*.spec.ts', '**/*.cy.ts'],
@@ -55,6 +55,7 @@ export default tseslint.config([
                     },
                 ],
             ],
+            '@taiga-ui/experience-next/flat-exports': 'error',
             '@taiga-ui/experience-next/strict-tui-doc-example': 'error',
             '@typescript-eslint/naming-convention': [
                 'error',
