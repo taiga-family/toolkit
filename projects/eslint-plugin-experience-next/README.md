@@ -60,13 +60,13 @@ Enforce imports from the deepest available entry point of Taiga UI packages.
 
 ```json
 {
-    "@taiga-ui/experience-next/prefer-deep-imports": [
-        "error",
-        {
-            "importFilter": ["@taiga-ui/core", "@taiga-ui/kit"],
-            "strict": true
-        }
-    ]
+  "@taiga-ui/experience-next/prefer-deep-imports": [
+    "error",
+    {
+      "importFilter": ["@taiga-ui/core", "@taiga-ui/kit"],
+      "strict": true
+    }
+  ]
 }
 ```
 
