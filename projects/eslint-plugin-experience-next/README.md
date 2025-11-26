@@ -53,3 +53,21 @@ export default [
 | short-tui-imports                   | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
 | standalone-imports-sort             | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
 | strict-tui-doc-example              | If you use the addon-doc, there will be a hint that you are importing something incorrectly         |     | 🔧  |     |
+
+## prefer-deep-imports
+
+Enforce imports from the deepest available entry point of Taiga UI packages.
+
+```json
+{
+    "@taiga-ui/experience-next/prefer-deep-imports": [
+        "error",
+        {
+            "importFilter": ["@taiga-ui/core", "@taiga-ui/kit"],
+            "strict": true
+        }
+    ]
+}
+```
+
+Use `strict` to forbid imports from intermediate entry points when deeper ones exist (recommended for CI).
