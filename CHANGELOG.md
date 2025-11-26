@@ -1,3 +1,10 @@
+### [0.366.0](https://github.com/taiga-family/toolkit/compare/v0.365.0...v0.366.0) (2025-11-26)
+
+### 🚀 Features
+
+- **eslit-plugin-experience-next**: add flat exports rule (#1433)
+  [(d67fe55)](https://github.com/taiga-family/toolkit/commit/d67fe5596c2f7548022e72f4743fc70fc124833d)
+
 ### [0.365.0](https://github.com/taiga-family/toolkit/compare/v0.364.0...v0.365.0) (2025-11-25)
 
 ### 🚀 Features
