@@ -20,9 +20,6 @@
         "jest-preset-angular": "^14.6.2",
         "ts-jest": "^29.4.5"
     },
-    "optionalDependencies": {
-        "@taiga-ui/testing": "^4.61.0"
-    },
     "publishConfig": {
         "access": "public"
     }
