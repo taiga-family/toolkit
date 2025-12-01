@@ -1,3 +1,10 @@
+### [0.367.0](https://github.com/taiga-family/toolkit/compare/v0.366.0...v0.367.0) (2025-12-01)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: migrate to typescript eslint utils for `standalone-import-sort` rule (#1438)
+  [(5f8ed27)](https://github.com/taiga-family/toolkit/commit/5f8ed2738f6aeba00c86be55822f3adec3520478)
+
 ### [0.366.0](https://github.com/taiga-family/toolkit/compare/v0.365.0...v0.366.0) (2025-11-26)
 
 ### 🚀 Features
