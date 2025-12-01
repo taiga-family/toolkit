@@ -1,6 +1,8 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
 
+import {isArray} from './is-array';
+
 export function getConstArray(
     node: TSESTree.Expression | null,
 ): TSESTree.ArrayExpression | null {
@@ -18,9 +20,5 @@ export function getConstArray(
         return null;
     }
 
-    if (node.expression.type === AST_NODE_TYPES.ArrayExpression) {
-        return node.expression;
-    }
-
-    return null;
+    return isArray(node.expression) ? node.expression : null;
 }

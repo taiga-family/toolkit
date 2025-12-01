@@ -1,118 +1,86 @@
-import {type TSESTree} from '@typescript-eslint/types';
-import {type JSSyntaxElement, type Rule} from 'eslint';
+import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-const config: Rule.RuleModule = {
-    create(context) {
-        const config = context.options[0] ?? {};
-        const defaultDecorators = config.decorators ?? [
-            'Component',
-            'Directive',
-            'NgModule',
-            'Pipe',
-        ];
+import {getDecoratorMetadata} from './utils/get-decorator-metadata';
+import {getImportsArray} from './utils/get-imports-array';
+import {getSortedNames} from './utils/get-sorted-names';
+import {nameOf} from './utils/name-of';
+import {sameOrder} from './utils/same-order';
+
+type Options = [{decorators?: string[]}];
+
+type MessageIds = 'incorrectOrder';
+
+const createRule = ESLintUtils.RuleCreator((name) => name);
+
+export default createRule<Options, MessageIds>({
+    create(context, [options]) {
+        const allowed = new Set(options.decorators);
+        const source = context.sourceCode;
 
         return {
-            ClassDeclaration(declaration) {
-                const node = declaration as Partial<TSESTree.ClassDeclaration>;
-                const decorators = Array.from(node.decorators ?? []);
+            ClassDeclaration(node?: TSESTree.ClassDeclaration) {
+                for (const decorator of node?.decorators ?? []) {
+                    const meta = getDecoratorMetadata(decorator, allowed);
 
-                decorators.forEach((decorator) => {
-                    const expression = decorator.expression as any;
-                    const name = expression?.callee?.name ?? '';
-
-                    if (!defaultDecorators.includes(name)) {
-                        return;
+                    if (!meta) {
+                        continue;
                     }
 
-                    const decoratorArguments = Array.from(expression.arguments ?? []);
+                    const arr = getImportsArray(meta);
 
-                    for (const argument of decoratorArguments) {
-                        const properties: any = Array.from(
-                            (argument as any).properties ?? [],
-                        ).reduce((mappings: any, item: any) => {
-                            mappings[item.key.name] = item;
-
-                            return mappings;
-                        }, {});
-
-                        if (properties.imports) {
-                            const elements = properties.imports.value.elements;
-                            const regularElements = [];
-                            const spreadElements = [];
-
-                            for (const element of elements) {
-                                if (element.type === 'SpreadElement') {
-                                    spreadElements.push(element);
-                                } else {
-                                    regularElements.push(element);
-                                }
-                            }
-
-                            const sortedRegularElements = regularElements
-                                .slice()
-                                .sort((a, b) =>
-                                    (a.name ?? '').localeCompare(b.name ?? ''),
-                                );
-
-                            const sortedSpreadElements = spreadElements
-                                .slice()
-                                .sort((a, b) =>
-                                    (a.argument.name ?? '').localeCompare(
-                                        b.argument.name || '',
-                                    ),
-                                );
-
-                            const newOrder = [
-                                ...sortedRegularElements,
-                                ...sortedSpreadElements,
-                            ];
-
-                            const currentOrder = elements.map((el: any) =>
-                                el.type === 'SpreadElement'
-                                    ? `...${el.argument.name}`
-                                    : el.name,
-                            );
-
-                            const expectedOrder = newOrder.map((el: any) =>
-                                el.type === 'SpreadElement'
-                                    ? `...${el.argument.name}`
-                                    : el.name,
-                            );
-
-                            if (
-                                JSON.stringify(currentOrder) !==
-                                JSON.stringify(expectedOrder)
-                            ) {
-                                const source = expectedOrder
-                                    .map((name) => (name === 'null' ? 'null' : name))
-                                    .join(', ');
-
-                                context.report({
-                                    fix: (fixer) =>
-                                        fixer.replaceTextRange(
-                                            properties.imports.value.range,
-                                            `[${source}]`,
-                                        ),
-                                    message: `Order in imports should be [${source}]`,
-                                    node: expression as JSSyntaxElement,
-                                });
-                            }
-                        }
+                    if (!arr) {
+                        continue;
                     }
-                });
+
+                    const elements = arr.elements.filter(
+                        (el): el is TSESTree.Expression | TSESTree.SpreadElement =>
+                            el !== null,
+                    );
+
+                    if (elements.length <= 1) {
+                        continue;
+                    }
+
+                    const expectedNames = getSortedNames(elements, source);
+                    const currentNames = elements.map((el) => nameOf(el, source));
+
+                    if (sameOrder(currentNames, expectedNames)) {
+                        continue;
+                    }
+
+                    context.report({
+                        data: {expected: expectedNames.join(', ')},
+                        fix: (fixer) =>
+                            fixer.replaceTextRange(
+                                arr.range,
+                                `[${expectedNames.join(', ')}]`,
+                            ),
+                        messageId: 'incorrectOrder',
+                        node: arr,
+                    });
+                }
             },
         };
     },
+    defaultOptions: [
+        {
+            decorators: ['Component', 'Directive', 'NgModule', 'Pipe'],
+        },
+    ],
     meta: {
+        docs: {
+            description: 'Sort Angular standalone imports inside decorators.',
+        },
         fixable: 'code',
+        messages: {
+            incorrectOrder: 'Order in imports should be [{{expected}}]',
+        },
         schema: [
             {
                 additionalProperties: false,
                 properties: {
                     decorators: {
-                        items: {
-                            type: 'string',
-                        },
+                        items: {type: 'string'},
                         type: 'array',
                     },
                 },
@@ -121,6 +89,5 @@ const config: Rule.RuleModule = {
         ],
         type: 'problem',
     },
-};
-
-export default config;
+    name: 'standalone-imports-sort',
+});
