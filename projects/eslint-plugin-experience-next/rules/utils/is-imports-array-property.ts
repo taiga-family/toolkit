@@ -1,5 +1,7 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
+import {isArray} from './is-array';
+
 export function isImportsArrayProperty(
     property?: TSESTree.Property,
 ): property is TSESTree.Property & {value: TSESTree.ArrayExpression} {
@@ -7,7 +9,6 @@ export function isImportsArrayProperty(
     const hasIdentifierKey =
         property?.key.type === AST_NODE_TYPES.Identifier &&
         property.key.name === 'imports';
-    const hasArrayValue = property?.value.type === AST_NODE_TYPES.ArrayExpression;
 
-    return isProperty && hasIdentifierKey && hasArrayValue;
+    return isProperty && hasIdentifierKey && isArray(property.value);
 }

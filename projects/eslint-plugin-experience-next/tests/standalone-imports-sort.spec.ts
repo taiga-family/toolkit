@@ -211,5 +211,29 @@ ruleTester.run('standalone-imports-sort', rule, {
                 class TestComponent {}
             `,
         },
+        {
+            code: `
+                @Component({
+                    standalone: true,
+                    imports: [
+                        TuiDataList,
+                        TuiDropdown,
+                        TuiFeedItemActionComponent,
+                        TuiFeedItemDetailsComponent,
+                        , // possible trailing comma
+                        TuiItemsWithMore,
+                        TuiTimelineStepComponent,
+                        TuiTimelineStepDirective,
+                        TuiTimelineStepsComponent,
+                        TuiTitle,
+                    ],
+                    templateUrl: './index.html',
+                    styleUrl: './index.less',
+                    encapsulation,
+                    changeDetection,
+                })
+                class TestComponent {}
+            `,
+        },
     ],
 });
