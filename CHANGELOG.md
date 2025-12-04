@@ -1,3 +1,14 @@
+### [0.368.0](https://github.com/taiga-family/toolkit/compare/v0.367.0...v0.368.0) (2025-12-04)
+
+### 🚀 Features
+
+- **cspell-config**: optimization search patterns (#1439)
+  [(f92273f)](https://github.com/taiga-family/toolkit/commit/f92273f88af37de9fcec9b72e1ed44df7146772e)
+- **eslint-plugin-experience-next**: add strict mode to prefer-deep-imports (#1436)
+  [(33f5fbc)](https://github.com/taiga-family/toolkit/commit/33f5fbcdb591823b3d75341fb49da89abfb7f049)
+- **eslint-plugin-experience-next**: skip required button type for `tuiButtonX` (#1437)
+  [(5168818)](https://github.com/taiga-family/toolkit/commit/516881897b8e27ce3467d626bfdbd95ede236a93)
+
 ### [0.367.0](https://github.com/taiga-family/toolkit/compare/v0.366.0...v0.367.0) (2025-12-01)
 
 ### 🚀 Features
