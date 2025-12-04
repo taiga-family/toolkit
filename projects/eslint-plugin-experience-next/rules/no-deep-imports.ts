@@ -41,8 +41,8 @@ export const rule = createRule({
 
             return Boolean(
                 currentFileProjectName &&
-                    importSourceProjectName &&
-                    currentFileProjectName === importSourceProjectName,
+                importSourceProjectName &&
+                currentFileProjectName === importSourceProjectName,
             );
         };
 
