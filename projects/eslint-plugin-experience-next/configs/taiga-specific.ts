@@ -27,7 +27,7 @@ export default defineConfig([
                 'error',
                 {
                     importFilter: packageNames,
-                    strict: false,
+                    strict: !!process.env.CI,
                 },
             ],
         },
