@@ -1,3 +1,10 @@
+### [0.369.0](https://github.com/taiga-family/toolkit/compare/v0.368.0...v0.369.0) (2025-12-05)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: disable strict mode (#1441)
+  [(ed5698c)](https://github.com/taiga-family/toolkit/commit/ed5698c9685379b5e8713cd977e7b3fa241f8ce2)
+
 ### [0.368.0](https://github.com/taiga-family/toolkit/compare/v0.367.0...v0.368.0) (2025-12-04)
 
 ### 🚀 Features
