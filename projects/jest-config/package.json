@@ -18,7 +18,7 @@
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "jest-preset-angular": "^14.6.2",
-        "ts-jest": "^29.4.5"
+        "ts-jest": "^29.4.6"
     },
     "optionalDependencies": {
         "@taiga-ui/testing": "^4.61.0"
