@@ -77,9 +77,6 @@ module.exports = {
                 direction: 'ltr',
                 except: [
                     'float', // Safari 15+
-                    /^margin/i,
-                    /^padding/i,
-                    /^border-/i,
                     'top',
                     'right',
                     'bottom',
@@ -105,16 +102,7 @@ module.exports = {
         'declaration-block-no-redundant-longhand-properties': [
             true,
             {
-                ignoreShorthands: [
-                    'inset',
-                    'overflow',
-                    'margin-inline',
-                    'margin-block',
-                    'padding-inline',
-                    'padding-block',
-                    'inset-inline',
-                    'inset-block',
-                ],
+                ignoreShorthands: [],
             },
         ],
         'declaration-empty-line-before': [
@@ -179,26 +167,6 @@ module.exports = {
             true,
             {
                 ignore: [
-                    'border-top', // Safari 14.5+
-                    'border-bottom', // Safari 14.5+
-                    'border-top-color', // Safari 14.5+
-                    'border-bottom-color', // Safari 14.5+
-                    'border-top-style', // Safari 14.5+
-                    'border-bottom-style', // Safari 14.5+
-                    'border-top-width', // Safari 14.5+
-                    'border-bottom-width', // Safari 14.5+
-                    'border-left', // Safari 14.5+
-                    'border-right', // Safari 14.5+
-                    'border-left-color', // Safari 14.5+
-                    'border-right-color', // Safari 14.5+
-                    'border-left-style', // Safari 14.5+
-                    'border-right-style', // Safari 14.5+
-                    'border-left-width', // Safari 14.5+
-                    'border-right-width', // Safari 14.5+
-                    'top', // Safari 14.5+
-                    'bottom', // Safari 14.5+
-                    'left', // Safari 14.5+
-                    'right', // Safari 14.5+
                     'scroll-margin-bottom', // Safari 15+
                     'scroll-margin-top', // Safari 15+
                     'scroll-margin-left', // Safari 15+
@@ -219,14 +187,11 @@ module.exports = {
                     'contain-intrinsic-width', //  Safari 17+ & Chrome 95+
                     'overflow-y', // Safari 26+ & Chrome 135+
                     'overflow-x', // Safari 26+ & Chrome 135+
-                    'resize', // Chrome 118+ & Safari NaN+
+                    'resize', // Chrome 118+ & Safari 16+
                 ],
             },
         ],
         'property-disallowed-list': [
-            'border-inline', // shorthand works in Safari 14.5+
-            'padding-inline', // shorthand works in Safari 14.5+
-            'margin-inline', // shorthand works in Safari 14.5+
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
         'property-no-unknown': [
