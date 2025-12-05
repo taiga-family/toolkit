@@ -8,66 +8,97 @@ import ts from 'typescript';
 
 const MESSAGE_ID = 'prefer-deep-imports';
 const ERROR_MESSAGE =
-    'Import via root or non-leaf entry points is prohibited for this package';
+    'Import via root entry point is prohibited when nested entry points exist';
 
-type Options = [
+type RuleOptions = [
     {
         importFilter: string[] | string;
         strict?: boolean;
-        mockPaths?: Record<string, string>;
     },
 ];
 
 type MessageIds = typeof MESSAGE_ID;
 
+const createRule = ESLintUtils.RuleCreator(() => ERROR_MESSAGE);
+
+const tsconfigCache = new Map<string, ts.ParsedCommandLine>();
 const moduleResolutionCache = new Map<string, string | null>();
-const entryPointCache = new Map<string, boolean>();
-const entryRootCache = new Map<string, string | null>();
+const exportCheckCache = new Map<string, Map<string, boolean>>();
+const nearestNgCache = new Map<string, string | null>();
+const tsFileCache = new Map<string, string[]>();
 
-const createRule = ESLintUtils.RuleCreator((name) => name);
-
-export default createRule<Options, MessageIds>({
-    create(context, [{importFilter, mockPaths, strict = false}]) {
-        const selector = `ImportDeclaration[source.value=${getFilterRegExp(
-            importFilter,
-            strict,
-        )}]`;
+export default createRule<RuleOptions, MessageIds>({
+    create(context, [options]) {
+        const allowedPackages = normalizeFilter(options.importFilter);
+        const strict = options.strict ?? false;
 
         return {
-            [selector](node: TSESTree.ImportDeclaration) {
-                const specifier = node.source.value satisfies string;
-                const resolvedFile = resolveAlias(specifier, context, mockPaths);
+            ImportDeclaration(node) {
+                const importPath = node.source.value;
 
-                if (!resolvedFile) {
+                if (typeof importPath !== 'string') {
                     return;
                 }
 
-                const entryRoot =
-                    findEntryRoot(resolvedFile) ?? path.dirname(resolvedFile);
+                const shortName = extractPackageName(importPath);
 
-                if (strict) {
-                    const nested = isNestedEntryPoint(specifier);
-                    const hasNested = checkNestedEntryPoints(entryRoot, mockPaths);
-
-                    if (nested && !hasNested) {
-                        return;
+                const allowed = allowedPackages.some((pkg) => {
+                    if (shortName && pkg instanceof RegExp) {
+                        return pkg.test(shortName);
                     }
-                }
 
-                const fixed = tryFixImport(node, entryRoot);
+                    return pkg === shortName;
+                });
 
-                if (!fixed) {
-                    context.report({messageId: MESSAGE_ID, node});
-
+                if (!allowed) {
                     return;
                 }
+
+                if (!strict && isNestedImport(importPath)) {
+                    return;
+                }
+
+                const symbols = extractImportedSymbols(node);
+
+                if (symbols.length === 0) {
+                    return;
+                }
+
+                const filename = context.filename;
+                const rootEntry = resolveRootEntryPoint(importPath, filename);
+
+                if (!rootEntry) {
+                    return context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
+                }
+
+                const nested = findNestedEntryPoints(rootEntry);
+
+                if (nested.length === 0) {
+                    return context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
+                }
+
+                const symbolMap = mapSymbolsToEntryPoints(
+                    rootEntry,
+                    nested,
+                    symbols,
+                    strict,
+                );
+
+                if (symbolMap.size === 0) {
+                    return;
+                }
+
+                const newImports = buildImports(node, importPath, symbolMap);
 
                 context.report({
                     fix(fixer) {
-                        return fixer.replaceTextRange(
-                            [node.range[0], node.range[1]],
-                            fixed,
-                        );
+                        return fixer.replaceTextRange(node.range, newImports);
                     },
                     messageId: MESSAGE_ID,
                     node,
@@ -90,7 +121,6 @@ export default createRule<Options, MessageIds>({
                 additionalProperties: false,
                 properties: {
                     importFilter: {type: ['string', 'array']},
-                    mockPaths: {type: 'object'},
                     strict: {type: 'boolean'},
                 },
                 type: 'object',
@@ -98,210 +128,381 @@ export default createRule<Options, MessageIds>({
         ],
         type: 'problem',
     },
+
     name: 'prefer-deep-imports',
 });
 
-function resolveAlias(
-    specifier: string,
-    context: Parameters<ReturnType<typeof createRule>['create']>[0],
-    mockPaths?: Record<string, string>,
-): string | null {
-    if (mockPaths && specifier in mockPaths) {
-        return mockPaths[specifier] ?? null;
+function extractPackageName(importPath: string): string | null {
+    if (!importPath.startsWith('@')) {
+        return null;
     }
 
-    if (moduleResolutionCache.has(specifier)) {
-        return moduleResolutionCache.get(specifier)!;
-    }
+    const p = importPath.split('/');
 
-    let result: string | null;
+    return p.length >= 2 ? `${p[0]}/${p[1]}` : null;
+}
 
-    try {
-        const services = ESLintUtils.getParserServices(context);
-        const program = services.program;
-        const compilerOptions = program.getCompilerOptions();
-        const resolved = ts.resolveModuleName(
-            specifier,
-            context.filename,
-            compilerOptions,
-            ts.sys,
+function isNestedImport(importPath: string): boolean {
+    return importPath.split('/').length > 2;
+}
+
+function extractImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
+    return node.specifiers
+        .filter(
+            (s): s is TSESTree.ImportSpecifier =>
+                s.type === AST_NODE_TYPES.ImportSpecifier,
+        )
+        .map((s) =>
+            s.imported.type === AST_NODE_TYPES.Identifier
+                ? s.imported.name
+                : s.imported.value,
         );
+}
 
-        result = resolved.resolvedModule?.resolvedFileName ?? null;
-    } catch {
-        result = null;
+function resolveRootEntryPoint(importPath: string, fromFile: string): string | null {
+    const key = `${importPath}|${fromFile}`;
+
+    if (moduleResolutionCache.has(key)) {
+        return moduleResolutionCache.get(key)!;
     }
 
-    moduleResolutionCache.set(specifier, result);
+    const tsconfig = findNearestTsconfig(fromFile);
 
-    return result;
-}
+    if (!tsconfig) {
+        moduleResolutionCache.set(key, null);
 
-function getImportedName(node: TSESTree.Identifier | TSESTree.StringLiteral): string {
-    return node.type === AST_NODE_TYPES.Identifier ? node.name : node.value;
-}
-
-function tryFixImport(
-    node: TSESTree.ImportDeclaration,
-    entryRoot: string,
-): string | null {
-    const specifiers = node.specifiers;
-    const isTypeOnly = node.importKind === 'type';
-
-    const allTsFiles = globSync(`${entryRoot}/**/*.ts`, {
-        ignore: {ignored: (p) => /\.(spec|cy)\.ts$/.test(p.name)},
-    });
-
-    const sourceFiles = specifiers.map((sp) => {
-        if (sp.type !== AST_NODE_TYPES.ImportSpecifier) {
-            return null;
-        }
-
-        const importedName = getImportedName(sp.imported);
-        const found = allTsFiles.find((filePath) => {
-            const content = fs.readFileSync(filePath, 'utf8');
-            const regExp = new RegExp(
-                String.raw`(?<=export\s(default\s)?(abstract\s)?\w+\s)\b${importedName}\b`,
-            );
-
-            return regExp.test(content);
-        });
-
-        return found?.replaceAll(/\\+/g, '/');
-    });
-
-    if (sourceFiles.some((x) => !x)) {
         return null;
     }
 
-    const entryPoints = sourceFiles.map(findNearestEntryPoint);
+    let parsed = tsconfigCache.get(tsconfig);
 
-    if (entryPoints.some((x) => !x)) {
-        return null;
+    if (!parsed) {
+        const json = ts.readConfigFile(tsconfig, ts.sys.readFile).config;
+
+        parsed = ts.parseJsonConfigFileContent(json, ts.sys, path.dirname(tsconfig));
+        tsconfigCache.set(tsconfig, parsed);
     }
 
-    const newImports = specifiers.map((sp, i) => {
-        if (sp.type !== AST_NODE_TYPES.ImportSpecifier) {
-            return null;
-        }
+    const resolved = ts.resolveModuleName(
+        importPath,
+        fromFile,
+        parsed.options,
+        ts.sys,
+    ).resolvedModule;
 
-        const imported = getImportedName(sp.imported);
-        const local = sp.local.name;
-        const mapped = imported === local ? imported : `${imported} as ${local}`;
+    const value = resolved ? path.dirname(resolved.resolvedFileName) : null;
 
-        return `import ${isTypeOnly ? 'type ' : ''}{${mapped}} from '${entryPoints[i]}';`;
-    });
+    moduleResolutionCache.set(key, value);
 
-    if (newImports.some((x) => x === null)) {
-        return null;
-    }
-
-    return newImports.join('\n');
+    return value;
 }
 
-function findEntryRoot(resolvedFile: string): string | null {
-    if (entryRootCache.has(resolvedFile)) {
-        return entryRootCache.get(resolvedFile)!;
-    }
+function findNearestTsconfig(start: string): string | null {
+    let dir = path.dirname(start);
+    const limit = process.cwd();
 
-    let dir = path.dirname(resolvedFile);
+    while (dir.startsWith(limit)) {
+        const candidate = path.join(dir, 'tsconfig.json');
 
-    while (dir !== path.dirname(dir)) {
-        if (fs.existsSync(path.join(dir, 'ng-package.json'))) {
-            entryRootCache.set(resolvedFile, dir);
-
-            return dir;
+        if (fs.existsSync(candidate)) {
+            return candidate;
         }
 
-        dir = path.dirname(dir);
-    }
+        const parent = path.dirname(dir);
 
-    entryRootCache.set(resolvedFile, null);
+        if (parent === dir) {
+            break;
+        }
+
+        dir = parent;
+    }
 
     return null;
 }
 
-function findNearestEntryPoint(filePath?: string | null): string {
-    if (!filePath) {
-        return '';
+function findNestedEntryPoints(root: string): string[] {
+    const cached = tsFileCache.get(`${root}|ng`);
+
+    if (cached) {
+        return cached;
     }
 
-    const parts = filePath.split('/');
+    const found = globSync('**/ng-package.json', {absolute: false, cwd: root})
+        .map((p) => p.replaceAll('\\', '/'))
+        .map((p) => p.replace('/ng-package.json', ''))
+        .filter((dir) => dir !== '.');
 
-    for (let i = parts.length - 1; i >= 0; i--) {
-        const candidate = parts.slice(0, i).join('/');
+    tsFileCache.set(`${root}|ng`, found);
 
-        if (fs.existsSync(`${candidate}/ng-package.json`)) {
-            return candidate;
+    return found;
+}
+
+function mapSymbolsToEntryPoints(
+    root: string,
+    nested: string[],
+    symbols: string[],
+    strict: boolean,
+): Map<string, string> {
+    const result = new Map<string, string>();
+    const remaining = new Set(symbols);
+
+    for (const np of nested) {
+        if (remaining.size === 0) {
+            break;
+        }
+
+        const full = path.join(root, np);
+
+        let files = tsFileCache.get(full);
+
+        if (!files) {
+            files = globSync('**/*.ts', {
+                absolute: true,
+                cwd: full,
+                ignore: ['**/*.spec.ts', '**/*.cy.ts'],
+            });
+            tsFileCache.set(full, files);
+        }
+
+        for (const file of files) {
+            const content = safeReadFile(file);
+
+            if (!content) {
+                continue;
+            }
+
+            for (const symbol of Array.from(remaining)) {
+                const has =
+                    cachedContainsDirectExport(file, content, symbol) ||
+                    cachedContainsReExport(file, content, symbol);
+
+                if (!has) {
+                    continue;
+                }
+
+                const nearest = cachedNearestNg(file, root);
+
+                if (!nearest) {
+                    continue;
+                }
+
+                let suffix = path.relative(root, nearest).replaceAll('\\', '/');
+
+                if (!strict && suffix.includes('/')) {
+                    suffix = suffix.split('/')[0]!;
+                }
+
+                result.set(symbol, suffix);
+                remaining.delete(symbol);
+            }
         }
     }
 
-    return '';
+    return result;
 }
 
-function checkNestedEntryPoints(
-    entryRoot: string,
-    mockPaths?: Record<string, string>,
+function cachedContainsDirectExport(
+    file: string,
+    content: string,
+    symbol: string,
 ): boolean {
-    if (mockPaths && Object.keys(mockPaths).length > 0) {
-        const normRoot = entryRoot.replaceAll('\\', '/').replace(/\/+$/, '');
-        const hasNestedMock = Object.values(mockPaths).some((resolved) => {
-            const dir = path.dirname(resolved).replaceAll('\\', '/');
+    let cache = exportCheckCache.get(file);
 
-            return dir.startsWith(`${normRoot}/`) && dir !== normRoot;
-        });
+    if (!cache) {
+        cache = new Map();
+        exportCheckCache.set(file, cache);
+    }
 
-        if (hasNestedMock) {
+    const key = `direct:${symbol}`;
+
+    if (cache.has(key)) {
+        return cache.get(key)!;
+    }
+
+    const res = containsDirectExport(content, symbol);
+
+    cache.set(key, res);
+
+    return res;
+}
+
+function cachedContainsReExport(file: string, content: string, symbol: string): boolean {
+    let cache = exportCheckCache.get(file);
+
+    if (!cache) {
+        cache = new Map();
+        exportCheckCache.set(file, cache);
+    }
+
+    const key = `re:${symbol}`;
+
+    if (cache.has(key)) {
+        return cache.get(key)!;
+    }
+
+    const res = containsReExport(file, content, symbol);
+
+    cache.set(key, res);
+
+    return res;
+}
+
+function containsDirectExport(content: string, symbol: string): boolean {
+    const re = new RegExp(
+        String.raw`(?:export\s+(?:function|class|const|let|var)\s+${symbol}\b)|` +
+            String.raw`(?:export\s*\{[^}]*\b${symbol}\b[^}]*\})`,
+    );
+
+    return re.test(content);
+}
+
+function containsReExport(file: string, content: string, symbol: string): boolean {
+    const star = /export\s*\*\s*from\s*['"](.+)['"]/g;
+    let m: RegExpExecArray | null;
+
+    while ((m = star.exec(content))) {
+        const resolved = resolveReExport(file, m[1]!);
+
+        if (!resolved) {
+            continue;
+        }
+
+        const nested = safeReadFile(resolved);
+
+        if (nested && containsDirectExport(nested, symbol)) {
             return true;
         }
     }
 
-    if (entryPointCache.has(entryRoot)) {
-        return entryPointCache.get(entryRoot)!;
-    }
-
-    const nested = globSync(`${entryRoot}/**/ng-package.json`).map((path) =>
-        path.replaceAll(/\\+/g, '/'),
+    const named = new RegExp(
+        String.raw`export\s*\{[^}]*\b${symbol}\b[^}]*\}\s*from\s*['"](.+)['"]`,
     );
 
-    const hasNested = nested.some((path) => path !== `${entryRoot}/ng-package.json`);
+    const nm = named.exec(content);
 
-    entryPointCache.set(entryRoot, hasNested);
+    if (nm) {
+        const resolved = resolveReExport(file, nm[1]!);
 
-    return hasNested;
-}
+        if (!resolved) {
+            return false;
+        }
 
-function isNestedEntryPoint(specifier: string): boolean {
-    const segments = specifier.split('/');
+        const nested = safeReadFile(resolved);
 
-    return specifier.startsWith('@') ? segments.length > 2 : segments.length > 1;
-}
-
-function getFilterRegExp(filter: string[] | string, strict: boolean): string {
-    if (typeof filter === 'string' && filter.startsWith('/')) {
-        return strict ? extendRegExp(filter) : filter;
+        if (nested && containsDirectExport(nested, symbol)) {
+            return true;
+        }
     }
 
-    const packages = typeof filter === 'string' ? [filter] : filter;
-    const [npmScope] = packages[0]?.split('/') ?? [];
-    const names = packages.map((p) => p.split('/')[1]).filter(Boolean);
-
-    const base = String.raw`/^${npmScope}\u002F(${names.join('|')})$/`;
-
-    return strict ? extendRegExp(base) : base;
+    return false;
 }
 
-function extendRegExp(regExp: string): string {
-    const trimmed = regExp.trim();
-    const slash = trimmed.lastIndexOf('/');
+function resolveReExport(file: string, rel: string): string | null {
+    const full = path.resolve(path.dirname(file), rel);
 
-    if (!trimmed.startsWith('/') || slash <= 1) {
-        return regExp;
+    return fs.existsSync(full) ? full : null;
+}
+
+function cachedNearestNg(file: string, root: string): string | null {
+    const key = `${file}|${root}`;
+
+    if (nearestNgCache.has(key)) {
+        return nearestNgCache.get(key)!;
     }
 
-    const flags = trimmed.slice(slash + 1);
-    const pattern = trimmed.slice(1, slash);
-    const strictPattern = String.raw`${pattern.replace(/\$$/, '')}(?:\u002F.*)?$`;
+    let dir = path.dirname(file);
 
-    return `/${strictPattern}/${flags}`;
+    while (dir.startsWith(root)) {
+        const candidate = path.join(dir, 'ng-package.json');
+
+        if (fs.existsSync(candidate)) {
+            nearestNgCache.set(key, dir);
+
+            return dir;
+        }
+
+        const parent = path.dirname(dir);
+
+        if (parent === dir) {
+            break;
+        }
+
+        dir = parent;
+    }
+
+    nearestNgCache.set(key, null);
+
+    return null;
+}
+
+function buildImports(
+    node: TSESTree.ImportDeclaration,
+    baseImport: string,
+    symbolMap: Map<string, string>,
+): string {
+    const isTypeOnly = node.importKind === 'type';
+
+    const groups = new Map<string, string[]>();
+
+    for (const [symbol, suffix] of symbolMap.entries()) {
+        const target = suffix ? `${baseImport}/${suffix}` : baseImport;
+
+        if (!groups.has(target)) {
+            groups.set(target, []);
+        }
+
+        groups.get(target)!.push(symbol);
+    }
+
+    const result: string[] = [];
+
+    for (const [target, symbols] of groups.entries()) {
+        const importParts = symbols.map((symbol) => {
+            const sp = node.specifiers.find(
+                (s): s is TSESTree.ImportSpecifier =>
+                    s.type === AST_NODE_TYPES.ImportSpecifier &&
+                    (s.imported.type === AST_NODE_TYPES.Identifier
+                        ? s.imported.name === symbol
+                        : s.imported.value === symbol),
+            );
+
+            if (!sp) {
+                return symbol;
+            }
+
+            const local = sp.local.name;
+
+            return symbol === local ? symbol : `${symbol} as ${local}`;
+        });
+
+        result.push(
+            `import ${isTypeOnly ? 'type ' : ''}{${importParts.join(
+                ', ',
+            )}} from '${target}';`,
+        );
+    }
+
+    return result.join('\n');
+}
+
+function safeReadFile(file: string): string | null {
+    try {
+        return fs.readFileSync(file, 'utf8');
+    } catch {
+        return null;
+    }
+}
+
+function normalizeFilter(filter: string[] | string): Array<RegExp | string> {
+    const arr = Array.isArray(filter) ? filter : [filter];
+
+    return arr.map((item) => {
+        if (typeof item === 'string' && item.startsWith('/') && item.endsWith('/')) {
+            const body = item.slice(1, -1);
+
+            return new RegExp(body);
+        }
+
+        return item;
+    });
 }

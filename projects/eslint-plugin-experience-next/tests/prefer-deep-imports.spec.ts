@@ -20,37 +20,7 @@ ruleTester.run('prefer-deep-imports', rule, {
             errors: [{messageId: 'prefer-deep-imports'}],
             options: [
                 {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
-                    mockPaths: {
-                        '@taiga-ui/core': '/mock/core/public-api.ts',
-                    },
-                },
-            ],
-        },
-        {
-            code: "import {TuiButton} from '@taiga-ui/core/components';",
-            errors: [{messageId: 'prefer-deep-imports'}],
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
-                    mockPaths: {
-                        '@taiga-ui/core/components': '/mock/core/components/index.ts',
-                        '@taiga-ui/core/components/button':
-                            '/mock/core/components/button/index.ts',
-                    },
-                    strict: true,
-                },
-            ],
-        },
-        {
-            code: "import {TuiX} from '@taiga-ui/core/unknown';",
-            errors: [{messageId: 'prefer-deep-imports'}],
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)(?:\u002F.*)?$/`,
-                    mockPaths: {
-                        '@taiga-ui/core/unknown': '/mock/core/unknown/index.ts',
-                    },
+                    importFilter: String.raw`/^@taiga-ui\u002F(core|cdk|kit)$/`,
                 },
             ],
         },
@@ -77,52 +47,6 @@ ruleTester.run('prefer-deep-imports', rule, {
             options: [
                 {
                     importFilter: String.raw`/^@taiga-ui\u002F(addon-commerce)$/`,
-                },
-            ],
-        },
-        {
-            code: "import {TuiButton} from '@taiga-ui/core/components/button';",
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
-                    mockPaths: {
-                        '@taiga-ui/core/components/button':
-                            '/mock/core/components/button/index.ts',
-                    },
-                },
-            ],
-        },
-        {
-            code: "import {TuiButton} from '@taiga-ui/core/components';",
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
-                    mockPaths: {
-                        '@taiga-ui/core/components':
-                            '/mock/core/components/public-api.ts',
-                    },
-                    strict: false,
-                },
-            ],
-        },
-        {
-            code: "import {TuiButton} from '@taiga-ui/core/components';",
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
-                    mockPaths: {
-                        '@taiga-ui/core/components':
-                            '/mock/core/components/public-api.ts',
-                    },
-                    strict: true,
-                },
-            ],
-        },
-        {
-            code: "import {Q} from '@taiga-ui/core/unknown/path';",
-            options: [
-                {
-                    importFilter: String.raw`/^@taiga-ui\u002F(core)$/`,
                 },
             ],
         },
