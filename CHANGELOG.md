@@ -1,3 +1,10 @@
+### [0.371.0](https://github.com/taiga-family/toolkit/compare/v0.370.0...v0.371.0) (2025-12-06)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: enable strict mode on CI for `prefer-deep-imports` (#1444)
+  [(7a9e1dd)](https://github.com/taiga-family/toolkit/commit/7a9e1dd251aa78a6fb3f9796f53994d8234b3cf1)
+
 ### [0.370.0](https://github.com/taiga-family/toolkit/compare/v0.369.0...v0.370.0) (2025-12-05)
 
 ### 🐞 Bug Fixes
