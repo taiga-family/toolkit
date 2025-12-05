@@ -21,7 +21,7 @@
         "ts-jest": "^29.4.5"
     },
     "optionalDependencies": {
-        "@taiga-ui/testing": "^4.61.0"
+        "@taiga-ui/testing": "^4.63.0"
     },
     "publishConfig": {
         "access": "public"
