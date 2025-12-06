@@ -19,6 +19,7 @@ module.exports = {
         `${process.cwd()}/**/tests-report/**`,
     ],
     rules: {
+        '@stylistic/selector-pseudo-class-parentheses-space-inside': null,
         'color-no-invalid-hex': true,
         'comment-whitespace-inside': 'always',
         'declaration-block-no-shorthand-property-overrides': true,
