@@ -1,3 +1,10 @@
+### [0.372.0](https://github.com/taiga-family/toolkit/compare/v0.371.0...v0.372.0) (2025-12-08)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: prettier conflicts (#1443)
+  [(6bb282e)](https://github.com/taiga-family/toolkit/commit/6bb282e6d6f63dfcfccc0896a3f233c48919dc13)
+
 ### [0.371.0](https://github.com/taiga-family/toolkit/compare/v0.370.0...v0.371.0) (2025-12-06)
 
 ### 🐞 Bug Fixes
