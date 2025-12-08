@@ -1,3 +1,10 @@
+### [0.373.0](https://github.com/taiga-family/toolkit/compare/v0.372.0...v0.373.0) (2025-12-08)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve algorithm for prefer-deep-imports (#1447)
+  [(0f058d7)](https://github.com/taiga-family/toolkit/commit/0f058d7f048438ca65be5106cd29148cd76bb3a8)
+
 ### [0.372.0](https://github.com/taiga-family/toolkit/compare/v0.371.0...v0.372.0) (2025-12-08)
 
 ### 🐞 Bug Fixes
