@@ -147,7 +147,7 @@ function isNestedImport(importPath: string): boolean {
 }
 
 function extractImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
-    return node.specifiers
+    const props = node.specifiers
         .filter(
             (s): s is TSESTree.ImportSpecifier =>
                 s.type === AST_NODE_TYPES.ImportSpecifier,
@@ -157,6 +157,12 @@ function extractImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
                 ? s.imported.name
                 : s.imported.value,
         );
+
+    if (node.specifiers.some((s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier)) {
+        return ['default', ...props];
+    }
+
+    return props;
 }
 
 function resolveRootEntryPoint(importPath: string, fromFile: string): string | null {
@@ -199,13 +205,13 @@ function resolveRootEntryPoint(importPath: string, fromFile: string): string | n
 
 function findNearestTsconfig(start: string): string | null {
     let dir = path.dirname(start);
-    const limit = process.cwd();
+    const root = process.cwd();
 
-    while (dir.startsWith(limit)) {
-        const candidate = path.join(dir, 'tsconfig.json');
+    while (dir.startsWith(root)) {
+        const file = path.join(dir, 'tsconfig.json');
 
-        if (fs.existsSync(candidate)) {
-            return candidate;
+        if (fs.existsSync(file)) {
+            return file;
         }
 
         const parent = path.dirname(dir);
@@ -227,10 +233,10 @@ function findNestedEntryPoints(root: string): string[] {
         return cached;
     }
 
-    const found = globSync('**/ng-package.json', {absolute: false, cwd: root})
-        .map((p) => p.replaceAll('\\', '/'))
-        .map((p) => p.replace('/ng-package.json', ''))
-        .filter((dir) => dir !== '.');
+    const found = globSync('**/ng-package.json', {cwd: root})
+        .map((f) => f.replaceAll('\\', '/'))
+        .map((f) => f.replace('/ng-package.json', ''))
+        .filter((p) => p !== '.');
 
     tsFileCache.set(`${root}|ng`, found);
 
@@ -252,7 +258,6 @@ function mapSymbolsToEntryPoints(
         }
 
         const full = path.join(root, np);
-
         let files = tsFileCache.get(full);
 
         if (!files) {
@@ -271,12 +276,12 @@ function mapSymbolsToEntryPoints(
                 continue;
             }
 
-            for (const symbol of Array.from(remaining)) {
-                const has =
+            for (const symbol of remaining) {
+                const match =
                     cachedContainsDirectExport(file, content, symbol) ||
                     cachedContainsReExport(file, content, symbol);
 
-                if (!has) {
+                if (!match) {
                     continue;
                 }
 
@@ -348,12 +353,32 @@ function cachedContainsReExport(file: string, content: string, symbol: string): 
 }
 
 function containsDirectExport(content: string, symbol: string): boolean {
-    const re = new RegExp(
-        String.raw`(?:export\s+(?:function|class|const|let|var)\s+${symbol}\b)|` +
-            String.raw`(?:export\s*\{[^}]*\b${symbol}\b[^}]*\})`,
+    const directExport = new RegExp(
+        String.raw`(?:export\s+(?:function|class|const|let|var)\s+${symbol}\b)` +
+            String.raw`|(?:export\s*\{[^}]*\b${symbol}\b[^}]*\})`,
     );
 
-    return re.test(content);
+    const aliasExport = new RegExp(
+        String.raw`export\s*\{[^}]*\b\w+\s+as\s+${symbol}\b[^}]*\}`,
+    );
+
+    const destructuring = new RegExp(
+        String.raw`export\s+const\s*\{[^}]*\b${symbol}\b[^}]*\}`,
+    );
+
+    if (symbol === 'default') {
+        const defaultRe = /export\s+default\b/;
+
+        if (defaultRe.test(content)) {
+            return true;
+        }
+    }
+
+    return (
+        directExport.test(content) ||
+        aliasExport.test(content) ||
+        destructuring.test(content)
+    );
 }
 
 function containsReExport(file: string, content: string, symbol: string): boolean {
@@ -382,6 +407,26 @@ function containsReExport(file: string, content: string, symbol: string): boolea
 
     if (nm) {
         const resolved = resolveReExport(file, nm[1]!);
+
+        if (!resolved) {
+            return false;
+        }
+
+        const nested = safeReadFile(resolved);
+
+        if (nested && containsDirectExport(nested, symbol)) {
+            return true;
+        }
+    }
+
+    const aliasNamed = new RegExp(
+        String.raw`export\s*\{[^}]*\b\w+\s+as\s+${symbol}\b[^}]*\}\s*from\s*['"](.+)['"]`,
+    );
+
+    const am = aliasNamed.exec(content);
+
+    if (am) {
+        const resolved = resolveReExport(file, am[1]!);
 
         if (!resolved) {
             return false;
@@ -441,7 +486,6 @@ function buildImports(
     symbolMap: Map<string, string>,
 ): string {
     const isTypeOnly = node.importKind === 'type';
-
     const groups = new Map<string, string[]>();
 
     for (const [symbol, suffix] of symbolMap.entries()) {
@@ -457,13 +501,14 @@ function buildImports(
     const result: string[] = [];
 
     for (const [target, symbols] of groups.entries()) {
-        const importParts = symbols.map((symbol) => {
+        const parts = symbols.map((symbol) => {
             const sp = node.specifiers.find(
                 (s): s is TSESTree.ImportSpecifier =>
                     s.type === AST_NODE_TYPES.ImportSpecifier &&
-                    (s.imported.type === AST_NODE_TYPES.Identifier
-                        ? s.imported.name === symbol
-                        : s.imported.value === symbol),
+                    ((s.imported.type === AST_NODE_TYPES.Identifier &&
+                        s.imported.name === symbol) ||
+                        (s.imported.type !== AST_NODE_TYPES.Identifier &&
+                            s.imported.value === symbol)),
             );
 
             if (!sp) {
@@ -476,9 +521,7 @@ function buildImports(
         });
 
         result.push(
-            `import ${isTypeOnly ? 'type ' : ''}{${importParts.join(
-                ', ',
-            )}} from '${target}';`,
+            `import ${isTypeOnly ? 'type ' : ''}{${parts.join(', ')}} from '${target}';`,
         );
     }
 
