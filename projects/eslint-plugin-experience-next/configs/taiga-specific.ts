@@ -9,7 +9,7 @@ import {
 } from '../rules/convention';
 
 const allPackageJSONs = globSync('**/package.json', {
-    ignore: ['node_modules/**', 'dist/**'],
+    ignore: ['**/node_modules/**', '**/dist/**'],
 }).filter((path) => !readJSON(path).private);
 const packageNames = allPackageJSONs.map((path) => readJSON(path).name).filter(Boolean);
 

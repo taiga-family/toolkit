@@ -12,7 +12,21 @@ const ERROR_MESSAGE =
 
 type RuleOptions = [
     {
+        /**
+         * List of package names for which this rule should be applied.
+         * Usually something like: ['@taiga-ui/core', '@taiga-ui/cdk', ...]
+         */
         importFilter: string[] | string;
+
+        /**
+         * strict = false:
+         *   - Only rewrite imports from the root package path
+         *   - Target only the first-level nested entry point (e.g. "@pkg/components")
+         *
+         * strict = true:
+         *   - May rewrite imports from nested paths as well
+         *   - Target the deepest nested entry point that actually exports the symbol
+         */
         strict?: boolean;
     },
 ];
@@ -21,84 +35,104 @@ type MessageIds = typeof MESSAGE_ID;
 
 const createRule = ESLintUtils.RuleCreator(() => ERROR_MESSAGE);
 
-const tsconfigCache = new Map<string, ts.ParsedCommandLine>();
-const moduleResolutionCache = new Map<string, string | null>();
-const exportCheckCache = new Map<string, Map<string, boolean>>();
-const nearestNgCache = new Map<string, string | null>();
-const tsFileCache = new Map<string, string[]>();
-
 export default createRule<RuleOptions, MessageIds>({
     create(context, [options]) {
-        const allowedPackages = normalizeFilter(options.importFilter);
-        const strict = options.strict ?? false;
+        const allowedPackages = normalizeImportFilter(options.importFilter);
+        const isStrictMode = options.strict ?? false;
+        const parserServices = ESLintUtils.getParserServices(context);
+        const program = parserServices.program;
+        const typeChecker = program.getTypeChecker();
 
         return {
-            ImportDeclaration(node) {
-                const importPath = node.source.value;
+            ImportDeclaration(node: TSESTree.ImportDeclaration) {
+                const rawImportPath = node.source.value;
 
-                if (typeof importPath !== 'string') {
+                if (typeof rawImportPath !== 'string') {
                     return;
                 }
 
-                const shortName = extractPackageName(importPath);
+                const rootPackageName = getRootPackageName(rawImportPath);
 
-                const allowed = allowedPackages.some((pkg) => {
-                    if (shortName && pkg instanceof RegExp) {
-                        return pkg.test(shortName);
-                    }
-
-                    return pkg === shortName;
-                });
-
-                if (!allowed) {
+                if (!rootPackageName) {
                     return;
                 }
 
-                if (!strict && isNestedImport(importPath)) {
+                if (!allowedPackages.includes(rootPackageName)) {
                     return;
                 }
 
-                const symbols = extractImportedSymbols(node);
-
-                if (symbols.length === 0) {
+                if (
+                    !isStrictMode &&
+                    isAlreadyNestedImport(rawImportPath, rootPackageName)
+                ) {
                     return;
                 }
 
-                const filename = context.filename;
-                const rootEntry = resolveRootEntryPoint(importPath, filename);
+                const importedSymbols = extractNamedImportedSymbols(node);
 
-                if (!rootEntry) {
-                    return context.report({
-                        messageId: MESSAGE_ID,
-                        node,
-                    });
+                if (importedSymbols.length === 0) {
+                    return;
                 }
 
-                const nested = findNestedEntryPoints(rootEntry);
+                const currentFileName = context.getFilename();
 
-                if (nested.length === 0) {
-                    return context.report({
-                        messageId: MESSAGE_ID,
-                        node,
-                    });
-                }
-
-                const symbolMap = mapSymbolsToEntryPoints(
-                    rootEntry,
-                    nested,
-                    symbols,
-                    strict,
+                const rootEntryDirectory = resolveRootEntryDirectory(
+                    rawImportPath,
+                    currentFileName,
+                    program,
                 );
 
-                if (symbolMap.size === 0) {
+                if (!rootEntryDirectory) {
+                    context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
+
                     return;
                 }
 
-                const newImports = buildImports(node, importPath, symbolMap);
+                const nestedEntryPointRelativePaths =
+                    findNestedEntryPointRelativePaths(rootEntryDirectory);
+
+                if (nestedEntryPointRelativePaths.length === 0) {
+                    context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
+
+                    return;
+                }
+
+                const candidateEntryPointPaths = selectCandidateEntryPointsForMode(
+                    nestedEntryPointRelativePaths,
+                    isStrictMode,
+                );
+
+                if (candidateEntryPointPaths.length === 0) {
+                    return;
+                }
+
+                const symbolToEntryPoint = mapSymbolsToEntryPointsUsingTypeChecker(
+                    importedSymbols,
+                    candidateEntryPointPaths,
+                    rootEntryDirectory,
+                    program,
+                    typeChecker,
+                );
+
+                if (symbolToEntryPoint.size === 0) {
+                    return;
+                }
+
+                const newImportBlock = buildRewrittenImports(
+                    node,
+                    rawImportPath,
+                    symbolToEntryPoint,
+                );
 
                 context.report({
                     fix(fixer) {
-                        return fixer.replaceTextRange(node.range, newImports);
+                        return fixer.replaceTextRange(node.range, newImportBlock);
                     },
                     messageId: MESSAGE_ID,
                     node,
@@ -132,377 +166,360 @@ export default createRule<RuleOptions, MessageIds>({
     name: 'prefer-deep-imports',
 });
 
-function extractPackageName(importPath: string): string | null {
-    if (!importPath.startsWith('@')) {
-        return null;
+/**
+ * Normalize "importFilter" option to a flat array of package names.
+ * The rule expects concrete package names, not regular expression strings.
+ */
+function normalizeImportFilter(importFilter: string[] | string): string[] {
+    return Array.isArray(importFilter) ? importFilter : [importFilter];
+}
+
+/**
+ * Extract the package root name from an import specifier.
+ *
+ * Examples:
+ *  "@taiga-ui/core"               → "@taiga-ui/core"
+ *  "@taiga-ui/core/components"   → "@taiga-ui/core"
+ *  "some-lib"                    → "some-lib"
+ *  "some-lib/utils"              → "some-lib"
+ */
+function getRootPackageName(importPath: string): string | null {
+    if (importPath.startsWith('@')) {
+        const segments = importPath.split('/');
+
+        if (segments.length < 2) {
+            return null;
+        }
+
+        return `${segments[0]}/${segments[1]}`;
     }
 
-    const p = importPath.split('/');
+    const parts = importPath.split('/');
 
-    return p.length >= 2 ? `${p[0]}/${p[1]}` : null;
+    return parts[0] ?? null;
 }
 
-function isNestedImport(importPath: string): boolean {
-    return importPath.split('/').length > 2;
+/**
+ * Check whether the current import path is already nested below the root package.
+ *
+ * Example:
+ *   root = "@taiga-ui/core"
+ *   "@taiga-ui/core"               → false (root import)
+ *   "@taiga-ui/core/components"    → true
+ *   "@taiga-ui/core/components/x"  → true
+ */
+function isAlreadyNestedImport(importPath: string, rootPackageName: string): boolean {
+    if (!importPath.startsWith(rootPackageName)) {
+        return false;
+    }
+
+    const importSegments = importPath.split('/');
+    const rootSegments = rootPackageName.split('/');
+
+    return importSegments.length > rootSegments.length;
 }
 
-function extractImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
+/**
+ * Extract only named imported symbols:
+ *
+ * Examples:
+ *   import {A, B as C} from 'x';  → ['A', 'B']
+ *
+ * Namespace imports and default imports are ignored for this rule.
+ */
+function extractNamedImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
     return node.specifiers
         .filter(
-            (s): s is TSESTree.ImportSpecifier =>
-                s.type === AST_NODE_TYPES.ImportSpecifier,
+            (specifier): specifier is TSESTree.ImportSpecifier =>
+                specifier.type === AST_NODE_TYPES.ImportSpecifier,
         )
-        .map((s) =>
-            s.imported.type === AST_NODE_TYPES.Identifier
-                ? s.imported.name
-                : s.imported.value,
+        .map((specifier) =>
+            specifier.imported.type === AST_NODE_TYPES.Identifier
+                ? specifier.imported.name
+                : specifier.imported.value,
         );
 }
 
-function resolveRootEntryPoint(importPath: string, fromFile: string): string | null {
-    const key = `${importPath}|${fromFile}`;
+/**
+ * Resolve the physical directory of the module being imported.
+ * We rely on the same module resolution that TypeScript uses for the program.
+ */
+function resolveRootEntryDirectory(
+    importPath: string,
+    fromFile: string,
+    program: ts.Program,
+): string | null {
+    const compilerOptions = program.getCompilerOptions();
 
-    if (moduleResolutionCache.has(key)) {
-        return moduleResolutionCache.get(key)!;
-    }
-
-    const tsconfig = findNearestTsconfig(fromFile);
-
-    if (!tsconfig) {
-        moduleResolutionCache.set(key, null);
-
-        return null;
-    }
-
-    let parsed = tsconfigCache.get(tsconfig);
-
-    if (!parsed) {
-        const json = ts.readConfigFile(tsconfig, ts.sys.readFile).config;
-
-        parsed = ts.parseJsonConfigFileContent(json, ts.sys, path.dirname(tsconfig));
-        tsconfigCache.set(tsconfig, parsed);
-    }
-
-    const resolved = ts.resolveModuleName(
+    const resolution = ts.resolveModuleName(
         importPath,
         fromFile,
-        parsed.options,
+        compilerOptions,
         ts.sys,
     ).resolvedModule;
 
-    const value = resolved ? path.dirname(resolved.resolvedFileName) : null;
-
-    moduleResolutionCache.set(key, value);
-
-    return value;
-}
-
-function findNearestTsconfig(start: string): string | null {
-    let dir = path.dirname(start);
-    const limit = process.cwd();
-
-    while (dir.startsWith(limit)) {
-        const candidate = path.join(dir, 'tsconfig.json');
-
-        if (fs.existsSync(candidate)) {
-            return candidate;
-        }
-
-        const parent = path.dirname(dir);
-
-        if (parent === dir) {
-            break;
-        }
-
-        dir = parent;
+    if (!resolution) {
+        return null;
     }
 
-    return null;
+    return path.dirname(resolution.resolvedFileName);
 }
 
-function findNestedEntryPoints(root: string): string[] {
-    const cached = tsFileCache.get(`${root}|ng`);
+/**
+ * Find all nested entry points relative to the given root directory.
+ *
+ * A directory is considered a nested entry point if it contains either:
+ *   - "ng-package.json"  (Angular library entry)
+ *   - "collection.json"  (Angular schematics collection)
+ *
+ * Returned paths are relative to "rootEntryDirectory".
+ *
+ * Example:
+ *   rootEntryDirectory = ".../core/src"
+ *   found:
+ *     "utils/ng-package.json"          → "utils"
+ *     "utils/dom/ng-package.json"      → "utils/dom"
+ *     "schematics/collection.json"     → "schematics"
+ */
+function findNestedEntryPointRelativePaths(rootEntryDirectory: string): string[] {
+    const ngPackageJsonFiles = globSync('**/ng-package.json', {
+        absolute: false,
+        cwd: rootEntryDirectory,
+    });
 
-    if (cached) {
-        return cached;
+    const collectionJsonFiles = globSync('**/collection.json', {
+        absolute: false,
+        cwd: rootEntryDirectory,
+    });
+
+    const directories: string[] = [];
+
+    for (const file of ngPackageJsonFiles) {
+        const normalized = file.replaceAll('\\', '/').replace(/\/ng-package\.json$/, '');
+
+        if (normalized && normalized !== '.') {
+            directories.push(normalized);
+        }
     }
 
-    const found = globSync('**/ng-package.json', {absolute: false, cwd: root})
-        .map((p) => p.replaceAll('\\', '/'))
-        .map((p) => p.replace('/ng-package.json', ''))
-        .filter((dir) => dir !== '.');
+    for (const file of collectionJsonFiles) {
+        const normalized = file.replaceAll('\\', '/').replace(/\/collection\.json$/, '');
 
-    tsFileCache.set(`${root}|ng`, found);
+        if (normalized && normalized !== '.') {
+            directories.push(normalized);
+        }
+    }
 
-    return found;
+    return directories;
 }
 
-function mapSymbolsToEntryPoints(
-    root: string,
-    nested: string[],
-    symbols: string[],
+/**
+ * For strict = false:
+ *   Only first-level nested directories are candidates.
+ *
+ * For strict = true:
+ *   All nested directories are candidates, sorted from deepest to shallowest
+ *   so that the deepest match wins.
+ */
+function selectCandidateEntryPointsForMode(
+    allNestedRelativePaths: string[],
     strict: boolean,
-): Map<string, string> {
-    const result = new Map<string, string>();
-    const remaining = new Set(symbols);
-
-    for (const np of nested) {
-        if (remaining.size === 0) {
-            break;
-        }
-
-        const full = path.join(root, np);
-
-        let files = tsFileCache.get(full);
-
-        if (!files) {
-            files = globSync('**/*.ts', {
-                absolute: true,
-                cwd: full,
-                ignore: ['**/*.spec.ts', '**/*.cy.ts'],
-            });
-            tsFileCache.set(full, files);
-        }
-
-        for (const file of files) {
-            const content = safeReadFile(file);
-
-            if (!content) {
-                continue;
-            }
-
-            for (const symbol of Array.from(remaining)) {
-                const has =
-                    cachedContainsDirectExport(file, content, symbol) ||
-                    cachedContainsReExport(file, content, symbol);
-
-                if (!has) {
-                    continue;
-                }
-
-                const nearest = cachedNearestNg(file, root);
-
-                if (!nearest) {
-                    continue;
-                }
-
-                let suffix = path.relative(root, nearest).replaceAll('\\', '/');
-
-                if (!strict && suffix.includes('/')) {
-                    suffix = suffix.split('/')[0]!;
-                }
-
-                result.set(symbol, suffix);
-                remaining.delete(symbol);
-            }
-        }
-    }
-
-    return result;
-}
-
-function cachedContainsDirectExport(
-    file: string,
-    content: string,
-    symbol: string,
-): boolean {
-    let cache = exportCheckCache.get(file);
-
-    if (!cache) {
-        cache = new Map();
-        exportCheckCache.set(file, cache);
-    }
-
-    const key = `direct:${symbol}`;
-
-    if (cache.has(key)) {
-        return cache.get(key)!;
-    }
-
-    const res = containsDirectExport(content, symbol);
-
-    cache.set(key, res);
-
-    return res;
-}
-
-function cachedContainsReExport(file: string, content: string, symbol: string): boolean {
-    let cache = exportCheckCache.get(file);
-
-    if (!cache) {
-        cache = new Map();
-        exportCheckCache.set(file, cache);
-    }
-
-    const key = `re:${symbol}`;
-
-    if (cache.has(key)) {
-        return cache.get(key)!;
-    }
-
-    const res = containsReExport(file, content, symbol);
-
-    cache.set(key, res);
-
-    return res;
-}
-
-function containsDirectExport(content: string, symbol: string): boolean {
-    const re = new RegExp(
-        String.raw`(?:export\s+(?:function|class|const|let|var)\s+${symbol}\b)|` +
-            String.raw`(?:export\s*\{[^}]*\b${symbol}\b[^}]*\})`,
-    );
-
-    return re.test(content);
-}
-
-function containsReExport(file: string, content: string, symbol: string): boolean {
-    const star = /export\s*\*\s*from\s*['"](.+)['"]/g;
-    let m: RegExpExecArray | null;
-
-    while ((m = star.exec(content))) {
-        const resolved = resolveReExport(file, m[1]!);
-
-        if (!resolved) {
-            continue;
-        }
-
-        const nested = safeReadFile(resolved);
-
-        if (nested && containsDirectExport(nested, symbol)) {
-            return true;
-        }
-    }
-
-    const named = new RegExp(
-        String.raw`export\s*\{[^}]*\b${symbol}\b[^}]*\}\s*from\s*['"](.+)['"]`,
-    );
-
-    const nm = named.exec(content);
-
-    if (nm) {
-        const resolved = resolveReExport(file, nm[1]!);
-
-        if (!resolved) {
-            return false;
-        }
-
-        const nested = safeReadFile(resolved);
-
-        if (nested && containsDirectExport(nested, symbol)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function resolveReExport(file: string, rel: string): string | null {
-    const full = path.resolve(path.dirname(file), rel);
-
-    return fs.existsSync(full) ? full : null;
-}
-
-function cachedNearestNg(file: string, root: string): string | null {
-    const key = `${file}|${root}`;
-
-    if (nearestNgCache.has(key)) {
-        return nearestNgCache.get(key)!;
-    }
-
-    let dir = path.dirname(file);
-
-    while (dir.startsWith(root)) {
-        const candidate = path.join(dir, 'ng-package.json');
-
-        if (fs.existsSync(candidate)) {
-            nearestNgCache.set(key, dir);
-
-            return dir;
-        }
-
-        const parent = path.dirname(dir);
-
-        if (parent === dir) {
-            break;
-        }
-
-        dir = parent;
-    }
-
-    nearestNgCache.set(key, null);
-
-    return null;
-}
-
-function buildImports(
-    node: TSESTree.ImportDeclaration,
-    baseImport: string,
-    symbolMap: Map<string, string>,
-): string {
-    const isTypeOnly = node.importKind === 'type';
-
-    const groups = new Map<string, string[]>();
-
-    for (const [symbol, suffix] of symbolMap.entries()) {
-        const target = suffix ? `${baseImport}/${suffix}` : baseImport;
-
-        if (!groups.has(target)) {
-            groups.set(target, []);
-        }
-
-        groups.get(target)!.push(symbol);
-    }
-
-    const result: string[] = [];
-
-    for (const [target, symbols] of groups.entries()) {
-        const importParts = symbols.map((symbol) => {
-            const sp = node.specifiers.find(
-                (s): s is TSESTree.ImportSpecifier =>
-                    s.type === AST_NODE_TYPES.ImportSpecifier &&
-                    (s.imported.type === AST_NODE_TYPES.Identifier
-                        ? s.imported.name === symbol
-                        : s.imported.value === symbol),
-            );
-
-            if (!sp) {
-                return symbol;
-            }
-
-            const local = sp.local.name;
-
-            return symbol === local ? symbol : `${symbol} as ${local}`;
-        });
-
-        result.push(
-            `import ${isTypeOnly ? 'type ' : ''}{${importParts.join(
-                ', ',
-            )}} from '${target}';`,
+): string[] {
+    if (!strict) {
+        return allNestedRelativePaths.filter(
+            (relativePath) => !relativePath.includes('/'),
         );
     }
 
-    return result.join('\n');
+    return [...allNestedRelativePaths].sort((a, b) => {
+        const depthA = a.split('/').filter(Boolean).length;
+        const depthB = b.split('/').filter(Boolean).length;
+
+        return depthB - depthA;
+    });
 }
 
-function safeReadFile(file: string): string | null {
-    try {
-        return fs.readFileSync(file, 'utf8');
-    } catch {
-        return null;
-    }
-}
+/**
+ * Build a map from exported symbol name to nested entry point relative path.
+ *
+ * Implementation strategy:
+ *   1. For each candidate nested entry point:
+ *      - Determine its entry file (using ng-package.json or collection.json).
+ *      - Ask TypeScript for the module symbol and its exports.
+ *   2. For each imported symbol:
+ *      - Find the first entry point whose export table contains that symbol.
+ *      - strict = true: candidates were sorted deepest-first.
+ *      - strict = false: candidates contain only first-level nested entry points.
+ */
+function mapSymbolsToEntryPointsUsingTypeChecker(
+    importedSymbols: string[],
+    candidateEntryPoints: string[],
+    rootEntryDirectory: string,
+    program: ts.Program,
+    typeChecker: ts.TypeChecker,
+): Map<string, string> {
+    const symbolToEntryPoint = new Map<string, string>();
+    const exportTableByEntryPoint = new Map<string, Set<string>>();
 
-function normalizeFilter(filter: string[] | string): Array<RegExp | string> {
-    const arr = Array.isArray(filter) ? filter : [filter];
+    for (const relativeEntryDir of candidateEntryPoints) {
+        const entryFile = getEntryFileForNestedEntryPoint(
+            rootEntryDirectory,
+            relativeEntryDir,
+        );
 
-    return arr.map((item) => {
-        if (typeof item === 'string' && item.startsWith('/') && item.endsWith('/')) {
-            const body = item.slice(1, -1);
-
-            return new RegExp(body);
+        if (!entryFile) {
+            continue;
         }
 
-        return item;
-    });
+        const sourceFile = program.getSourceFile(entryFile);
+
+        if (!sourceFile) {
+            continue;
+        }
+
+        const moduleSymbol = typeChecker.getSymbolAtLocation(sourceFile);
+
+        if (!moduleSymbol) {
+            continue;
+        }
+
+        const exports = typeChecker.getExportsOfModule(moduleSymbol);
+        const exportedNames = new Set<string>(exports.map((symbol) => symbol.getName()));
+
+        exportTableByEntryPoint.set(relativeEntryDir, exportedNames);
+    }
+
+    for (const importedSymbol of importedSymbols) {
+        for (const relativeEntryDir of candidateEntryPoints) {
+            const exportedNames = exportTableByEntryPoint.get(relativeEntryDir);
+
+            if (!exportedNames) {
+                continue;
+            }
+
+            if (!exportedNames.has(importedSymbol)) {
+                continue;
+            }
+
+            symbolToEntryPoint.set(importedSymbol, relativeEntryDir);
+            break;
+        }
+    }
+
+    return symbolToEntryPoint;
+}
+
+/**
+ * Determine the physical entry file for a nested entry point.
+ *
+ * Priority:
+ *   1. If "ng-package.json" exists:
+ *        - use lib.entryFile if present
+ *        - otherwise fall back to "index.ts"
+ *   2. Else if "collection.json" exists:
+ *        - treat this directory as a schematic collection package
+ *        - entry file is "index.ts" if it exists
+ *   3. Otherwise: no entry file can be determined → return null
+ */
+function getEntryFileForNestedEntryPoint(
+    rootEntryDirectory: string,
+    relativeEntryDirectory: string,
+): string | null {
+    const absoluteDirectory = path.join(rootEntryDirectory, relativeEntryDirectory);
+    const ngPackageJsonPath = path.join(absoluteDirectory, 'ng-package.json');
+    const collectionJsonPath = path.join(absoluteDirectory, 'collection.json');
+
+    if (fs.existsSync(ngPackageJsonPath)) {
+        try {
+            const raw = fs.readFileSync(ngPackageJsonPath, 'utf8');
+            const json = JSON.parse(raw) as {lib?: {entryFile?: string}};
+            const entryRelative = json.lib?.entryFile ?? 'index.ts';
+
+            return path.resolve(absoluteDirectory, entryRelative);
+        } catch {
+            const fallback = path.resolve(absoluteDirectory, 'index.ts');
+
+            return fs.existsSync(fallback) ? fallback : null;
+        }
+    }
+
+    if (fs.existsSync(collectionJsonPath)) {
+        const entryFile = path.resolve(absoluteDirectory, 'index.ts');
+
+        return fs.existsSync(entryFile) ? entryFile : null;
+    }
+
+    return null;
+}
+
+/**
+ * Build the final text block with rewritten import declarations.
+ *
+ * Example:
+ *   original:
+ *     import {A, B as C, D} from '@taiga-ui/core';
+ *
+ *   symbolMap (strict = true):
+ *     A -> "components/button"
+ *     B -> "components/button"
+ *     D -> "components/other"
+ *
+ *   result:
+ *     import {A, B as C} from '@taiga-ui/core/components/button';
+ *     import {D} from '@taiga-ui/core/components/other';
+ */
+function buildRewrittenImports(
+    node: TSESTree.ImportDeclaration,
+    baseImportPath: string,
+    symbolToEntryPoint: Map<string, string>,
+): string {
+    const isTypeOnlyImport = node.importKind === 'type';
+    const groupedByTarget = new Map<string, string[]>();
+
+    for (const [symbolName, relativeEntryPath] of symbolToEntryPoint.entries()) {
+        const targetSpecifier = `${baseImportPath}/${relativeEntryPath}`;
+
+        if (!groupedByTarget.has(targetSpecifier)) {
+            groupedByTarget.set(targetSpecifier, []);
+        }
+
+        groupedByTarget.get(targetSpecifier)!.push(symbolName);
+    }
+
+    const importStatements: string[] = [];
+
+    for (const [targetSpecifier, symbols] of groupedByTarget.entries()) {
+        const parts = symbols.map((symbolName) => {
+            const matchingSpecifier = node.specifiers.find(
+                (specifier): specifier is TSESTree.ImportSpecifier =>
+                    specifier.type === AST_NODE_TYPES.ImportSpecifier &&
+                    (specifier.imported.type === AST_NODE_TYPES.Identifier
+                        ? specifier.imported.name === symbolName
+                        : specifier.imported.value === symbolName),
+            );
+
+            if (!matchingSpecifier) {
+                return symbolName;
+            }
+
+            const importedName =
+                matchingSpecifier.imported.type === AST_NODE_TYPES.Identifier
+                    ? matchingSpecifier.imported.name
+                    : matchingSpecifier.imported.value;
+
+            const localName = matchingSpecifier.local.name;
+
+            return importedName === localName
+                ? importedName
+                : `${importedName} as ${localName}`;
+        });
+
+        const statement = `import ${isTypeOnlyImport ? 'type ' : ''}{${parts.join(
+            ', ',
+        )}} from '${targetSpecifier}';`;
+
+        importStatements.push(statement);
+    }
+
+    return importStatements.join('\n');
 }
