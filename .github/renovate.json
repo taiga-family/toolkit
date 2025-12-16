@@ -18,6 +18,10 @@
             "matchPackageNames": ["@types/jest", "jest", "jest-preset-angular", "ts-jest"],
             "matchUpdateTypes": ["major"],
             "enabled": false
+        },
+        {
+            "matchPackageNames": ["zone.js"],
+            "enabled": false
         }
     ]
 }
