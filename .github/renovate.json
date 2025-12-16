@@ -3,6 +3,10 @@
     "extends": ["github>taiga-family/renovate-config"],
     "packageRules": [
         {
+            "enabled": true,
+            "matchDepTypes": ["peerDependencies", "optionalDependencies"]
+        },
+        {
             "matchDepTypes": ["dependencies", "peerDependencies", "optionalDependencies"],
             "semanticCommitType": "fix"
         },
