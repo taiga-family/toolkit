@@ -54,7 +54,6 @@
         "declaration": false,
         "declarationMap": false,
         "moduleResolution": "node",
-        "experimentalDecorators": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
