@@ -41,11 +41,11 @@
         ]
     },
     "devDependencies": {
-        "@nx/rollup": "22.0.4",
-        "@nx/workspace": "22.0.4",
+        "@nx/rollup": "22.3.1",
+        "@nx/workspace": "22.3.1",
         "esbuild": "0.27.0",
         "lint-staged": "16.2.7",
-        "nx": "22.0.4",
+        "nx": "22.3.1",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
         "zone.js": "0.15.1"
