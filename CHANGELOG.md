@@ -1,3 +1,21 @@
+### [0.375.0](https://github.com/taiga-family/toolkit/compare/v0.374.0...v0.375.0) (2025-12-19)
+
+### 🚀 Features
+
+- **release-it-config**: do not require new commits (#1461)
+  [(b707fb4)](https://github.com/taiga-family/toolkit/commit/b707fb4fc9c48263c6b41576fe32e1518cefc3e9)
+
+### 🐞 Bug Fixes
+
+- update release-it (#1460)
+  [(6ac7b4c)](https://github.com/taiga-family/toolkit/commit/6ac7b4c113af3a4b708111f2299962b7c0a5801e)
+- update eslint (#1459)
+  [(9f149ae)](https://github.com/taiga-family/toolkit/commit/9f149ae1c2cf47cb3b20d9cc35dfcbd59c2a1ed9)
+- update dependency ts-jest to ^29.4.6 (#1458)
+  [(04b54bc)](https://github.com/taiga-family/toolkit/commit/04b54bc726a1ec84520fcea6bc52dd7321e8cb8c)
+- update dependency @cspell/dict-en-gb to ^5.0.20 (#1457)
+  [(f6edd33)](https://github.com/taiga-family/toolkit/commit/f6edd337416b6ac087e8e25168891ca16375e88f)
+
 ### [0.374.0](https://github.com/taiga-family/toolkit/compare/v0.373.0...v0.374.0) (2025-12-19)
 
 ### 🚀 Features
