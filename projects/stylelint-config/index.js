@@ -126,7 +126,10 @@ module.exports = {
             },
         ],
         'declaration-no-important': null,
-        'declaration-property-value-disallowed-list': null,
+        'declaration-property-value-disallowed-list': {
+            width: ['stretch'],
+            'inline-size': ['stretch'],
+        },
         'font-family-name-quotes': null,
         'font-family-no-duplicate-names': true,
         'font-family-no-missing-generic-family-keyword': true,
