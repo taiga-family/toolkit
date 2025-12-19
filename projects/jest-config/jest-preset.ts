@@ -1,9 +1,10 @@
-import {readFileSync} from 'node:fs';
 import {cpus} from 'node:os';
 import {resolve} from 'node:path';
 
 import {type JestConfigWithTsJest, pathsToModuleNameMapper} from 'ts-jest';
 import {type MapLike} from 'typescript';
+
+import {readTsConfig} from './utils';
 
 process.env.TZ = 'Europe/Moscow';
 process.env.FORCE_COLOR = 'true';
@@ -61,10 +62,4 @@ export default {
     verbose: !process.env.CI,
 } satisfies JestConfigWithTsJest;
 
-function readTsConfig(): Record<string, Record<string, unknown>> {
-    try {
-        return JSON.parse(readFileSync(resolve(process.cwd(), 'tsconfig.json'), 'utf-8'));
-    } catch {
-        return {compilerOptions: {}};
-    }
-}
+export * from './utils';
