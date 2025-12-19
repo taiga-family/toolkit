@@ -1,3 +1,10 @@
+### [0.376.0](https://github.com/taiga-family/toolkit/compare/v0.375.0...v0.376.0) (2025-12-19)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: wrong exports (#1462)
+  [(7a5ea69)](https://github.com/taiga-family/toolkit/commit/7a5ea699c4862027b9fc9be870c704d2ded99049)
+
 ### [0.375.0](https://github.com/taiga-family/toolkit/compare/v0.374.0...v0.375.0) (2025-12-19)
 
 ### 🚀 Features
