@@ -1,3 +1,14 @@
+### [0.374.0](https://github.com/taiga-family/toolkit/compare/v0.373.0...v0.374.0) (2025-12-19)
+
+### 🚀 Features
+
+- **stylelint-config**: restrict `stretch` (#1454)
+  [(720f229)](https://github.com/taiga-family/toolkit/commit/720f229d6b1144b649e48adaaaae0e13ddae2e7b)
+- **jest-config**: using polyfills directly (#1455)
+  [(8a7da7f)](https://github.com/taiga-family/toolkit/commit/8a7da7f09db0d363e5b99e1052142b56c774af4a)
+- **tsconfig**: remove `experimentalDecorators` (#1453)
+  [(dc9288b)](https://github.com/taiga-family/toolkit/commit/dc9288bc595c398bc6ca66254b520014cd87f961)
+
 ### [0.373.0](https://github.com/taiga-family/toolkit/compare/v0.372.0...v0.373.0) (2025-12-08)
 
 ### 🚀 Features
