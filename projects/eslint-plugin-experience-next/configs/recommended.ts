@@ -758,11 +758,7 @@ export default defineConfig([
                 'error',
                 {
                     currentProject: String.raw`(?<=projects/)([-\w]+)`,
-                    ignoreImports: [
-                        String.raw`\?raw`,
-                        '@taiga-ui/testing/cypress',
-                        '@taiga-ui/testing/setup-jest',
-                    ],
+                    ignoreImports: [String.raw`\?raw`, '@taiga-ui/testing/cypress'],
                 },
             ],
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
