@@ -24,7 +24,7 @@ module.exports = {
         pushArgs: ['--follow-tags'],
         requireBranch: false,
         requireCleanWorkingDir: false,
-        requireCommits: true,
+        requireCommits: false,
         tagName: 'v${version}',
     },
     github: {
@@ -42,7 +42,7 @@ module.exports = {
             'echo "new version is v${version}"',
             `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`,
             'npx prettier CHANGELOG.md --write > /dev/null',
-            'git fetch --prune --tags',
+            'git fetch --prune --prune-tags origin > /dev/null || echo ""', // cleanup git workspace
             'git add CHANGELOG.md',
             'npx syncer || echo ""',
             'npm run after:bump -s || echo ""',
@@ -50,7 +50,7 @@ module.exports = {
         ],
         'after:release':
             'echo Successfully released ${name} v${version} to ${repo.repository}.',
-        'before:init': 'git fetch --prune --tags',
+        'before:init': 'git fetch --prune --prune-tags origin > /dev/null || echo ""',
         'before:release': 'npm run release',
     },
     npm: {
