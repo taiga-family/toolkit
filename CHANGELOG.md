@@ -1,3 +1,18 @@
+### [0.377.0](https://github.com/taiga-family/toolkit/compare/v0.376.0...v0.377.0) (2025-12-19)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^16.26.1 (#1470)
+  [(04e8e53)](https://github.com/taiga-family/toolkit/commit/04e8e5394df47df3c4dc07ede336f1209446ea1a)
+- update dependency sort-package-json to ^3.6.0 (#1469)
+  [(ccf3fdc)](https://github.com/taiga-family/toolkit/commit/ccf3fdca00dfd4276b8173cc9e5be3ff29532232)
+- update dependency @html-eslint/parser to ^0.52.0 (#1468)
+  [(468b2c6)](https://github.com/taiga-family/toolkit/commit/468b2c6709645bb2ac3d4c79311838f488d5d832)
+- update commitlint to ^20.2.0 (#1466)
+  [(88aefa3)](https://github.com/taiga-family/toolkit/commit/88aefa3e40d141f0a396442dbe680ec8bc7ce18d)
+- update @typescript-eslint/\* deps to ^8.50.0 (#1465)
+  [(f4714e6)](https://github.com/taiga-family/toolkit/commit/f4714e6f59ec941dd19de38bd759485f9a3d367c)
+
 ### [0.376.0](https://github.com/taiga-family/toolkit/compare/v0.375.0...v0.376.0) (2025-12-19)
 
 ### 🐞 Bug Fixes
