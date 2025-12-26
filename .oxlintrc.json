@@ -1,0 +1,4 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "extends": ["./node_modules/@taiga-ui/oxlint-config/.oxlintrc.json"]
+}
