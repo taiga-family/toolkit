@@ -1,0 +1,15 @@
+{
+    "name": "oxlint-config",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "prefix": "tui",
+    "projectType": "library",
+    "sourceRoot": "projects/oxlint-config",
+    "targets": {
+        "publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
+            }
+        }
+    }
+}
