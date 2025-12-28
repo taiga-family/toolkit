@@ -52,6 +52,7 @@ oxlint --fix && eslint --fix
 ```
 
 Disabling eslint rules based on oxlint config is supported:
+
 ```js
 // eslint.config.js
 import oxlint from 'eslint-plugin-oxlint';
