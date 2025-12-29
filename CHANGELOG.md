@@ -1,3 +1,5 @@
+### [0.378.0](https://github.com/taiga-family/toolkit/compare/v0.377.0...v0.378.0) (2025-12-22)
+
 ### [0.377.0](https://github.com/taiga-family/toolkit/compare/v0.376.0...v0.377.0) (2025-12-19)
 
 ### 🐞 Bug Fixes
