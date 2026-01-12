@@ -3,13 +3,23 @@
 import {setupZoneTestEnv} from 'jest-preset-angular/setup-env/zone';
 import ResizeObserver from 'resize-observer-polyfill';
 
-import {tuiSwitchNgDevMode} from './utils/switch-ng-dev-mode';
-
-const {TextDecoder: TextDecoderMock, TextEncoder: TextEncoderMock} = require('node:util'); // drop it after migrate zone less mode
-
-tuiSwitchNgDevMode(false);
-
 setupZoneTestEnv();
+
+if (typeof globalThis.structuredClone !== 'function') {
+    globalThis.structuredClone = (obj: unknown) => JSON.parse(JSON.stringify(obj));
+}
+
+if (typeof globalThis.setImmediate !== 'function') {
+    globalThis.setImmediate = ((fn: (...args: unknown[]) => void, ...args: unknown[]) =>
+        setTimeout(fn, 0, ...args)) as unknown as typeof globalThis.setImmediate;
+}
+
+if (typeof globalThis.clearImmediate !== 'function') {
+    globalThis.clearImmediate = ((timeoutId: number | undefined) =>
+        clearTimeout(timeoutId)) as unknown as typeof globalThis.clearImmediate;
+}
+
+const {TextDecoder: TextDecoderMock, TextEncoder: TextEncoderMock} = require('node:util');
 
 global.TextEncoder = TextEncoderMock;
 global.TextDecoder = TextDecoderMock;
@@ -162,18 +172,4 @@ global.Date = class extends Date {
 if (!('Zone' in global)) {
     require('zone.js');
     require('zone.js/testing');
-}
-
-if (typeof globalThis.structuredClone !== 'function') {
-    globalThis.structuredClone = (obj: unknown) => JSON.parse(JSON.stringify(obj));
-}
-
-if (typeof globalThis.setImmediate !== 'function') {
-    globalThis.setImmediate = ((fn: (...args: unknown[]) => void, ...args: unknown[]) =>
-        setTimeout(fn, 0, ...args)) as unknown as typeof globalThis.setImmediate;
-}
-
-if (typeof globalThis.clearImmediate !== 'function') {
-    globalThis.clearImmediate = ((timeoutId: number | undefined) =>
-        clearTimeout(timeoutId)) as unknown as typeof globalThis.clearImmediate;
 }
