@@ -1,3 +1,10 @@
+### [0.381.0](https://github.com/taiga-family/toolkit/compare/v0.380.0...v0.381.0) (2026-01-12)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: compilation issue (#1476)
+  [(85eea40)](https://github.com/taiga-family/toolkit/commit/85eea4042ebccac49f6cac4f58b192b2f28a7756)
+
 ### [0.380.0](https://github.com/taiga-family/toolkit/compare/v0.379.0...v0.380.0) (2026-01-05)
 
 ### [0.379.0](https://github.com/taiga-family/toolkit/compare/v0.378.0...v0.379.0) (2025-12-29)
