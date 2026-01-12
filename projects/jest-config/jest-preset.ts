@@ -61,6 +61,14 @@ export default {
     verbose: !process.env.CI,
 } satisfies JestConfigWithTsJest;
 
+declare const global: (Record<any, any> & Window) | undefined;
+
+export function tuiSwitchNgDevMode(enable: boolean): void {
+    if (global) {
+        global.ngDevMode = enable;
+    }
+}
+
 function readTsConfig(): Record<string, Record<string, unknown>> {
     try {
         return JSON.parse(readFileSync(resolve(process.cwd(), 'tsconfig.json'), 'utf-8'));
