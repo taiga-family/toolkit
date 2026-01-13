@@ -6,7 +6,7 @@ import {isArray} from './is-array';
 export function getConstArray(
     node: TSESTree.Expression | null,
 ): TSESTree.ArrayExpression | null {
-    if (!node || node.type !== AST_NODE_TYPES.TSAsExpression) {
+    if (node?.type !== AST_NODE_TYPES.TSAsExpression) {
         return null;
     }
 

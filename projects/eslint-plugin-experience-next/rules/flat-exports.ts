@@ -91,10 +91,7 @@ export default createRule<[], typeof MESSAGE_ID>({
 
                         const elementNode = arr.node.elements[index];
 
-                        if (
-                            !elementNode ||
-                            elementNode.type !== AST_NODE_TYPES.Identifier
-                        ) {
+                        if (elementNode?.type !== AST_NODE_TYPES.Identifier) {
                             return;
                         }
 
@@ -135,7 +132,7 @@ export default createRule<[], typeof MESSAGE_ID>({
                 let isDirty = false;
 
                 for (const el of arrayExpression.elements) {
-                    if (!el || el.type !== AST_NODE_TYPES.Identifier) {
+                    if (el?.type !== AST_NODE_TYPES.Identifier) {
                         isDirty = true;
                         continue;
                     }
