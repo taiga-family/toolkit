@@ -1,11 +1,10 @@
 /// <reference types="@types/jest" />
-/// <reference types="@types/node" />
+import {TextDecoder as TextDecoderMock, TextEncoder as TextEncoderMock} from 'node:util';
+
 import {setupZoneTestEnv} from 'jest-preset-angular/setup-env/zone';
 import ResizeObserver from 'resize-observer-polyfill';
 
 import {tuiSwitchNgDevMode} from './jest-preset';
-
-const {TextDecoder: TextDecoderMock, TextEncoder: TextEncoderMock} = require('node:util'); // drop it after migrate zone less mode
 
 tuiSwitchNgDevMode(false);
 
@@ -37,6 +36,8 @@ global.window.resizeTo = (width) => {
 };
 
 global.URL.createObjectURL = jest.fn(String);
+
+// eslint-disable-next-line @typescript-eslint/strict-void-return
 global.URL.revokeObjectURL = jest.fn();
 
 Object.defineProperty(global.window, 'CSS', {value: null});

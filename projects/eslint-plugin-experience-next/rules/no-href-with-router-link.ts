@@ -22,7 +22,7 @@ const config: Rule.RuleModule = {
             Tag(node: unknown) {
                 const htmlNode = node as HTMLTag | undefined;
 
-                if (!htmlNode?.name || htmlNode.name.toLowerCase() !== 'a') {
+                if (htmlNode?.name?.toLowerCase() !== 'a') {
                     return;
                 }
 

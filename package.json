@@ -44,7 +44,6 @@
         "@nx/rollup": "22.3.2",
         "@nx/workspace": "22.3.2",
         "esbuild": "0.27.2",
-        "lint-staged": "16.2.7",
         "nx": "22.3.2",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",

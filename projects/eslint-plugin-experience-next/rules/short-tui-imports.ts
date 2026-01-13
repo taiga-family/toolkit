@@ -54,7 +54,7 @@ export const rule = createRule<Options, MessageIds>({
                 }
 
                 const [arg] = expression.arguments;
-                const isNotObject = !arg || arg.type !== AST_NODE_TYPES.ObjectExpression;
+                const isNotObject = arg?.type !== AST_NODE_TYPES.ObjectExpression;
 
                 if (isNotObject) {
                     return;
