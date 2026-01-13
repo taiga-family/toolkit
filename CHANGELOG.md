@@ -1,3 +1,10 @@
+### [0.383.0](https://github.com/taiga-family/toolkit/compare/v0.382.0...v0.383.0) (2026-01-13)
+
+### 🚀 Features
+
+- **commitlint-config**: move `lint-staged` to peer dependencies (#1478)
+  [(29d0cc3)](https://github.com/taiga-family/toolkit/commit/29d0cc36fb925d4cb17f227f3095faac1242efd1)
+
 ### [0.382.0](https://github.com/taiga-family/toolkit/compare/v0.381.0...v0.382.0) (2026-01-12)
 
 ### 🐞 Bug Fixes
