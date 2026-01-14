@@ -147,6 +147,8 @@
         "шиммер",
         "codeowners",
         "tseslint",
-        "tsestree"
+        "tsestree",
+        "санитайзер",
+        "hilite"
     ]
 }
