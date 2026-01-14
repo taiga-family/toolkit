@@ -15,6 +15,23 @@ const attributeOptions = {
 };
 
 module.exports = {
+    $schema: 'https://json.schemastore.org/prettierrc',
+    plugins: [
+        require.resolve('stylelint-prettier'),
+        require.resolve('prettier-plugin-organize-attributes'),
+    ],
+    arrowParens: 'always',
+    bracketSpacing: false,
+    endOfLine: 'lf',
+    htmlWhitespaceSensitivity: 'ignore',
+    printWidth: 120,
+    proseWrap: 'always',
+    semi: true,
+    singleAttributePerLine: true,
+    singleQuote: true,
+    tabWidth: 4,
+    trailingComma: 'all',
+    useTabs: false,
     overrides: [
         {
             files: ['*.json'],
@@ -60,17 +77,17 @@ module.exports = {
         },
         {
             files: ['*.yml', '*.yaml'],
-            options: {tabWidth: 2, parser: 'yaml'},
+            options: {parser: 'yaml', tabWidth: 2},
         },
         {
             files: ['*.md'],
-            options: {tabWidth: 2, parser: 'markdown'},
+            options: {parser: 'markdown', tabWidth: 2},
         },
         {
             files: ['*.html'],
             options: {
-                printWidth: 120,
                 parser: 'angular',
+                printWidth: 120,
                 ...attributeOptions,
             },
         },
@@ -78,8 +95,8 @@ module.exports = {
             files: ['*.js', '*.ts'],
             options: {
                 ...attributeOptions,
-                printWidth: 90,
                 parser: 'typescript',
+                printWidth: 90,
             },
         },
         {
@@ -89,21 +106,4 @@ module.exports = {
             ),
         },
     ],
-    printWidth: 120,
-    tabWidth: 4,
-    plugins: [
-        require.resolve('stylelint-prettier'),
-        require.resolve('prettier-plugin-organize-attributes'),
-    ],
-    $schema: 'https://json.schemastore.org/prettierrc',
-    arrowParens: 'always',
-    bracketSpacing: false,
-    endOfLine: 'lf',
-    htmlWhitespaceSensitivity: 'ignore',
-    proseWrap: 'always',
-    semi: true,
-    singleAttributePerLine: true,
-    singleQuote: true,
-    trailingComma: 'all',
-    useTabs: false,
 };
