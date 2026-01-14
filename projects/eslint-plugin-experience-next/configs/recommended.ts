@@ -794,6 +794,7 @@ export default defineConfig([
                 {
                     ignoreWithDirectives: [
                         'tuiButtonClose',
+                        'tuiButtonCopy',
                         'tuiAccordion',
                         'tuiButtonX',
                         'tuiOption',
