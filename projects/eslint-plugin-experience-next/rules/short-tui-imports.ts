@@ -24,6 +24,7 @@ const DEFAULT_DECORATORS = ['Component', 'Directive', 'NgModule', 'Pipe'];
 const DEFAULT_EXCEPTIONS: ShortImportsException[] = [
     {from: 'TuiTextfieldOptionsDirective', to: 'TuiTextfield'},
     {from: 'TuiPreviewDialogDirective', to: 'TuiPreview'},
+    {from: 'TuiAccountComponent', to: 'TuiAccountComponent'},
 ];
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
