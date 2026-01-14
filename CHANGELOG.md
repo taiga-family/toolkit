@@ -1,3 +1,10 @@
+### [0.384.0](https://github.com/taiga-family/toolkit/compare/v0.383.0...v0.384.0) (2026-01-14)
+
+### 🚀 Features
+
+- find re-export in root packages in no-deep-imports-to-indexed-packages rule (#1479)
+  [(a670362)](https://github.com/taiga-family/toolkit/commit/a670362f51a6c1de7124e70adf318ec93795c829)
+
 ### [0.383.0](https://github.com/taiga-family/toolkit/compare/v0.382.0...v0.383.0) (2026-01-13)
 
 ### 🚀 Features
