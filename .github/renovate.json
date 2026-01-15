@@ -15,7 +15,14 @@
             "matchUpdateTypes": ["major"]
         },
         {
-            "matchPackageNames": ["@types/jest", "jest", "jest-preset-angular", "ts-jest"],
+            "matchPackageNames": [
+                "@types/jest",
+                "jest",
+                "jest-preset-angular",
+                "ts-jest",
+                "jest-environment-jsdom",
+                "angular-eslint"
+            ],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
