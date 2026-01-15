@@ -105,6 +105,11 @@ export default defineConfig([
             tseslint.configs.all,
         ],
         languageOptions: {
+            globals: {
+                ...globals.builtin,
+                ...globals.browser,
+                ...globals.node,
+            },
             parserOptions: {
                 ecmaVersion: 'latest',
                 errorOnTypeScriptSyntacticAndSemanticIssues: false,
@@ -113,18 +118,8 @@ export default defineConfig([
                 warnOnUnsupportedTypeScriptVersion: false,
                 ...parserOptions,
             },
-            globals: {
-                ...globals.builtin,
-                ...globals.browser,
-                ...globals.node,
-            },
         },
         rules: {
-            '@typescript-eslint/no-confusing-void-expression': 'off',
-            '@typescript-eslint/no-import-type-side-effects': 'off', // verbatimModuleSyntax should be false
-            '@typescript-eslint/no-invalid-void-type': 'off',
-            'no-void': ['error', {allowAsStatement: true}],
-            'sonarjs/no-identical-functions': 'error',
             '@stylistic/function-call-spacing': 'error',
             '@stylistic/lines-between-class-members': [
                 'error',
@@ -209,6 +204,7 @@ export default defineConfig([
             '@typescript-eslint/explicit-member-accessibility': [
                 'error',
                 {
+                    accessibility: 'explicit',
                     overrides: {
                         accessors: 'explicit',
                         constructors: 'no-public',
@@ -216,7 +212,6 @@ export default defineConfig([
                         parameterProperties: 'explicit',
                         properties: 'explicit',
                     },
-                    accessibility: 'explicit',
                 },
             ],
             '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -233,6 +228,7 @@ export default defineConfig([
             ],
             '@typescript-eslint/no-base-to-string': 'off',
             '@typescript-eslint/no-confusing-non-null-assertion': 'error',
+            '@typescript-eslint/no-confusing-void-expression': 'off',
             '@typescript-eslint/no-deprecated': 'off',
             '@typescript-eslint/no-duplicate-enum-values': 'error',
             '@typescript-eslint/no-duplicate-type-constituents': 'error',
@@ -264,7 +260,9 @@ export default defineConfig([
             '@typescript-eslint/no-floating-promises': 'off',
             '@typescript-eslint/no-for-in-array': 'error',
             '@typescript-eslint/no-implied-eval': 'error',
+            '@typescript-eslint/no-import-type-side-effects': 'off', // verbatimModuleSyntax should be false
             '@typescript-eslint/no-inferrable-types': 'error',
+            '@typescript-eslint/no-invalid-void-type': 'off',
             '@typescript-eslint/no-magic-numbers': 'off',
             '@typescript-eslint/no-misused-promises': 'off',
             '@typescript-eslint/no-misused-spread': 'off',
@@ -381,8 +379,8 @@ export default defineConfig([
             '@typescript-eslint/switch-exhaustiveness-check': [
                 'error',
                 {
-                    considerDefaultExhaustiveForUnions: true,
                     allowDefaultCaseForExhaustiveSwitch: true,
+                    considerDefaultExhaustiveForUnions: true,
                     requireDefaultForNonUnion: false,
                 },
             ],
@@ -400,8 +398,8 @@ export default defineConfig([
             'decorator-position/decorator-position': [
                 'error',
                 {
-                    printWidth: 120,
                     methods: 'above',
+                    printWidth: 120,
                     properties: 'above',
                 },
             ],
@@ -566,10 +564,10 @@ export default defineConfig([
                 },
             ],
             'no-var': 'error',
+            'no-void': ['error', {allowAsStatement: true}],
             'perfectionist/sort-array-includes': [
                 'error',
                 {
-                    groupKind: 'literals-first',
                     ignoreCase: true,
                     order: 'asc',
                     type: 'alphabetical',
@@ -586,7 +584,6 @@ export default defineConfig([
             'perfectionist/sort-sets': [
                 'error',
                 {
-                    groupKind: 'literals-first',
                     ignoreCase: true,
                     order: 'asc',
                     type: 'alphabetical',
@@ -622,6 +619,7 @@ export default defineConfig([
             'promise/param-names': 'error',
             'simple-import-sort/exports': 'error',
             'simple-import-sort/imports': 'error',
+            'sonarjs/no-identical-functions': 'error',
             'sonarjs/no-inverted-boolean-check': 'error',
             'spaced-comment': [
                 'error',
@@ -844,7 +842,6 @@ export default defineConfig([
         files: ['**/*.pw.spec.ts'],
         extends: [playwright.configs['flat/recommended']],
         rules: {
-            'playwright/no-networkidle': 'off',
             'compat/compat': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/expect-expect': [
@@ -854,6 +851,7 @@ export default defineConfig([
                 },
             ],
             'playwright/no-force-option': 'error',
+            'playwright/no-networkidle': 'off',
             'playwright/no-skipped-test': 'off',
             'playwright/no-wait-for-selector': 'off',
             'playwright/no-wait-for-timeout': 'off',
@@ -886,7 +884,6 @@ export default defineConfig([
              * If enabled we have
              * Expected to be running in 'ProxyZone', but it was not found
              */
-            'jest/valid-title': 'error',
             'jest/prefer-ending-with-an-expect': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'jest/prefer-lowercase-title': [
@@ -924,6 +921,7 @@ export default defineConfig([
                 },
             ],
             'jest/unbound-method': 'off',
+            'jest/valid-title': 'error',
         },
     },
     {

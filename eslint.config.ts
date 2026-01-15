@@ -33,17 +33,20 @@ export default process.env.HTML_ESLINT
                   'perfectionist/sort-objects': [
                       'error',
                       {
-                          customGroups: {
-                              id: 'id',
-                              overrides: 'overrides',
-                              env: 'env',
-                              files: 'files',
-                              parser: 'parser',
-                              plugins: 'plugins',
-                              extends: 'extends',
-                              $schema: '$schema',
-                              rules: 'rules',
-                          },
+                          customGroups: [
+                              {
+                                  elementNamePattern: String.raw`^\$schema$`,
+                                  groupName: '$schema',
+                              },
+                              {elementNamePattern: '^id$', groupName: 'id'},
+                              {elementNamePattern: '^env$', groupName: 'env'},
+                              {elementNamePattern: '^files$', groupName: 'files'},
+                              {elementNamePattern: '^parser$', groupName: 'parser'},
+                              {elementNamePattern: '^plugins$', groupName: 'plugins'},
+                              {elementNamePattern: '^extends$', groupName: 'extends'},
+                              {elementNamePattern: '^rules$', groupName: 'rules'},
+                              {elementNamePattern: '^overrides$', groupName: 'overrides'},
+                          ],
                           groups: [
                               '$schema',
                               'id',

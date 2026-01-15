@@ -1,7 +1,7 @@
 module.exports = {
-    files: ['*/*.*'],
     $schema:
         'https://raw.githubusercontent.com/streetsidesoftware/master/cspell.schema.json',
+    files: ['*/*.*'],
     caseSensitive: false,
     ignorePaths: [
         '**/LICENSE',
