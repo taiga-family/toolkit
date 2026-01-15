@@ -28,6 +28,9 @@ export const rule = createRule({
         const isDeepImport = (source?: string): boolean =>
             !!source && new RegExp(deepImport, 'g').test(source);
 
+        const isSideEffectImport = (node: TSESTree.ImportDeclaration): boolean =>
+            node.specifiers.length === 0;
+
         const isInsideTheSameEntryPoint = (source?: string): boolean => {
             const filePath = path
                 .relative(context.cwd, context.filename)
@@ -53,10 +56,13 @@ export const rule = createRule({
             [`ImportDeclaration[source.value=/${importDeclaration}/]`](
                 node?: TSESTree.ImportDeclaration,
             ) {
-                const importSource = node?.source.value;
+                if (!node || isSideEffectImport(node)) {
+                    return;
+                }
+
+                const importSource = node.source.value;
 
                 if (
-                    !node ||
                     !importSource ||
                     !isDeepImport(importSource) ||
                     isInsideTheSameEntryPoint(importSource) ||
