@@ -1,3 +1,12 @@
+### [0.387.0](https://github.com/taiga-family/toolkit/compare/v0.386.0...v0.387.0) (2026-01-15)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: revert (#1488)
+  [(70ef651)](https://github.com/taiga-family/toolkit/commit/70ef6513615e6085ba0340817cd8102dbca2bd19)
+- update dependency @cspell/dict-en-gb to ^5.0.21 (#1487)
+  [(199ec0f)](https://github.com/taiga-family/toolkit/commit/199ec0fe31b65aca97393096efd66c21be546b81)
+
 ### [0.386.0](https://github.com/taiga-family/toolkit/compare/v0.385.0...v0.386.0) (2026-01-15)
 
 ### 🐞 Bug Fixes
