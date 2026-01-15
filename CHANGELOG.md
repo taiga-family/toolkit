@@ -1,3 +1,10 @@
+### [0.386.0](https://github.com/taiga-family/toolkit/compare/v0.385.0...v0.386.0) (2026-01-15)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: pin angular/cli (#1485)
+  [(09fd08a)](https://github.com/taiga-family/toolkit/commit/09fd08afb0508ba62f4febb90763b63b27a58192)
+
 ### [0.385.0](https://github.com/taiga-family/toolkit/compare/v0.384.0...v0.385.0) (2026-01-15)
 
 ### 🐞 Bug Fixes
