@@ -1,3 +1,16 @@
+### [0.388.0](https://github.com/taiga-family/toolkit/compare/v0.387.0...v0.388.0) (2026-01-15)
+
+### 🐞 Bug Fixes
+
+- **cspell-config**: revert cspell config (#1493)
+  [(d766fcf)](https://github.com/taiga-family/toolkit/commit/d766fcfd84dd216228fc7462ff496920c639ce2e)
+- update @stylistic/\* deps (#1492)
+  [(8fe2f29)](https://github.com/taiga-family/toolkit/commit/8fe2f2946c559fc186faaf470129bd97aa5467d2)
+- update dependency stylelint-order to ^7.0.1 (#1490)
+  [(a9884b9)](https://github.com/taiga-family/toolkit/commit/a9884b9f66ea272a72df8eb43dc635c138966a10)
+- update dependency @eslint/compat to ^2.0.1 (#1489)
+  [(f4cde39)](https://github.com/taiga-family/toolkit/commit/f4cde396d2b3a300d0d3119cd4ac8a01efc167f1)
+
 ### [0.387.0](https://github.com/taiga-family/toolkit/compare/v0.386.0...v0.387.0) (2026-01-15)
 
 ### 🐞 Bug Fixes
