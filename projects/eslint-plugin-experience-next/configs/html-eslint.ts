@@ -1,7 +1,8 @@
 import html from '@html-eslint/eslint-plugin';
 import htmlParser from '@html-eslint/parser';
+import {defineConfig} from 'eslint/config';
 
-export default [
+export default defineConfig([
     {
         ignores: [
             '**/tests-report/**',
@@ -13,15 +14,14 @@ export default [
         ],
     },
     {
-        ...html.configs.recommended,
         files: ['**/*.html'],
         plugins: {html},
+        extends: ['html/recommended'],
         language: 'html/html',
         languageOptions: {
             parser: htmlParser,
         },
         rules: {
-            ...html.configs.recommended.rules,
             '@taiga-ui/experience-next/no-href-with-router-link': 'error',
             'html/indent': 'off', // prettier conflicts
             'html/no-extra-spacing-attrs': 'off', // prettier conflicts
@@ -93,4 +93,4 @@ export default [
             'html/no-restricted-attr-values': 'off',
         },
     },
-];
+]);
