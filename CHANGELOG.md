@@ -1,3 +1,20 @@
+### [0.385.0](https://github.com/taiga-family/toolkit/compare/v0.384.0...v0.385.0) (2026-01-15)
+
+### 🐞 Bug Fixes
+
+- update react (#1472)
+  [(0d9d67d)](https://github.com/taiga-family/toolkit/commit/0d9d67d89030a639dfb0c4668a1e269ef03fc45f)
+- update dependency @html-eslint/eslint-plugin to ^0.52.1 (#1467)
+  [(0296284)](https://github.com/taiga-family/toolkit/commit/0296284febca5867bf64a1c85a354448a503650a)
+- **eslint-plugin-experience-next**: ignore side effect imports (#1484)
+  [(e00e601)](https://github.com/taiga-family/toolkit/commit/e00e6018320e0a02be2698f2a4c818e44d2c17a9)
+- **cspell-config**: ignore new words (#1482)
+  [(90dbd78)](https://github.com/taiga-family/toolkit/commit/90dbd78f59480dd2b1606b04d42ce9ca59a4a3bb)
+- **eslint-plugin-experience-next**: ignore rename `TuiAccountComponent` (#1481)
+  [(9af270c)](https://github.com/taiga-family/toolkit/commit/9af270c65ec4adb3c8bb2b653ee3c3396a079e4f)
+- **eslint-plugin-experience-next**: ignore `tuiButtonCopy` (#1480)
+  [(74aa71b)](https://github.com/taiga-family/toolkit/commit/74aa71bb356258d655d0bab6403108388bfc5566)
+
 ### [0.384.0](https://github.com/taiga-family/toolkit/compare/v0.383.0...v0.384.0) (2026-01-14)
 
 ### 🚀 Features
