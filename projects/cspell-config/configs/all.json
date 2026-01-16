@@ -679,6 +679,8 @@
         "optimise",
         "styleguide",
         "crossfading",
-        "UTDL"
+        "UTDL",
+        "oxlint",
+        "oxlintrc"
     ]
 }
