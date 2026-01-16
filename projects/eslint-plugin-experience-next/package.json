@@ -4,9 +4,6 @@
     "description": "An ESLint plugin to enforce a consistent code styles across taiga-ui projects",
     "license": "Apache-2.0",
     "type": "module",
-    "overrides": {
-        "@angular/cli": ">=19.0.0"
-    },
     "devDependencies": {
         "@typescript-eslint/rule-tester": "8.53.0",
         "glob": "13.0.0"
@@ -20,7 +17,7 @@
         "@stylistic/eslint-plugin": "^5.7.0",
         "@types/glob": "*",
         "@typescript-eslint/eslint-plugin": "^8.53.0",
-        "angular-eslint": "^20.7.0",
+        "angular-eslint": ">=20.7.0",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.7",
         "eslint-plugin-compat": "^6.0.2",
