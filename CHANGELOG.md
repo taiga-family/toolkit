@@ -1,3 +1,28 @@
+### [0.389.0](https://github.com/taiga-family/toolkit/compare/v0.388.0...v0.389.0) (2026-01-16)
+
+### 🐞 Bug Fixes
+
+- update versions (#1506)
+  [(e7d2f84)](https://github.com/taiga-family/toolkit/commit/e7d2f84391d648faca23d4e89575346912876da3)
+- **eslint-plugin-experience-next**: support higger version of angular-eslint (#1504)
+  [(1f9bb36)](https://github.com/taiga-family/toolkit/commit/1f9bb36bc99dfdbf57c8fb41928569de128fe2fb)
+- update dependency typescript-eslint to ^8.53.0 (#1500)
+  [(f3d36a4)](https://github.com/taiga-family/toolkit/commit/f3d36a4fc09f8fd3169bbb1e339973878131dd6d)
+- update eslint (#1501)
+  [(6f08c56)](https://github.com/taiga-family/toolkit/commit/6f08c5610998d0d76f9e6c6a494e3cbb05270ffd)
+- update dependency release-it to ^19.2.3 (#1499)
+  [(cf61d92)](https://github.com/taiga-family/toolkit/commit/cf61d92b5e232dd7883eae7e2a53b2414ddd9212)
+- update dependency prettier to ^3.8.0 (#1498)
+  [(7b0feb1)](https://github.com/taiga-family/toolkit/commit/7b0feb1ce4edf88951851274b3e3ad9a6c571294)
+- update dependency cspell to ^9.6.0 (#1497)
+  [(6e215e6)](https://github.com/taiga-family/toolkit/commit/6e215e63f33dd85336e8d2f9a8b0a06a87056e21)
+- update dependency @html-eslint/parser to ^0.53.0 (#1496)
+  [(3cb1e3c)](https://github.com/taiga-family/toolkit/commit/3cb1e3c45bd68bbb74c8149f9295caeb1ab51f9e)
+- update commitlint to ^20.3.1 (#1494)
+  [(8ea2e90)](https://github.com/taiga-family/toolkit/commit/8ea2e90f58f42479796f27bac5e437cfd49318b4)
+- update dependency @html-eslint/eslint-plugin to ^0.53.0 (#1495)
+  [(4c8f897)](https://github.com/taiga-family/toolkit/commit/4c8f897b505d790437a66f3950a65131465a50ee)
+
 ### [0.388.0](https://github.com/taiga-family/toolkit/compare/v0.387.0...v0.388.0) (2026-01-15)
 
 ### 🐞 Bug Fixes
