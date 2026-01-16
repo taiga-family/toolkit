@@ -1,3 +1,12 @@
+### [0.390.0](https://github.com/taiga-family/toolkit/compare/v0.389.0...v0.390.0) (2026-01-16)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: revert peer dependencies (#1508)
+  [(39cc893)](https://github.com/taiga-family/toolkit/commit/39cc893a44dcdf914ec47204ee1f640f7098cd9c)
+- update dependency stylelint to &gt;=16.26.1 (#1507)
+  [(82cfcd8)](https://github.com/taiga-family/toolkit/commit/82cfcd86cff5eaa380282bb6a2f2c78fcea3b1dd)
+
 ### [0.389.0](https://github.com/taiga-family/toolkit/compare/v0.388.0...v0.389.0) (2026-01-16)
 
 ### 🐞 Bug Fixes
