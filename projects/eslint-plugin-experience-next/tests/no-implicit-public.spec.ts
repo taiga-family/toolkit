@@ -5,10 +5,7 @@ const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 const ruleTester = new RuleTester({
     languageOptions: {
         parser: require('@typescript-eslint/parser'),
-        parserOptions: {
-            ecmaVersion: 2020,
-            sourceType: 'module',
-        },
+        parserOptions: {ecmaVersion: 2020, sourceType: 'module'},
     },
 });
 

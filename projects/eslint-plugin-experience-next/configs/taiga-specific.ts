@@ -25,10 +25,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-deep-imports': 'off',
             '@taiga-ui/experience-next/prefer-deep-imports': [
                 'error',
-                {
-                    importFilter: packageNames,
-                    strict: !!process.env.CI,
-                },
+                {importFilter: packageNames, strict: !!process.env.CI},
             ],
         },
     },

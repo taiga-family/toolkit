@@ -144,23 +144,14 @@ export default createRule<[], typeof MESSAGE_ID>({
                         typeChecker.isArrayLikeType(elType) ||
                         typeChecker.isTupleType(elType);
 
-                    elements.push({
-                        isArrayLike,
-                        isClass,
-                        name: el.name,
-                        type: elType,
-                    });
+                    elements.push({isArrayLike, isClass, name: el.name, type: elType});
 
                     if (!isClass && !isArrayLike) {
                         isDirty = true;
                     }
                 }
 
-                arrays.set(name, {
-                    elements,
-                    isDirty,
-                    node: arrayExpression,
-                });
+                arrays.set(name, {elements, isDirty, node: arrayExpression});
             },
         };
     },

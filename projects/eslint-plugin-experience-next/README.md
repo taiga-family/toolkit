@@ -53,6 +53,7 @@ export default [
 | short-tui-imports                   | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
 | standalone-imports-sort             | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
 | strict-tui-doc-example              | If you use the addon-doc, there will be a hint that you are importing something incorrectly         |     | 🔧  |     |
+| object-single-line                  | Enforce single-line formatting for objects when possible (recursive, Prettier-friendly)             | ✅  | 🔧  |     |
 
 ## prefer-deep-imports
 

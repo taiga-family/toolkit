@@ -41,10 +41,7 @@ export default createRule<[RuleConfig[]], 'invalidName'>({
                 }
 
                 context.report({
-                    data: {
-                        currentName: fieldName,
-                        expectedName: rule.newFieldName,
-                    },
+                    data: {currentName: fieldName, expectedName: rule.newFieldName},
                     fix(fixer) {
                         return fixer.replaceText(node.key, rule.newFieldName);
                     },
@@ -70,15 +67,9 @@ export default createRule<[RuleConfig[]], 'invalidName'>({
                 items: {
                     additionalProperties: false,
                     properties: {
-                        fieldNames: {
-                            items: {type: 'string'},
-                            type: 'array',
-                        },
+                        fieldNames: {items: {type: 'string'}, type: 'array'},
                         newFieldName: {type: 'string'},
-                        withTypesSpecifier: {
-                            items: {type: 'string'},
-                            type: 'array',
-                        },
+                        withTypesSpecifier: {items: {type: 'string'}, type: 'array'},
                     },
                     type: 'object',
                 },

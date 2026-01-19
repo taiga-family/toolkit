@@ -29,10 +29,7 @@ const plugin = {
         readonly ['taiga-specific']: ConfigArray;
         readonly ['html-eslint']: ConfigArray;
     },
-    meta: {
-        name: pkg.name,
-        version: pkg.version,
-    },
+    meta: {name: pkg.name, version: pkg.version},
     rules: {
         'array-as-const': arrayAsConst,
         'class-property-naming': classPropertyNaming,

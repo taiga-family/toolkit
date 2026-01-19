@@ -14,10 +14,7 @@ global.TextEncoder = TextEncoderMock;
 global.TextDecoder = TextDecoderMock;
 global.ResizeObserver = ResizeObserver;
 
-Object.defineProperty(global.document, 'execCommand', {
-    value: () => {},
-    writable: true,
-});
+Object.defineProperty(global.document, 'execCommand', {value: () => {}, writable: true});
 
 // you can also pass the mock implementation
 // to jest.fn as an argument
@@ -43,21 +40,13 @@ global.URL.revokeObjectURL = jest.fn();
 Object.defineProperty(global.window, 'CSS', {value: null});
 
 Object.defineProperty(global.window, 'getComputedStyle', {
-    value: () => ({
-        appearance: ['-webkit-appearance'],
-        display: 'none',
-    }),
+    value: () => ({appearance: ['-webkit-appearance'], display: 'none'}),
 });
 
-Object.defineProperty(global.document, 'doctype', {
-    value: '<!DOCTYPE html>',
-});
+Object.defineProperty(global.document, 'doctype', {value: '<!DOCTYPE html>'});
 
 Object.defineProperty(global.document.body.style, 'transform', {
-    value: () => ({
-        configurable: true,
-        enumerable: true,
-    }),
+    value: () => ({configurable: true, enumerable: true}),
 });
 
 Object.defineProperty(global.window, 'matchMedia', {
