@@ -53,9 +53,7 @@ const config: Rule.RuleModule = {
         };
     },
     meta: {
-        docs: {
-            description: 'Exported arrays of class references should use `as const`.',
-        },
+        docs: {description: 'Exported arrays of class references should use `as const`.'},
         fixable: 'code',
         messages: {
             shouldUseAsConst:

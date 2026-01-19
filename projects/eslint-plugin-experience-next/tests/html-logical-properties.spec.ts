@@ -2,11 +2,7 @@ import htmlPlugin from '@html-eslint/eslint-plugin';
 import htmlParser from '@html-eslint/parser';
 import {RuleTester} from 'eslint';
 
-const ruleTester = new RuleTester({
-    languageOptions: {
-        parser: htmlParser,
-    },
-});
+const ruleTester = new RuleTester({languageOptions: {parser: htmlParser}});
 
 const rule = htmlPlugin.rules['no-restricted-attrs']!;
 

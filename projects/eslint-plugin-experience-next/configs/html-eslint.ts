@@ -18,9 +18,7 @@ export default defineConfig([
         plugins: {html},
         extends: ['html/recommended'],
         language: 'html/html',
-        languageOptions: {
-            parser: htmlParser,
-        },
+        languageOptions: {parser: htmlParser},
         rules: {
             '@taiga-ui/experience-next/no-href-with-router-link': 'error',
             'html/indent': 'off', // prettier conflicts
@@ -78,19 +76,12 @@ export default defineConfig([
                 },
             ],
             'html/require-closing-tags': 'off', // prettier conflicts
-            'html/require-img-alt': [
-                'error',
-                {
-                    substitute: ['[alt]', '[attr.alt]'],
-                },
-            ],
+            'html/require-img-alt': ['error', {substitute: ['[alt]', '[attr.alt]']}],
             'html/use-baseline': 'off',
         },
     },
     {
         files: ['**/demo/**/*.html'],
-        rules: {
-            'html/no-restricted-attr-values': 'off',
-        },
+        rules: {'html/no-restricted-attr-values': 'off'},
     },
 ]);

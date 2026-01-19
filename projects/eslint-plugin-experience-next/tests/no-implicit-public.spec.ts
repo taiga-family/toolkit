@@ -20,11 +20,7 @@ ruleTester.run('no-implicit-public', rule, {
                     method() {}
                 }
             `,
-            errors: [
-                {
-                    message: 'method method should be marked as public',
-                },
-            ],
+            errors: [{message: 'method method should be marked as public'}],
             output: `
                 class TestClass {
                      public method() {}
@@ -37,11 +33,7 @@ ruleTester.run('no-implicit-public', rule, {
                     field = 'value';
                 }
             `,
-            errors: [
-                {
-                    message: 'property field should be marked as public',
-                },
-            ],
+            errors: [{message: 'property field should be marked as public'}],
             output: `
                 class TestClass {
                      public field = 'value';
@@ -54,11 +46,7 @@ ruleTester.run('no-implicit-public', rule, {
                     get value() { return 'test'; }
                 }
             `,
-            errors: [
-                {
-                    message: 'get value should be marked as public',
-                },
-            ],
+            errors: [{message: 'get value should be marked as public'}],
             output: `
                 class TestClass {
                      public get value() { return 'test'; }
@@ -71,11 +59,7 @@ ruleTester.run('no-implicit-public', rule, {
                     set value(val: string) {}
                 }
             `,
-            errors: [
-                {
-                    message: 'set value should be marked as public',
-                },
-            ],
+            errors: [{message: 'set value should be marked as public'}],
             output: `
                 class TestClass {
                      public set value(val: string) {}
@@ -88,11 +72,7 @@ ruleTester.run('no-implicit-public', rule, {
                     @Input() field = 'value';
                 }
             `,
-            errors: [
-                {
-                    message: 'property field should be marked as public',
-                },
-            ],
+            errors: [{message: 'property field should be marked as public'}],
             output: `
                 class TestClass {
                     @Input()  public field = 'value';

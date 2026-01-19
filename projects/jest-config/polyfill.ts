@@ -109,9 +109,7 @@ Object.defineProperty(global.document, 'createRange', {
 Object.defineProperty(window, 'scrollTo', jest.fn());
 
 Object.defineProperty(global.window, 'getComputedStyle', {
-    value: () => ({
-        getPropertyValue: (_prop: string) => '',
-    }),
+    value: () => ({getPropertyValue: (_prop: string) => ''}),
 });
 
 global.DataTransfer = class {

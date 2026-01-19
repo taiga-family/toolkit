@@ -22,11 +22,7 @@ ruleTester.run('strict-tui-doc-example', rule, {
                     };
                 }
             `,
-            errors: [
-                {
-                    messageId: 'strict-doc-example-extensions-invalid-value',
-                },
-            ],
+            errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
             output: `
                 class TestComponent {
                     private examples: TuiDocExample = {
@@ -43,11 +39,7 @@ ruleTester.run('strict-tui-doc-example', rule, {
                     };
                 }
             `,
-            errors: [
-                {
-                    messageId: 'strict-doc-example-extensions-invalid-value',
-                },
-            ],
+            errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
             output: `
                 class TestComponent {
                     private examples: TuiDocExample = {
@@ -64,11 +56,7 @@ ruleTester.run('strict-tui-doc-example', rule, {
                     };
                 }
             `,
-            errors: [
-                {
-                    messageId: 'strict-doc-example-extensions-invalid-key',
-                },
-            ],
+            errors: [{messageId: 'strict-doc-example-extensions-invalid-key'}],
         },
         {
             code: `
@@ -78,11 +66,7 @@ ruleTester.run('strict-tui-doc-example', rule, {
                     };
                 }
             `,
-            errors: [
-                {
-                    messageId: 'strict-doc-example-extensions-invalid-value',
-                },
-            ],
+            errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
             output: `
                 class TestComponent {
                     private examples: TuiDocExample = {

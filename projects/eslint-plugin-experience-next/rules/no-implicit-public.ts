@@ -70,9 +70,7 @@ export const rule = createRule({
                 'Require explicit `public` modifier for class members and parameter properties',
         },
         fixable: 'code',
-        messages: {
-            implicitPublic: '{{kind}} {{name}} should be marked as public',
-        },
+        messages: {implicitPublic: '{{kind}} {{name}} should be marked as public'},
         schema: [],
         type: 'problem',
     },
