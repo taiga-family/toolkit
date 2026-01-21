@@ -28,7 +28,7 @@ export default {
         {
             prefix: `<rootDir>/${compilerOptions?.baseUrl}/`
                 .replaceAll('./', '/')
-                .replaceAll(/\/\/+/g, '/'),
+                .replaceAll(/\/{2,}/g, '/'),
         },
     ),
     modulePathIgnorePatterns: ['.cache', 'dist', '<rootDir>/dist/'],

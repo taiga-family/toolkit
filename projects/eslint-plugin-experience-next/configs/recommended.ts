@@ -12,6 +12,7 @@ import jest from 'eslint-plugin-jest';
 import packageJson, {configs as packageJsonConfigs} from 'eslint-plugin-package-json';
 import playwright from 'eslint-plugin-playwright';
 import prettier from 'eslint-plugin-prettier';
+import regexp, {configs as regexpConfigs} from 'eslint-plugin-regexp';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
@@ -87,6 +88,7 @@ export default defineConfig([
             'decorator-position': require('eslint-plugin-decorator-position'),
             perfectionist: require('eslint-plugin-perfectionist'),
             prettier,
+            regexp,
             'simple-import-sort': simpleImportSort,
             sonarjs,
             unicorn,
@@ -98,6 +100,7 @@ export default defineConfig([
             require('eslint-plugin-import').flatConfigs.typescript,
             require('eslint-plugin-promise').configs['flat/recommended'],
             compat.configs['flat/recommended'],
+            regexpConfigs['flat/recommended'],
             eslint.configs.recommended,
             eslint.configs.recommended,
             tseslint.configs.all,
@@ -580,6 +583,13 @@ export default defineConfig([
             'promise/no-callback-in-promise': 'off',
             'promise/no-nesting': 'off',
             'promise/param-names': 'error',
+            'regexp/no-unused-capturing-group': [
+                'error',
+                {
+                    allowNamed: true,
+                    fixable: true,
+                },
+            ],
             'simple-import-sort/exports': 'error',
             'simple-import-sort/imports': 'error',
             'sonarjs/no-identical-functions': 'error',
