@@ -60,13 +60,9 @@ export const rule = createRule({
     },
     defaultOptions: [],
     meta: {
-        docs: {
-            description: ERROR_MESSAGE,
-        },
+        docs: {description: ERROR_MESSAGE},
         fixable: 'code',
-        messages: {
-            [MESSAGE_ID]: ERROR_MESSAGE,
-        },
+        messages: {[MESSAGE_ID]: ERROR_MESSAGE},
         schema: [],
         type: 'problem',
     },

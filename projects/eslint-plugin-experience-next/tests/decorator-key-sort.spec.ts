@@ -28,11 +28,7 @@ ruleTester.run('decorator-key-sort', rule, {
                         'Incorrect order keys in @Component decorator, please sort by [selector -> template]',
                 },
             ],
-            options: [
-                {
-                    Component: ['selector', 'template'],
-                },
-            ],
+            options: [{Component: ['selector', 'template']}],
             output: `
                 @Component({selector: 'app-test',template: 'test'})
                 class TestClass {}
@@ -54,11 +50,7 @@ ruleTester.run('decorator-key-sort', rule, {
                         'Incorrect order keys in @Component decorator, please sort by [selector -> template -> styleUrls]',
                 },
             ],
-            options: [
-                {
-                    Component: ['selector', 'template', 'styleUrls'],
-                },
-            ],
+            options: [{Component: ['selector', 'template', 'styleUrls']}],
             output: `
                 @Component({selector: 'app-test',template: 'test',styleUrls: ['test.css'],extra: 'value'})
                 class TestClass {}
@@ -90,11 +82,7 @@ ruleTester.run('decorator-key-sort', rule, {
                 })
                 class TestClass {}
             `,
-            options: [
-                {
-                    Component: ['selector', 'template', 'styleUrls'],
-                },
-            ],
+            options: [{Component: ['selector', 'template', 'styleUrls']}],
         },
         {
             code: `
@@ -104,11 +92,7 @@ ruleTester.run('decorator-key-sort', rule, {
                 })
                 class TestClass {}
             `,
-            options: [
-                {
-                    Component: ['selector', 'template', 'styleUrls'],
-                },
-            ],
+            options: [{Component: ['selector', 'template', 'styleUrls']}],
         },
     ],
 });

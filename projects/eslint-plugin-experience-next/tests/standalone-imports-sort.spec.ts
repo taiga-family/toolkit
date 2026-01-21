@@ -64,11 +64,7 @@ ruleTester.run('standalone-imports-sort', rule, {
                 })
                 class TestComponent {}
             `,
-            errors: [
-                {
-                    message: 'Order in imports should be [AModule, BModule, ZModule]',
-                },
-            ],
+            errors: [{message: 'Order in imports should be [AModule, BModule, ZModule]'}],
             output: `
                 @Component({
                     standalone: true,
@@ -84,11 +80,7 @@ ruleTester.run('standalone-imports-sort', rule, {
                 })
                 class Test {}
             `,
-            errors: [
-                {
-                    message: 'Order in imports should be [AModule, BModule, ZModule]',
-                },
-            ],
+            errors: [{message: 'Order in imports should be [AModule, BModule, ZModule]'}],
             output: `
                 @NgModule({
                     imports: [AModule, BModule, ZModule]
@@ -103,11 +95,7 @@ ruleTester.run('standalone-imports-sort', rule, {
                 })
                 class Test {}
             `,
-            errors: [
-                {
-                    message: 'Order in imports should be [AModule, BModule, ZModule]',
-                },
-            ],
+            errors: [{message: 'Order in imports should be [AModule, BModule, ZModule]'}],
             output: `
                 @Directive({
                     imports: [AModule, BModule, ZModule]
@@ -122,11 +110,7 @@ ruleTester.run('standalone-imports-sort', rule, {
                 })
                 class Test {}
             `,
-            errors: [
-                {
-                    message: 'Order in imports should be [AModule, BModule, ZModule]',
-                },
-            ],
+            errors: [{message: 'Order in imports should be [AModule, BModule, ZModule]'}],
             output: `
                 @Pipe({
                     imports: [AModule, BModule, ZModule]

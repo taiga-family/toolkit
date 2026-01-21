@@ -62,19 +62,11 @@ export default createRule<Options, MessageIds>({
             },
         };
     },
-    defaultOptions: [
-        {
-            decorators: ['Component', 'Directive', 'NgModule', 'Pipe'],
-        },
-    ],
+    defaultOptions: [{decorators: ['Component', 'Directive', 'NgModule', 'Pipe']}],
     meta: {
-        docs: {
-            description: 'Sort Angular standalone imports inside decorators.',
-        },
+        docs: {description: 'Sort Angular standalone imports inside decorators.'},
         fixable: 'code',
-        messages: {
-            incorrectOrder: 'Order in imports should be [{{expected}}]',
-        },
+        messages: {incorrectOrder: 'Order in imports should be [{{expected}}]'},
         schema: [
             {
                 additionalProperties: false,

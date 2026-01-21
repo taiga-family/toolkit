@@ -59,13 +59,9 @@ const config: Rule.RuleModule = {
         };
     },
     meta: {
-        docs: {
-            description: ERROR_MESSAGE,
-        },
+        docs: {description: ERROR_MESSAGE},
         fixable: 'code',
-        messages: {
-            [MESSAGE_ID]: ERROR_MESSAGE,
-        },
+        messages: {[MESSAGE_ID]: ERROR_MESSAGE},
         type: 'problem',
     },
 };

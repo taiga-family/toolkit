@@ -5,11 +5,7 @@ const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 const ruleTester = new RuleTester({
     languageOptions: {
         parser: require('@typescript-eslint/parser'),
-        parserOptions: {
-            projectService: {
-                allowDefaultProject: ['*.ts*'],
-            },
-        },
+        parserOptions: {projectService: {allowDefaultProject: ['*.ts*']}},
     },
 });
 

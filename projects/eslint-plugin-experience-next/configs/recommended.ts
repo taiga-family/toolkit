@@ -34,9 +34,7 @@ const tsconfig =
     projectJsonExist('tsconfig.base.json');
 
 const parserOptions = tsconfig
-    ? {
-          project: [tsconfig],
-      }
+    ? {project: [tsconfig]}
     : {
           EXPERIMENTAL_useProjectService: {
               maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: Infinity,
@@ -148,13 +146,7 @@ export default defineConfig([
                 {blankLine: 'any', next: '*', prev: ['case', 'default']},
                 {blankLine: 'any', next: 'directive', prev: 'directive'},
             ],
-            '@stylistic/quotes': [
-                'error',
-                'single',
-                {
-                    avoidEscape: true,
-                },
-            ],
+            '@stylistic/quotes': ['error', 'single', {avoidEscape: true}],
             '@stylistic/type-annotation-spacing': 'error',
             '@typescript-eslint/adjacent-overload-signatures': 'off',
             '@typescript-eslint/array-type': [
@@ -345,9 +337,7 @@ export default defineConfig([
             '@typescript-eslint/only-throw-error': 'error',
             '@typescript-eslint/parameter-properties': [
                 'error',
-                {
-                    allow: ['public readonly', 'protected readonly', 'private readonly'],
-                },
+                {allow: ['public readonly', 'protected readonly', 'private readonly']},
             ],
             '@typescript-eslint/prefer-as-const': 'error',
             '@typescript-eslint/prefer-destructuring': 'off',
@@ -403,20 +393,8 @@ export default defineConfig([
                     properties: 'above',
                 },
             ],
-            eqeqeq: [
-                'error',
-                'always',
-                {
-                    null: 'ignore',
-                },
-            ],
-            'func-style': [
-                'error',
-                'declaration',
-                {
-                    allowArrowFunctions: true,
-                },
-            ],
+            eqeqeq: ['error', 'always', {null: 'ignore'}],
+            'func-style': ['error', 'declaration', {allowArrowFunctions: true}],
             'guard-for-in': 'error',
             'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
             'import/enforce-node-protocol-usage': ['error', 'always'],
@@ -429,12 +407,7 @@ export default defineConfig([
             'import/no-mutable-exports': 'error',
             'import/no-self-import': 'error',
             'import/no-unresolved': 'off',
-            'import/no-useless-path-segments': [
-                'error',
-                {
-                    noUselessIndex: true,
-                },
-            ],
+            'import/no-useless-path-segments': ['error', {noUselessIndex: true}],
             'import/no-webpack-loader-syntax': 'error',
             'lines-around-comment': [
                 'error',
@@ -459,12 +432,7 @@ export default defineConfig([
             'max-params': ['error', 5],
             'no-bitwise': 'error',
             'no-case-declarations': 'error',
-            'no-console': [
-                'error',
-                {
-                    allow: ['info', 'assert', 'warn', 'error'],
-                },
-            ],
+            'no-console': ['error', {allow: ['info', 'assert', 'warn', 'error']}],
             'no-constant-condition': 'error',
             'no-empty': ['error', {allowEmptyCatch: true}],
             'no-extra-boolean-cast': 'error',
@@ -606,12 +574,7 @@ export default defineConfig([
                 },
             ],
             'prefer-template': 'error',
-            'prettier/prettier': [
-                'error',
-                {
-                    endOfLine: 'auto',
-                },
-            ],
+            'prettier/prettier': ['error', {endOfLine: 'auto'}],
             'promise/always-return': 'off',
             'promise/catch-or-return': 'off',
             'promise/no-callback-in-promise': 'off',
@@ -621,21 +584,10 @@ export default defineConfig([
             'simple-import-sort/imports': 'error',
             'sonarjs/no-identical-functions': 'error',
             'sonarjs/no-inverted-boolean-check': 'error',
-            'spaced-comment': [
-                'error',
-                'always',
-                {
-                    markers: ['/'],
-                },
-            ],
+            'spaced-comment': ['error', 'always', {markers: ['/']}],
             'unicorn/consistent-empty-array-spread': 'error',
             'unicorn/escape-case': 'error',
-            'unicorn/filename-case': [
-                'error',
-                {
-                    case: 'kebabCase',
-                },
-            ],
+            'unicorn/filename-case': ['error', {case: 'kebabCase'}],
             'unicorn/new-for-builtins': 'error',
             'unicorn/no-array-method-this-argument': 'error',
             'unicorn/no-array-push-push': 'error',
@@ -661,9 +613,7 @@ export default defineConfig([
     },
     {
         files: ['**/*.{ts,tsx}'],
-        plugins: {
-            rxjs,
-        },
+        plugins: {rxjs},
         extends: [angular.configs.tsRecommended],
         processor: angular.processInlineTemplates,
         rules: {
@@ -761,12 +711,11 @@ export default defineConfig([
             ],
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
+            '@taiga-ui/experience-next/object-single-line': ['error', {printWidth: 90}],
             '@taiga-ui/experience-next/short-tui-imports': 'error',
             '@taiga-ui/experience-next/standalone-imports-sort': [
                 'error',
-                {
-                    decorators: ['Component', 'Directive', 'NgModule', 'Pipe'],
-                },
+                {decorators: ['Component', 'Directive', 'NgModule', 'Pipe']},
             ],
             'rxjs/no-compat': 'error',
             'rxjs/no-connectable': 'error',
@@ -846,9 +795,7 @@ export default defineConfig([
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/expect-expect': [
                 'error',
-                {
-                    assertFunctionNames: ['expect', 'expect.soft'],
-                },
+                {assertFunctionNames: ['expect', 'expect.soft']},
             ],
             'playwright/no-force-option': 'error',
             'playwright/no-networkidle': 'off',
@@ -916,9 +863,7 @@ export default defineConfig([
             'jest/require-to-throw-message': 'off',
             'jest/require-top-level-describe': [
                 'error',
-                {
-                    maxNumberOfTopLevelDescribes: 1,
-                },
+                {maxNumberOfTopLevelDescribes: 1},
             ],
             'jest/unbound-method': 'off',
             'jest/valid-title': 'error',
@@ -954,20 +899,14 @@ export default defineConfig([
     },
     {
         files: ['**/*.md'],
-        plugins: {
-            markdown,
-        },
+        plugins: {markdown},
         extends: [markdown.configs.recommended],
         language: 'markdown/gfm',
-        rules: {
-            'markdown/require-alt-text': 'off',
-        },
+        rules: {'markdown/require-alt-text': 'off'},
     },
     {
         files: ['**/*.md', '**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
-        rules: {
-            'no-irregular-whitespace': 'off',
-        },
+        rules: {'no-irregular-whitespace': 'off'},
     },
 ]);
 
