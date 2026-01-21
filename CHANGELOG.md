@@ -1,3 +1,17 @@
+### [0.392.0](https://github.com/taiga-family/toolkit/compare/v0.391.0...v0.392.0) (2026-01-21)
+
+### 🚀 Features
+
+- **browserslist-config**: bump browser support (#1514)
+  [(b16cb5f)](https://github.com/taiga-family/toolkit/commit/b16cb5f95d1f741331571b6e648d0c3de984295d)
+
+### 🐞 Bug Fixes
+
+- update dependency release-it to ^19.2.4 (#1512)
+  [(57b8a8e)](https://github.com/taiga-family/toolkit/commit/57b8a8e401386333c7259702960d0534b9bf8c88)
+- update @typescript-eslint/\* deps to ^8.53.1 (#1511)
+  [(284b0a4)](https://github.com/taiga-family/toolkit/commit/284b0a435e0204ea31bcfb0d453928d68a6e6fc4)
+
 ### [0.391.0](https://github.com/taiga-family/toolkit/compare/v0.390.0...v0.391.0) (2026-01-16)
 
 ### [0.390.0](https://github.com/taiga-family/toolkit/compare/v0.389.0...v0.390.0) (2026-01-16)
