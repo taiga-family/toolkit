@@ -1,3 +1,10 @@
+### [0.393.0](https://github.com/taiga-family/toolkit/compare/v0.392.0...v0.393.0) (2026-01-21)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `object-single-line` rule (#1510)
+  [(1f9561a)](https://github.com/taiga-family/toolkit/commit/1f9561ad8ab211d4a6272e61d52479db24140881)
+
 ### [0.392.0](https://github.com/taiga-family/toolkit/compare/v0.391.0...v0.392.0) (2026-01-21)
 
 ### 🚀 Features
