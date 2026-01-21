@@ -103,7 +103,11 @@ export default defineConfig([
             tseslint.configs.all,
         ],
         languageOptions: {
-            globals: {...globals.builtin, ...globals.browser, ...globals.node},
+            globals: {
+                ...globals.builtin,
+                ...globals.browser,
+                ...globals.node,
+            },
             parserOptions: {
                 ecmaVersion: 'latest',
                 errorOnTypeScriptSyntacticAndSemanticIssues: false,
@@ -157,7 +161,10 @@ export default defineConfig([
             '@typescript-eslint/consistent-return': 'off',
             '@typescript-eslint/consistent-type-assertions': [
                 'error',
-                {assertionStyle: 'as', objectLiteralTypeAssertions: 'allow-as-parameter'},
+                {
+                    assertionStyle: 'as',
+                    objectLiteralTypeAssertions: 'allow-as-parameter',
+                },
             ],
             '@typescript-eslint/consistent-type-definitions': 'error',
             '@typescript-eslint/consistent-type-imports': [
@@ -260,11 +267,26 @@ export default defineConfig([
                 'error',
                 {
                     types: {
-                        BigInt: {fixWith: 'bigint', message: 'Use bigint instead'},
-                        Boolean: {fixWith: 'boolean', message: 'Use boolean instead'},
-                        Number: {fixWith: 'number', message: 'Use number instead'},
-                        String: {fixWith: 'string', message: 'Use string instead'},
-                        Symbol: {fixWith: 'symbol', message: 'Use symbol instead'},
+                        BigInt: {
+                            fixWith: 'bigint',
+                            message: 'Use bigint instead',
+                        },
+                        Boolean: {
+                            fixWith: 'boolean',
+                            message: 'Use boolean instead',
+                        },
+                        Number: {
+                            fixWith: 'number',
+                            message: 'Use number instead',
+                        },
+                        String: {
+                            fixWith: 'string',
+                            message: 'Use string instead',
+                        },
+                        Symbol: {
+                            fixWith: 'symbol',
+                            message: 'Use symbol instead',
+                        },
                         '{}': {
                             fixWith: 'Record<string, unknown>',
                             message:
@@ -354,14 +376,22 @@ export default defineConfig([
             ],
             '@typescript-eslint/triple-slash-reference': [
                 'error',
-                {lib: 'always', path: 'always', types: 'always'},
+                {
+                    lib: 'always',
+                    path: 'always',
+                    types: 'always',
+                },
             ],
             '@typescript-eslint/unbound-method': 'off',
             '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
             curly: ['error', 'all'],
             'decorator-position/decorator-position': [
                 'error',
-                {methods: 'above', printWidth: 120, properties: 'above'},
+                {
+                    methods: 'above',
+                    printWidth: 120,
+                    properties: 'above',
+                },
             ],
             eqeqeq: ['error', 'always', {null: 'ignore'}],
             'func-style': ['error', 'declaration', {allowArrowFunctions: true}],
@@ -409,7 +439,11 @@ export default defineConfig([
             'no-implicit-coercion': ['error', {allow: ['!!']}],
             'no-irregular-whitespace': [
                 'error',
-                {skipRegExps: false, skipStrings: false, skipTemplates: false},
+                {
+                    skipRegExps: false,
+                    skipStrings: false,
+                    skipTemplates: false,
+                },
             ],
             'no-loop-func': 'error',
             'no-nested-ternary': 'error',
@@ -491,29 +525,53 @@ export default defineConfig([
             'no-useless-escape': 'error',
             'no-useless-rename': [
                 'error',
-                {ignoreDestructuring: true, ignoreExport: false, ignoreImport: false},
+                {
+                    ignoreDestructuring: true,
+                    ignoreExport: false,
+                    ignoreImport: false,
+                },
             ],
             'no-var': 'error',
             'no-void': ['error', {allowAsStatement: true}],
             'perfectionist/sort-array-includes': [
                 'error',
-                {ignoreCase: true, order: 'asc', type: 'alphabetical'},
+                {
+                    ignoreCase: true,
+                    order: 'asc',
+                    type: 'alphabetical',
+                },
             ],
             'perfectionist/sort-maps': [
                 'error',
-                {ignoreCase: true, order: 'asc', type: 'alphabetical'},
+                {
+                    ignoreCase: true,
+                    order: 'asc',
+                    type: 'alphabetical',
+                },
             ],
             'perfectionist/sort-sets': [
                 'error',
-                {ignoreCase: true, order: 'asc', type: 'alphabetical'},
+                {
+                    ignoreCase: true,
+                    order: 'asc',
+                    type: 'alphabetical',
+                },
             ],
             'perfectionist/sort-switch-case': [
                 'error',
-                {ignoreCase: true, order: 'asc', type: 'alphabetical'},
+                {
+                    ignoreCase: true,
+                    order: 'asc',
+                    type: 'alphabetical',
+                },
             ],
             'perfectionist/sort-variable-declarations': [
                 'error',
-                {ignoreCase: true, order: 'asc', type: 'alphabetical'},
+                {
+                    ignoreCase: true,
+                    order: 'asc',
+                    type: 'alphabetical',
+                },
             ],
             'prefer-template': 'error',
             'prettier/prettier': ['error', {endOfLine: 'auto'}],

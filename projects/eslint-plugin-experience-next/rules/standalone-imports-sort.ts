@@ -70,7 +70,12 @@ export default createRule<Options, MessageIds>({
         schema: [
             {
                 additionalProperties: false,
-                properties: {decorators: {items: {type: 'string'}, type: 'array'}},
+                properties: {
+                    decorators: {
+                        items: {type: 'string'},
+                        type: 'array',
+                    },
+                },
                 type: 'object',
             },
         ],

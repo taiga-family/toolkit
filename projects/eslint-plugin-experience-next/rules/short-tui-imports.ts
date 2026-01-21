@@ -207,7 +207,12 @@ export const rule = createRule<Options, MessageIds>({
         };
     },
 
-    defaultOptions: [{decorators: DEFAULT_DECORATORS, exceptions: DEFAULT_EXCEPTIONS}],
+    defaultOptions: [
+        {
+            decorators: DEFAULT_DECORATORS,
+            exceptions: DEFAULT_EXCEPTIONS,
+        },
+    ],
 
     meta: {
         docs: {
@@ -223,11 +228,17 @@ export const rule = createRule<Options, MessageIds>({
             {
                 additionalProperties: false,
                 properties: {
-                    decorators: {items: {type: 'string'}, type: 'array'},
+                    decorators: {
+                        items: {type: 'string'},
+                        type: 'array',
+                    },
                     exceptions: {
                         items: {
                             additionalProperties: false,
-                            properties: {from: {type: 'string'}, to: {type: 'string'}},
+                            properties: {
+                                from: {type: 'string'},
+                                to: {type: 'string'},
+                            },
                             required: ['from', 'to'],
                             type: 'object',
                         },

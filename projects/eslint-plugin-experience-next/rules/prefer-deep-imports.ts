@@ -83,7 +83,10 @@ export default createRule<RuleOptions, MessageIds>({
                 );
 
                 if (!rootEntryDirectory) {
-                    context.report({messageId: MESSAGE_ID, node});
+                    context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
 
                     return;
                 }
@@ -92,7 +95,10 @@ export default createRule<RuleOptions, MessageIds>({
                     findNestedEntryPointRelativePaths(rootEntryDirectory);
 
                 if (nestedEntryPointRelativePaths.length === 0) {
-                    context.report({messageId: MESSAGE_ID, node});
+                    context.report({
+                        messageId: MESSAGE_ID,
+                        node,
+                    });
 
                     return;
                 }
@@ -134,7 +140,12 @@ export default createRule<RuleOptions, MessageIds>({
             },
         };
     },
-    defaultOptions: [{importFilter: [], strict: false}],
+    defaultOptions: [
+        {
+            importFilter: [],
+            strict: false,
+        },
+    ],
     meta: {
         docs: {description: ERROR_MESSAGE},
         fixable: 'code',

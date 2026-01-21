@@ -40,14 +40,38 @@ ruleTester.run('Recommended naming convention', rule, {
         },
     ],
     valid: [
-        {code: 'export class TestComponent {}', options: recommended},
-        {code: 'export abstract class AbstractService {}', options: recommended},
-        {code: 'export function testFunction() {}', options: recommended},
-        {code: 'export interface TestInterface {}', options: recommended},
-        {code: 'const testVariable = 42;', options: recommended},
-        {code: 'const TEST_CONSTANT = 42;', options: recommended},
-        {code: 'const {someNormalProp} = object;', options: recommended},
-        {code: 'export enum TestEnum { Value }', options: recommended},
+        {
+            code: 'export class TestComponent {}',
+            options: recommended,
+        },
+        {
+            code: 'export abstract class AbstractService {}',
+            options: recommended,
+        },
+        {
+            code: 'export function testFunction() {}',
+            options: recommended,
+        },
+        {
+            code: 'export interface TestInterface {}',
+            options: recommended,
+        },
+        {
+            code: 'const testVariable = 42;',
+            options: recommended,
+        },
+        {
+            code: 'const TEST_CONSTANT = 42;',
+            options: recommended,
+        },
+        {
+            code: 'const {someNormalProp} = object;',
+            options: recommended,
+        },
+        {
+            code: 'export enum TestEnum { Value }',
+            options: recommended,
+        },
     ],
 });
 
@@ -85,13 +109,37 @@ ruleTester.run('Taiga naming convention', rule, {
         },
     ],
     valid: [
-        {code: 'export class TuiComponent {}', options: custom},
-        {code: 'export abstract class AbstractTuiService {}', options: custom},
-        {code: 'export abstract class TuiAbstractService {}', options: custom},
-        {code: 'export function tuiTestFunction() {}', options: custom},
-        {code: 'export interface TuiTestInterface {}', options: custom},
-        {code: 'export type TuiTestType = string;', options: custom},
-        {code: 'export enum TuiTestEnum { Value }', options: custom},
-        {code: 'const testVariable = 42;', options: custom},
+        {
+            code: 'export class TuiComponent {}',
+            options: custom,
+        },
+        {
+            code: 'export abstract class AbstractTuiService {}',
+            options: custom,
+        },
+        {
+            code: 'export abstract class TuiAbstractService {}',
+            options: custom,
+        },
+        {
+            code: 'export function tuiTestFunction() {}',
+            options: custom,
+        },
+        {
+            code: 'export interface TuiTestInterface {}',
+            options: custom,
+        },
+        {
+            code: 'export type TuiTestType = string;',
+            options: custom,
+        },
+        {
+            code: 'export enum TuiTestEnum { Value }',
+            options: custom,
+        },
+        {
+            code: 'const testVariable = 42;',
+            options: custom,
+        },
     ],
 });

@@ -54,44 +54,18 @@ export const rule = createRule<Options, MessageIds>({
             return false;
         };
 
-        const canInlineForReport = (node?: TSESTree.ObjectExpression): boolean => {
-            if (!node?.loc) {
-                return false;
-            }
-
-            if (node.properties.length !== 1) {
-                return false;
-            }
-
-            if (hasAnyCommentsInside(node)) {
+        const canInlineObjectExpression = (node?: TSESTree.ObjectExpression): boolean => {
+            if (
+                !node?.loc ||
+                node.properties.length !== 1 ||
+                hasAnyCommentsInside(node)
+            ) {
                 return false;
             }
 
             const [onlyProperty] = node.properties;
 
-            if (!onlyProperty) {
-                return false;
-            }
-
-            return !isForbiddenProperty(onlyProperty);
-        };
-
-        const canInlineNestedObjectConservative = (
-            node?: TSESTree.ObjectExpression,
-        ): boolean => {
-            return !node?.loc ||
-                node.properties.length !== 1 ||
-                hasAnyCommentsInside(node)
-                ? false
-                : node.properties.every((p) => !isForbiddenProperty(p));
-        };
-
-        const canInlineArrowReturnObject = (
-            node?: TSESTree.ObjectExpression,
-        ): boolean => {
-            return !node?.loc || hasAnyCommentsInside(node)
-                ? false
-                : node.properties.every((p) => !isForbiddenProperty(p));
+            return !onlyProperty ? false : !isForbiddenProperty(onlyProperty);
         };
 
         const unwrapExpression = (
@@ -132,6 +106,22 @@ export const rule = createRule<Options, MessageIds>({
             return current;
         };
 
+        const getParenthesizedInner = (
+            expression: TSESTree.Expression,
+        ): TSESTree.Expression | null => {
+            const anyExpression = expression as any;
+
+            if (anyExpression?.type === 'ParenthesizedExpression') {
+                const inner = anyExpression.expression as TSESTree.Expression | undefined;
+
+                if (inner) {
+                    return inner;
+                }
+            }
+
+            return null;
+        };
+
         const spreadNeedsParens = (argument: TSESTree.Expression): boolean => {
             switch (argument.type) {
                 case AST_NODE_TYPES.AssignmentExpression:
@@ -151,69 +141,52 @@ export const rule = createRule<Options, MessageIds>({
             return spreadNeedsParens(argument) ? `...(${argText})` : `...${argText}`;
         };
 
+        const renderPropertyOneLine = (
+            property: TSESTree.ObjectLiteralElement,
+        ): string => {
+            if (property.type === AST_NODE_TYPES.SpreadElement) {
+                return renderSpreadOneLine(
+                    property.argument as unknown as TSESTree.Expression,
+                );
+            }
+
+            if (
+                (property.type as unknown) !== AST_NODE_TYPES.Property ||
+                property.kind !== 'init' ||
+                property.method
+            ) {
+                return sourceCode.getText(property);
+            }
+
+            if (property.shorthand && property.key.type === AST_NODE_TYPES.Identifier) {
+                return property.key.name;
+            }
+
+            const keyText = sourceCode.getText(property.key);
+            const valueExpression = property.value as unknown as TSESTree.Expression;
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            const valueText = renderExpressionOneLine(valueExpression);
+
+            if (property.computed) {
+                return `[${keyText}]: ${valueText}`;
+            }
+
+            return `${keyText}: ${valueText}`;
+        };
+
         const renderObjectExpressionOneLine = (
             node: TSESTree.ObjectExpression,
         ): string => {
-            if (node.properties.length === 0) {
+            const [onlyProperty] = node.properties;
+
+            if (!onlyProperty) {
                 return '{}';
             }
 
-            const propertiesText = node.properties
-                // eslint-disable-next-line @typescript-eslint/no-use-before-define
-                .map((p) => renderPropertyOneLine(p))
-                .join(', ');
-
-            return `{${propertiesText}}`;
-        };
-
-        const getParenthesizedInner = (
-            expression: TSESTree.Expression,
-        ): TSESTree.Expression | null => {
-            const anyExpression = expression as any;
-
-            if (anyExpression?.type === 'ParenthesizedExpression') {
-                const inner = anyExpression.expression as TSESTree.Expression | undefined;
-
-                return inner ?? null;
-            }
-
-            return null;
+            return `{${renderPropertyOneLine(onlyProperty)}}`;
         };
 
         const renderExpressionOneLine = (expression: TSESTree.Expression): string => {
-            if (expression.type === AST_NODE_TYPES.ArrowFunctionExpression) {
-                const body: any = expression.body;
-
-                const parenthesizedInner =
-                    body &&
-                    typeof body === 'object' &&
-                    body.type === 'ParenthesizedExpression'
-                        ? (body.expression as TSESTree.Expression | undefined)
-                        : null;
-
-                // eslint-disable-next-line no-nested-ternary
-                const bodyCandidate = parenthesizedInner
-                    ? unwrapExpression(parenthesizedInner)
-                    : body && typeof body === 'object' && 'type' in body
-                      ? unwrapExpression(body as TSESTree.Expression)
-                      : null;
-
-                if (
-                    bodyCandidate?.type === AST_NODE_TYPES.ObjectExpression &&
-                    canInlineArrowReturnObject(bodyCandidate)
-                ) {
-                    const bodyStart = (body as TSESTree.Node).range[0];
-                    const bodyEnd = (body as TSESTree.Node).range[1];
-                    const prefix = sourceCode.text.slice(expression.range[0], bodyStart);
-                    const suffix = sourceCode.text.slice(bodyEnd, expression.range[1]);
-                    const newBodyText = `(${renderObjectExpressionOneLine(bodyCandidate)})`;
-
-                    return `${prefix}${newBodyText}${suffix}`;
-                }
-
-                return sourceCode.getText(expression);
-            }
-
             const innerParen = getParenthesizedInner(expression);
 
             if (innerParen) {
@@ -221,7 +194,7 @@ export const rule = createRule<Options, MessageIds>({
 
                 if (
                     inner.type === AST_NODE_TYPES.ObjectExpression &&
-                    canInlineNestedObjectConservative(inner)
+                    canInlineObjectExpression(inner)
                 ) {
                     return `(${renderObjectExpressionOneLine(inner)})`;
                 }
@@ -233,7 +206,7 @@ export const rule = createRule<Options, MessageIds>({
 
             if (
                 unwrapped.type === AST_NODE_TYPES.ObjectExpression &&
-                canInlineNestedObjectConservative(unwrapped)
+                canInlineObjectExpression(unwrapped)
             ) {
                 return renderObjectExpressionOneLine(unwrapped);
             }
@@ -241,36 +214,128 @@ export const rule = createRule<Options, MessageIds>({
             return sourceCode.getText(expression);
         };
 
-        const renderPropertyOneLine = (
-            property?: TSESTree.ObjectLiteralElement,
-        ): string => {
-            if (property?.type === AST_NODE_TYPES.SpreadElement) {
-                return renderSpreadOneLine(
-                    property.argument as unknown as TSESTree.Expression,
+        const hasPendingInnerInlineCandidate = (
+            node: TSESTree.ObjectExpression,
+        ): boolean => {
+            if (node.properties.length !== 1) {
+                return false;
+            }
+
+            const [onlyElement] = node.properties;
+
+            if (
+                onlyElement?.type !== AST_NODE_TYPES.Property ||
+                onlyElement.kind !== 'init' ||
+                onlyElement.method
+            ) {
+                return false;
+            }
+
+            const rawValue = onlyElement.value as unknown as TSESTree.Expression;
+            const value = unwrapExpression(rawValue);
+            const innerParen = getParenthesizedInner(value);
+
+            if (innerParen) {
+                const inner = unwrapExpression(innerParen);
+
+                if (
+                    inner.type === AST_NODE_TYPES.ObjectExpression &&
+                    canInlineObjectExpression(inner)
+                ) {
+                    const innerText = sourceCode.getText(inner);
+
+                    return innerText.includes('\n');
+                }
+            }
+
+            if (value.type === AST_NODE_TYPES.ArrowFunctionExpression) {
+                const bodyAny = value.body as any;
+
+                if (bodyAny?.type === 'ParenthesizedExpression') {
+                    const bodyInner = bodyAny.expression as
+                        | TSESTree.Expression
+                        | undefined;
+
+                    if (bodyInner) {
+                        const inner = unwrapExpression(bodyInner);
+
+                        if (
+                            inner.type === AST_NODE_TYPES.ObjectExpression &&
+                            canInlineObjectExpression(inner)
+                        ) {
+                            const innerText = sourceCode.getText(inner);
+
+                            return innerText.includes('\n');
+                        }
+                    }
+                } else if (bodyAny && typeof bodyAny === 'object' && 'type' in bodyAny) {
+                    const bodyExpr = unwrapExpression(bodyAny as TSESTree.Expression);
+
+                    if (
+                        bodyExpr.type === AST_NODE_TYPES.ObjectExpression &&
+                        canInlineObjectExpression(bodyExpr)
+                    ) {
+                        const innerText = sourceCode.getText(bodyExpr);
+
+                        return innerText.includes('\n');
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        const hasArrowReturningMultiPropObject = (
+            node: TSESTree.ObjectExpression,
+        ): boolean => {
+            if (node.properties.length !== 1) {
+                return false;
+            }
+
+            const [onlyElement] = node.properties;
+
+            if (
+                onlyElement?.type !== AST_NODE_TYPES.Property ||
+                onlyElement.kind !== 'init' ||
+                onlyElement.method
+            ) {
+                return false;
+            }
+
+            const rawValue = onlyElement.value as unknown as TSESTree.Expression;
+            const value = unwrapExpression(rawValue);
+
+            if (value.type !== AST_NODE_TYPES.ArrowFunctionExpression) {
+                return false;
+            }
+
+            const bodyAny = value.body as any;
+
+            if (bodyAny?.type === 'ParenthesizedExpression') {
+                const innerRaw = bodyAny.expression as TSESTree.Expression | undefined;
+
+                if (!innerRaw) {
+                    return false;
+                }
+
+                const inner = unwrapExpression(innerRaw);
+
+                return (
+                    inner.type === AST_NODE_TYPES.ObjectExpression &&
+                    inner.properties.length > 1
                 );
             }
 
-            if ((property?.type as unknown) !== AST_NODE_TYPES.Property) {
-                return sourceCode.getText(property);
+            if (bodyAny && typeof bodyAny === 'object' && 'type' in bodyAny) {
+                const inner = unwrapExpression(bodyAny as TSESTree.Expression);
+
+                return (
+                    inner.type === AST_NODE_TYPES.ObjectExpression &&
+                    inner.properties.length > 1
+                );
             }
 
-            if (property?.kind !== 'init' || property.method) {
-                return sourceCode.getText(property);
-            }
-
-            if (property.shorthand && property.key.type === AST_NODE_TYPES.Identifier) {
-                return property.key.name;
-            }
-
-            const keyText = sourceCode.getText(property.key);
-            const valueExpression = property.value as unknown as TSESTree.Expression;
-            const valueText = renderExpressionOneLine(valueExpression);
-
-            if (property.computed) {
-                return `[${keyText}]: ${valueText}`;
-            }
-
-            return `${keyText}: ${valueText}`;
+            return false;
         };
 
         const fitsPrintWidthAfterFix = (
@@ -306,13 +371,14 @@ export const rule = createRule<Options, MessageIds>({
 
         return {
             ObjectExpression(node: TSESTree.ObjectExpression) {
-                if (!canInlineForReport(node)) {
-                    return;
-                }
-
                 const originalText = sourceCode.getText(node);
 
-                if (!originalText.includes('\n')) {
+                if (
+                    !canInlineObjectExpression(node) ||
+                    !originalText.includes('\n') ||
+                    hasPendingInnerInlineCandidate(node) ||
+                    hasArrowReturningMultiPropObject(node)
+                ) {
                     return;
                 }
 
@@ -336,10 +402,10 @@ export const rule = createRule<Options, MessageIds>({
     meta: {
         docs: {
             description:
-                'Enforce single-line formatting for objects when possible (recursive, Prettier-friendly)',
+                'Enforce single-line formatting for single-property objects when possible (Prettier-friendly)',
         },
         fixable: 'whitespace',
-        messages: {oneLine: 'object should be written in one line'},
+        messages: {oneLine: 'Single-property object should be written in one line'},
         schema: [
             {
                 additionalProperties: false,
@@ -349,6 +415,7 @@ export const rule = createRule<Options, MessageIds>({
         ],
         type: 'layout',
     },
+
     name: 'object-single-line',
 });
 

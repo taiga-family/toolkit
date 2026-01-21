@@ -41,7 +41,10 @@ export const rule = createRule({
             }
 
             context.report({
-                data: {kind: node.kind || 'property', name},
+                data: {
+                    kind: node.kind || 'property',
+                    name,
+                },
                 fix: (fixer) => fixer.insertTextBeforeRange(range, ' public '),
                 messageId: 'implicitPublic',
                 node,

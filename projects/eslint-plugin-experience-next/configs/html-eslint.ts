@@ -80,5 +80,8 @@ export default defineConfig([
             'html/use-baseline': 'off',
         },
     },
-    {files: ['**/demo/**/*.html'], rules: {'html/no-restricted-attr-values': 'off'}},
+    {
+        files: ['**/demo/**/*.html'],
+        rules: {'html/no-restricted-attr-values': 'off'},
+    },
 ]);
