@@ -1,3 +1,19 @@
+### [0.394.0](https://github.com/taiga-family/toolkit/compare/v0.393.0...v0.394.0) (2026-01-22)
+
+### 🚀 Features
+
+- **browserslist-config**: migrate to ESM module (#1520)
+  [(b1bb773)](https://github.com/taiga-family/toolkit/commit/b1bb77349e4a93a2233995b699546a1482e215a7)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-perfectionist to ^5.4.0 (#1519)
+  [(a55af19)](https://github.com/taiga-family/toolkit/commit/a55af19520247ef068d34b0e774db1683818b0d9)
+- **cspell-config**: forgot revert `typesafe` (#1518)
+  [(f865c83)](https://github.com/taiga-family/toolkit/commit/f865c83cd89415faedc1d9a0af686aa62e29c3d5)
+- update dependency prettier to ^3.8.1 (#1516)
+  [(01e177f)](https://github.com/taiga-family/toolkit/commit/01e177fc854a07c90a328df9d9be95904c62037c)
+
 ### [0.393.0](https://github.com/taiga-family/toolkit/compare/v0.392.0...v0.393.0) (2026-01-21)
 
 ### 🚀 Features
