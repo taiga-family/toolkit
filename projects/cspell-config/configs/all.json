@@ -679,6 +679,7 @@
         "optimise",
         "styleguide",
         "crossfading",
-        "UTDL"
+        "UTDL",
+        "typesafe"
     ]
 }
