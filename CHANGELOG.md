@@ -1,3 +1,12 @@
+### [0.395.0](https://github.com/taiga-family/toolkit/compare/v0.394.0...v0.395.0) (2026-01-23)
+
+### 🐞 Bug Fixes
+
+- **release-it-config**: do not continue process if previous commands fail (#1524)
+  [(c993167)](https://github.com/taiga-family/toolkit/commit/c993167bfaf94b9bf61b8285f660c0fa35fc07d3)
+- update dependency globals to ^17.1.0 (#1523)
+  [(34c2ee9)](https://github.com/taiga-family/toolkit/commit/34c2ee9c097c014efb77eeb0bc2d9a05d7aa1fa2)
+
 ### [0.394.0](https://github.com/taiga-family/toolkit/compare/v0.393.0...v0.394.0) (2026-01-22)
 
 ### 🚀 Features
