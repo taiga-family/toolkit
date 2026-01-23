@@ -26,7 +26,8 @@
         ]
     },
     "browserslist": [
-        "extends @taiga-ui/browserslist-config"
+        "defaults and fully supports es6-module",
+        "maintained node versions"
     ],
     "prettier": "@taiga-ui/prettier-config",
     "stylelint": {
