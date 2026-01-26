@@ -1,3 +1,23 @@
+### [0.397.0](https://github.com/taiga-family/toolkit/compare/v0.395.0...v0.397.0) (2026-01-26)
+
+### 🚀 Features
+
+- **browserslist-config**: support commonjs (#1526)
+  [(7c5b279)](https://github.com/taiga-family/toolkit/commit/7c5b27941709dc9ff22fd5e86dacdb8b7aa2ec6a)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-playwright to ^2.5.1 (#1531)
+  [(0b261e1)](https://github.com/taiga-family/toolkit/commit/0b261e1603a99adaf5bcc25feea3e623dbe8ae9e)
+- update dependency sort-package-json to ^3.6.1 (#1530)
+  [(7f2d02e)](https://github.com/taiga-family/toolkit/commit/7f2d02e708fa204f7b3ae69caae19f4f5c30e7ab)
+- update dependency eslint-plugin-package-json to ^0.88.2 (#1528)
+  [(309535e)](https://github.com/taiga-family/toolkit/commit/309535e00840c51eaeec300cfe7b6a43d6c587ac)
+- update dependency eslint-plugin-compat to ^6.1.0 (#1527)
+  [(95b4838)](https://github.com/taiga-family/toolkit/commit/95b48381180ef80858c7e1e46954dacd3c6531b5)
+- update dependency @stylistic/eslint-plugin to ^5.7.1 (#1525)
+  [(4a1788e)](https://github.com/taiga-family/toolkit/commit/4a1788e6fcebec96b2e0ae3c6be03a9b40455a4e)
+
 ### [0.396.0](https://github.com/taiga-family/toolkit/compare/v0.394.0...v0.396.0) (2026-01-23)
 
 ### 🐞 Bug Fixes
