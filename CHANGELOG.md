@@ -1,3 +1,10 @@
+### [0.398.0](https://github.com/taiga-family/toolkit/compare/v0.397.0...v0.398.0) (2026-01-26)
+
+### 🐞 Bug Fixes
+
+- update dependency cspell to ^9.6.1 (#1533)
+  [(ef39e6d)](https://github.com/taiga-family/toolkit/commit/ef39e6d3db40e2cbe518ab2a43a892fe016d60bc)
+
 ### [0.397.0](https://github.com/taiga-family/toolkit/compare/v0.395.0...v0.397.0) (2026-01-26)
 
 ### 🚀 Features
