@@ -5,32 +5,11 @@
     "projectType": "library",
     "sourceRoot": "projects/browserslist-config",
     "targets": {
-        "build": {
-            "executor": "@nx/rollup:rollup",
-            "outputs": ["{workspaceRoot}/dist/{projectName}"],
-            "options": {
-                "outputPath": "{workspaceRoot}/dist/{projectName}",
-                "main": "projects/{projectName}/index.ts",
-                "tsConfig": "projects/{projectName}/tsconfig.lib.json",
-                "assets": ["projects/{projectName}/README.md"],
-                "compiler": "tsc",
-                "external": "all",
-                "format": ["esm", "cjs"],
-                "generateExportsField": true
-            }
-        },
         "publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "params": "ignore",
-                    "dependencies": false
-                }
-            ]
+                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
+            }
         }
     }
 }

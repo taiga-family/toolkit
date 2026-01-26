@@ -10,14 +10,12 @@
         "url": "https://github.com/taiga-family/configurations.git"
     },
     "license": "Apache-2.0",
-    "type": "module",
-    "exports": {
-        ".": {
-            "types": "./index.d.ts",
-            "default": "./index.js"
-        }
-    },
+    "main": "index.js",
     "types": "./index.d.ts",
+    "typings": "index.d.ts",
+    "files": [
+        "index.d.ts"
+    ],
     "publishConfig": {
         "access": "public"
     }

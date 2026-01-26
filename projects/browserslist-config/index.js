@@ -1,4 +1,4 @@
-export default [
+const defaults = [
     'ChromeAndroid >= 107',
     'Chrome >= 107',
     'Edge >= 107',
@@ -10,3 +10,7 @@ export default [
     'Firefox >= 128',
     'FirefoxAndroid >= 128',
 ];
+
+const node = ['Node >= 20'];
+
+module.exports = {defaults, modern: defaults, node};
