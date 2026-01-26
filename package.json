@@ -1,6 +1,6 @@
 {
     "name": "taiga-linters",
-    "version": "0.395.0",
+    "version": "0.396.0",
     "private": true,
     "license": "Apache-2.0",
     "workspaces": [
