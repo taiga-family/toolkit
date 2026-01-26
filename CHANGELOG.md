@@ -1,3 +1,10 @@
+### [0.399.0](https://github.com/taiga-family/toolkit/compare/v0.398.0...v0.399.0) (2026-01-26)
+
+### 🚀 Features
+
+- **browserslist-config**: revert to commonjs only (#1535)
+  [(7cc75ad)](https://github.com/taiga-family/toolkit/commit/7cc75adf3305ff83e85c27fb5a033ef515cd2d9e)
+
 ### [0.398.0](https://github.com/taiga-family/toolkit/compare/v0.397.0...v0.398.0) (2026-01-26)
 
 ### 🐞 Bug Fixes
