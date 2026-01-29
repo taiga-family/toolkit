@@ -319,5 +319,5 @@ function normalizeModuleSpecifier(moduleSpecifier: string): string {
 }
 
 function stripKnownExtensions(filePathOrSpecifier: string): string {
-    return filePathOrSpecifier.replace(/\.(d\.ts|ts|tsx|js|jsx|mjs|cjs)$/, '');
+    return filePathOrSpecifier.replace(/\.(?:d\.ts|ts|tsx|js|jsx|mjs|cjs)$/, '');
 }

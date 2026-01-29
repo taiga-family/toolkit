@@ -5,7 +5,7 @@ module.exports = function (
 ) {
     Handlebars.registerHelper('replaceCommit', function (context) {
         const commit =
-            /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(\((.*?)\))?!?: (.*?)$/g;
+            /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(\((.*?)\))?!?: (.*)$/g;
 
         // @ts-ignore
         const string = context.fn(this);

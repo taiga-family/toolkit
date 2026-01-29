@@ -96,7 +96,7 @@ export const rule = createRule<Options, MessageIds>({
                     const exception = exceptions.find((ex) => ex.from === importedAs);
                     const short = exception
                         ? exception.to
-                        : importedAs.replace(/(Component|Directive)$/, '');
+                        : importedAs.replace(/(?:Component|Directive)$/, '');
 
                     const fullText = sourceCode.getText();
                     const regex = new RegExp(String.raw`\b${importedAs}\b`, 'g');
@@ -191,7 +191,7 @@ export const rule = createRule<Options, MessageIds>({
                     const importedClass = getImportedName(spec);
 
                     const matchesPattern =
-                        /^Tui[A-Z].*(Component|Directive)$/.test(importedClass) ||
+                        /^Tui[A-Z].*(?:Component|Directive)$/.test(importedClass) ||
                         exceptions.some((exception) => exception.from === importedClass);
 
                     if (matchesPattern) {
