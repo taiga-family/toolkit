@@ -19,8 +19,10 @@
         "postcss-less": "^6.0.0",
         "stylelint": "^16.26.1",
         "stylelint-config-standard": "^39.0.1",
+        "stylelint-no-unsupported-browser-features": "^8.0.5",
         "stylelint-order": "^7.0.1",
         "stylelint-plugin-logical-css": "^1.2.3",
+        "stylelint-plugin-use-baseline": "^1.2.1",
         "stylelint-rem-over-px": "^1.0.2",
         "stylelint-use-logical": "^2.1.2"
     },
