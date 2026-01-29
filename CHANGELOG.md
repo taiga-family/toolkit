@@ -1,3 +1,22 @@
+### [0.400.0](https://github.com/taiga-family/toolkit/compare/v0.399.0...v0.400.0) (2026-01-29)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: add regex plugin (#1515)
+  [(bd40f93)](https://github.com/taiga-family/toolkit/commit/bd40f93aef5e669b3972a4470cbd5b8e34879144)
+- update dependency globals to ^17.2.0 (#1542)
+  [(18ef8ab)](https://github.com/taiga-family/toolkit/commit/18ef8ab81bc670a58aefe5455fee53c852b68dc7)
+- update dependency eslint-plugin-sonarjs to ^3.0.6 (#1541)
+  [(0f1b7cf)](https://github.com/taiga-family/toolkit/commit/0f1b7cfe7d3fd4e263898c34892eaf40e5f0a093)
+- update @typescript-eslint/\* deps to ^8.54.0 (#1539)
+  [(4785fbf)](https://github.com/taiga-family/toolkit/commit/4785fbff931855afc7fac26519701b2ce6581a74)
+- update dependency @html-eslint/parser to ^0.54.0 (#1538)
+  [(aab091e)](https://github.com/taiga-family/toolkit/commit/aab091ecca84860e3e5e0a06755704175c987e57)
+- update dependency @html-eslint/eslint-plugin to ^0.54.0 (#1537)
+  [(005f9db)](https://github.com/taiga-family/toolkit/commit/005f9db54c3485c3fd5c1e4d462ed58e82f12491)
+- update dependency cspell to ^9.6.2 (#1536)
+  [(0048fde)](https://github.com/taiga-family/toolkit/commit/0048fdeac44e322c14ebb5b9a1a6c1e841e545af)
+
 ### [0.399.0](https://github.com/taiga-family/toolkit/compare/v0.398.0...v0.399.0) (2026-01-26)
 
 ### 🚀 Features
