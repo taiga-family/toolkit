@@ -1,3 +1,5 @@
+const {defaults: browserslist} = require('@taiga-ui/browserslist-config');
+
 module.exports = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
@@ -7,6 +9,8 @@ module.exports = {
         'stylelint-use-logical',
         'stylelint-plugin-logical-css',
         '@stylistic/stylelint-plugin',
+        'stylelint-plugin-use-baseline',
+        'stylelint-no-unsupported-browser-features',
     ],
     extends: ['@stylistic/stylelint-config'],
     allowEmptyInput: true,
@@ -177,6 +181,79 @@ module.exports = {
             ],
             {
                 unspecified: 'bottom',
+            },
+        ],
+        'plugin/no-unsupported-browser-features': [
+            true,
+            {
+                browsers: browserslist,
+                ignore: [
+                    'css-nesting',
+                    'css-resize',
+                    'css-touch-action',
+                    'css3-cursors',
+                    'css-overscroll-behavior',
+                    'css-scroll-behavior',
+                    'css-focus-visible',
+                    'css-selection',
+                    'css-has',
+                    'css-containment',
+                    'css-nth-child-of',
+                    'css3-cursors-grab',
+                    'css-grid-animation',
+                ],
+                ignorePartialSupport: true,
+            },
+        ],
+        'plugin/use-baseline': [
+            true,
+            {
+                available: 2021, // Safari 14.5 was released by Apple in May 2021
+                ignoreAtRules: ['view-transition', '/^font-/', '/^supports/'],
+                ignoreFunctions: [
+                    'color-mix', // Safari 16+
+                    'rect', // Safari 17+
+                ],
+                ignoreProperties: {
+                    '/^animation-/': ['/^.+$/'],
+                    '/^mask-/': ['/^.+$/'],
+                    '/^scroll-snap-/': ['/^.+$/'], // Safari 15+
+                    'accent-color': ['/^.+$/'], // Safari NaN
+                    appearance: ['/^.+$/'], // Safari 15+
+                    'backdrop-filter': ['/^.+$/'],
+                    'backface-visibility': ['/^.+$/'],
+                    'box-decoration-break': ['/^.+$/'], // Safari NaN
+                    clip: ['/^.+$/'],
+                    'clip-path': ['/^.+$/'],
+                    'color-scheme': ['/^.+$/'],
+                    contain: ['/^.+$/'], // Safari 15+
+                    hyphens: ['auto'],
+                    'line-clamp': ['/^.+$/'],
+                    mask: ['/^.+$/'],
+                    'mix-blend-mode': ['/^.+$/'],
+                    outline: ['/^.+$/'],
+                    overflow: ['clip'], // Safari 16+
+                    'overflow-clip-margin': ['/^.+$/'], // Safari NaN
+                    'overflow-wrap': ['anywhere'], // Safari 15+
+                    'overscroll-behavior': ['/^.+$/'], // Safari 16+
+                    'overscroll-behavior-x': ['/^.+$/'], // Safari 16+
+                    resize: ['/^.+$/'],
+                    scale: ['/^.+$/'],
+                    'scroll-behavior': ['/^.+$/'], // Safari 15+
+                    'text-wrap': ['/^.+$/'], // Safari 17+
+                    'user-select': ['none', 'auto'],
+                    'word-break': ['break-word'],
+                    'writing-mode': ['tb'],
+                    zoom: ['/^.+$/'],
+                },
+                ignoreSelectors: [
+                    'nesting',
+                    'host-context',
+                    'selection',
+                    'has', // Safari 15.4+
+                    'focus-visible', // Safari 15+
+                    'fullscreen', // Safari 16+
+                ],
             },
         ],
         'plugin/use-logical-properties-and-values': [
