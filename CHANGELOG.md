@@ -1,3 +1,10 @@
+### [0.401.0](https://github.com/taiga-family/toolkit/compare/v0.400.0...v0.401.0) (2026-01-29)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: allow any characters in RegExp (#1544)
+  [(4eee64e)](https://github.com/taiga-family/toolkit/commit/4eee64e9740a220f02e60f84de607691adc43c18)
+
 ### [0.400.0](https://github.com/taiga-family/toolkit/compare/v0.399.0...v0.400.0) (2026-01-29)
 
 ### 🐞 Bug Fixes
