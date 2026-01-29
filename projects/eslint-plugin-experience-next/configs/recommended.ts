@@ -120,6 +120,7 @@ export default defineConfig([
                 ...parserOptions,
             },
         },
+        settings: {regexp: {allowedCharacterRanges: ['all']}},
         rules: {
             '@stylistic/function-call-spacing': 'error',
             '@stylistic/lines-between-class-members': [
