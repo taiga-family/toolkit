@@ -1,3 +1,10 @@
+### [0.402.0](https://github.com/taiga-family/toolkit/compare/v0.401.0...v0.402.0) (2026-01-29)
+
+### 🚀 Features
+
+- **stylelint-config**: allow Safari 14' CSS properties (#1545)
+  [(ce4d4c2)](https://github.com/taiga-family/toolkit/commit/ce4d4c219c86ab21dc3206fcec8bb48aa3b70f7a)
+
 ### [0.401.0](https://github.com/taiga-family/toolkit/compare/v0.400.0...v0.401.0) (2026-01-29)
 
 ### 🐞 Bug Fixes
