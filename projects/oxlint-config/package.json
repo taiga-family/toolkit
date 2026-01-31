@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/oxlint-config",
-    "version": "0.390.0",
+    "version": "0.402.0",
     "description": "Taiga UI oxlint config",
     "keywords": [
         "oxlint"
@@ -12,8 +12,8 @@
     "license": "Apache-2.0",
     "main": ".oxlintrc.json",
     "peerDependencies": {
-        "eslint-plugin-oxlint": "1.35.0",
-        "oxlint": "1.35.0"
+        "eslint-plugin-oxlint": "1.42.0",
+        "oxlint": "1.42.0"
     },
     "publishConfig": {
         "access": "public"
