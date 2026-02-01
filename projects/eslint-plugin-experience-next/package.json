@@ -37,7 +37,7 @@
         "eslint-plugin-unicorn": "^62.0.0",
         "eslint-plugin-unused-imports": "^4.3.0",
         "glob": "*",
-        "globals": "^17.2.0",
+        "globals": "^17.3.0",
         "typescript-eslint": "^8.54.0"
     },
     "publishConfig": {
