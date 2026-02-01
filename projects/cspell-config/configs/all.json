@@ -680,6 +680,8 @@
         "styleguide",
         "crossfading",
         "UTDL",
-        "typesafe"
+        "typesafe",
+        "oxlint",
+        "oxlintrc"
     ]
 }
