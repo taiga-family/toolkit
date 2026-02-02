@@ -1,3 +1,20 @@
+### [0.403.0](https://github.com/taiga-family/toolkit/compare/v0.402.0...v0.403.0) (2026-02-01)
+
+### 🐞 Bug Fixes
+
+- update cspell (#1553)
+  [(388649b)](https://github.com/taiga-family/toolkit/commit/388649b5b2f5fd1abadb89ce4ba928cba67a6b44)
+- update dependency globals to ^17.3.0 (#1552)
+  [(369d6cf)](https://github.com/taiga-family/toolkit/commit/369d6cf27b50b52b49aeddf0bea4e2ffee107090)
+- update dependency @html-eslint/eslint-plugin to ^0.54.2 (#1551)
+  [(20feb57)](https://github.com/taiga-family/toolkit/commit/20feb57a8b3adbcb99ecec22ac78b6124c1b47ce)
+- update dependency stylelint-plugin-logical-css to ^1.3.0 (#1550)
+  [(b8af74b)](https://github.com/taiga-family/toolkit/commit/b8af74b95c55bba53f8b89b3804cfa31c637886a)
+- update dependency @eslint/compat to ^2.0.2 (#1548)
+  [(f81cc09)](https://github.com/taiga-family/toolkit/commit/f81cc09b6fa2dcdd0b9dcfb8a246283b854f8c4c)
+- update commitlint to ^20.4.0 (#1547)
+  [(0d04308)](https://github.com/taiga-family/toolkit/commit/0d0430864f4cbe9544e25d51205d0c494e2069d9)
+
 ### [0.402.0](https://github.com/taiga-family/toolkit/compare/v0.401.0...v0.402.0) (2026-01-29)
 
 ### 🚀 Features
