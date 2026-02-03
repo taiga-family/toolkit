@@ -6,7 +6,7 @@
     "type": "module",
     "devDependencies": {
         "@typescript-eslint/rule-tester": "8.54.0",
-        "glob": "13.0.0"
+        "glob": "13.0.1"
     },
     "peerDependencies": {
         "@eslint/compat": "^2.0.2",
