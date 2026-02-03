@@ -1,3 +1,19 @@
+### [0.404.0](https://github.com/taiga-family/toolkit/compare/v0.403.0...v0.404.0) (2026-02-03)
+
+### 🚀 Features
+
+- **stylelint-config**: browserslist supports in stylelint (#1543)
+  [(076b079)](https://github.com/taiga-family/toolkit/commit/076b0790495cb4338d2d5e39dd30089f6b5548b3)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-jest to ^29.12.2 (#1557)
+  [(72a06f7)](https://github.com/taiga-family/toolkit/commit/72a06f7f6a7385612ed7e8ba327b4276b3a59124)
+- update dependency cspell to ^9.6.3 (#1556)
+  [(7c1f73b)](https://github.com/taiga-family/toolkit/commit/7c1f73bfc61bf957e68d3262443974b4c4024477)
+- update commitlint to ^20.4.1 (#1555)
+  [(2558242)](https://github.com/taiga-family/toolkit/commit/25582423bcfdc40b077c3c94e2862064f470b706)
+
 ### [0.403.0](https://github.com/taiga-family/toolkit/compare/v0.402.0...v0.403.0) (2026-02-01)
 
 ### 🐞 Bug Fixes
