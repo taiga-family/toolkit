@@ -680,6 +680,7 @@
         "styleguide",
         "crossfading",
         "UTDL",
-        "typesafe"
+        "typesafe",
+        "popout"
     ]
 }
