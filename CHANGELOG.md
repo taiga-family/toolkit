@@ -1,3 +1,17 @@
+### [0.405.0](https://github.com/taiga-family/toolkit/compare/v0.404.0...v0.405.0) (2026-02-04)
+
+### 🚀 Features
+
+- **stylelint-config**: more graceful degradation (#1561)
+  [(69eafd6)](https://github.com/taiga-family/toolkit/commit/69eafd628c98ed76eaea42c9281b052715ce920c)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint-no-unsupported-browser-features to ^8.1.1 (#1559)
+  [(55f0097)](https://github.com/taiga-family/toolkit/commit/55f00972f03b9c9edb5dce35abf623657583a4fc)
+- update dependency glob to v13.0.1 (#1558)
+  [(c861562)](https://github.com/taiga-family/toolkit/commit/c861562845f423742f9bfc0adce71ceb2d259bd9)
+
 ### [0.404.0](https://github.com/taiga-family/toolkit/compare/v0.403.0...v0.404.0) (2026-02-03)
 
 ### 🚀 Features
