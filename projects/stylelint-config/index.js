@@ -214,14 +214,15 @@ module.exports = {
                 ignoreFunctions: [
                     'color-mix', // Safari 16+
                     'rect', // Safari 17+
+                    'anchor', // Safari 26+
+                    'anchor-size', // Safari 26+
                 ],
                 ignoreProperties: {
-                    '/^anchor-/': ['/^.+$/'],
+                    '/^anchor-/': ['/^.+$/'], // Safari 26+
                     '/^animation-/': ['/^.+$/'],
                     '/^mask-/': ['/^.+$/'],
                     '/^scroll-snap-/': ['/^.+$/'], // Safari 15+
                     'accent-color': ['/^.+$/'], // Safari NaN
-                    anchor: ['/^.+$/'],
                     appearance: ['/^.+$/'], // Safari 15+
                     'backdrop-filter': ['/^.+$/'],
                     'backface-visibility': ['/^.+$/'],
