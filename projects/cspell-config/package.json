@@ -24,7 +24,7 @@
         "@cspell/dict-medicalterms": "^4.1.7",
         "@cspell/dict-ru_ru": "^2.3.2",
         "@cspell/dict-russian": "^1.1.27",
-        "@cspell/dict-scientific-terms-us": "^3.0.8",
+        "@cspell/dict-scientific-terms-us": "^3.1.0",
         "cspell": "^9.6.4"
     },
     "publishConfig": {
