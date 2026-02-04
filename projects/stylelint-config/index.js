@@ -201,6 +201,7 @@ module.exports = {
                     'css-nth-child-of',
                     'css3-cursors-grab',
                     'css-grid-animation',
+                    'css-autofill',
                 ],
                 ignorePartialSupport: true,
             },
@@ -215,10 +216,12 @@ module.exports = {
                     'rect', // Safari 17+
                 ],
                 ignoreProperties: {
+                    '/^anchor-/': ['/^.+$/'],
                     '/^animation-/': ['/^.+$/'],
                     '/^mask-/': ['/^.+$/'],
                     '/^scroll-snap-/': ['/^.+$/'], // Safari 15+
                     'accent-color': ['/^.+$/'], // Safari NaN
+                    anchor: ['/^.+$/'],
                     appearance: ['/^.+$/'], // Safari 15+
                     'backdrop-filter': ['/^.+$/'],
                     'backface-visibility': ['/^.+$/'],
@@ -237,6 +240,7 @@ module.exports = {
                     'overflow-wrap': ['anywhere'], // Safari 15+
                     'overscroll-behavior': ['/^.+$/'], // Safari 16+
                     'overscroll-behavior-x': ['/^.+$/'], // Safari 16+
+                    'position-anchor': ['/^.+$/'],
                     resize: ['/^.+$/'],
                     scale: ['/^.+$/'],
                     'scroll-behavior': ['/^.+$/'], // Safari 15+
