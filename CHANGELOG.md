@@ -1,3 +1,12 @@
+### [0.406.0](https://github.com/taiga-family/toolkit/compare/v0.405.0...v0.406.0) (2026-02-04)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: more graceful degradation (#1563)
+  [(7d90203)](https://github.com/taiga-family/toolkit/commit/7d90203295ec1950afd74ca6d582bf7662af0828)
+- **cspell-config**: forgot add `popout` (#1562)
+  [(70af337)](https://github.com/taiga-family/toolkit/commit/70af3374a3838a93ae344f687b41a8ebce5bf2ec)
+
 ### [0.405.0](https://github.com/taiga-family/toolkit/compare/v0.404.0...v0.405.0) (2026-02-04)
 
 ### 🚀 Features
