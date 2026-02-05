@@ -43,7 +43,7 @@
     "devDependencies": {
         "@nx/rollup": "22.4.5",
         "@nx/workspace": "22.4.5",
-        "esbuild": "0.27.2",
+        "esbuild": "0.27.3",
         "nx": "22.4.5",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
