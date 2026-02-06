@@ -1,3 +1,27 @@
+### [0.407.0](https://github.com/taiga-family/toolkit/compare/v0.406.0...v0.407.0) (2026-02-06)
+
+### 🚀 Features
+
+- **stylelint-config**: support stylelint 17 (#1565)
+  [(933a7d0)](https://github.com/taiga-family/toolkit/commit/933a7d0b4d12b75a8480f9c40233a93bb5bc1574)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: update settings (#1572)
+  [(e458c98)](https://github.com/taiga-family/toolkit/commit/e458c98b6a905ca44bcf952f5848a7795a3cd6e2)
+- **stylelint-config**: more graceful degradation (#1571)
+  [(925c8bb)](https://github.com/taiga-family/toolkit/commit/925c8bbef895d151fc3e6fafa21d18c02ed1b612)
+- update dependency @release-it/conventional-changelog to v10.0.5 (#1569)
+  [(67d752f)](https://github.com/taiga-family/toolkit/commit/67d752feaed9ebda380dffd1daa4548e9b74c187)
+- update dependency eslint-plugin-perfectionist to ^5.5.0 (#1568)
+  [(762478e)](https://github.com/taiga-family/toolkit/commit/762478edaaeeaf4fc012a19c1042f3457bda07eb)
+- update dependency @cspell/dict-scientific-terms-us to ^3.1.0 (#1567)
+  [(8779cf1)](https://github.com/taiga-family/toolkit/commit/8779cf16edc16eb29be5f62f40fbd4d8e0225084)
+- update dependency cspell to ^9.6.4 (#1566)
+  [(5762dbd)](https://github.com/taiga-family/toolkit/commit/5762dbdc9e5b29ece9a4de25e1c5957ef6b54cf4)
+- update dependency stylelint-use-logical to ^2.1.3 (#1564)
+  [(40f06de)](https://github.com/taiga-family/toolkit/commit/40f06deeffc4a0fa235d15b01336a7bac2d92be7)
+
 ### [0.406.0](https://github.com/taiga-family/toolkit/compare/v0.405.0...v0.406.0) (2026-02-04)
 
 ### 🐞 Bug Fixes
