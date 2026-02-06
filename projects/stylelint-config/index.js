@@ -188,20 +188,22 @@ module.exports = {
             {
                 browsers: browserslist,
                 ignore: [
-                    'css-nesting',
                     'css-resize',
-                    'css-touch-action',
                     'css3-cursors',
-                    'css-overscroll-behavior',
-                    'css-scroll-behavior',
-                    'css-focus-visible',
                     'css-selection',
-                    'css-has',
-                    'css-containment',
                     'css-nth-child-of',
                     'css3-cursors-grab',
-                    'css-grid-animation',
-                    'css-autofill',
+                    'css-has', // Safari 15.4+
+                    'css-nesting', // Safari 17.2+
+                    'css-overscroll-behavior', // Safari 16+
+                    'css-scroll-behavior', // Safari 15.4+
+                    'css-focus-visible', // Safari 15.4+
+                    'css-containment', // Safari 15.4+
+                    'css-grid-animation', // Safari 16+
+                    'css-autofill', // Safari 15+
+                    'css-text-align-last', // Safari 16+
+                    'css-scrollbar', // Safari 18.2+
+                    'css-touch-action', // Safari NaN
                 ],
                 ignorePartialSupport: true,
             },
