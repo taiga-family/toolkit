@@ -1,0 +1,21 @@
+{
+    "name": "@taiga-ui/oxlint-config",
+    "version": "0.408.0",
+    "description": "Taiga UI oxlint config",
+    "keywords": [
+        "oxlint"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/taiga-family/configurations.git"
+    },
+    "license": "Apache-2.0",
+    "main": ".oxlintrc.json",
+    "peerDependencies": {
+        "eslint-plugin-oxlint": "1.43.0",
+        "oxlint": "1.43.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

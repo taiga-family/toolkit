@@ -681,6 +681,8 @@
         "crossfading",
         "UTDL",
         "typesafe",
-        "popout"
+        "popout",
+        "oxlint",
+        "oxlintrc"
     ]
 }
