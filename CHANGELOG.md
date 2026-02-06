@@ -1,3 +1,10 @@
+### [0.408.0](https://github.com/taiga-family/toolkit/compare/v0.407.0...v0.408.0) (2026-02-06)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: more graceful degradation (#1573)
+  [(d133ae0)](https://github.com/taiga-family/toolkit/commit/d133ae03f3131dc1077b93cde7acb0662eb7f98d)
+
 ### [0.407.0](https://github.com/taiga-family/toolkit/compare/v0.406.0...v0.407.0) (2026-02-06)
 
 ### 🚀 Features
