@@ -247,6 +247,7 @@ module.exports = {
                     resize: ['/^.+$/'],
                     scale: ['/^.+$/'],
                     'scroll-behavior': ['/^.+$/'], // Safari 15+
+                    'scrollbar-width': ['/^.+$/'], // Safari 18.2+
                     'text-wrap': ['/^.+$/'], // Safari 17+
                     'user-select': ['none', 'auto'],
                     'word-break': ['break-word'],
