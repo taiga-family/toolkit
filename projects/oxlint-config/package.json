@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/oxlint-config",
-    "version": "0.403.0",
+    "version": "0.408.0",
     "description": "Taiga UI oxlint config",
     "keywords": [
         "oxlint"
