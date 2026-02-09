@@ -41,14 +41,14 @@
         ]
     },
     "devDependencies": {
-        "@angular/platform-browser-dynamic": "19.2.18",
         "@angular-devkit/core": "19.2.19",
-        "@angular/compiler-cli": "19.2.18",
-        "@angular/compiler": "19.2.18",
         "@angular/cdk": "19.2.19",
         "@angular/cli": "19.2.18",
         "@angular/common": "19.2.18",
+        "@angular/compiler": "19.2.18",
+        "@angular/compiler-cli": "19.2.18",
         "@angular/core": "19.2.18",
+        "@angular/platform-browser-dynamic": "19.2.18",
         "@nx/rollup": "22.4.5",
         "@nx/workspace": "22.4.5",
         "esbuild": "0.27.3",
