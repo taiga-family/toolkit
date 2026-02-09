@@ -1,3 +1,12 @@
+### [0.409.0](https://github.com/taiga-family/toolkit/compare/v0.408.0...v0.409.0) (2026-02-08)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-jest to ^29.13.0 (#1576)
+  [(6e0be41)](https://github.com/taiga-family/toolkit/commit/6e0be4189e50590bd60f6d0661865ad531bb0385)
+- update dependency @cspell/dict-en-gb to ^5.0.23 (#1575)
+  [(ea0f3c6)](https://github.com/taiga-family/toolkit/commit/ea0f3c6d42781bc864f6c1292a7f49e1914534ab)
+
 ### [0.408.0](https://github.com/taiga-family/toolkit/compare/v0.407.0...v0.408.0) (2026-02-06)
 
 ### 🐞 Bug Fixes
