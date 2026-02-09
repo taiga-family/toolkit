@@ -14,7 +14,7 @@
         "@html-eslint/eslint-plugin": "^0.54.2",
         "@html-eslint/parser": "^0.54.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
-        "@stylistic/eslint-plugin": "^5.7.1",
+        "@stylistic/eslint-plugin": "^5.8.0",
         "@types/glob": "*",
         "@typescript-eslint/eslint-plugin": "^8.54.0",
         "angular-eslint": "^20.7.0",
