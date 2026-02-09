@@ -7,7 +7,7 @@
         "url": "https://github.com/taiga-family/toolkit.git"
     },
     "license": "Apache-2.0",
-    "peerDependencies": {
+    "dependencies": {
         "@taiga-ui/auto-changelog-config": "0.410.0",
         "@taiga-ui/browserslist-config": "0.410.0",
         "@taiga-ui/commitlint-config": "0.410.0",
