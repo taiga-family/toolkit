@@ -1,3 +1,14 @@
+### [0.411.0](https://github.com/taiga-family/toolkit/compare/v0.410.0...v0.411.0) (2026-02-09)
+
+### 🐞 Bug Fixes
+
+- **configs**: peer dependency problems (#1582)
+  [(fe33c2d)](https://github.com/taiga-family/toolkit/commit/fe33c2d7ea422c8014e041c3075891cccb5e5d85)
+- update dependency eslint-plugin-unused-imports to ^4.4.1 (#1581)
+  [(dddbec5)](https://github.com/taiga-family/toolkit/commit/dddbec5e1fc89bfe97d3ee5cf09d38ff70804bc3)
+- update dependency @stylistic/eslint-plugin to ^5.8.0 (#1580)
+  [(0895173)](https://github.com/taiga-family/toolkit/commit/0895173d8292dd0d7794bc0fdfc8832a84b1bc1e)
+
 ### [0.410.0](https://github.com/taiga-family/toolkit/compare/v0.409.0...v0.410.0) (2026-02-09)
 
 ### [0.409.0](https://github.com/taiga-family/toolkit/compare/v0.408.0...v0.409.0) (2026-02-08)
