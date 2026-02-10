@@ -1,3 +1,12 @@
+### [0.412.0](https://github.com/taiga-family/toolkit/compare/v0.411.0...v0.412.0) (2026-02-10)
+
+### 🐞 Bug Fixes
+
+- **configs**: peer dependency problems (#1585)
+  [(b104f28)](https://github.com/taiga-family/toolkit/commit/b104f2893149015f0037c7484ba0fa1c0de2edc5)
+- update @typescript-eslint/\* deps to ^8.55.0 (#1583)
+  [(432967e)](https://github.com/taiga-family/toolkit/commit/432967e6831dafef93b522655a3619b909bb1ce9)
+
 ### [0.411.0](https://github.com/taiga-family/toolkit/compare/v0.410.0...v0.411.0) (2026-02-09)
 
 ### 🐞 Bug Fixes
