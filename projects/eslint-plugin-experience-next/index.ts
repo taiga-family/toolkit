@@ -15,6 +15,7 @@ import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
+import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import objectSingleLine from './rules/object-single-line';
 import preferDeepImports from './rules/prefer-deep-imports';
 import shortTuiImports from './rules/short-tui-imports';
@@ -43,6 +44,7 @@ const plugin = {
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
+        'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'object-single-line': objectSingleLine,
         'prefer-deep-imports': preferDeepImports,
         'short-tui-imports': shortTuiImports,
