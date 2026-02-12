@@ -15,7 +15,7 @@
         "syncer": "./bin/src/index.js"
     },
     "dependencies": {
-        "glob": "13.0.2"
+        "glob": "13.0.3"
     },
     "publishConfig": {
         "access": "public"
