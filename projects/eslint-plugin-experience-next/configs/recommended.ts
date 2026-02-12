@@ -807,6 +807,7 @@ export default defineConfig([
         files: ['**/*.pw.spec.ts'],
         extends: [playwright.configs['flat/recommended']],
         rules: {
+            '@taiga-ui/experience-next/no-playwright-empty-fill': 'error',
             'compat/compat': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/expect-expect': [

@@ -48,6 +48,7 @@ export default [
 | no-deep-imports-to-indexed-packages | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
 | no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
+| no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | standalone-imports-sort             | Sort imports alphabetically                                                                         | ✅  | 🔧  |     |
 | prefer-deep-imports                 | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
 | short-tui-imports                   | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
