@@ -1,0 +1,70 @@
+name: Notify on PR opened
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send webhook message
+        uses: actions/github-script@v7
+        env:
+          WEBHOOK_URL: ${{ secrets.TAIGA_ANGULAR_MRS_WEBHOOK_URL }}
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            const isFork =
+              pr.head?.repo?.full_name !== pr.base?.repo?.full_name;
+
+            if (isFork) {
+              core.info('Skip fork PR');
+              return;
+            }
+
+            const ghLogin = pr.user?.login ?? '';
+
+            if (!ghLogin || ghLogin.includes('-bot')) {
+              core.info(`Skip bot user: ${ghLogin}`);
+              return;
+            }
+
+            const loginMap = {
+              splincode: 'm.ivanov4',
+              waterplea: 'a.inkin',
+            };
+
+            const author = loginMap[ghLogin] ?? ghLogin;
+            const title = pr.title ?? '(no title)';
+            const url = pr.html_url;
+            const number = pr.number;
+
+            const message =
+              `:merged-arrow: Новый Pull request от @${author}\n` +
+              `:github-logo: [#${number} ${title}](${url})`;
+
+            const webhookUrl = process.env.WEBHOOK_URL;
+
+            if (!webhookUrl) {
+              throw new Error('WEBHOOK_URL is not set');
+            }
+
+            const res = await fetch(webhookUrl, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ text: message }),
+            });
+
+            if (!res.ok) {
+              throw new Error(
+                `Webhook failed: ${res.status} ${res.statusText}\n${await res.text()}`
+              );
+            }
+
+            core.info('Notification sent successfully');
