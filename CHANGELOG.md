@@ -1,3 +1,19 @@
+### [0.413.0](https://github.com/taiga-family/toolkit/compare/v0.412.0...v0.413.0) (2026-02-12)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add rule to replace Playwright `fill('')` with `clear()` (#1590)
+  [(2441bfd)](https://github.com/taiga-family/toolkit/commit/2441bfdf7ef183842b5f673557c8bbac4bf671a7)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-sonarjs to ^3.0.7 (#1589)
+  [(d9157ae)](https://github.com/taiga-family/toolkit/commit/d9157aeb4a65f6b1187d4f124924dda7679857bc)
+- update dependency glob to v13.0.2 (#1587)
+  [(2b7a79a)](https://github.com/taiga-family/toolkit/commit/2b7a79a50167006b5c782a3639be883cf438b523)
+- update dependency stylelint to ^17.2.0 (#1586)
+  [(2c9dbcd)](https://github.com/taiga-family/toolkit/commit/2c9dbcd0f36b22e9b808c1960f9afc73abf88e02)
+
 ### [0.412.0](https://github.com/taiga-family/toolkit/compare/v0.411.0...v0.412.0) (2026-02-10)
 
 ### 🐞 Bug Fixes
