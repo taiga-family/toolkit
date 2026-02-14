@@ -1,10 +1,10 @@
-import htmlPlugin from '@html-eslint/eslint-plugin';
-import htmlParser from '@html-eslint/parser';
+import {rules} from '@html-eslint/eslint-plugin';
+import parser from '@html-eslint/parser';
 import {RuleTester} from 'eslint';
 
-const ruleTester = new RuleTester({languageOptions: {parser: htmlParser}});
+const ruleTester = new RuleTester({languageOptions: {parser}});
 
-const rule = htmlPlugin.rules['no-restricted-attrs']!;
+const rule = rules['no-restricted-attrs']!;
 
 const ruleConfig = {
     attrPatterns: [
