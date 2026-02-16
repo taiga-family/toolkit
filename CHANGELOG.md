@@ -1,3 +1,14 @@
+### [0.414.0](https://github.com/taiga-family/toolkit/compare/v0.413.0...v0.414.0) (2026-02-13)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^17.3.0 (#1598)
+  [(d72d17a)](https://github.com/taiga-family/toolkit/commit/d72d17ad58d119c73f0d426e991674ad51532f23)
+- update dependency eslint-plugin-jest to ^29.14.0 (#1597)
+  [(1791e9a)](https://github.com/taiga-family/toolkit/commit/1791e9a15d681134d9acaaa12a69939b3b3e3c75)
+- update dependency glob to v13.0.3 (#1596)
+  [(d10b227)](https://github.com/taiga-family/toolkit/commit/d10b22779a4e4e0be2480e982f0eabed818b5b50)
+
 ### [0.413.0](https://github.com/taiga-family/toolkit/compare/v0.412.0...v0.413.0) (2026-02-12)
 
 ### 🚀 Features
