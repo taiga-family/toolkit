@@ -33,3 +33,7 @@ Monorepo for all the tooling which enables ESLint, Prettier, Stylelint to suppor
 
 You can install all of them by `npm i @taiga-ui/configs -D` or install partially like
 `npm i @taiga-ui/{tsconfig, jest-config} -D`
+
+| **Package**                                                      | **Version**                                                        | **README**                                                                        | **Downloads**                                                                                       |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [@taiga-ui/configs](https://npmjs.com/package/@taiga-ui/configs) | ![](https://img.shields.io/npm/v/%40taiga-ui%2Fconfigs/latest.svg) | [![](https://img.shields.io/badge/README--green.svg)](projects/configs/README.md) | [![](https://img.shields.io/npm/dw/@taiga-ui/configs)](https://npmjs.com/package/@taiga-ui/configs) |

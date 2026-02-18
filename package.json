@@ -71,8 +71,7 @@
             "./package-lock.json"
         ],
         "matchPackageNames": [
-            "@taiga-ui/*",
-            "taiga-linters"
+            "@taiga-ui/*"
         ]
     }
 }
