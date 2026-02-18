@@ -1,3 +1,10 @@
+### [0.418.0](https://github.com/taiga-family/toolkit/compare/v0.417.0...v0.418.0) (2026-02-18)
+
+### 🐞 Bug Fixes
+
+- **release-it-config**: revert git tag mechanism
+  [(37c0f4d)](https://github.com/taiga-family/toolkit/commit/37c0f4d7239671e05b6d46fc1afde579ed3caeac)
+
 ### 🚀 Features
 
 - **configs**: implicit provide syncer cli
