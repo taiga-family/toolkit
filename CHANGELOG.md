@@ -1,3 +1,8 @@
+### 🚀 Features
+
+- **configs**: implicit provide syncer cli
+  [(8934491)](https://github.com/taiga-family/toolkit/commit/89344917fb14adac97d8dbd6591ec4b2679c7e6d)
+
 ### 🐞 Bug Fixes
 
 - **release-it-config**: auto git tag
