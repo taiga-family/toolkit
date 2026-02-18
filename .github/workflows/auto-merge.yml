@@ -3,7 +3,7 @@ on:
   pull_request:
 
 env:
-  JOBS_NAME: '[ "ci", "release-it-check" ]'
+  JOBS_NAME: '[ "ci", "release-it-check", "test" ]'
 
 jobs:
   setup:

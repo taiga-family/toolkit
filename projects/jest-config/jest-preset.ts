@@ -56,7 +56,7 @@ export default {
         ],
     },
     transformIgnorePatterns: [
-        'node_modules/(?!@angular|rxjs|ngx-highlightjs|@maskito|parse5|@ng-web-apis|@taiga-ui).+',
+        'node_modules/(?!@angular|rxjs|ngx-highlightjs|@ngrx|@maskito|parse5|@ng-web-apis|@taiga-ui|vscode-.+|@html-eslint).+',
     ],
     verbose: !process.env.CI,
 } satisfies JestConfigWithTsJest;

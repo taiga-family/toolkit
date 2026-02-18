@@ -18,7 +18,10 @@ export default defineConfig([
         plugins: {html},
         extends: ['html/recommended'],
         language: 'html/html',
-        languageOptions: {parser: htmlParser},
+        languageOptions: {
+            parser: htmlParser,
+            parserOptions: {templateEngineSyntax: {'{{': '}}'}},
+        },
         rules: {
             '@taiga-ui/experience-next/no-href-with-router-link': 'error',
             'html/indent': 'off', // prettier conflicts
