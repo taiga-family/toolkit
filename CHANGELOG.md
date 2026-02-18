@@ -1,4 +1,4 @@
-### [0.414.0](https://github.com/taiga-family/toolkit/compare/v0.413.0...v0.414.0) (2026-02-13)
+### [0.415.0](https://github.com/taiga-family/toolkit/compare/v0.413.0...v0.415.0) (2026-02-13)
 
 ### 🐞 Bug Fixes
 

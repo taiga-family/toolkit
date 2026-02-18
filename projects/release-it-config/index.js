@@ -40,8 +40,6 @@ module.exports = {
     },
     hooks: {
         'after:bump': [
-            'git fetch --prune --prune-tags origin', // cleanup git workspace
-            'git tag v${version}', // for include last tag inside CHANGELOG
             'echo "new version is v${version}"',
             `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`,
             'npx prettier CHANGELOG.md --write > /dev/null',
