@@ -1,3 +1,12 @@
+### 🐞 Bug Fixes
+
+- **release-it-config**: auto git tag
+  [(b0cb4df)](https://github.com/taiga-family/toolkit/commit/b0cb4df4a335fcb9cee520d1beea1882ae355674)
+- update dependency @html-eslint/eslint-plugin to ^0.55.0 (#1600)
+  [(441c220)](https://github.com/taiga-family/toolkit/commit/441c22023f45a1c20860cd94da72a695b8a57b84)
+- **release-it-config**: cleanup workspace before (#1602)
+  [(efccf1b)](https://github.com/taiga-family/toolkit/commit/efccf1b17a56b05025bd00c0490bbed946c4a601)
+
 ### [0.415.0](https://github.com/taiga-family/toolkit/compare/v0.413.0...v0.415.0) (2026-02-13)
 
 ### 🐞 Bug Fixes
