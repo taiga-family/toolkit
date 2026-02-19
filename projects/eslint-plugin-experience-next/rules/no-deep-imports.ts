@@ -4,6 +4,7 @@ import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
 const MESSAGE_ID = 'no-deep-imports' as const;
 const ERROR_MESSAGE = 'Deep imports of Taiga UI packages are prohibited';
+const ASSET_EXTENSIONS = /\.(?:svg|png|jpe?g|webp|gif)(?:\?.*)?$/i;
 
 const DEFAULT_OPTIONS = {
     currentProject: '',
@@ -24,6 +25,9 @@ export const rule = createRule({
             importDeclaration,
             projectName,
         } = {...DEFAULT_OPTIONS, ...context.options[0]};
+
+        const isAssetImport = (source?: string): boolean =>
+            !!source && ASSET_EXTENSIONS.test(source);
 
         const isDeepImport = (source?: string): boolean =>
             !!source && new RegExp(deepImport, 'g').test(source);
@@ -66,7 +70,8 @@ export const rule = createRule({
                     !importSource ||
                     !isDeepImport(importSource) ||
                     isInsideTheSameEntryPoint(importSource) ||
-                    shouldIgnore(importSource)
+                    shouldIgnore(importSource) ||
+                    isAssetImport(importSource)
                 ) {
                     return;
                 }
