@@ -643,7 +643,7 @@ export default defineConfig([
             '@angular-eslint/no-conflicting-lifecycle': 'error',
             '@angular-eslint/no-duplicates-in-metadata-arrays': 'error',
             '@angular-eslint/no-empty-lifecycle-method': 'error',
-            '@angular-eslint/no-experimental': 'error',
+            '@angular-eslint/no-experimental': 'off',
             '@angular-eslint/no-input-prefix': 'error',
             '@angular-eslint/no-input-rename': 'off',
             '@angular-eslint/no-inputs-metadata-property': 'off',
