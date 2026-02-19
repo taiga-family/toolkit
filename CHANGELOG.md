@@ -1,3 +1,14 @@
+### [0.420.0](https://github.com/taiga-family/toolkit/compare/v0.419.0...v0.420.0) (2026-02-19)
+
+### 🐞 Bug Fixes
+
+- update commitlint to ^20.4.2 (#1606)
+  [(6786d4f)](https://github.com/taiga-family/toolkit/commit/6786d4f97b5188ae1e35fea4667dddd9326ec01e)
+- **stylelint-config**: ignore CSS3 attr function (#1607)
+  [(2544b40)](https://github.com/taiga-family/toolkit/commit/2544b40acec652991e02913faf58f5f7e8665cdf)
+- **eslint-plugin-experience-next**: ignore assets path in no-deep-imports (#1605)
+  [(d8c7f3d)](https://github.com/taiga-family/toolkit/commit/d8c7f3d62dbe04e95247a8c6a3e8a455ecc45368)
+
 ### [0.419.0](https://github.com/taiga-family/toolkit/compare/v0.418.0...v0.419.0) (2026-02-19)
 
 ### 🚀 Features
