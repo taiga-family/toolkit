@@ -15,10 +15,12 @@
         "stylelint": "stylelint '**/*.{less,css}' --allow-empty-input --config package.json",
         "test": "jest ."
     },
+    "commitlint": {
+        "extends": [
+            "@taiga-ui/commitlint-config"
+        ]
+    },
     "lint-staged": {
-        "*.less": [
-            "stylelint --fix"
-        ],
         "*.{js,ts,html,svg,yml,md,less,json}": [
             "prettier --write",
             "eslint --fix",
