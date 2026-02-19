@@ -1,3 +1,15 @@
+### [0.419.0](https://github.com/taiga-family/toolkit/compare/v0.418.0...v0.419.0) (2026-02-19)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: allow angular experimental (#1604)
+  [(4893ee6)](https://github.com/taiga-family/toolkit/commit/4893ee614d48ab17f8fc9bd5f948ad3471af79c1)
+
+### 🐞 Bug Fixes
+
+- update dependency glob to v13.0.5 (#1603)
+  [(404a633)](https://github.com/taiga-family/toolkit/commit/404a6338a7181702d32455e6b7408e4d1ed9783b)
+
 ### [0.418.0](https://github.com/taiga-family/toolkit/compare/v0.417.0...v0.418.0) (2026-02-18)
 
 ### 🐞 Bug Fixes

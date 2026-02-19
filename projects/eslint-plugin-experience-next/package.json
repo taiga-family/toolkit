@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/eslint-plugin-experience-next",
-    "version": "0.418.0",
+    "version": "0.419.0",
     "description": "An ESLint plugin to enforce a consistent code styles across taiga-ui projects",
     "license": "Apache-2.0",
     "type": "module",
