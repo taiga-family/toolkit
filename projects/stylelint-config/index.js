@@ -190,6 +190,7 @@ module.exports = {
                 ignore: [
                     'css-resize',
                     'css3-cursors',
+                    'css3-attr',
                     'css-selection',
                     'css-nth-child-of',
                     'css3-cursors-grab',
