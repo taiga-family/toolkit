@@ -1,12 +1,12 @@
 {
     "name": "@taiga-ui/eslint-plugin-experience-next",
-    "version": "0.420.0",
+    "version": "0.421.0",
     "description": "An ESLint plugin to enforce a consistent code styles across taiga-ui projects",
     "license": "Apache-2.0",
     "type": "module",
     "devDependencies": {
         "@typescript-eslint/rule-tester": "8.55.0",
-        "glob": "13.0.5"
+        "glob": "13.0.6"
     },
     "peerDependencies": {
         "@eslint/compat": "^2.0.2",
@@ -20,7 +20,7 @@
         "angular-eslint": "^20.7.0",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.7",
-        "eslint-plugin-compat": "^6.1.0",
+        "eslint-plugin-compat": "^7.0.1",
         "eslint-plugin-de-morgan": "^2.0.0",
         "eslint-plugin-decorator-position": "^6.0.0",
         "eslint-plugin-file-progress": "^3.0.2",
@@ -33,8 +33,8 @@
         "eslint-plugin-promise": "^7.2.1",
         "eslint-plugin-regexp": "^3.0.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-sonarjs": "^3.0.7",
-        "eslint-plugin-unicorn": "^62.0.0",
+        "eslint-plugin-sonarjs": "^4.0.0",
+        "eslint-plugin-unicorn": "^63.0.0",
         "eslint-plugin-unused-imports": "^4.4.1",
         "glob": "*",
         "globals": "^17.3.0",

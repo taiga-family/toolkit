@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/syncer",
-    "version": "0.420.0",
+    "version": "0.421.0",
     "description": "Taiga UI CLI tool for sync version in npm workspaces",
     "keywords": [
         "sync version"
@@ -15,7 +15,7 @@
         "syncer": "./bin/src/index.js"
     },
     "dependencies": {
-        "glob": "13.0.5"
+        "glob": "13.0.6"
     },
     "publishConfig": {
         "access": "public"
