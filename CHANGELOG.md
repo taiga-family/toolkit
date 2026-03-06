@@ -1,3 +1,12 @@
+### [0.422.0](https://github.com/taiga-family/toolkit/compare/v0.420.0...v0.422.0) (2026-03-06)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: upgrade some packages (#1614)
+  [(43dcfd4)](https://github.com/taiga-family/toolkit/commit/43dcfd4f877f079f93044d5a0b5009dae959b10d)
+- **eslint-plugin-experience-next**: native private member ordering should be under typescript private fields (#1613)
+  [(f5c4ded)](https://github.com/taiga-family/toolkit/commit/f5c4ded3ff61ba2ee2ea54cfd1f7d0d04be155f0)
+
 ### [0.421.0](https://github.com/taiga-family/toolkit/compare/v0.419.0...v0.421.0) (2026-02-19)
 
 ### 🐞 Bug Fixes
