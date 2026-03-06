@@ -44,9 +44,9 @@ export const TUI_MEMBER_ORDERING_CONVENTION = [
     'private-decorated-field',
     'protected-abstract-field',
     'public-abstract-field',
-    '#private-instance-field',
     'private-decorated-field',
     'private-instance-field',
+    '#private-instance-field',
     [
         'protected-decorated-field',
         'public-decorated-field',
