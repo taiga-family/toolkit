@@ -13,8 +13,8 @@
     "license": "Apache-2.0",
     "type": "module",
     "peerDependencies": {
-        "@commitlint/cli": "^20.4.2",
-        "@commitlint/config-conventional": "^20.4.2",
+        "@commitlint/cli": "^20.4.3",
+        "@commitlint/config-conventional": "^20.4.3",
         "conventional-changelog-conventionalcommits": "^9.1.0",
         "lint-staged": "^16.2.7"
     },
