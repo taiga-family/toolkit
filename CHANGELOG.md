@@ -1,3 +1,28 @@
+### [0.424.0](https://github.com/taiga-family/toolkit/compare/v0.423.0...v0.424.0) (2026-03-07)
+
+### 🐞 Bug Fixes
+
+- update dependency lint-staged to ^16.3.2 (#1626)
+  [(0896119)](https://github.com/taiga-family/toolkit/commit/08961197e712e66d2ad71c32787159c03c1aad99)
+- update dependency globals to ^17.4.0 (#1625)
+  [(35a3268)](https://github.com/taiga-family/toolkit/commit/35a3268f322a4b93aa0d4f91c78962c76000b629)
+- update dependency @eslint/compat to ^2.0.3 (#1624)
+  [(dc3544e)](https://github.com/taiga-family/toolkit/commit/dc3544ea3359a422ca49731d57c243b70f7af84a)
+- update dependency cspell to ^9.7.0 (#1623)
+  [(ee0fff7)](https://github.com/taiga-family/toolkit/commit/ee0fff75a24780a5820e57a9522674a83ae4130e)
+- update dependency conventional-changelog-conventionalcommits to ^9.3.0 (#1622)
+  [(e2860e1)](https://github.com/taiga-family/toolkit/commit/e2860e13e8cf2260948fc5b641aa0c0ad23f2907)
+- update dependency @html-eslint/parser to ^0.58.1 (#1621)
+  [(a527259)](https://github.com/taiga-family/toolkit/commit/a527259126621987a39bb42416423e37bbadac01)
+- update dependency @html-eslint/eslint-plugin to ^0.58.1 (#1620)
+  [(e37aec4)](https://github.com/taiga-family/toolkit/commit/e37aec4d2749eb901e635fe30a97df97c681f35c)
+- update @typescript-eslint/\* deps to ^8.56.1 (#1619)
+  [(7de680a)](https://github.com/taiga-family/toolkit/commit/7de680ada919e3982f29795d6798a82101852403)
+- update dependency @cspell/dict-en-gb to ^5.0.24 (#1617)
+  [(443b9fc)](https://github.com/taiga-family/toolkit/commit/443b9fcd01985c9c267ff7cf8a4c58c434001755)
+- update commitlint to ^20.4.3 (#1616)
+  [(6e4b106)](https://github.com/taiga-family/toolkit/commit/6e4b106c115c1a75a43e4a99bf4dd6ef0db7cdaf)
+
 ### [0.423.0](https://github.com/taiga-family/toolkit/compare/v0.422.0...v0.423.0) (2026-03-06)
 
 ### [0.422.0](https://github.com/taiga-family/toolkit/compare/v0.420.0...v0.422.0) (2026-03-06)
