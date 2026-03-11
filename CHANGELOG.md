@@ -1,3 +1,10 @@
+### [0.425.0](https://github.com/taiga-family/toolkit/compare/v0.424.0...v0.425.0) (2026-03-11)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: specify order for `inset` in `order/properties-order` rule (#1628)
+  [(8e36908)](https://github.com/taiga-family/toolkit/commit/8e3690822079d3060874212b20706fe33d56281a)
+
 ### [0.424.0](https://github.com/taiga-family/toolkit/compare/v0.423.0...v0.424.0) (2026-03-07)
 
 ### 🐞 Bug Fixes
