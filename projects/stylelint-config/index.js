@@ -172,6 +172,7 @@ module.exports = {
                 'all',
                 'content',
                 'position',
+                'inset',
                 {
                     order: 'flexible',
                     properties: ['top', 'left', 'right', 'bottom'],
