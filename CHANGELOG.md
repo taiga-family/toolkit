@@ -1,3 +1,10 @@
+### [0.427.0](https://github.com/taiga-family/toolkit/compare/v0.426.0...v0.427.0) (2026-03-12)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve pw lint rules (#1631)
+  [(597ed45)](https://github.com/taiga-family/toolkit/commit/597ed45e5e9089b0dc44544c4ae54208cf6e0613)
+
 ### [0.426.0](https://github.com/taiga-family/toolkit/compare/v0.425.0...v0.426.0) (2026-03-12)
 
 ### 🐞 Bug Fixes
