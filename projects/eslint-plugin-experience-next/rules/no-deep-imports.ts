@@ -4,7 +4,17 @@ import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
 const MESSAGE_ID = 'no-deep-imports' as const;
 const ERROR_MESSAGE = 'Deep imports of Taiga UI packages are prohibited';
-const ASSET_EXTENSIONS = /\.(?:svg|png|jpe?g|webp|gif)(?:\?.*)?$/i;
+
+const CODE_EXTENSIONS = new Set([
+    '.cjs',
+    '.cts',
+    '.js',
+    '.jsx',
+    '.mjs',
+    '.mts',
+    '.ts',
+    '.tsx',
+]);
 
 const DEFAULT_OPTIONS = {
     currentProject: '',
@@ -26,8 +36,16 @@ export const rule = createRule({
             projectName,
         } = {...DEFAULT_OPTIONS, ...context.options[0]};
 
-        const isAssetImport = (source?: string): boolean =>
-            !!source && ASSET_EXTENSIONS.test(source);
+        const hasNonCodeExtension = (source?: string): boolean => {
+            if (!source) {
+                return false;
+            }
+
+            const cleanSource = source.split(/[?#]/, 1)[0] ?? '';
+            const extension = path.posix.extname(cleanSource).toLowerCase();
+
+            return !!extension && !CODE_EXTENSIONS.has(extension);
+        };
 
         const isDeepImport = (source?: string): boolean =>
             !!source && new RegExp(deepImport, 'g').test(source);
@@ -71,7 +89,7 @@ export const rule = createRule({
                     !isDeepImport(importSource) ||
                     isInsideTheSameEntryPoint(importSource) ||
                     shouldIgnore(importSource) ||
-                    isAssetImport(importSource)
+                    hasNonCodeExtension(importSource)
                 ) {
                     return;
                 }
@@ -81,7 +99,7 @@ export const rule = createRule({
                         const [start, end] = node.source.range;
 
                         return fixer.replaceTextRange(
-                            [start + 1, end - 1], // keep quotes
+                            [start + 1, end - 1],
                             importSource.replaceAll(new RegExp(deepImport, 'g'), ''),
                         );
                     },
