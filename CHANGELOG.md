@@ -1,3 +1,12 @@
+### [0.426.0](https://github.com/taiga-family/toolkit/compare/v0.425.0...v0.426.0) (2026-03-12)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: check only ts/js extensions (#1630)
+  [(b1572f7)](https://github.com/taiga-family/toolkit/commit/b1572f7336476adffc89f275eb667cbb241f126c)
+- **stylelint-config**: enable `inset-inline-*` & `inset-block-*` (#1629)
+  [(4f82c10)](https://github.com/taiga-family/toolkit/commit/4f82c102b8d3e76062234ef36115882096b9f50b)
+
 ### [0.425.0](https://github.com/taiga-family/toolkit/compare/v0.424.0...v0.425.0) (2026-03-11)
 
 ### 🐞 Bug Fixes
