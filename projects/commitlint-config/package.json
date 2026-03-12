@@ -16,7 +16,7 @@
         "@commitlint/cli": "^20.4.4",
         "@commitlint/config-conventional": "^20.4.4",
         "conventional-changelog-conventionalcommits": "^9.3.0",
-        "lint-staged": "^16.3.2"
+        "lint-staged": "^16.3.3"
     },
     "publishConfig": {
         "access": "public"
