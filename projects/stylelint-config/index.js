@@ -4,6 +4,7 @@ module.exports = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
     plugins: [
+        './relative-less-import-extension.js',
         'stylelint-order',
         'stylelint-rem-over-px',
         'stylelint-use-logical',
@@ -33,6 +34,7 @@ module.exports = {
         '@stylistic/selector-pseudo-class-parentheses-space-inside': null,
         '@stylistic/string-quotes': 'single',
         '@stylistic/value-list-comma-newline-after': null,
+        '@taiga-ui/relative-less-import-extension': true,
         'alpha-value-notation': 'number',
         'annotation-no-unknown': true,
         'at-rule-allowed-list': [
