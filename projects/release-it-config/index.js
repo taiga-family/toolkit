@@ -14,6 +14,17 @@ module.exports = {
             infile: false,
             path: '.',
             preset: 'conventionalcommits',
+            types: [
+                {section: 'Features', type: 'feat'},
+                {section: 'Bug Fixes', type: 'fix'},
+                {hidden: true, type: 'refactor'},
+                {hidden: true, type: 'chore'},
+                {hidden: true, type: 'perf'},
+                {hidden: true, type: 'docs'},
+                {hidden: true, type: 'style'},
+                {hidden: true, type: 'ci'},
+                {hidden: true, type: 'test'},
+            ],
         },
     },
     git: {
