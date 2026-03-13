@@ -25,6 +25,8 @@ const DEFAULT_EXCEPTIONS: ShortImportsException[] = [
     {from: 'TuiTextfieldOptionsDirective', to: 'TuiTextfield'},
     {from: 'TuiPreviewDialogDirective', to: 'TuiPreview'},
     {from: 'TuiAccountComponent', to: 'TuiAccountComponent'},
+    {from: 'TuiIslandDirective', to: 'TuiIsland'},
+    {from: 'TuiTableBarsHostComponent', to: 'TuiTableBarsHost'},
 ];
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
