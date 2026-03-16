@@ -1,3 +1,17 @@
+### [0.429.0](https://github.com/taiga-family/toolkit/compare/v0.428.0...v0.429.0) (2026-03-16)
+
+### 🚀 Features
+
+- **cspell-config**: support new words (#1643)
+  [(1df53ba)](https://github.com/taiga-family/toolkit/commit/1df53bac2b6dec9e23b26531b6c3e08b76ab2306)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: extends exclusions (#1640)
+  [(53e6d44)](https://github.com/taiga-family/toolkit/commit/53e6d44101c8fe870be8399945b7ebc99aa571dc)
+- **eslint-plugin-experience-next**: do not use non ascii symbols for properties (#1642)
+  [(0a3cef3)](https://github.com/taiga-family/toolkit/commit/0a3cef339bfa9c360b2e18402faa1d11d27fbf31)
+
 ### [0.428.0](https://github.com/taiga-family/toolkit/compare/v0.427.0...v0.428.0) (2026-03-13)
 
 ### 🐞 Bug Fixes
