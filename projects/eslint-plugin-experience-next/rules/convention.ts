@@ -5,7 +5,7 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     },
     {
         format: ['camelCase'],
-        selector: ['classMethod', 'function', 'classProperty'],
+        selector: ['classMethod', 'classProperty'],
     },
     {
         format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
@@ -15,6 +15,18 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
         filter: '__non_webpack_require__',
         format: null,
         selector: 'variable',
+    },
+    {
+        custom: {
+            match: true,
+            regex: String.raw`^[\x00-\x7F]+$`,
+        },
+        format: null,
+        selector: 'parameter',
+    },
+    {
+        format: ['camelCase'],
+        selector: 'function',
     },
 ] as const;
 

@@ -223,10 +223,6 @@ export default defineConfig([
                 {default: TUI_MEMBER_ORDERING_CONVENTION},
             ],
             '@typescript-eslint/method-signature-style': ['error', 'method'],
-            '@typescript-eslint/naming-convention': [
-                'error',
-                ...TUI_RECOMMENDED_NAMING_CONVENTION,
-            ],
             '@typescript-eslint/no-base-to-string': 'off',
             '@typescript-eslint/no-confusing-non-null-assertion': 'error',
             '@typescript-eslint/no-confusing-void-expression': 'off',
@@ -905,6 +901,30 @@ export default defineConfig([
             ],
             'jest/unbound-method': 'off',
             'jest/valid-title': 'error',
+        },
+    },
+    {
+        files: ['**/*.ts'],
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                ...TUI_RECOMMENDED_NAMING_CONVENTION,
+            ],
+        },
+    },
+    {
+        files: ['**/*.tsx'],
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                ...TUI_RECOMMENDED_NAMING_CONVENTION.filter(
+                    ({selector}) => selector !== 'function',
+                ),
+                {
+                    format: ['camelCase', 'PascalCase'],
+                    selector: 'function',
+                },
+            ],
         },
     },
     {
