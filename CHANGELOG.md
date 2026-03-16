@@ -1,3 +1,18 @@
+### [0.428.0](https://github.com/taiga-family/toolkit/compare/v0.427.0...v0.428.0) (2026-03-13)
+
+### 🐞 Bug Fixes
+
+- **release-it-config**: repsect only `feat` and `fix` commits for release (#1639)
+  [(7c97615)](https://github.com/taiga-family/toolkit/commit/7c9761577dca6af05578f54bece882e70d03ced5)
+- update @typescript-eslint/\* deps to ^8.57.0 (#1637)
+  [(4e6884c)](https://github.com/taiga-family/toolkit/commit/4e6884c29d02e6b758cf889b8b693f6360f48df7)
+- update dependency lint-staged to ^16.3.3 (#1635)
+  [(2613cf4)](https://github.com/taiga-family/toolkit/commit/2613cf42b2ab161e58b0ceb2409b2c61169d9c61)
+- update cspell (#1634)
+  [(d0df331)](https://github.com/taiga-family/toolkit/commit/d0df331cce534b5032f7d9907ed1722eda08e405)
+- update commitlint to ^20.4.4 (#1632)
+  [(80e9aa8)](https://github.com/taiga-family/toolkit/commit/80e9aa830b14d70c46fed82c0c6215349778180b)
+
 ### [0.427.0](https://github.com/taiga-family/toolkit/compare/v0.426.0...v0.427.0) (2026-03-12)
 
 ### 🚀 Features
