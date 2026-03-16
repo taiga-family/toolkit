@@ -681,6 +681,13 @@
         "crossfading",
         "UTDL",
         "typesafe",
-        "popout"
+        "popout",
+        "msdownload",
+        "msword",
+        "openxmlformats",
+        "officedocument",
+        "wordprocessingml",
+        "longname",
+        "prebundle"
     ]
 }
