@@ -1,3 +1,10 @@
+### [0.430.0](https://github.com/taiga-family/toolkit/compare/v0.429.0...v0.430.0) (2026-03-17)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: refactor to es next imports (#1644)
+  [(6db3eb5)](https://github.com/taiga-family/toolkit/commit/6db3eb55341c2a2e197564238923391d51206826)
+
 ### [0.429.0](https://github.com/taiga-family/toolkit/compare/v0.428.0...v0.429.0) (2026-03-16)
 
 ### 🚀 Features
