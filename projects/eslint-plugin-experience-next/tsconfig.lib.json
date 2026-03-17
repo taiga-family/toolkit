@@ -1,6 +1,6 @@
 {
     "extends": "../../tsconfig.json",
-    "include": ["./*.ts"],
+    "include": ["./*.ts", "**/*.d.ts"],
     "exclude": ["**/*.spec.ts"],
     "compilerOptions": {
         "baseUrl": ".",
