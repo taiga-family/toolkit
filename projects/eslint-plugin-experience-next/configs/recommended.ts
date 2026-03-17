@@ -1,17 +1,22 @@
-import {createRequire} from 'node:module';
-
 import eslint from '@eslint/js';
 import markdown from '@eslint/markdown';
 import rxjs from '@smarttools/eslint-plugin-rxjs';
 import stylistic from '@stylistic/eslint-plugin';
 import angular from 'angular-eslint';
+import {type ESLint} from 'eslint';
 import {defineConfig} from 'eslint/config';
 import compat from 'eslint-plugin-compat';
+import cypress from 'eslint-plugin-cypress';
+import {configs as deMorganConfigs} from 'eslint-plugin-de-morgan';
+import decoratorPosition from 'eslint-plugin-decorator-position';
 import progress from 'eslint-plugin-file-progress';
+import importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
 import packageJson, {configs as packageJsonConfigs} from 'eslint-plugin-package-json';
+import perfectionist from 'eslint-plugin-perfectionist';
 import playwright from 'eslint-plugin-playwright';
 import prettier from 'eslint-plugin-prettier';
+import promise from 'eslint-plugin-promise';
 import regexp, {configs as regexpConfigs} from 'eslint-plugin-regexp';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
@@ -24,10 +29,10 @@ import {
     TUI_MEMBER_ORDERING_CONVENTION,
     TUI_RECOMMENDED_NAMING_CONVENTION,
 } from '../rules/convention';
+import {angularVersion, modernAngularRules} from './utils/get-ng-version';
+import {projectJsonExist} from './utils/project-json-exist';
 
-const require = createRequire(import.meta.url);
-
-let angularVersion = 16;
+export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
 const tsconfig =
     projectJsonExist('tsconfig.eslint.json') ||
@@ -37,26 +42,9 @@ const tsconfig =
 const parserOptions = tsconfig
     ? {project: [tsconfig]}
     : {
-          EXPERIMENTAL_useProjectService: {
-              maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: Infinity,
-          },
+          projectService: true,
+          tsconfigRootDir: process.cwd(),
       };
-
-const modernAngularRules = {
-    defaultStandalone: 19,
-    modernStyles: 17,
-    preferControlFlow: 17,
-    preferSignals: 17,
-    templateLiteral: 19,
-};
-
-try {
-    const {major} = require('@angular/cli').VERSION;
-
-    angularVersion = parseInt(major, 10);
-} catch {}
-
-export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
 export default defineConfig([
     progress.configs['recommended-ci'],
@@ -80,13 +68,12 @@ export default defineConfig([
             '**/LICENSE',
         ],
     },
-    require('eslint-config-prettier'),
     {
         files: ALL_TS_JS_FILES,
         plugins: {
             '@stylistic': stylistic,
-            'decorator-position': require('eslint-plugin-decorator-position'),
-            perfectionist: require('eslint-plugin-perfectionist'),
+            'decorator-position': decoratorPosition,
+            perfectionist,
             prettier,
             regexp,
             'simple-import-sort': simpleImportSort,
@@ -95,13 +82,12 @@ export default defineConfig([
             'unused-imports': unusedImports,
         },
         extends: [
-            require('eslint-plugin-de-morgan').configs.recommended,
-            require('eslint-plugin-import').flatConfigs.recommended,
-            require('eslint-plugin-import').flatConfigs.typescript,
-            require('eslint-plugin-promise').configs['flat/recommended'],
+            deMorganConfigs.recommended,
+            importPlugin.flatConfigs.recommended,
+            importPlugin.flatConfigs.typescript,
+            promise.configs['flat/recommended'],
             compat.configs['flat/recommended'],
             regexpConfigs['flat/recommended'],
-            eslint.configs.recommended,
             eslint.configs.recommended,
             tseslint.configs.all,
         ],
@@ -625,7 +611,7 @@ export default defineConfig([
     },
     {
         files: ['**/*.{ts,tsx}'],
-        plugins: {rxjs},
+        plugins: {rxjs: rxjs as unknown as ESLint.Plugin},
         extends: [angular.configs.tsRecommended],
         processor: angular.processInlineTemplates,
         rules: {
@@ -929,6 +915,7 @@ export default defineConfig([
     },
     {
         files: ['**/*.cy.ts'],
+        plugins: {cypress},
         rules: {
             'compat/compat': 'off',
             'cypress/no-unnecessary-waiting': 'off',
@@ -951,6 +938,9 @@ export default defineConfig([
         extends: [tseslint.configs.disableTypeChecked, packageJsonConfigs.recommended],
         rules: {
             'package-json/require-description': ['error', {ignorePrivate: true}],
+            'package-json/require-exports': 'off',
+            'package-json/require-files': 'off',
+            'package-json/require-sideEffects': 'off',
             'package-json/require-type': ['off', {ignorePrivate: true}],
             'package-json/specify-peers-locally': 'off',
         },
@@ -967,13 +957,3 @@ export default defineConfig([
         rules: {'no-irregular-whitespace': 'off'},
     },
 ]);
-
-function projectJsonExist(filename: string): string {
-    try {
-        const path = require('node:path').resolve(filename);
-
-        return require('node:fs').existsSync(path) ? path : '';
-    } catch {
-        return '';
-    }
-}

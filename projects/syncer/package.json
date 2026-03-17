@@ -7,9 +7,27 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/taiga-family/configurations.git"
+        "url": "https://github.com/taiga-family/toolkit.git"
     },
     "license": "Apache-2.0",
+    "contributors": [
+        {
+            "name": "Alex Inkin",
+            "email": "alexander@inkin.ru"
+        },
+        {
+            "name": "Maksim Ivanov",
+            "email": "splincodewd@yandex.ru"
+        },
+        {
+            "name": "Vladimir Potekhin",
+            "email": "vladimir.potekh@gmail.com"
+        },
+        {
+            "name": "Nikita Barsukov",
+            "email": "nikita.s.barsukov@gmail.com"
+        }
+    ],
     "main": "./bin/src/index.js",
     "bin": {
         "syncer": "./bin/src/index.js"

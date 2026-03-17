@@ -15,19 +15,16 @@
             "matchUpdateTypes": ["major"]
         },
         {
-            "matchPackageNames": [
-                "@types/jest",
-                "jest",
-                "jest-preset-angular",
-                "ts-jest",
-                "jest-environment-jsdom",
-                "angular-eslint"
-            ],
+            "matchPackageNames": ["@types/jest", "jest", "jest-preset-angular", "ts-jest", "jest-environment-jsdom"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "matchPackageNames": ["zone.js"],
+            "enabled": false
+        },
+        {
+            "matchPackageNames": ["/^@angular.*/", "angular-eslint"],
             "enabled": false
         }
     ]
