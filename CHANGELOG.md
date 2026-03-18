@@ -1,3 +1,23 @@
+### [0.431.0](https://github.com/taiga-family/toolkit/compare/v0.430.0...v0.431.0) (2026-03-18)
+
+### 🚀 Features
+
+- **stylelint-config**: add relative less import extension (#1641)
+  [(4b650cf)](https://github.com/taiga-family/toolkit/commit/4b650cf984c71a5e4d8e1befa539799a7c600e63)
+
+### 🐞 Bug Fixes
+
+- update stylelint dependencies (#1650)
+  [(6532be0)](https://github.com/taiga-family/toolkit/commit/6532be0a0422a03f5930f7eafccf78814e88fb83)
+- update dependency lint-staged to ^16.4.0 (#1649)
+  [(209eb08)](https://github.com/taiga-family/toolkit/commit/209eb08452954b01bb9d582df29d02c28c26944b)
+- update commitlint to ^20.5.0 (#1648)
+  [(bc0ecc0)](https://github.com/taiga-family/toolkit/commit/bc0ecc0eedad00413e89a358a6bebf8075e86817)
+- update dependency @typescript-eslint/eslint-plugin to ^8.57.1 (#1646)
+  [(9909d52)](https://github.com/taiga-family/toolkit/commit/9909d52eba06a2b38248cb5a6045682eb5ea76f7)
+- update dependency @release-it/conventional-changelog to v10.0.6 (#1645)
+  [(0f9b9b3)](https://github.com/taiga-family/toolkit/commit/0f9b9b3a2640b4f1a8e260d5ff08dc0a5f9208eb)
+
 ### [0.430.0](https://github.com/taiga-family/toolkit/compare/v0.429.0...v0.430.0) (2026-03-17)
 
 ### 🐞 Bug Fixes
