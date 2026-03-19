@@ -1,0 +1,17 @@
+:root {
+    --tui-viewport-svh: 0;
+    --tui-viewport-height: 0;
+    --tui-viewport-y: 0;
+    --t-svh: calc(100 * var(--tui-viewport-svh));
+}
+
+/* issue: https://github.com/ryo-manba/stylelint-plugin-use-baseline/issues/111 */
+/* stylelint-disable-next-line */
+@supports (height: 100svh) {
+    --t-svh: 100svh;
+}
+
+* {
+    inset: 0;
+    inset-block-end: max(0px, calc(var(--t-svh) - var(--tui-viewport-height) - var(--tui-viewport-y)));
+}
