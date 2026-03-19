@@ -1,3 +1,10 @@
+### [0.432.0](https://github.com/taiga-family/toolkit/compare/v0.431.0...v0.432.0) (2026-03-19)
+
+### 🚀 Features
+
+- **stylelint-config**: compat with new stylelint-plugin-logical-css (#1653)
+  [(0ca6e3e)](https://github.com/taiga-family/toolkit/commit/0ca6e3ef8524967dc1589f1563e1d96dfd666576)
+
 ### [0.431.0](https://github.com/taiga-family/toolkit/compare/v0.430.0...v0.431.0) (2026-03-18)
 
 ### 🚀 Features
