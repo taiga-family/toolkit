@@ -1,5 +1,6 @@
 const {defaults: browserslist} = require('@taiga-ui/browserslist-config');
 
+/** @type {import('stylelint').Config} */
 module.exports = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
@@ -13,7 +14,10 @@ module.exports = {
         'stylelint-plugin-use-baseline',
         'stylelint-no-unsupported-browser-features',
     ],
-    extends: ['@stylistic/stylelint-config'],
+    extends: [
+        '@stylistic/stylelint-config',
+        'stylelint-plugin-logical-css/configs/recommended',
+    ],
     allowEmptyInput: true,
     customSyntax: 'postcss-less',
     defaultSeverity: 'error',
@@ -152,6 +156,38 @@ module.exports = {
             },
         ],
         'lightness-notation': 'percentage',
+        'logical-css/require-logical-keywords': [
+            true,
+            {
+                ignore: ['clear', 'float', 'resize'],
+            },
+        ],
+        'logical-css/require-logical-properties': [
+            true,
+            {
+                ignore: [
+                    'scroll-margin-bottom',
+                    'scroll-margin-top',
+                    'scroll-margin-left',
+                    'scroll-margin-right',
+                    'scroll-padding-bottom',
+                    'scroll-padding-top',
+                    'scroll-padding-left',
+                    'scroll-padding-right',
+                    'border-bottom-left-radius',
+                    'border-bottom-right-radius',
+                    'border-top-left-radius',
+                    'border-top-right-radius',
+                    'overscroll-behavior-x',
+                    'overscroll-behavior-y',
+                    'contain-intrinsic-height',
+                    'contain-intrinsic-width',
+                    'overflow-y',
+                    'overflow-x',
+                ],
+            },
+        ],
+        'logical-css/require-logical-units': null, // Safari 15+ supports logical properties but not logical units
         'media-feature-name-no-unknown': true,
         'media-feature-name-no-vendor-prefix': null,
         'media-feature-name-value-no-unknown': true,
@@ -204,6 +240,7 @@ module.exports = {
                     'css-text-align-last', // Safari 16+
                     'css-scrollbar', // Safari 18.2+
                     'css-touch-action', // Safari NaN
+                    'viewport-unit-variants', // Safari 16+
                 ],
                 ignorePartialSupport: true,
             },
@@ -261,34 +298,6 @@ module.exports = {
                     'has', // Safari 15.4+
                     'focus-visible', // Safari 15+
                     'fullscreen', // Safari 16+
-                ],
-            },
-        ],
-        'plugin/use-logical-properties-and-values': [
-            true,
-            {
-                ignore: [
-                    'scroll-margin-bottom', // Safari 15+
-                    'scroll-margin-top', // Safari 15+
-                    'scroll-margin-left', // Safari 15+
-                    'scroll-margin-right', // Safari 15+
-                    'scroll-padding-bottom', // Safari 15+
-                    'scroll-padding-top', // Safari 15+
-                    'scroll-padding-left', // Safari 15+
-                    'scroll-padding-right', // Safari 15+
-                    'border-bottom-left-radius', // Safari 15+ & Chrome 89+
-                    'border-bottom-right-radius', // Safari 15+ & Chrome 89+
-                    'border-top-left-radius', // Safari 15+ & Chrome 89+
-                    'border-top-right-radius', // Safari 15+ & Chrome 89+
-                    'clear', //  Safari 15+ & Chrome 118+
-                    'float', //  Safari 15+ & Chrome 118+
-                    'overscroll-behavior-x', // Safari 16+
-                    'overscroll-behavior-y', // Safari 16+
-                    'contain-intrinsic-height', //  Safari 17+ & Chrome 95+
-                    'contain-intrinsic-width', //  Safari 17+ & Chrome 95+
-                    'overflow-y', // Safari 26+ & Chrome 135+
-                    'overflow-x', // Safari 26+ & Chrome 135+
-                    'resize', // Chrome 118+ & Safari NaN+
                 ],
             },
         ],
@@ -380,6 +389,7 @@ module.exports = {
             'vh',
             'vw',
             'fr',
+            'svh',
         ],
         'unit-no-unknown': true,
         'value-keyword-case': [
