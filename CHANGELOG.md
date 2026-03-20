@@ -1,3 +1,19 @@
+### [0.433.0](https://github.com/taiga-family/toolkit/compare/v0.432.0...v0.433.0) (2026-03-20)
+
+### 🚀 Features
+
+- **stylelint-config**: bump stylelint-plugin-use-baseline (#1658)
+  [(515dc34)](https://github.com/taiga-family/toolkit/commit/515dc343efd51282fe342fc7c267e1da4207d19f)
+- **stylelint-config**: allow content-visibility (#1656)
+  [(074cdae)](https://github.com/taiga-family/toolkit/commit/074cdaefe6ec7431f124bca0e71cb39c5f2e9fc6)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: change filename case for tsx files (#1655)
+  [(94fbe22)](https://github.com/taiga-family/toolkit/commit/94fbe225283e3a6d67e4e42cb72184e5c603f7e0)
+- update dependency stylelint to ^17.5.0 (#1654)
+  [(869def4)](https://github.com/taiga-family/toolkit/commit/869def4cd968f1f9daff042bc3b8e6b3202427a1)
+
 ### [0.432.0](https://github.com/taiga-family/toolkit/compare/v0.431.0...v0.432.0) (2026-03-19)
 
 ### 🚀 Features
