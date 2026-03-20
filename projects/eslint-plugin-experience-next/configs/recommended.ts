@@ -899,7 +899,7 @@ export default defineConfig([
         },
     },
     {
-        files: ['**/*.tsx'],
+        files: ['**/*.{jsx,tsx}'],
         rules: {
             '@typescript-eslint/naming-convention': [
                 'error',
@@ -911,6 +911,7 @@ export default defineConfig([
                     selector: 'function',
                 },
             ],
+            'unicorn/filename-case': ['error', {case: 'camelCase'}],
         },
     },
     {
