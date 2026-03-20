@@ -5,8 +5,6 @@
     --t-svh: calc(100 * var(--tui-viewport-svh));
 }
 
-/* issue: https://github.com/ryo-manba/stylelint-plugin-use-baseline/issues/111 */
-/* stylelint-disable-next-line */
 @supports (height: 100svh) {
     --t-svh: 100svh;
 }

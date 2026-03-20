@@ -27,6 +27,10 @@ module.exports = {
         `${process.cwd()}/**/node_modules/**`,
         `${process.cwd()}/**/tests-report/**`,
     ],
+    reportDescriptionlessDisables: true,
+    reportNeedlessDisables: true,
+    reportUnscopedDisables: true,
+    validate: true,
     rules: {
         '@stylistic/declaration-block-trailing-semicolon': null,
         '@stylistic/declaration-colon-newline-after': null,
@@ -302,6 +306,7 @@ module.exports = {
                     'focus-visible', // Safari 15+
                     'fullscreen', // Safari 16+
                 ],
+                ignoreUnits: ['svh'],
             },
         ],
         'property-disallowed-list': [
