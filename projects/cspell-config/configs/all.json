@@ -688,6 +688,7 @@
         "officedocument",
         "wordprocessingml",
         "longname",
-        "prebundle"
+        "prebundle",
+        "Descriptionless"
     ]
 }

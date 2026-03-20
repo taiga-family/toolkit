@@ -27,5 +27,6 @@
     "workspaceLayout": {
         "libsDir": "projects",
         "appsDir": "projects"
-    }
+    },
+    "analytics": true
 }
