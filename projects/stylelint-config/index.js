@@ -240,6 +240,7 @@ module.exports = {
                     'css-text-align-last', // Safari 16+
                     'css-scrollbar', // Safari 18.2+
                     'css-touch-action', // Safari NaN
+                    'css-content-visibility', // Safari 18+
                     'viewport-unit-variants', // Safari 16+
                 ],
                 ignorePartialSupport: true,
@@ -270,6 +271,8 @@ module.exports = {
                     'clip-path': ['/^.+$/'],
                     'color-scheme': ['/^.+$/'],
                     contain: ['/^.+$/'], // Safari 15+
+                    'contain-intrinsic-block-size': ['/^.+$/'], // Safari 18+
+                    'content-visibility': ['/^.+$/'], // Safari 18+
                     hyphens: ['auto'],
                     'line-clamp': ['/^.+$/'],
                     mask: ['/^.+$/'],
