@@ -1,3 +1,10 @@
+### [0.436.0](https://github.com/taiga-family/toolkit/compare/v0.435.0...v0.436.0) (2026-03-23)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: false positive for timeline scope (#1665)
+  [(88d1c48)](https://github.com/taiga-family/toolkit/commit/88d1c486bfd51dd3e43b44a254b7faae1f697398)
+
 ### [0.435.0](https://github.com/taiga-family/toolkit/compare/v0.434.0...v0.435.0) (2026-03-23)
 
 ### [0.434.0](https://github.com/taiga-family/toolkit/compare/v0.433.0...v0.434.0) (2026-03-23)
