@@ -254,7 +254,7 @@ module.exports = {
             true,
             {
                 available: 2021, // Safari 14.5 was released by Apple in May 2021
-                ignoreAtRules: ['view-transition', '/^font-/', '/^supports/'],
+                ignoreAtRules: ['view-transition', 'property', '/^font-/', '/^supports/'],
                 ignoreFunctions: [
                     'color-mix', // Safari 16+
                     'rect', // Safari 17+
