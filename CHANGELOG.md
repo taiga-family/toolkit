@@ -1,3 +1,10 @@
+### [0.437.0](https://github.com/taiga-family/toolkit/compare/v0.436.0...v0.437.0) (2026-03-23)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: ignore `caption-side` (#1666)
+  [(209026b)](https://github.com/taiga-family/toolkit/commit/209026b5797754d619adb753549cd0d6a6906d1d)
+
 ### [0.436.0](https://github.com/taiga-family/toolkit/compare/v0.435.0...v0.436.0) (2026-03-23)
 
 ### 🐞 Bug Fixes
