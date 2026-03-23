@@ -1,3 +1,9 @@
+@property --value {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
 :root {
     --tui-viewport-svh: 0;
     --tui-viewport-height: 0;
