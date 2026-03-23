@@ -29,7 +29,7 @@ module.exports = {
     ],
     reportDescriptionlessDisables: true,
     reportNeedlessDisables: true,
-    reportUnscopedDisables: true,
+    reportUnscopedDisables: false,
     validate: true,
     rules: {
         '@stylistic/declaration-block-trailing-semicolon': null,
