@@ -100,7 +100,7 @@ module.exports = {
                 ignore: ['after-comment'],
             },
         ],
-        'custom-property-no-missing-var-function': true,
+        'custom-property-no-missing-var-function': null, // TODO: https://github.com/stylelint/stylelint/issues/9163
         'declaration-block-no-duplicate-custom-properties': true,
         'declaration-block-no-duplicate-properties': [
             true,
@@ -289,11 +289,15 @@ module.exports = {
                     'overscroll-behavior-x': ['/^.+$/'], // Safari 16+
                     'position-anchor': ['/^.+$/'],
                     resize: ['/^.+$/'],
+                    rotate: ['/^.+$/'],
                     scale: ['/^.+$/'],
                     'scroll-behavior': ['/^.+$/'], // Safari 15+
                     'scrollbar-width': ['/^.+$/'], // Safari 18.2+
                     'text-wrap': ['/^.+$/'], // Safari 17+
+                    'timeline-scope': ['/^.+$/'], // Safari 26+
+                    translate: ['/^.+$/'],
                     'user-select': ['none', 'auto'],
+                    'view-timeline': ['/^.+$/'], // Safari 26+
                     'word-break': ['break-word'],
                     'writing-mode': ['tb'],
                     zoom: ['/^.+$/'],
