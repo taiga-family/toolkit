@@ -163,7 +163,7 @@ module.exports = {
         'logical-css/require-logical-keywords': [
             true,
             {
-                ignore: ['clear', 'float', 'resize'],
+                ignore: ['clear', 'float', 'resize', 'caption-side'],
             },
         ],
         'logical-css/require-logical-properties': [
