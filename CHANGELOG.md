@@ -1,3 +1,19 @@
+### [0.434.0](https://github.com/taiga-family/toolkit/compare/v0.433.0...v0.434.0) (2026-03-23)
+
+### 🚀 Features
+
+- **stylelint-config**: support `@property` (#1664)
+  [(cfe7695)](https://github.com/taiga-family/toolkit/commit/cfe7695aecf589a272aa2407ff2a2373e7116305)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: disable reportUnscopedDisables (#1663)
+  [(69a579c)](https://github.com/taiga-family/toolkit/commit/69a579c81dee390ab103e96389b4d7bd7ac6b9f1)
+- update dependency stylelint-plugin-use-baseline to ^1.4.1 (#1662)
+  [(6dc4e6d)](https://github.com/taiga-family/toolkit/commit/6dc4e6d33806a06ed62ca5396a1236baf64208ab)
+- update eslint ecosystem (#1659)
+  [(e887568)](https://github.com/taiga-family/toolkit/commit/e887568979ce887f4421ee0cc8c29700e6cac795)
+
 ### [0.433.0](https://github.com/taiga-family/toolkit/compare/v0.432.0...v0.433.0) (2026-03-20)
 
 ### 🚀 Features
