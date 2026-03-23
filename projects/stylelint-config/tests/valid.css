@@ -4,6 +4,27 @@
     initial-value: 0;
 }
 
+@keyframes rotate-appear {
+    from {
+        rotate: 0deg;
+        translate: 0;
+    }
+
+    to {
+        rotate: 720deg;
+        translate: 100%;
+    }
+}
+
+[directive] {
+    timeline-scope: --value;
+}
+
+.animation {
+    animation: rotate-appear 1ms linear;
+    animation-timeline: --my-scroller;
+}
+
 :root {
     --tui-viewport-svh: 0;
     --tui-viewport-height: 0;
