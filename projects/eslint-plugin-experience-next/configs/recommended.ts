@@ -396,6 +396,7 @@ export default defineConfig([
             'import/no-cycle': 'error',
             'import/no-duplicates': ['error', {'prefer-inline': true}],
             'import/no-mutable-exports': 'error',
+            'import/no-named-as-default': 'error',
             'import/no-self-import': 'error',
             'import/no-unresolved': 'off',
             'import/no-useless-path-segments': ['error', {noUselessIndex: true}],
@@ -710,6 +711,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
             '@taiga-ui/experience-next/object-single-line': ['error', {printWidth: 90}],
+            '@taiga-ui/experience-next/prefer-multi-arg-push': 'error',
             '@taiga-ui/experience-next/short-tui-imports': 'error',
             '@taiga-ui/experience-next/standalone-imports-sort': [
                 'error',
