@@ -15,25 +15,29 @@ const ruleTester = new RuleTester({
 ruleTester.run('injection-token-description', rule, {
     invalid: [
         {
-            code: "const TEST_TOKEN = new InjectionToken('some description');",
+            code: /* TypeScript */ "const TEST_TOKEN = new InjectionToken('some description');",
             errors: [{messageId: 'invalid-injection-token-description'}],
-            output: "const TEST_TOKEN = new InjectionToken('[TEST_TOKEN]: some description');",
+            output: /* TypeScript */ "const TEST_TOKEN = new InjectionToken('[TEST_TOKEN]: some description');",
         },
         {
-            code: 'const SERVICE_TOKEN = new InjectionToken(`some ${variable} description`);',
+            code: /* TypeScript */ 'const SERVICE_TOKEN = new InjectionToken(`some ${variable} description`);',
             errors: [{messageId: 'invalid-injection-token-description'}],
-            output: 'const SERVICE_TOKEN = new InjectionToken(`[SERVICE_TOKEN]: some ${variable} description`);',
+            output: /* TypeScript */ 'const SERVICE_TOKEN = new InjectionToken(`[SERVICE_TOKEN]: some ${variable} description`);',
         },
     ],
     valid: [
         {
-            code: "const TEST_TOKEN = new InjectionToken('[TEST_TOKEN]: some description');",
+            code: /* TypeScript */ "const TEST_TOKEN = new InjectionToken('[TEST_TOKEN]: some description');",
         },
-        {code: "const testToken = new InjectionToken('testToken description');"},
         {
-            code: "const MY_SERVICE_TOKEN = new InjectionToken('Service for MY_SERVICE_TOKEN');",
+            code: /* TypeScript */ "const testToken = new InjectionToken('testToken description');",
         },
-        {code: 'const API_TOKEN = new InjectionToken(`[API_TOKEN]: ${someVar}`);'},
-        {code: "new InjectionToken('some description');"},
+        {
+            code: /* TypeScript */ "const MY_SERVICE_TOKEN = new InjectionToken('Service for MY_SERVICE_TOKEN');",
+        },
+        {
+            code: /* TypeScript */ 'const API_TOKEN = new InjectionToken(`[API_TOKEN]: ${someVar}`);',
+        },
+        {code: /* TypeScript */ "new InjectionToken('some description');"},
     ],
 });

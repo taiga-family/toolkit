@@ -12,11 +12,11 @@ const ruleTester = new RuleTester({
 ruleTester.run('class-property-naming', rule, {
     invalid: [
         {
-            code: `
-        class Test {
-          element: Element;
-        }
-      `,
+            code: /* TypeScript */ `
+                class Test {
+                    element: Element;
+                }
+            `,
             errors: [{messageId: 'invalidName'}],
             options: [
                 [
@@ -27,18 +27,18 @@ ruleTester.run('class-property-naming', rule, {
                     },
                 ],
             ],
-            output: `
-        class Test {
-          el: Element;
-        }
-      `,
+            output: /* TypeScript */ `
+                class Test {
+                    el: Element;
+                }
+            `,
         },
         {
-            code: `
-          class Test {
-            window: Window;
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    window: Window;
+                }
+            `,
             errors: [{messageId: 'invalidName'}],
             options: [
                 [
@@ -49,18 +49,18 @@ ruleTester.run('class-property-naming', rule, {
                     },
                 ],
             ],
-            output: `
-          class Test {
-            win: Window;
-          }
-        `,
+            output: /* TypeScript */ `
+                class Test {
+                    win: Window;
+                }
+            `,
         },
         {
-            code: `
-          class Test {
-            document: Document;
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    document: Document;
+                }
+            `,
             errors: [{messageId: 'invalidName'}],
             options: [
                 [
@@ -71,18 +71,18 @@ ruleTester.run('class-property-naming', rule, {
                     },
                 ],
             ],
-            output: `
-          class Test {
-            doc: Document;
-          }
-        `,
+            output: /* TypeScript */ `
+                class Test {
+                    doc: Document;
+                }
+            `,
         },
         {
-            code: `
-          class Test {
-            element?: Element | undefined;
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    element?: Element | undefined;
+                }
+            `,
             errors: [{messageId: 'invalidName'}],
             options: [
                 [
@@ -93,22 +93,22 @@ ruleTester.run('class-property-naming', rule, {
                     },
                 ],
             ],
-            output: `
-          class Test {
-            el?: Element | undefined;
-          }
-        `,
+            output: /* TypeScript */ `
+                class Test {
+                    el?: Element | undefined;
+                }
+            `,
         },
     ],
     valid: [
         {
-            code: `
-          class Test {
-            el: Element;
-            win: Window;
-            doc: Document;
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    el: Element;
+                    win: Window;
+                    doc: Document;
+                }
+            `,
             options: [
                 [
                     {
@@ -130,12 +130,12 @@ ruleTester.run('class-property-naming', rule, {
             ],
         },
         {
-            code: `
-          class Test {
-            element: string; // Not matching our types
-            window: number;  // Not matching our types
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    element: string; // Not matching our types
+                    window: number; // Not matching our types
+                }
+            `,
             options: [
                 [
                     {
@@ -157,13 +157,13 @@ ruleTester.run('class-property-naming', rule, {
             ],
         },
         {
-            code: `
-          class Test {
-            private el: Element;
-            protected win: Window;
-            public doc: Document;
-          }
-        `,
+            code: /* TypeScript */ `
+                class Test {
+                    private el: Element;
+                    protected win: Window;
+                    public doc: Document;
+                }
+            `,
             options: [
                 [
                     {
