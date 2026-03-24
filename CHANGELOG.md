@@ -1,3 +1,10 @@
+### [0.439.0](https://github.com/taiga-family/toolkit/compare/v0.438.0...v0.439.0) (2026-03-24)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `prefer-multi-arg` (#1671)
+  [(65a3fa4)](https://github.com/taiga-family/toolkit/commit/65a3fa4a5715fca914232be4758f41350ed6492e)
+
 ### [0.438.0](https://github.com/taiga-family/toolkit/compare/v0.437.0...v0.438.0) (2026-03-24)
 
 ### 🚀 Features
