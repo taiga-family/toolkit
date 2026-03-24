@@ -689,6 +689,7 @@
         "wordprocessingml",
         "longname",
         "prebundle",
-        "Descriptionless"
+        "Descriptionless",
+        "hardline"
     ]
 }
