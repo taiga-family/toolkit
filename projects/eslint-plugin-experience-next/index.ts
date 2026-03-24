@@ -18,6 +18,7 @@ import noImplicitPublic from './rules/no-implicit-public';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import objectSingleLine from './rules/object-single-line';
 import preferDeepImports from './rules/prefer-deep-imports';
+import preferMultiArgPush from './rules/prefer-multi-arg-push';
 import shortTuiImports from './rules/short-tui-imports';
 import standaloneImportsSort from './rules/standalone-imports-sort';
 import strictTuiDocExample from './rules/strict-tui-doc-example';
@@ -47,6 +48,7 @@ const plugin = {
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'object-single-line': objectSingleLine,
         'prefer-deep-imports': preferDeepImports,
+        'prefer-multi-arg-push': preferMultiArgPush,
         'short-tui-imports': shortTuiImports,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
