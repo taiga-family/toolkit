@@ -15,62 +15,62 @@ const ruleTester = new RuleTester({
 ruleTester.run('strict-tui-doc-example', rule, {
     invalid: [
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        TypeScript: import('./example.html')
+                        TypeScript: import('./example.html'),
                     };
                 }
             `,
             errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
-            output: `
+            output: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        TypeScript: import('./example.ts')
+                        TypeScript: import('./example.ts'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        HTML: import('./example.ts')
+                        HTML: import('./example.ts'),
                     };
                 }
             `,
             errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
-            output: `
+            output: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        HTML: import('./example.html')
+                        HTML: import('./example.html'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        InvalidKey: import('./example.ts')
+                        InvalidKey: import('./example.ts'),
                     };
                 }
             `,
             errors: [{messageId: 'strict-doc-example-extensions-invalid-key'}],
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        './components/test.ts': import('./components/test.html')
+                        './components/test.ts': import('./components/test.html'),
                     };
                 }
             `,
             errors: [{messageId: 'strict-doc-example-extensions-invalid-value'}],
-            output: `
+            output: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        './components/test.ts': import('./components/test.ts')
+                        './components/test.ts': import('./components/test.ts'),
                     };
                 }
             `,
@@ -78,46 +78,46 @@ ruleTester.run('strict-tui-doc-example', rule, {
     ],
     valid: [
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples = {
-                        TypeScript: import('./example.html')
+                        TypeScript: import('./example.html'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        TypeScript: import('./example.ts')
+                        TypeScript: import('./example.ts'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        HTML: import('./example.html')
+                        HTML: import('./example.html'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        './components/test.ts': import('./components/test.ts')
+                        './components/test.ts': import('./components/test.ts'),
                     };
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class TestComponent {
                     private examples: TuiDocExample = {
-                        TypeScript: import('./example.ts?raw')
+                        TypeScript: import('./example.ts?raw'),
                     };
                 }
             `,

@@ -375,6 +375,7 @@ export default defineConfig([
             ],
             '@typescript-eslint/unbound-method': 'off',
             '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
+            'arrow-body-style': ['error', 'as-needed'],
             curly: ['error', 'all'],
             'decorator-position/decorator-position': [
                 'error',

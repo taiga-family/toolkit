@@ -72,58 +72,56 @@ function splitQueryAndHash(value) {
 }
 
 /** @type {import('stylelint').Rule} */
-const ruleFunction = (primary) => {
-    return (root, result) => {
-        const validOptions = validateOptions(result, ruleName, {
-            actual: primary,
-            possible: [true],
-        });
+const ruleFunction = (primary) => (root, result) => {
+    const validOptions = validateOptions(result, ruleName, {
+        actual: primary,
+        possible: [true],
+    });
 
-        if (!validOptions) {
+    if (!validOptions) {
+        return;
+    }
+
+    const expectedExtension = getExpectedExtension(root);
+
+    root.walkAtRules('import', (atRule) => {
+        const params = atRule.params.trim();
+
+        if (isUrlImport(params)) {
             return;
         }
 
-        const expectedExtension = getExpectedExtension(root);
+        const match = params.match(/^(['"])([^'"]+)\1(.*)$/);
 
-        root.walkAtRules('import', (atRule) => {
-            const params = atRule.params.trim();
+        if (!match) {
+            return;
+        }
 
-            if (isUrlImport(params)) {
-                return;
-            }
+        const [, quote, rawImportPath, tail] = match;
 
-            const match = params.match(/^(['"])([^'"]+)\1(.*)$/);
+        if (!isLocalImportPath(rawImportPath)) {
+            return;
+        }
 
-            if (!match) {
-                return;
-            }
+        const {pathname, suffix} = splitQueryAndHash(rawImportPath);
 
-            const [, quote, rawImportPath, tail] = match;
+        if (hasKnownStyleExtension(pathname)) {
+            return;
+        }
 
-            if (!isLocalImportPath(rawImportPath)) {
-                return;
-            }
+        const fixedPath = `${pathname}${expectedExtension}${suffix}`;
+        const fixedParams = `${quote}${fixedPath}${quote}${tail}`;
 
-            const {pathname, suffix} = splitQueryAndHash(rawImportPath);
-
-            if (hasKnownStyleExtension(pathname)) {
-                return;
-            }
-
-            const fixedPath = `${pathname}${expectedExtension}${suffix}`;
-            const fixedParams = `${quote}${fixedPath}${quote}${tail}`;
-
-            report({
-                fix: () => {
-                    atRule.params = fixedParams;
-                },
-                message: messages.expected(rawImportPath, fixedPath),
-                node: atRule,
-                result,
-                ruleName,
-            });
+        report({
+            fix: () => {
+                atRule.params = fixedParams;
+            },
+            message: messages.expected(rawImportPath, fixedPath),
+            node: atRule,
+            result,
+            ruleName,
         });
-    };
+    });
 };
 
 ruleFunction.ruleName = ruleName;

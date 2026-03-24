@@ -9,7 +9,7 @@ const ruleTester = new RuleTester({
 ruleTester.run('prefer-multi-arg-push', rule, {
     invalid: [
         {
-            code: `
+            code: /* TypeScript */ `
                 output.push('# Getting Started');
                 output.push('');
             `,
@@ -17,12 +17,12 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 output.push('# Getting Started', '');
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 output.push('a');
                 output.push('b');
                 output.push('c');
@@ -32,12 +32,12 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 output.push('a', 'b', 'c');
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 function build() {
                     output.push('hello');
                     output.push('world');
@@ -47,14 +47,14 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 function build() {
                     output.push('hello', 'world');
                 }
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 lines.push('first');
                 lines.push('second');
                 other.push('x');
@@ -66,13 +66,13 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 lines.push('first', 'second');
                 other.push('x', 'y');
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 result.push(a, b);
                 result.push(c);
             `,
@@ -80,12 +80,12 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 result.push(a, b, c);
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 this.list.push('a');
                 this.list.push('b');
             `,
@@ -93,26 +93,26 @@ ruleTester.run('prefer-multi-arg-push', rule, {
                 {messageId: 'preferMultiArgPush'},
                 {messageId: 'preferMultiArgPush'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 this.list.push('a', 'b');
             `,
         },
     ],
     valid: [
-        {code: "output.push('# Getting Started', '');"},
+        {code: /* TypeScript */ "output.push('# Getting Started', '');"},
         {
-            code: `
+            code: /* TypeScript */ `
                 output.push('a');
                 console.log('b');
                 output.push('c');
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 arr1.push('x');
                 arr2.push('y');
             `,
         },
-        {code: "output.push('only one');"},
+        {code: /* TypeScript */ "output.push('only one');"},
     ],
 });

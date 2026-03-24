@@ -19,57 +19,57 @@ const rule = rules['naming-convention'];
 ruleTester.run('Recommended naming convention', rule, {
     invalid: [
         {
-            code: 'export class test_component {}',
+            code: /* TypeScript */ 'export class test_component {}',
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
         },
         {
-            code: 'export function test_function() {}',
+            code: /* TypeScript */ 'export function test_function() {}',
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
         },
         {
-            code: 'export interface test_interface {}',
+            code: /* TypeScript */ 'export interface test_interface {}',
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
         },
         {
-            code: 'const snake_case_var = 42;',
+            code: /* TypeScript */ 'const snake_case_var = 42;',
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
         },
     ],
     valid: [
         {
-            code: 'export class TestComponent {}',
+            code: /* TypeScript */ 'export class TestComponent {}',
             options: recommended,
         },
         {
-            code: 'export abstract class AbstractService {}',
+            code: /* TypeScript */ 'export abstract class AbstractService {}',
             options: recommended,
         },
         {
-            code: 'export function testFunction() {}',
+            code: /* TypeScript */ 'export function testFunction() {}',
             options: recommended,
         },
         {
-            code: 'export interface TestInterface {}',
+            code: /* TypeScript */ 'export interface TestInterface {}',
             options: recommended,
         },
         {
-            code: 'const testVariable = 42;',
+            code: /* TypeScript */ 'const testVariable = 42;',
             options: recommended,
         },
         {
-            code: 'const TEST_CONSTANT = 42;',
+            code: /* TypeScript */ 'const TEST_CONSTANT = 42;',
             options: recommended,
         },
         {
-            code: 'const {someNormalProp} = object;',
+            code: /* TypeScript */ 'const {someNormalProp} = object;',
             options: recommended,
         },
         {
-            code: 'export enum TestEnum { Value }',
+            code: /* TypeScript */ 'export enum TestEnum { Value }',
             options: recommended,
         },
     ],
@@ -78,67 +78,67 @@ ruleTester.run('Recommended naming convention', rule, {
 ruleTester.run('Taiga naming convention', rule, {
     invalid: [
         {
-            code: 'export class TestComponent {}',
+            code: /* TypeScript */ 'export class TestComponent {}',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
         {
-            code: 'export interface TestInterface {}',
+            code: /* TypeScript */ 'export interface TestInterface {}',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
         {
-            code: 'export function testFunction() {}',
+            code: /* TypeScript */ 'export function testFunction() {}',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
         {
-            code: 'export type TestType = string;',
+            code: /* TypeScript */ 'export type TestType = string;',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
         {
-            code: 'export enum TestEnum { Value }',
+            code: /* TypeScript */ 'export enum TestEnum { Value }',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
         {
-            code: 'export abstract class TestService {}',
+            code: /* TypeScript */ 'export abstract class TestService {}',
             errors: [{messageId: 'missingAffix'}],
             options: custom,
         },
     ],
     valid: [
         {
-            code: 'export class TuiComponent {}',
+            code: /* TypeScript */ 'export class TuiComponent {}',
             options: custom,
         },
         {
-            code: 'export abstract class AbstractTuiService {}',
+            code: /* TypeScript */ 'export abstract class AbstractTuiService {}',
             options: custom,
         },
         {
-            code: 'export abstract class TuiAbstractService {}',
+            code: /* TypeScript */ 'export abstract class TuiAbstractService {}',
             options: custom,
         },
         {
-            code: 'export function tuiTestFunction() {}',
+            code: /* TypeScript */ 'export function tuiTestFunction() {}',
             options: custom,
         },
         {
-            code: 'export interface TuiTestInterface {}',
+            code: /* TypeScript */ 'export interface TuiTestInterface {}',
             options: custom,
         },
         {
-            code: 'export type TuiTestType = string;',
+            code: /* TypeScript */ 'export type TuiTestType = string;',
             options: custom,
         },
         {
-            code: 'export enum TuiTestEnum { Value }',
+            code: /* TypeScript */ 'export enum TuiTestEnum { Value }',
             options: custom,
         },
         {
-            code: 'const testVariable = 42;',
+            code: /* TypeScript */ 'const testVariable = 42;',
             options: custom,
         },
     ],

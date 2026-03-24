@@ -18,7 +18,7 @@ const ruleConfig = {
 ruleTester.run('html/no-restricted-attrs - logical CSS properties', rule, {
     invalid: [
         {
-            code: '<div [style.left.rem]="spacing">Should use inset-inline-start</div>',
+            code: /* HTML */ /* HTML */ '<div [style.left.rem]="spacing">Should use inset-inline-start</div>',
             errors: [
                 {
                     message:
@@ -28,7 +28,7 @@ ruleTester.run('html/no-restricted-attrs - logical CSS properties', rule, {
             options: [ruleConfig],
         },
         {
-            code: '<div [style.right]="spacing">Should use inset-inline-end</div>',
+            code: /* HTML */ '<div [style.right]="spacing">Should use inset-inline-end</div>',
             errors: [
                 {
                     message:
@@ -40,11 +40,11 @@ ruleTester.run('html/no-restricted-attrs - logical CSS properties', rule, {
     ],
     valid: [
         {
-            code: '<div [style.inset-inline-start.rem]="spacing">Good logical property</div>',
+            code: /* HTML */ '<div [style.inset-inline-start.rem]="spacing">Good logical property</div>',
             options: [ruleConfig],
         },
         {
-            code: '<div [style.color]="color">Non-spatial property is fine</div>',
+            code: /* HTML */ '<div [style.color]="color">Non-spatial property is fine</div>',
             options: [ruleConfig],
         },
     ],

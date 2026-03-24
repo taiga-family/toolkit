@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
 ruleTester.run('flat-exports', rule, {
     invalid: [
         {
-            code: `
+            code: /* TypeScript */ `
                 class TuiTextfieldDirective {}
                 class TuiInputDirective {}
 
@@ -20,7 +20,7 @@ ruleTester.run('flat-exports', rule, {
                 export const TuiInput = [TuiTextfield, TuiInputDirective] as const;
             `,
             errors: [{data: {name: 'TuiTextfield'}, messageId: 'spreadArrays'}],
-            output: `
+            output: /* TypeScript */ `
                 class TuiTextfieldDirective {}
                 class TuiInputDirective {}
 
@@ -29,7 +29,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -42,7 +42,7 @@ ruleTester.run('flat-exports', rule, {
                 {data: {name: 'X'}, messageId: 'spreadArrays'},
                 {data: {name: 'Y'}, messageId: 'spreadArrays'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -53,7 +53,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -61,7 +61,7 @@ ruleTester.run('flat-exports', rule, {
                 export const Second = [First, B] as const;
             `,
             errors: [{data: {name: 'First'}, messageId: 'spreadArrays'}],
-            output: `
+            output: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -70,7 +70,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -83,7 +83,7 @@ ruleTester.run('flat-exports', rule, {
                 {data: {name: 'One'}, messageId: 'spreadArrays'},
                 {data: {name: 'Two'}, messageId: 'spreadArrays'},
             ],
-            output: `
+            output: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -94,7 +94,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -103,7 +103,7 @@ ruleTester.run('flat-exports', rule, {
                 export const Combo = [Base, C] as const;
             `,
             errors: [{data: {name: 'Base'}, messageId: 'spreadArrays'}],
-            output: `
+            output: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -115,19 +115,19 @@ ruleTester.run('flat-exports', rule, {
     ],
     valid: [
         {
-            code: `
+            code: /* TypeScript */ `
                 export const A = ['abc'] as const;
                 export const B = [A, 123] as const;
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 export const A = ['abc'] as const;
                 export const B = [A, class C {}] as const;
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -136,7 +136,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -145,7 +145,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -155,7 +155,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
 
@@ -163,7 +163,7 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 class B {}
                 class C {}
@@ -172,14 +172,14 @@ ruleTester.run('flat-exports', rule, {
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 class A {}
                 export const Inner = ['x'] as const;
                 export const Outer = [Inner, A] as const;
             `,
         },
         {
-            code: `
+            code: /* TypeScript */ `
                 export const A = ['abc'] as const;
                 export const B = [A] as const;
                 export const C = [B] as const;
