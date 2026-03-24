@@ -1,3 +1,17 @@
+### [0.438.0](https://github.com/taiga-family/toolkit/compare/v0.437.0...v0.438.0) (2026-03-24)
+
+### 🚀 Features
+
+- **prettier-config**: support `Typescript` embedded code (#1670)
+  [(a8e3d24)](https://github.com/taiga-family/toolkit/commit/a8e3d248ea36f9043c6e5cf50148974b1a886a31)
+
+### 🐞 Bug Fixes
+
+- update @typescript-eslint/\* deps to ^8.57.2 (#1669)
+  [(775ea7f)](https://github.com/taiga-family/toolkit/commit/775ea7fe19727bc325d2718be3826167162c1a82)
+- update dependency @cspell/dict-en-gb to ^5.0.26 (#1667)
+  [(a677361)](https://github.com/taiga-family/toolkit/commit/a6773614d623f3b32b5088f8001bfcd3f060b1e4)
+
 ### [0.437.0](https://github.com/taiga-family/toolkit/compare/v0.436.0...v0.437.0) (2026-03-23)
 
 ### 🐞 Bug Fixes
