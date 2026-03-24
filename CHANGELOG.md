@@ -1,3 +1,10 @@
+### [0.440.0](https://github.com/taiga-family/toolkit/compare/v0.439.0...v0.440.0) (2026-03-24)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `arrow-body-style` (#1672)
+  [(e55e6fd)](https://github.com/taiga-family/toolkit/commit/e55e6fd6eff83d9992d3d2c8eb4bd518f2123a49)
+
 ### [0.439.0](https://github.com/taiga-family/toolkit/compare/v0.438.0...v0.439.0) (2026-03-24)
 
 ### 🚀 Features
