@@ -36,7 +36,7 @@
         "@taiga-ui/browserslist-config": "0.443.0",
         "postcss": "^8.5.8",
         "postcss-less": "^6.0.0",
-        "stylelint": "^17.5.0",
+        "stylelint": "^17.6.0",
         "stylelint-config-standard": "^40.0.0",
         "stylelint-no-unsupported-browser-features": "^8.1.1",
         "stylelint-order": "^8.1.1",
