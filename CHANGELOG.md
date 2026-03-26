@@ -1,3 +1,12 @@
+### [0.443.0](https://github.com/taiga-family/toolkit/compare/v0.442.0...v0.443.0) (2026-03-26)
+
+### 🐞 Bug Fixes
+
+- update eslint ecosystem (#1678)
+  [(fef76ca)](https://github.com/taiga-family/toolkit/commit/fef76ca4b12e547a295a803003eca19c3f9abf12)
+- update dependency @cspell/dict-en-gb to ^5.0.27 (#1677)
+  [(fa61f41)](https://github.com/taiga-family/toolkit/commit/fa61f41fb5d15226a14c01eba8036eea7b1b8ae1)
+
 ### [0.442.0](https://github.com/taiga-family/toolkit/compare/v0.441.0...v0.442.0) (2026-03-26)
 
 ### [0.441.0](https://github.com/taiga-family/toolkit/compare/v0.440.0...v0.441.0) (2026-03-26)
