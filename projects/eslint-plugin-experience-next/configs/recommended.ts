@@ -34,10 +34,7 @@ import {projectJsonExist} from './utils/project-json-exist';
 
 export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
 
-const tsconfig =
-    projectJsonExist('tsconfig.eslint.json') ||
-    projectJsonExist('tsconfig.json') ||
-    projectJsonExist('tsconfig.base.json');
+const tsconfig = projectJsonExist('tsconfig.eslint.json');
 
 const parserOptions = tsconfig
     ? {project: [tsconfig]}
