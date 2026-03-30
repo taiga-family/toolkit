@@ -1,3 +1,10 @@
+### [0.445.0](https://github.com/taiga-family/toolkit/compare/v0.444.0...v0.445.0) (2026-03-30)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: ensure only tsconfig.eslint.json (#1681)
+  [(88673e9)](https://github.com/taiga-family/toolkit/commit/88673e94b227d1a0e51e241ea7b591fadf8685ac)
+
 ### [0.444.0](https://github.com/taiga-family/toolkit/compare/v0.443.0...v0.444.0) (2026-03-26)
 
 ### 🐞 Bug Fixes
