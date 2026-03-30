@@ -1,3 +1,10 @@
+### [0.444.0](https://github.com/taiga-family/toolkit/compare/v0.443.0...v0.444.0) (2026-03-26)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^17.6.0 (#1679)
+  [(b8ef42d)](https://github.com/taiga-family/toolkit/commit/b8ef42d0c3f1de497d1c6ce925f7edff763b6b72)
+
 ### [0.443.0](https://github.com/taiga-family/toolkit/compare/v0.442.0...v0.443.0) (2026-03-26)
 
 ### 🐞 Bug Fixes
