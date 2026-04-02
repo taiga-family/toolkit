@@ -26,11 +26,16 @@
         }
     ],
     "type": "module",
+    "dependencies": {
+        "angular-eslint": "21.3.1"
+    },
     "devDependencies": {
         "@typescript-eslint/rule-tester": "8.58.0",
         "glob": "13.0.6"
     },
     "peerDependencies": {
+        "@angular-devkit/core": ">= 19.0.0",
+        "@angular-devkit/schematics": ">= 19.0.0",
         "@eslint/compat": "^2.0.3",
         "@eslint/markdown": "^8.0.1",
         "@html-eslint/eslint-plugin": "^0.58.1",
@@ -39,7 +44,6 @@
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/glob": "*",
         "@typescript-eslint/eslint-plugin": "^8.58.0",
-        "angular-eslint": "^20.7.0",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.7",
         "eslint-plugin-compat": "^7.0.1",
