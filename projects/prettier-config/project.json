@@ -1,6 +1,6 @@
 {
-    "name": "prettier-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "prettier-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/prettier-config",

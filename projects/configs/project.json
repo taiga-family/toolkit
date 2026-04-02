@@ -1,6 +1,6 @@
 {
-    "name": "configs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "configs",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/configs",

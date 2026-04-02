@@ -1,6 +1,6 @@
 {
-    "name": "browserslist-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "browserslist-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/browserslist-config",

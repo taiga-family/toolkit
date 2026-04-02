@@ -1,6 +1,6 @@
 {
-    "name": "cspell-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "cspell-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/cspell-config",

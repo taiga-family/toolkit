@@ -1,6 +1,6 @@
 {
-    "name": "auto-changelog-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "auto-changelog-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/auto-changelog-config",

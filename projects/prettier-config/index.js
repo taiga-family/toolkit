@@ -32,16 +32,19 @@ module.exports = {
             },
         },
         {
-            files: ['package.json', 'ng-package.json'],
+            files: [
+                'package.json',
+                'ng-package.json',
+                'project.json',
+                'renovate.json',
+                'default.json',
+                'tsconfig*.json',
+            ],
             options: {
                 parser: 'json-stringify',
                 plugins: [
                     require.resolve(
-                        path.resolve(
-                            __dirname,
-                            'plugins',
-                            'prettier-plugin-sort-package.js',
-                        ),
+                        path.resolve(__dirname, 'plugins', 'prettier-plugin-sort.js'),
                     ),
                 ],
             },

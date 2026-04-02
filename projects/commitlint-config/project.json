@@ -1,36 +1,36 @@
 {
-    "name": "commitlint-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "commitlint-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/commitlint-config",
     "targets": {
         "build": {
             "executor": "@nx/rollup:rollup",
-            "outputs": ["{workspaceRoot}/dist/{projectName}"],
             "options": {
-                "outputPath": "{workspaceRoot}/dist/{projectName}",
-                "main": "projects/{projectName}/index.ts",
-                "tsConfig": "projects/{projectName}/tsconfig.lib.json",
                 "assets": ["projects/{projectName}/README.md"],
                 "compiler": "tsc",
                 "external": "all",
                 "format": ["esm", "cjs"],
-                "generateExportsField": true
-            }
+                "generateExportsField": true,
+                "main": "projects/{projectName}/index.ts",
+                "outputPath": "{workspaceRoot}/dist/{projectName}",
+                "tsConfig": "projects/{projectName}/tsconfig.lib.json"
+            },
+            "outputs": ["{workspaceRoot}/dist/{projectName}"]
         },
         "publish": {
+            "dependsOn": [
+                {
+                    "dependencies": false,
+                    "params": "ignore",
+                    "target": "build"
+                }
+            ],
             "executor": "nx:run-commands",
             "options": {
                 "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "params": "ignore",
-                    "dependencies": false
-                }
-            ]
+            }
         }
     }
 }

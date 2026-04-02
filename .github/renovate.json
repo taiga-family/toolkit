@@ -7,7 +7,11 @@
             "matchDepTypes": ["peerDependencies", "optionalDependencies"]
         },
         {
-            "matchDepTypes": ["dependencies", "peerDependencies", "optionalDependencies"],
+            "matchDepTypes": [
+                "dependencies",
+                "peerDependencies",
+                "optionalDependencies"
+            ],
             "semanticCommitType": "fix"
         },
         {
@@ -15,6 +19,7 @@
             "matchUpdateTypes": ["major"]
         },
         {
+            "enabled": false,
             "matchPackageNames": [
                 "@types/jest",
                 "jest",
@@ -23,16 +28,15 @@
                 "jest-environment-jsdom",
                 "typescript"
             ],
-            "matchUpdateTypes": ["major"],
-            "enabled": false
+            "matchUpdateTypes": ["major"]
         },
         {
-            "matchPackageNames": ["zone.js"],
-            "enabled": false
+            "enabled": false,
+            "matchPackageNames": ["zone.js"]
         },
         {
-            "matchPackageNames": ["/^@angular.*/", "angular-eslint"],
-            "enabled": false
+            "enabled": false,
+            "matchPackageNames": ["/^@angular.*/", "angular-eslint"]
         }
     ]
 }
