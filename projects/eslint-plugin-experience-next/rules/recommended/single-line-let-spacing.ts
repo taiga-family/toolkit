@@ -17,7 +17,7 @@ export const rule = createRule({
             const {sourceCode} = context;
             const sourceText = sourceCode.getText();
 
-            function buildReplacement(
+            function buildSpacingReplacement(
                 betweenText: string,
                 nextLine: number,
                 blankLineCount: number,
@@ -28,7 +28,7 @@ export const rule = createRule({
                     sourceCode.lines[nextLine] ?? '',
                 );
 
-                return `;${lineBreak.repeat(blankLineCount + 1)}${indentation}`;
+                return `${lineBreak.repeat(blankLineCount + 1)}${indentation}`;
             }
 
             function checkChildren(children: readonly unknown[]): void {
@@ -92,7 +92,7 @@ export const rule = createRule({
                                 fix: (fixer) =>
                                     fixer.replaceTextRange(
                                         [currentEnd, nextStart],
-                                        buildReplacement(betweenText, nextLine, 0),
+                                        buildSpacingReplacement(betweenText, nextLine, 0),
                                     ),
                                 loc: sourceSpanToLoc(next.sourceSpan),
                                 messageId: 'singleLineLetSpacingUnexpectedBlankLine',
@@ -110,7 +110,7 @@ export const rule = createRule({
                                 fix: (fixer) =>
                                     fixer.replaceTextRange(
                                         [currentEnd, nextStart],
-                                        buildReplacement(betweenText, nextLine, 1),
+                                        buildSpacingReplacement(betweenText, nextLine, 1),
                                     ),
                                 loc: sourceSpanToLoc(next.sourceSpan),
                                 messageId:
@@ -125,7 +125,7 @@ export const rule = createRule({
                                 fix: (fixer) =>
                                     fixer.replaceTextRange(
                                         [currentEnd, nextStart],
-                                        buildReplacement(betweenText, nextLine, 1),
+                                        buildSpacingReplacement(betweenText, nextLine, 1),
                                     ),
                                 loc: sourceSpanToLoc(next.sourceSpan),
                                 messageId:
@@ -141,7 +141,7 @@ export const rule = createRule({
                             fix: (fixer) =>
                                 fixer.replaceTextRange(
                                     [currentEnd, nextStart],
-                                    buildReplacement(betweenText, nextLine, 1),
+                                    buildSpacingReplacement(betweenText, nextLine, 1),
                                 ),
                             loc: sourceSpanToLoc(next.sourceSpan),
                             messageId:
