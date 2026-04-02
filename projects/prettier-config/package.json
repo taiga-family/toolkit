@@ -1,8 +1,11 @@
 {
     "name": "@taiga-ui/prettier-config",
-    "version": "0.446.0",
+    "version": "0.447.0",
     "description": "Taiga-ui prettier config",
-    "keywords": ["prettier", "prettier-config"],
+    "keywords": [
+        "prettier",
+        "prettier-config"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

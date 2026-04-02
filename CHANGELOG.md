@@ -1,3 +1,15 @@
+### [0.447.0](https://github.com/taiga-family/toolkit/compare/v0.446.0...v0.447.0) (2026-04-02)
+
+### 🚀 Features
+
+- **prettier-config**: improve alphabetic sort for json files (#1683)
+  [(33b076b)](https://github.com/taiga-family/toolkit/commit/33b076b0c57d481fcb1713eb1816606e2e8baa6a)
+
+### 🐞 Bug Fixes
+
+- update eslint ecosystem (#1680)
+  [(a62c246)](https://github.com/taiga-family/toolkit/commit/a62c246bb0e5879dd0a59958cdad8c6f4975c257)
+
 ### [0.446.0](https://github.com/taiga-family/toolkit/compare/v0.445.0...v0.446.0) (2026-04-01)
 
 ### 🐞 Bug Fixes
