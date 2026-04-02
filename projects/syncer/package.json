@@ -2,9 +2,7 @@
     "name": "@taiga-ui/syncer",
     "version": "0.447.0",
     "description": "Taiga UI CLI tool for sync version in npm workspaces",
-    "keywords": [
-        "sync version"
-    ],
+    "keywords": ["sync version"],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

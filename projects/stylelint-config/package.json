@@ -2,10 +2,7 @@
     "name": "@taiga-ui/stylelint-config",
     "version": "0.447.0",
     "description": "Taiga UI stylelint config",
-    "keywords": [
-        "stylelint",
-        "prettier"
-    ],
+    "keywords": ["stylelint", "prettier"],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

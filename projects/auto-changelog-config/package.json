@@ -2,9 +2,7 @@
     "name": "@taiga-ui/auto-changelog-config",
     "version": "0.447.0",
     "description": "Taiga UI auto-changelog config",
-    "keywords": [
-        "auto-changelog"
-    ],
+    "keywords": ["auto-changelog"],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"
