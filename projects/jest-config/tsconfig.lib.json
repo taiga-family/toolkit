@@ -1,15 +1,15 @@
 {
     "extends": "../../tsconfig.json",
-    "include": ["./*.ts"],
-    "exclude": ["./tests/*.spec.ts"],
     "compilerOptions": {
-        "rootDir": ".",
         "baseUrl": ".",
-        "outDir": "../../dist/jest-config",
+        "rootDir": ".",
+        "allowImportingTsExtensions": false,
         "declaration": true,
         "incremental": null,
-        "moduleResolution": "bundler",
         "module": "esnext",
-        "allowImportingTsExtensions": false
-    }
+        "moduleResolution": "bundler",
+        "outDir": "../../dist/jest-config"
+    },
+    "include": ["./*.ts"],
+    "exclude": ["./tests/*.spec.ts"]
 }

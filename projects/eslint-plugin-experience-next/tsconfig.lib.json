@@ -1,13 +1,13 @@
 {
     "extends": "../../tsconfig.json",
-    "include": ["./*.ts", "**/*.d.ts"],
-    "exclude": ["**/*.spec.ts"],
     "compilerOptions": {
         "baseUrl": ".",
+        "allowImportingTsExtensions": false,
         "esModuleInterop": true,
-        "moduleResolution": "bundler",
         "module": "esnext",
-        "tsBuildInfoFile": "/dev/null",
-        "allowImportingTsExtensions": false
-    }
+        "moduleResolution": "bundler",
+        "tsBuildInfoFile": "/dev/null"
+    },
+    "include": ["./*.ts", "**/*.d.ts"],
+    "exclude": ["**/*.spec.ts"]
 }

@@ -1,6 +1,6 @@
 {
-    "name": "tsconfig",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "tsconfig",
     "projectType": "library",
     "sourceRoot": "projects/tsconfig",
     "targets": {

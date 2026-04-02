@@ -1,11 +1,11 @@
 {
     "extends": "../../tsconfig.json",
-    "include": ["src/*.ts"],
     "compilerOptions": {
-        "rootDir": ".",
         "baseUrl": ".",
-        "outDir": "bin",
+        "rootDir": ".",
+        "allowImportingTsExtensions": false,
         "module": "commonjs",
-        "allowImportingTsExtensions": false
-    }
+        "outDir": "bin"
+    },
+    "include": ["src/*.ts"]
 }

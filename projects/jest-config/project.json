@@ -1,6 +1,6 @@
 {
-    "name": "jest-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "jest-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/jest-config",
@@ -17,17 +17,17 @@
             }
         },
         "publish": {
+            "dependsOn": [
+                {
+                    "dependencies": false,
+                    "params": "ignore",
+                    "target": "build"
+                }
+            ],
             "executor": "nx:run-commands",
             "options": {
                 "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "params": "ignore",
-                    "dependencies": false
-                }
-            ]
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 {
-    "name": "release-it-config",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "release-it-config",
     "prefix": "tui",
     "projectType": "library",
     "sourceRoot": "projects/release-it-config",
