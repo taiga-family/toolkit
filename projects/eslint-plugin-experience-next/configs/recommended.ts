@@ -948,7 +948,7 @@ export default defineConfig([
     },
     {
         files: ['**/*.md'],
-        plugins: {markdown},
+        plugins: {markdown: markdown as unknown as ESLint.Plugin},
         extends: [markdown.configs.recommended],
         language: 'markdown/gfm',
         rules: {'markdown/require-alt-text': 'off'},
