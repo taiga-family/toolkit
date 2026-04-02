@@ -3,9 +3,7 @@
     "version": "0.447.0",
     "private": true,
     "license": "Apache-2.0",
-    "workspaces": [
-        "projects/*"
-    ],
+    "workspaces": ["projects/*"],
     "scripts": {
         "after:bump": "npx nx build syncer && node projects/syncer/bin/src/index.js",
         "cspell": "cspell --relative --dot --gitignore .",
@@ -16,9 +14,7 @@
         "test": "jest ."
     },
     "commitlint": {
-        "extends": [
-            "@taiga-ui/commitlint-config"
-        ]
+        "extends": ["@taiga-ui/commitlint-config"]
     },
     "lint-staged": {
         "*.{js,ts,html,svg,yml,md,less,json}": [
@@ -27,14 +23,10 @@
             "cspell"
         ]
     },
-    "browserslist": [
-        "extends @taiga-ui/browserslist-config"
-    ],
+    "browserslist": ["extends @taiga-ui/browserslist-config"],
     "prettier": "@taiga-ui/prettier-config",
     "stylelint": {
-        "extends": [
-            "@taiga-ui/stylelint-config"
-        ],
+        "extends": ["@taiga-ui/stylelint-config"],
         "ignoreFiles": [
             "**/demo/**",
             "**/dist/**",
@@ -51,28 +43,19 @@
         "@angular/compiler-cli": "19.2.20",
         "@angular/core": "19.2.20",
         "@angular/platform-browser-dynamic": "19.2.20",
-        "@nx/rollup": "22.6.3",
-        "@nx/workspace": "22.6.3",
-        "nx": "22.6.3",
+        "@nx/rollup": "22.6.4",
+        "@nx/workspace": "22.6.4",
+        "nx": "22.6.4",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
         "zone.js": "0.15.1"
     },
     "cspell": {
-        "files": [
-            "*/*.*"
-        ],
-        "import": [
-            "@taiga-ui/cspell-config/cspell.config.js"
-        ]
+        "files": ["*/*.*"],
+        "import": ["@taiga-ui/cspell-config/cspell.config.js"]
     },
     "syncer": {
-        "includePaths": [
-            "./projects",
-            "./package-lock.json"
-        ],
-        "matchPackageNames": [
-            "@taiga-ui/*"
-        ]
+        "includePaths": ["./projects", "./package-lock.json"],
+        "matchPackageNames": ["@taiga-ui/*"]
     }
 }
