@@ -614,6 +614,8 @@ export default defineConfig([
         extends: [angular.configs.tsRecommended],
         processor: angular.processInlineTemplates,
         rules: {
+            '@angular-eslint/computed-must-return':
+                angularVersion >= modernAngularRules.preferSignals ? 'error' : 'off',
             '@angular-eslint/consistent-component-styles':
                 angularVersion >= modernAngularRules.modernStyles ? 'error' : 'off',
             '@angular-eslint/contextual-decorator': 'error',
@@ -622,9 +624,11 @@ export default defineConfig([
             '@angular-eslint/no-async-lifecycle-method': 'error',
             '@angular-eslint/no-attribute-decorator': 'error',
             '@angular-eslint/no-conflicting-lifecycle': 'error',
+            '@angular-eslint/no-developer-preview': 'off',
             '@angular-eslint/no-duplicates-in-metadata-arrays': 'error',
             '@angular-eslint/no-empty-lifecycle-method': 'error',
             '@angular-eslint/no-experimental': 'off',
+            '@angular-eslint/no-implicit-take-until-destroyed': 'error',
             '@angular-eslint/no-input-prefix': 'error',
             '@angular-eslint/no-input-rename': 'off',
             '@angular-eslint/no-inputs-metadata-property': 'off',
@@ -637,12 +641,17 @@ export default defineConfig([
             '@angular-eslint/prefer-host-metadata-property': 'error',
             '@angular-eslint/prefer-inject': 'error',
             '@angular-eslint/prefer-on-push-component-change-detection': 'error',
+            '@angular-eslint/prefer-output-emitter-ref':
+                angularVersion >= modernAngularRules.defaultStandalone ? 'error' : 'off',
             '@angular-eslint/prefer-output-readonly': 'error',
+            '@angular-eslint/prefer-signal-model':
+                angularVersion >= modernAngularRules.defaultStandalone ? 'error' : 'off',
             '@angular-eslint/prefer-signals':
                 angularVersion >= modernAngularRules.preferSignals ? 'error' : 'off',
             '@angular-eslint/prefer-standalone':
                 angularVersion >= modernAngularRules.defaultStandalone ? 'off' : 'error',
             '@angular-eslint/relative-url-prefix': 'error',
+            '@angular-eslint/require-lifecycle-on-prototype': 'error',
             '@angular-eslint/sort-lifecycle-methods': 'error',
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
@@ -772,15 +781,24 @@ export default defineConfig([
             '@angular-eslint/template/mouse-events-have-key-events': 'error',
             '@angular-eslint/template/no-distracting-elements': 'error',
             '@angular-eslint/template/no-duplicate-attributes': 'error',
+            '@angular-eslint/template/no-empty-control-flow':
+                angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/no-interpolation-in-attributes':
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/no-negated-async': 'off',
+            '@angular-eslint/template/no-nested-tags': 'error',
+            '@angular-eslint/template/no-non-null-assertion': 'error',
+            '@angular-eslint/template/prefer-at-else':
+                angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/prefer-at-empty':
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
+            '@angular-eslint/template/prefer-built-in-pipes': 'error',
+            '@angular-eslint/template/prefer-class-binding': 'error',
             '@angular-eslint/template/prefer-contextual-for-variables': 'error',
             '@angular-eslint/template/prefer-control-flow':
                 angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
             '@angular-eslint/template/prefer-self-closing-tags': 'error',
+            '@angular-eslint/template/prefer-static-string-properties': 'error',
             '@angular-eslint/template/prefer-template-literal':
                 angularVersion >= modernAngularRules.templateLiteral ? 'error' : 'off',
         },
