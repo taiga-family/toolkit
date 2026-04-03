@@ -5,11 +5,9 @@ const createRule = ESLintUtils.RuleCreator((name) => name);
 
 type Options = [];
 
-type MessageId = 'mergeLiterals' | 'useTemplate';
+type MessageId = 'flattenTemplate' | 'mergeLiterals' | 'useTemplate';
 
-type StringLiteralNode = TSESTree.StringLiteral;
-
-function isStringLiteralNode(node: TSESTree.Node): node is StringLiteralNode {
+function isStringLiteral(node: TSESTree.Node): node is TSESTree.StringLiteral {
     return (
         node.type === AST_NODE_TYPES.Literal &&
         typeof (node as TSESTree.Literal).value === 'string'
@@ -41,7 +39,7 @@ function isStringType(type: ts.Type, checker: ts.TypeChecker): boolean {
     return type.isStringLiteral() || checker.typeToString(type) === 'string';
 }
 
-function buildMergedString(parts: StringLiteralNode[]): string {
+function buildMergedString(parts: TSESTree.StringLiteral[]): string {
     const combined = parts.map((p) => p.value).join('');
     const quote = combined.includes("'") && !combined.includes('"') ? '"' : "'";
     const escaped = combined
@@ -54,24 +52,55 @@ function buildMergedString(parts: StringLiteralNode[]): string {
     return `${quote}${escaped}${quote}`;
 }
 
-function buildTemplateLiteral(
+function escapeForTemplateLiteral(value: string): string {
+    return value.replaceAll('\\', '\\\\').replaceAll('`', '\\`').replaceAll('${', '\\${');
+}
+
+function partsToTemplateContent(
     parts: TSESTree.Node[],
     getText: (n: TSESTree.Node) => string,
 ): string {
-    const inner = parts
-        .map((part) => {
-            if (isStringLiteralNode(part)) {
-                return part.value
-                    .replaceAll('\\', '\\\\')
-                    .replaceAll('`', '\\`')
-                    .replaceAll('${', '\\${');
-            }
-
-            return `\${${getText(part)}}`;
-        })
+    return parts
+        .map((part) =>
+            isStringLiteral(part)
+                ? escapeForTemplateLiteral(part.value)
+                : `\${${getText(part)}}`,
+        )
         .join('');
+}
 
-    return `\`${inner}\``;
+/**
+ * Returns the raw content between the backticks of a TemplateLiteral,
+ * delegating each expression slot to `renderExpr`.
+ */
+function templateContent(
+    template: TSESTree.TemplateLiteral,
+    renderExpr: (expr: TSESTree.Expression, index: number) => string,
+): string {
+    return template.quasis
+        .map(
+            (quasi, i) =>
+                `${quasi.value.raw}${
+                    i < template.expressions.length
+                        ? renderExpr(template.expressions[i]!, i)
+                        : ''
+                }`,
+        )
+        .join('');
+}
+
+function hasTemplateLiteralAncestor(node: TSESTree.Node): boolean {
+    let current: TSESTree.Node | undefined = node.parent;
+
+    while (current != null) {
+        if (current.type === AST_NODE_TYPES.TemplateLiteral) {
+            return true;
+        }
+
+        current = current.parent;
+    }
+
+    return false;
 }
 
 export const rule = createRule<Options, MessageId>({
@@ -90,7 +119,7 @@ export const rule = createRule<Options, MessageId>({
         }
 
         function isStringNode(node: TSESTree.Node): boolean {
-            if (isStringLiteralNode(node)) {
+            if (isStringLiteral(node)) {
                 return true;
             }
 
@@ -99,54 +128,103 @@ export const rule = createRule<Options, MessageId>({
             }
 
             const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-            const type = checker.getTypeAtLocation(tsNode);
 
-            return isStringType(type, checker);
+            return isStringType(checker.getTypeAtLocation(tsNode), checker);
         }
+
+        const getText = (n: TSESTree.Node): string => sourceCode.getText(n);
+        const wrapExpr = (expr: TSESTree.Expression): string => `\${${getText(expr)}}`;
 
         return {
             BinaryExpression(node) {
-                if (node.operator !== '+') {
+                if (node.operator !== '+' || !isRootConcat(node)) {
                     return;
                 }
 
-                if (!isRootConcat(node)) {
+                // Comments between parts serve as inline documentation — preserve them
+                if (sourceCode.getCommentsInside(node).length > 0) {
                     return;
                 }
 
                 const parts = collectParts(node);
-                const allLiterals = parts.every(isStringLiteralNode);
 
-                if (allLiterals) {
+                if (
+                    !parts.every(
+                        (p) =>
+                            p.type !== AST_NODE_TYPES.TemplateLiteral && isStringNode(p),
+                    )
+                ) {
+                    return;
+                }
+
+                const allLiterals = parts.every(isStringLiteral);
+
+                // Direct child of a template expression → inline parts to avoid
+                // nested template literals like `${`${a}${b}`}`
+                if (node.parent.type === AST_NODE_TYPES.TemplateLiteral) {
+                    const template = node.parent;
+
+                    // Tagged templates: changing quasis/expressions count alters behaviour
+                    if (
+                        template.parent.type === AST_NODE_TYPES.TaggedTemplateExpression
+                    ) {
+                        return;
+                    }
+
                     context.report({
-                        fix(fixer) {
-                            return fixer.replaceText(node, buildMergedString(parts));
-                        },
-                        messageId: 'mergeLiterals',
+                        fix: (fixer) =>
+                            fixer.replaceText(
+                                template,
+                                `\`${templateContent(template, (expr) => (expr === node ? partsToTemplateContent(parts, getText) : wrapExpr(expr)))}\``,
+                            ),
+                        messageId: allLiterals ? 'mergeLiterals' : 'useTemplate',
                         node,
                     });
 
                     return;
                 }
 
-                if (
-                    parts.every(
-                        (part) =>
-                            part.type !== AST_NODE_TYPES.TemplateLiteral &&
-                            isStringNode(part),
-                    )
-                ) {
-                    context.report({
-                        fix(fixer) {
-                            return fixer.replaceText(
-                                node,
-                                buildTemplateLiteral(parts, (n) => sourceCode.getText(n)),
-                            );
-                        },
-                        messageId: 'useTemplate',
-                        node,
-                    });
+                // Nested inside a template but not direct child — would produce
+                // `${`${a}${b}`.method()}`, so skip
+                if (hasTemplateLiteralAncestor(node)) {
+                    return;
                 }
+
+                context.report({
+                    fix: (fixer) =>
+                        fixer.replaceText(
+                            node,
+                            allLiterals
+                                ? buildMergedString(parts)
+                                : `\`${partsToTemplateContent(parts, getText)}\``,
+                        ),
+                    messageId: allLiterals ? 'mergeLiterals' : 'useTemplate',
+                    node,
+                });
+            },
+
+            TemplateLiteral(node) {
+                // Tagged templates: changing quasis/expressions count alters behaviour
+                if (node.parent.type === AST_NODE_TYPES.TaggedTemplateExpression) {
+                    return;
+                }
+
+                node.expressions.forEach((expr, i) => {
+                    if (
+                        expr.type === AST_NODE_TYPES.TemplateLiteral &&
+                        expr.parent.type !== AST_NODE_TYPES.TaggedTemplateExpression
+                    ) {
+                        context.report({
+                            fix: (fixer) =>
+                                fixer.replaceText(
+                                    node,
+                                    `\`${templateContent(node, (e, j) => (j === i ? templateContent(expr, wrapExpr) : wrapExpr(e)))}\``,
+                                ),
+                            messageId: 'flattenTemplate',
+                            node: expr,
+                        });
+                    }
+                });
             },
         };
     },
@@ -157,6 +235,7 @@ export const rule = createRule<Options, MessageId>({
         },
         fixable: 'code',
         messages: {
+            flattenTemplate: 'Flatten nested template literal into its parent.',
             mergeLiterals: 'Merge string literals instead of concatenating them.',
             useTemplate: 'Use a template literal instead of string concatenation.',
         },

@@ -323,8 +323,51 @@ const c = a + b;
 const c = `${a}${b}`;
 ```
 
+When the concatenation is a **direct expression inside a template literal**, the parts are inlined into the outer
+template instead of producing a nested template literal:
+
+```ts
+// ❌ error
+const url = `${base}${path + query}`;
+
+// ✅ after autofix — inlined, no nesting
+const url = `${base}${path}${query}`;
+```
+
+```ts
+// ❌ error — literal concat inside template
+const mask = `${'HH' + ':MM'}`;
+
+// ✅ after autofix
+const mask = `HH:MM`;
+```
+
+When the concatenation appears **inside a method call or other expression** within a template literal, the rule skips it
+to avoid creating unreadable nested template literals like `` `${`${a}${b}`.method()}` ``.
+
+The rule also **flattens already-nested template literals** produced by earlier autofixes or written by hand:
+
+```ts
+// ❌ error
+const s = `${`${dateMode}${dateTimeSeparator}`}HH:MM`;
+
+// ✅ after autofix
+const s = `${dateMode}${dateTimeSeparator}HH:MM`;
+```
+
+Concatenation that uses **inline comments between parts** is intentionally left untouched, as the comments serve as
+documentation:
+
+```ts
+// ✅ not flagged — comments are preserved
+const urlRegex =
+  String.raw`^([a-zA-Z]+:\/\/)?` + // protocol
+  String.raw`([\w-]+\.)+[\w]{2,}` + // domain
+  String.raw`(\/\S*)?$`; // path
+```
+
 > For mixed concatenation (`'prefix' + variable`) use the standard `prefer-template` rule, which is already enabled in
-> `recommended`. Template literals (`` `foo` + `bar` ``) are not flagged by this rule.
+> `recommended`. Template literals (`` `foo` + `bar` ``) and tagged templates are not flagged by this rule.
 
 ---
 
