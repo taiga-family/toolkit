@@ -1,10 +1,12 @@
+import parser from '@typescript-eslint/parser';
+
 import {rule} from '../rules/no-string-literal-concat';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
 const ruleTester = new RuleTester({
     languageOptions: {
-        parser: require('@typescript-eslint/parser'),
+        parser,
         parserOptions: {projectService: {allowDefaultProject: ['*.ts*']}},
     },
 });
