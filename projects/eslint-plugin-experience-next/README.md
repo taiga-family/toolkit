@@ -286,7 +286,8 @@ await page.getByLabel('Name').clear();
 
 ## no-string-literal-concat
 
-Disallows concatenating string literals with `+`. Adjacent string literals are always mergeable into one — splitting them with `+` adds noise without benefit, and multi-line splits are especially easy to miss.
+Disallows concatenating string literals with `+`. Adjacent string literals are always mergeable into one — splitting
+them with `+` adds noise without benefit, and multi-line splits are especially easy to miss.
 
 Replaces the built-in `no-useless-concat` rule, which only catches same-line concatenation.
 
@@ -322,8 +323,8 @@ const c = a + b;
 const c = `${a}${b}`;
 ```
 
-> For mixed concatenation (`'prefix' + variable`) use the standard `prefer-template` rule, which is already enabled in `recommended`.
-> Template literals (`` `foo` + `bar` ``) are not flagged by this rule.
+> For mixed concatenation (`'prefix' + variable`) use the standard `prefer-template` rule, which is already enabled in
+> `recommended`. Template literals (`` `foo` + `bar` ``) are not flagged by this rule.
 
 ---
 
