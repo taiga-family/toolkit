@@ -164,7 +164,6 @@ export default createRule<[], typeof MESSAGE_ID>({
             },
         };
     },
-    defaultOptions: [],
     meta: {
         docs: {
             description:

@@ -112,7 +112,6 @@ export const rule = createRule<
             },
         };
     },
-    defaultOptions: [],
     meta: {
         docs: {
             description: `Ensures that keys and values are valid in a ${DOC_EXAMPLE_INTERFACE_NAME} interface.`,

@@ -63,7 +63,6 @@ export const rule = createRule({
             },
         };
     },
-    defaultOptions: [],
     meta: {
         docs: {
             description:

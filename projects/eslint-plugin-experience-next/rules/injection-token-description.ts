@@ -58,7 +58,6 @@ export const rule = createRule({
             },
         };
     },
-    defaultOptions: [],
     meta: {
         docs: {description: ERROR_MESSAGE},
         fixable: 'code',

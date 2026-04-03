@@ -120,8 +120,6 @@ export const rule = createRule<Options, MessageId>({
         };
     },
 
-    defaultOptions: [],
-
     meta: {
         docs: {
             description:

@@ -109,8 +109,8 @@ export const rule = createRule({
             },
         };
     },
-    defaultOptions: [DEFAULT_OPTIONS],
     meta: {
+        defaultOptions: [DEFAULT_OPTIONS],
         docs: {description: ERROR_MESSAGE},
         fixable: 'code',
         messages: {[MESSAGE_ID]: ERROR_MESSAGE},

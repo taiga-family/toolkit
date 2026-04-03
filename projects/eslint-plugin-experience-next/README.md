@@ -49,6 +49,7 @@ export default [
 | no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
+| no-string-literal-concat            | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
 | object-single-line                  | Enforce single-line formatting for single-property objects when it fits `printWidth`                | ✅  | 🔧  |     |
 | prefer-deep-imports                 | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
 | prefer-multi-arg-push               | Combine consecutive `.push()` calls on the same array into a single multi-argument call             | ✅  | 🔧  |     |
@@ -280,6 +281,50 @@ await page.getByLabel('Name').fill('');
 // ✅ after autofix
 await page.getByLabel('Name').clear();
 ```
+
+---
+
+## no-string-literal-concat
+
+Disallows concatenating string literals with `+`. Adjacent string literals are always mergeable into one — splitting
+them with `+` adds noise without benefit, and multi-line splits are especially easy to miss.
+
+Replaces the built-in `no-useless-concat` rule, which only catches same-line concatenation.
+
+```ts
+// ❌ error
+const msg = 'Hello, ' + 'world!';
+
+// ✅ after autofix
+const msg = 'Hello, world!';
+```
+
+```ts
+// ❌ error — also caught across lines
+it(
+    'returns the last day of month when' +
+        ' the result month has fewer days',
+    () => { ... },
+);
+
+// ✅ after autofix
+it('returns the last day of month when the result month has fewer days', () => {
+    ...
+});
+```
+
+```ts
+// ❌ error — string variables concatenated with +
+const a = 'hello';
+const b = 'world';
+const c = a + b;
+
+// ✅ after autofix
+const c = `${a}${b}`;
+```
+
+> For mixed concatenation (`'prefix' + variable`) use the standard `prefer-template` rule, which is already enabled in
+> `recommended`. Template literals (`` `foo` + `bar` ``) are not flagged by this rule.
 
 ---
 

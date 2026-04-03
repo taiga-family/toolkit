@@ -140,13 +140,13 @@ export default createRule<RuleOptions, MessageIds>({
             },
         };
     },
-    defaultOptions: [
-        {
-            importFilter: [],
-            strict: false,
-        },
-    ],
     meta: {
+        defaultOptions: [
+            {
+                importFilter: [],
+                strict: false,
+            },
+        ],
         docs: {description: ERROR_MESSAGE},
         fixable: 'code',
         messages: {[MESSAGE_ID]: ERROR_MESSAGE},
