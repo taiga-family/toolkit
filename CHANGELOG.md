@@ -1,3 +1,10 @@
+### [0.450.0](https://github.com/taiga-family/toolkit/compare/v0.449.0...v0.450.0) (2026-04-03)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: exclude ng-package.json (#1693)
+  [(4599328)](https://github.com/taiga-family/toolkit/commit/459932880887a5668054e6a885f2032d705a226b)
+
 ### [0.449.0](https://github.com/taiga-family/toolkit/compare/v0.448.0...v0.449.0) (2026-04-03)
 
 ### 🐞 Bug Fixes
