@@ -206,6 +206,7 @@ if (originalEstreeJsonPrinter) {
                 const node = /** @type {{type: string; elements: unknown[]}} */ path.node;
 
                 if (
+                    !options.filepath?.endsWith('package.json') &&
                     node.type === 'ArrayExpression' &&
                     node.elements.length >= 1 &&
                     node.elements.length <= 2 &&
