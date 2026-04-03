@@ -1,8 +1,10 @@
 {
     "name": "@taiga-ui/cspell-config",
-    "version": "0.447.0",
+    "version": "0.448.0",
     "description": "Taiga UI cspell config",
-    "keywords": ["cspell"],
+    "keywords": [
+        "cspell"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

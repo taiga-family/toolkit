@@ -1,3 +1,16 @@
+### [0.448.0](https://github.com/taiga-family/toolkit/compare/v0.447.0...v0.448.0) (2026-04-02)
+
+### 🐞 Bug Fixes
+
+- update dependency @stylistic/stylelint-config to v5 (#1691)
+  [(1abdd85)](https://github.com/taiga-family/toolkit/commit/1abdd85ea386d4d7bfe3fcfbaee96a8a94d48697)
+- update dependency ts-jest to ^29.4.9 (#1688)
+  [(08bb9d0)](https://github.com/taiga-family/toolkit/commit/08bb9d0f6b9f59f1042c837c69f73cfaed19d800)
+- update dependency eslint-plugin-cypress to ^6.2.2 (#1687)
+  [(359961d)](https://github.com/taiga-family/toolkit/commit/359961d47e0ce94c73ef5e1f9e4b7d26d2ca38aa)
+- update dependency conventional-changelog-conventionalcommits to ^9.3.1 (#1686)
+  [(ec6c16d)](https://github.com/taiga-family/toolkit/commit/ec6c16d0b4deffc2943bebcd5608a4df891939f1)
+
 ### [0.447.0](https://github.com/taiga-family/toolkit/compare/v0.446.0...v0.447.0) (2026-04-02)
 
 ### 🚀 Features

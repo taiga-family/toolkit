@@ -1,8 +1,10 @@
 {
     "name": "@taiga-ui/release-it-config",
-    "version": "0.447.0",
+    "version": "0.448.0",
     "description": "Taiga UI release-it config",
-    "keywords": ["release-it"],
+    "keywords": [
+        "release-it"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

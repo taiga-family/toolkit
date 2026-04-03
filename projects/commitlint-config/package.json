@@ -1,8 +1,11 @@
 {
     "name": "@taiga-ui/commitlint-config",
-    "version": "0.447.0",
+    "version": "0.448.0",
     "description": "Taiga UI commitlint config",
-    "keywords": ["commitlint", "prettier"],
+    "keywords": [
+        "commitlint",
+        "prettier"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

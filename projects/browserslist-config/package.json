@@ -1,8 +1,10 @@
 {
     "name": "@taiga-ui/browserslist-config",
-    "version": "0.447.0",
+    "version": "0.448.0",
     "description": "Taiga UI browserslist config",
-    "keywords": ["browserslist"],
+    "keywords": [
+        "browserslist"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"
@@ -29,7 +31,9 @@
     "main": "index.js",
     "types": "./index.d.ts",
     "typings": "index.d.ts",
-    "files": ["index.d.ts"],
+    "files": [
+        "index.d.ts"
+    ],
     "publishConfig": {
         "access": "public"
     }
