@@ -140,6 +140,7 @@ export default defineConfig([
             ],
             '@stylistic/quotes': ['error', 'single', {avoidEscape: true}],
             '@stylistic/type-annotation-spacing': 'error',
+            '@taiga-ui/experience-next/no-string-literal-concat': 'error',
             '@typescript-eslint/adjacent-overload-signatures': 'off',
             '@typescript-eslint/array-type': [
                 'error',
@@ -511,7 +512,6 @@ export default defineConfig([
             ],
             'no-return-assign': ['error', 'always'],
             'no-unneeded-ternary': 'error',
-            'no-useless-concat': 'error',
             'no-useless-escape': 'error',
             'no-useless-rename': [
                 'error',
@@ -582,6 +582,7 @@ export default defineConfig([
             'sonarjs/no-identical-functions': 'error',
             'sonarjs/no-inverted-boolean-check': 'error',
             'spaced-comment': ['error', 'always', {markers: ['/']}],
+            'template-curly-spacing': ['error', 'never'],
             'unicorn/consistent-empty-array-spread': 'error',
             'unicorn/escape-case': 'error',
             'unicorn/filename-case': ['error', {case: 'kebabCase'}],
@@ -715,6 +716,7 @@ export default defineConfig([
                 'error',
                 {decorators: ['Component', 'Directive', 'NgModule', 'Pipe']},
             ],
+            'no-multi-str': 'error',
             'rxjs/no-compat': 'error',
             'rxjs/no-connectable': 'error',
             'rxjs/no-cyclic-action': 'error',

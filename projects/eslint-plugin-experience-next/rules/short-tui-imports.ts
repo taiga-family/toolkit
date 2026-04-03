@@ -209,14 +209,13 @@ export const rule = createRule<Options, MessageIds>({
         };
     },
 
-    defaultOptions: [
-        {
-            decorators: DEFAULT_DECORATORS,
-            exceptions: DEFAULT_EXCEPTIONS,
-        },
-    ],
-
     meta: {
+        defaultOptions: [
+            {
+                decorators: DEFAULT_DECORATORS,
+                exceptions: DEFAULT_EXCEPTIONS,
+            },
+        ],
         docs: {
             description:
                 'Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata (supports configurable decorators and exceptions).',

@@ -54,8 +54,8 @@ export default createRule<[RuleConfig[]], 'invalidName'>({
             },
         };
     },
-    defaultOptions: [[]],
     meta: {
+        defaultOptions: [[]],
         docs: {
             description:
                 'Enforce custom naming for class properties based on their type.',

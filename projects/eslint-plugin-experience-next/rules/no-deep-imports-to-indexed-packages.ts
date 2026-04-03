@@ -256,7 +256,6 @@ export default createRule({
             },
         };
     },
-    defaultOptions: [],
     meta: {
         docs: {
             description:

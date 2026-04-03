@@ -398,8 +398,8 @@ export const rule = createRule<Options, MessageIds>({
             },
         };
     },
-    defaultOptions: [{printWidth: 90}],
     meta: {
+        defaultOptions: [{printWidth: 90}],
         docs: {
             description:
                 'Enforce single-line formatting for single-property objects when possible (Prettier-friendly)',
