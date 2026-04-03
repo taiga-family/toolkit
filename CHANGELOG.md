@@ -1,3 +1,10 @@
+### [0.449.0](https://github.com/taiga-family/toolkit/compare/v0.448.0...v0.449.0) (2026-04-03)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression for package.json files (#1692)
+  [(eeb7136)](https://github.com/taiga-family/toolkit/commit/eeb71368e9eee614f181c85af9efe85be2289948)
+
 ### [0.448.0](https://github.com/taiga-family/toolkit/compare/v0.447.0...v0.448.0) (2026-04-02)
 
 ### 🐞 Bug Fixes
