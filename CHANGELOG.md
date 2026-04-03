@@ -1,3 +1,10 @@
+### [0.451.0](https://github.com/taiga-family/toolkit/compare/v0.450.0...v0.451.0) (2026-04-03)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-string-literal-concat` (#1694)
+  [(507a89a)](https://github.com/taiga-family/toolkit/commit/507a89af96fd0420b157483585d86f13ffa54304)
+
 ### [0.450.0](https://github.com/taiga-family/toolkit/compare/v0.449.0...v0.450.0) (2026-04-03)
 
 ### 🐞 Bug Fixes
