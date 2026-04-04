@@ -210,7 +210,7 @@ export default defineConfig([
             '@typescript-eslint/no-base-to-string': 'off',
             '@typescript-eslint/no-confusing-non-null-assertion': 'error',
             '@typescript-eslint/no-confusing-void-expression': 'off',
-            '@typescript-eslint/no-deprecated': 'off',
+            '@typescript-eslint/no-deprecated': 'off', // TODO: should be error?
             '@typescript-eslint/no-duplicate-enum-values': 'error',
             '@typescript-eslint/no-duplicate-type-constituents': 'error',
             '@typescript-eslint/no-empty-function': [
@@ -227,7 +227,7 @@ export default defineConfig([
                 },
             ],
             '@typescript-eslint/no-empty-object-type': 'error',
-            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-explicit-any': 'off', // TODO: should be error?
             '@typescript-eslint/no-extra-non-null-assertion': 'error',
             '@typescript-eslint/no-extraneous-class': [
                 'error',
@@ -238,14 +238,15 @@ export default defineConfig([
                     allowWithDecorator: true,
                 },
             ],
-            '@typescript-eslint/no-floating-promises': 'off',
+            '@typescript-eslint/no-floating-promises': 'off', // TODO: should be error, just void before Promise
             '@typescript-eslint/no-for-in-array': 'error',
             '@typescript-eslint/no-implied-eval': 'error',
             '@typescript-eslint/no-import-type-side-effects': 'off', // verbatimModuleSyntax should be false
             '@typescript-eslint/no-inferrable-types': 'error',
             '@typescript-eslint/no-invalid-void-type': 'off',
+            '@typescript-eslint/no-loop-func': 'off', // TODO: should be error?
             '@typescript-eslint/no-magic-numbers': 'off',
-            '@typescript-eslint/no-misused-promises': 'off',
+            '@typescript-eslint/no-misused-promises': 'off', // TODO: ['error', {checksVoidReturn: {attributes: false}}],
             '@typescript-eslint/no-misused-spread': 'off',
             '@typescript-eslint/no-namespace': ['error', {allowDeclarations: true}],
             '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
@@ -284,22 +285,22 @@ export default defineConfig([
                     },
                 },
             ],
-            '@typescript-eslint/no-shadow': 'off',
+            '@typescript-eslint/no-shadow': 'off', // TODO: should be error?
             '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
             '@typescript-eslint/no-unnecessary-condition': 'error',
             '@typescript-eslint/no-unnecessary-qualifier': 'error',
-            '@typescript-eslint/no-unnecessary-template-expression': 'off',
+            '@typescript-eslint/no-unnecessary-template-expression': 'error',
             '@typescript-eslint/no-unnecessary-type-arguments': 'error',
             '@typescript-eslint/no-unnecessary-type-assertion': 'error',
             '@typescript-eslint/no-unnecessary-type-constraint': 'error',
-            '@typescript-eslint/no-unnecessary-type-parameters': 'off',
-            '@typescript-eslint/no-unsafe-argument': 'off',
-            '@typescript-eslint/no-unsafe-assignment': 'off',
-            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/no-unnecessary-type-parameters': 'off', // TODO: should be error?
+            '@typescript-eslint/no-unsafe-argument': 'off', // TODO: should be error?
+            '@typescript-eslint/no-unsafe-assignment': 'off', // TODO: should be error?
+            '@typescript-eslint/no-unsafe-call': 'off', // TODO: should be error?
             '@typescript-eslint/no-unsafe-declaration-merging': 'error',
-            '@typescript-eslint/no-unsafe-member-access': 'off',
-            '@typescript-eslint/no-unsafe-return': 'off',
-            '@typescript-eslint/no-unsafe-type-assertion': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off', // TODO: should be error?
+            '@typescript-eslint/no-unsafe-return': 'off', // TODO: should be error?
+            '@typescript-eslint/no-unsafe-type-assertion': 'off', // TODO: should be error?
             '@typescript-eslint/no-unused-expressions': [
                 'error',
                 {
@@ -333,7 +334,7 @@ export default defineConfig([
             '@typescript-eslint/prefer-find': 'error',
             '@typescript-eslint/prefer-for-of': 'error',
             '@typescript-eslint/prefer-includes': 'error',
-            '@typescript-eslint/prefer-nullish-coalescing': 'off',
+            '@typescript-eslint/prefer-nullish-coalescing': 'off', // TODO: ['error', {ignorePrimitives: {boolean: true, number: true, string: true}}]
             '@typescript-eslint/prefer-optional-chain': 'error',
             '@typescript-eslint/prefer-readonly': ['error'],
             '@typescript-eslint/prefer-readonly-parameter-types': 'off',
@@ -352,9 +353,9 @@ export default defineConfig([
             '@typescript-eslint/require-array-sort-compare': 'error',
             '@typescript-eslint/require-await': 'error',
             '@typescript-eslint/restrict-plus-operands': 'error',
-            '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/restrict-template-expressions': 'off', // TODO: should be error?
             '@typescript-eslint/sort-type-constituents': 'error',
-            '@typescript-eslint/strict-boolean-expressions': 'off',
+            '@typescript-eslint/strict-boolean-expressions': 'off', // TODO: should be error?
             '@typescript-eslint/switch-exhaustiveness-check': [
                 'error',
                 {
@@ -394,6 +395,7 @@ export default defineConfig([
             'import/no-absolute-path': 'error',
             'import/no-cycle': 'error',
             'import/no-duplicates': ['error', {'prefer-inline': true}],
+            'import/no-extraneous-dependencies': 'off',
             'import/no-mutable-exports': 'error',
             'import/no-named-as-default': 'error',
             'import/no-self-import': 'error',
@@ -436,7 +438,7 @@ export default defineConfig([
                     skipTemplates: false,
                 },
             ],
-            'no-loop-func': 'error',
+            'no-loop-func': 'off',
             'no-nested-ternary': 'error',
             'no-prototype-builtins': 'off',
             'no-restricted-imports': [
@@ -511,6 +513,7 @@ export default defineConfig([
                 },
             ],
             'no-return-assign': ['error', 'always'],
+            'no-shadow': 'off',
             'no-unneeded-ternary': 'error',
             'no-useless-escape': 'error',
             'no-useless-rename': [
@@ -568,7 +571,8 @@ export default defineConfig([
             'promise/always-return': 'off',
             'promise/catch-or-return': 'off',
             'promise/no-callback-in-promise': 'off',
-            'promise/no-nesting': 'off',
+            'promise/no-nesting': 'off', // TODO: should be error?
+            'promise/no-return-in-finally': 'error',
             'promise/param-names': 'error',
             'regexp/no-unused-capturing-group': [
                 'error',
@@ -579,6 +583,8 @@ export default defineConfig([
             ],
             'simple-import-sort/exports': 'error',
             'simple-import-sort/imports': 'error',
+            'sonarjs/cognitive-complexity': 'off', // TODO: should be error? ['error', 15]
+            'sonarjs/no-duplicate-string': 'off', // TODO: should be error? ['error', {threshold: 5}]
             'sonarjs/no-identical-functions': 'error',
             'sonarjs/no-inverted-boolean-check': 'error',
             'spaced-comment': ['error', 'always', {markers: ['/']}],
@@ -587,18 +593,25 @@ export default defineConfig([
             'unicorn/escape-case': 'error',
             'unicorn/filename-case': ['error', {case: 'kebabCase'}],
             'unicorn/new-for-builtins': 'error',
+            'unicorn/no-array-for-each': 'off', // TODO: should be error
             'unicorn/no-array-method-this-argument': 'error',
             'unicorn/no-array-push-push': 'error',
             'unicorn/no-await-in-promise-methods': 'error',
             'unicorn/no-empty-file': 'error',
             'unicorn/no-magic-array-flat-depth': 'error',
+            'unicorn/no-negated-condition': 'error',
             'unicorn/no-negation-in-equality-check': 'error',
             'unicorn/no-new-array': 'error',
+            'unicorn/no-object-as-default-parameter': 'off',
             'unicorn/no-single-promise-in-promise-methods': 'error',
             'unicorn/no-typeof-undefined': 'error',
             'unicorn/no-unnecessary-polyfills': 'error',
             'unicorn/no-useless-spread': 'error',
+            'unicorn/no-useless-undefined': 'error',
+            'unicorn/prefer-dom-node-append': 'off', // TODO: should be error?
             'unicorn/prefer-logical-operator-over-ternary': 'error',
+            'unicorn/prefer-number-properties': 'error',
+            'unicorn/prefer-prototype-methods': 'error',
             'unicorn/prefer-query-selector': 'error',
             'unicorn/prefer-set-size': 'error',
             'unicorn/prefer-string-raw': 'error',
@@ -831,7 +844,6 @@ export default defineConfig([
         extends: [jest.configs['flat/recommended']],
         rules: {
             '@typescript-eslint/no-extraneous-class': 'off',
-            '@typescript-eslint/no-shadow': 'off',
             'compat/compat': 'off',
             'jest/expect-expect': 'off',
             'jest/max-expects': 'off',
@@ -888,7 +900,7 @@ export default defineConfig([
                 {maxNumberOfTopLevelDescribes: 1},
             ],
             'jest/unbound-method': 'off',
-            'jest/valid-title': 'error',
+            'jest/valid-title': 'off',
         },
     },
     {

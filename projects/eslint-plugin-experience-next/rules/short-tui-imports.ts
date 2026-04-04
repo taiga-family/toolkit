@@ -102,7 +102,7 @@ export const rule = createRule<Options, MessageIds>({
 
                     const fullText = sourceCode.getText();
                     const regex = new RegExp(String.raw`\b${importedAs}\b`, 'g');
-                    const usageCount = (fullText.match(regex) || []).length;
+                    const usageCount = (fullText.match(regex) ?? []).length;
                     const shouldDeleteImport = usageCount <= 2;
 
                     context.report({

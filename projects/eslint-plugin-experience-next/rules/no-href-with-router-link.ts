@@ -31,7 +31,7 @@ const config: Rule.RuleModule = {
                 let hasRouterLink = false;
                 let hasHref = false;
 
-                for (const attr of htmlNode.attributes || []) {
+                for (const attr of htmlNode.attributes ?? []) {
                     const attrName = attr.key.value;
 
                     if (attrName?.toLowerCase() === 'href') {
@@ -50,8 +50,8 @@ const config: Rule.RuleModule = {
                                 ? fixer.removeRange(hrefAttribute.range)
                                 : null,
                         messageId: MESSAGE_ID,
-                        node: (routerLinkAttribute ||
-                            hrefAttribute ||
+                        node: (routerLinkAttribute ??
+                            hrefAttribute ??
                             htmlNode) as unknown as Rule.Node,
                     });
                 }

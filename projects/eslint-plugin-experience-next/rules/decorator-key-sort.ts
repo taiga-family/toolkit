@@ -8,7 +8,7 @@ const config: Rule.RuleModule = {
             ClassDeclaration(node) {
                 const decorators: any[] = Array.from((node as any).decorators ?? []);
 
-                decorators.forEach((decorator: any) => {
+                for (const decorator of decorators) {
                     const {expression} = decorator;
                     const decoratorName = expression.callee?.name ?? '';
 
@@ -62,7 +62,7 @@ const config: Rule.RuleModule = {
                             }
                         }
                     }
-                });
+                }
             },
         };
     },

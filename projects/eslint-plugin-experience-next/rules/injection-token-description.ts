@@ -13,7 +13,7 @@ export const rule = createRule({
                 let token: string | undefined;
                 let name: string | undefined;
 
-                const [description] = node?.arguments || [];
+                const [description] = node?.arguments ?? [];
 
                 if (!description) {
                     return;
