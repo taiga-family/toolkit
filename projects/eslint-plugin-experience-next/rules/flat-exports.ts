@@ -84,24 +84,24 @@ export default createRule<[], typeof MESSAGE_ID>({
                         continue;
                     }
 
-                    arr.elements.forEach((meta, index) => {
+                    for (const [index, meta] of arr.elements.entries()) {
                         if (!meta.isArrayLike) {
-                            return;
+                            continue;
                         }
 
                         const elementNode = arr.node.elements[index];
 
                         if (elementNode?.type !== AST_NODE_TYPES.Identifier) {
-                            return;
+                            continue;
                         }
 
                         const hasLocalArrayMeta = arrays.has(meta.name);
-                        const isExternalPure = !hasLocalArrayMeta
-                            ? isExternalPureTuple(typeChecker, meta.type)
-                            : false;
+                        const isExternalPure = hasLocalArrayMeta
+                            ? false
+                            : isExternalPureTuple(typeChecker, meta.type);
 
                         if (!hasLocalArrayMeta && !isExternalPure) {
-                            return;
+                            continue;
                         }
 
                         context.report({
@@ -112,7 +112,7 @@ export default createRule<[], typeof MESSAGE_ID>({
                             messageId: MESSAGE_ID,
                             node: elementNode,
                         });
-                    });
+                    }
                 }
             },
 

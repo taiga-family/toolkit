@@ -65,7 +65,7 @@ export const rule = createRule<Options, MessageIds>({
 
             const [onlyProperty] = node.properties;
 
-            return !onlyProperty ? false : !isForbiddenProperty(onlyProperty);
+            return onlyProperty ? !isForbiddenProperty(onlyProperty) : false;
         };
 
         const unwrapExpression = (

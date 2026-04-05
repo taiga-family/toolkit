@@ -209,7 +209,7 @@ export const rule = createRule<Options, MessageId>({
                     return;
                 }
 
-                node.expressions.forEach((expr, i) => {
+                for (const [i, expr] of node.expressions.entries()) {
                     if (
                         expr.type === AST_NODE_TYPES.TemplateLiteral &&
                         expr.parent.type !== AST_NODE_TYPES.TaggedTemplateExpression
@@ -224,7 +224,7 @@ export const rule = createRule<Options, MessageId>({
                             node: expr,
                         });
                     }
-                });
+                }
             },
         };
     },

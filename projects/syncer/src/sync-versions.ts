@@ -58,11 +58,11 @@ export function tuiSyncVersions(options: Options): void {
 
         const updatedJSON = JSON.stringify(packageJson, null, 4);
 
-        if (originalJSON !== updatedJSON) {
+        if (originalJSON === updatedJSON) {
+            console.info(`[no changes]: ${file}`);
+        } else {
             writeFileSync(file, `${updatedJSON}\n`);
             console.info(`[synchronized]: ${file}`);
-        } else {
-            console.info(`[no changes]: ${file}`);
         }
     }
 }
@@ -77,35 +77,33 @@ export function tuiBumpDeps(options: BumpDepsOptions): void {
         prevVersion,
     } = options;
 
-    Object.keys(deps)
-        .filter((key) =>
-            tuiIsMatchedPackageName({
-                ignorePackageNames: ignorePackageNames ?? [],
-                matchPackageNames: matchPackageNames ?? [],
-                name: key,
-            }),
-        )
-        .forEach((key) => {
-            const value = deps[key] as
-                | Record<string, Record<string, string>>
-                | string
-                | undefined;
+    for (const key of Object.keys(deps).filter((key) =>
+        tuiIsMatchedPackageName({
+            ignorePackageNames: ignorePackageNames ?? [],
+            matchPackageNames: matchPackageNames ?? [],
+            name: key,
+        }),
+    )) {
+        const value = deps[key] as
+            | Record<string, Record<string, string>>
+            | string
+            | undefined;
 
-            if (typeof value === 'string') {
-                deps[key] = isPeerDependency
-                    ? value.replace(prevVersion, newVersion)
-                    : `^${newVersion}`;
-            } else if (deps[key]?.hasOwnProperty('requires')) {
-                tuiBumpDeps({
-                    deps: value?.requires ?? {},
-                    ignorePackageNames,
-                    isPeerDependency,
-                    matchPackageNames,
-                    newVersion,
-                    prevVersion,
-                });
-            }
-        });
+        if (typeof value === 'string') {
+            deps[key] = isPeerDependency
+                ? value.replace(prevVersion, newVersion)
+                : `^${newVersion}`;
+        } else if (deps[key]?.hasOwnProperty('requires')) {
+            tuiBumpDeps({
+                deps: value?.requires ?? {},
+                ignorePackageNames,
+                isPeerDependency,
+                matchPackageNames,
+                newVersion,
+                prevVersion,
+            });
+        }
+    }
 }
 
 interface MatchedOptions {

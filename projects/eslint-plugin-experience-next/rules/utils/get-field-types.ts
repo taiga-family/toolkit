@@ -21,7 +21,7 @@ export function getFieldTypes(type: ts.Type, checker: TypeChecker): string[] {
     } else if (type.flags & ts.TypeFlags.String) {
         typeNames.push('string');
     } else {
-        const symbol = type.getSymbol() || type.aliasSymbol;
+        const symbol = type.getSymbol() ?? type.aliasSymbol;
 
         if (symbol) {
             typeNames.push(symbol.getName());

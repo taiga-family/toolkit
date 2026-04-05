@@ -59,10 +59,10 @@ export const rule = createRule({
                 .replaceAll(/\\+/g, '/');
 
             const [currentFileProjectName] =
-                (currentProject && new RegExp(currentProject, 'g').exec(filePath)) || [];
+                (currentProject && new RegExp(currentProject, 'g').exec(filePath)) ?? [];
 
             const [importSourceProjectName] =
-                source?.match(new RegExp(projectName, 'g')) || [];
+                source?.match(new RegExp(projectName, 'g')) ?? [];
 
             return Boolean(
                 currentFileProjectName &&

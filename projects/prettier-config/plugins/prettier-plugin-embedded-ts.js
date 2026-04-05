@@ -138,20 +138,28 @@ function collectComments(ast) {
     };
 
     if (Array.isArray(ast.comments)) {
-        ast.comments.forEach(push);
+        for (const comment of ast.comments) {
+            push(comment);
+        }
     }
 
     visit(ast, (node) => {
         if (Array.isArray(node.comments)) {
-            node.comments.forEach(push);
+            for (const comment of node.comments) {
+                push(comment);
+            }
         }
 
         if (Array.isArray(node.leadingComments)) {
-            node.leadingComments.forEach(push);
+            for (const comment of node.leadingComments) {
+                push(comment);
+            }
         }
 
         if (Array.isArray(node.trailingComments)) {
-            node.trailingComments.forEach(push);
+            for (const comment of node.trailingComments) {
+                push(comment);
+            }
         }
     });
 

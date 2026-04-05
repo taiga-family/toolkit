@@ -77,7 +77,7 @@ export const rule = createRule<Options, MessageId>({
                 }
 
                 if (group.length > 1) {
-                    group.forEach((groupStmt, idx) => {
+                    for (const [idx, groupStmt] of group.entries()) {
                         context.report({
                             ...(idx === 0
                                 ? {
@@ -103,7 +103,7 @@ export const rule = createRule<Options, MessageId>({
                             messageId: 'preferMultiArgPush',
                             node: groupStmt,
                         });
-                    });
+                    }
                 }
 
                 i = j;
