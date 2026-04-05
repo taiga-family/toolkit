@@ -607,7 +607,7 @@ export default defineConfig([
             'unicorn/no-typeof-undefined': 'error',
             'unicorn/no-unnecessary-polyfills': 'error',
             'unicorn/no-useless-spread': 'error',
-            'unicorn/no-useless-undefined': 'error',
+            'unicorn/no-useless-undefined': ['error', {checkArguments: true}],
             'unicorn/prefer-dom-node-append': 'off', // TODO: should be error?
             'unicorn/prefer-logical-operator-over-ternary': 'error',
             'unicorn/prefer-number-properties': 'error',
