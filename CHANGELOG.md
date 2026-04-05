@@ -1,3 +1,12 @@
+### [0.454.0](https://github.com/taiga-family/toolkit/compare/v0.453.0...v0.454.0) (2026-04-05)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression (#1702)
+  [(8e5c46f)](https://github.com/taiga-family/toolkit/commit/8e5c46f7d7060994e23cdd93e1017ebb738edd72)
+- update dependency @html-eslint/parser to ^0.59.0 (#1701)
+  [(890f434)](https://github.com/taiga-family/toolkit/commit/890f4343df4a6c5482fbf91f816655bf69ecf71b)
+
 ### [0.453.0](https://github.com/taiga-family/toolkit/compare/v0.452.0...v0.453.0) (2026-04-05)
 
 ### 🚀 Features
