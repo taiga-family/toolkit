@@ -1,3 +1,19 @@
+### [0.453.0](https://github.com/taiga-family/toolkit/compare/v0.452.0...v0.453.0) (2026-04-05)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve some rules (#1698)
+  [(e8360f8)](https://github.com/taiga-family/toolkit/commit/e8360f8c2c649c6fc98f493aca73ccb60ac66563)
+
+### 🐞 Bug Fixes
+
+- update dependency @html-eslint/eslint-plugin to ^0.59.0 (#1700)
+  [(5a73fbf)](https://github.com/taiga-family/toolkit/commit/5a73fbf1f5b8b2c2569b199df4298d561c7267ba)
+- update dependency cspell to ^9.8.0 (#1699)
+  [(04b28ef)](https://github.com/taiga-family/toolkit/commit/04b28ef93004243cbfea01a8ee1b11ada5f6b449)
+- update dependency @eslint/compat to ^2.0.4 (#1697)
+  [(1e569b3)](https://github.com/taiga-family/toolkit/commit/1e569b3256f2f3804d2f5ead3d6d43c87e3369fb)
+
 ### [0.452.0](https://github.com/taiga-family/toolkit/compare/v0.451.0...v0.452.0) (2026-04-03)
 
 ### 🚀 Features
