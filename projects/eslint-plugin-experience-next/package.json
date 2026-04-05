@@ -34,7 +34,7 @@
         "@eslint/compat": "^2.0.4",
         "@eslint/markdown": "^8.0.1",
         "@html-eslint/eslint-plugin": "^0.59.0",
-        "@html-eslint/parser": "^0.58.1",
+        "@html-eslint/parser": "^0.59.0",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/glob": "*",
