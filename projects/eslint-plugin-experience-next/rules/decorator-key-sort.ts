@@ -2,11 +2,11 @@ import {type Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
     create(context) {
-        const order: any = context.options[0] || {};
+        const order = context.options[0] || {};
 
         return {
             ClassDeclaration(node) {
-                const decorators: any[] = Array.from((node as any).decorators ?? []);
+                const decorators = Array.from((node as any).decorators ?? []);
 
                 for (const decorator of decorators) {
                     const {expression} = decorator;
@@ -14,9 +14,7 @@ const config: Rule.RuleModule = {
 
                     if (decoratorName in (order || {})) {
                         const orderList = order[decoratorName];
-                        const decoratorArguments: any[] = Array.from(
-                            expression.arguments ?? [],
-                        );
+                        const decoratorArguments = Array.from(expression.arguments ?? []);
 
                         for (const argument of decoratorArguments) {
                             const properties = Array.from(argument.properties ?? []);
