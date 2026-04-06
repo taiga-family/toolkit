@@ -16,6 +16,7 @@ import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-p
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
+import noRedundantTypeAnnotation from './rules/no-redundant-type-annotation';
 import noStringLiteralConcat from './rules/no-string-literal-concat';
 import objectSingleLine from './rules/object-single-line';
 import preferDeepImports from './rules/prefer-deep-imports';
@@ -47,6 +48,7 @@ const plugin = {
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
+        'no-redundant-type-annotation': noRedundantTypeAnnotation,
         'no-string-literal-concat': noStringLiteralConcat,
         'object-single-line': objectSingleLine,
         'prefer-deep-imports': preferDeepImports,

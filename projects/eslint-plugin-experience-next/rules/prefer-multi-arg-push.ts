@@ -53,7 +53,7 @@ export const rule = createRule<Options, MessageId>({
                 }
 
                 const arrayText = sourceCode.getText(call.callee.object);
-                const group: TSESTree.ExpressionStatement[] = [stmt];
+                const group = [stmt];
                 let j = i + 1;
 
                 while (j < statements.length) {

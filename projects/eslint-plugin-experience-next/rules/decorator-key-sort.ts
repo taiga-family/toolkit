@@ -2,7 +2,7 @@ import {type Rule} from 'eslint';
 
 const config: Rule.RuleModule = {
     create(context) {
-        const order: any = context.options[0] || {};
+        const order = context.options[0] || {};
 
         return {
             ClassDeclaration(node) {
