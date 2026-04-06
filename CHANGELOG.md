@@ -1,3 +1,15 @@
+### [0.457.0](https://github.com/taiga-family/toolkit/compare/v0.456.0...v0.457.0) (2026-04-06)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-redundant-type-annotation` (#1706)
+  [(057b8dc)](https://github.com/taiga-family/toolkit/commit/057b8dc13e1452eae792103d3b71d05d3115095f)
+
+### 🐞 Bug Fixes
+
+- update dependency cspell to v10 (#1705)
+  [(7a9f1ba)](https://github.com/taiga-family/toolkit/commit/7a9f1ba4b04fda52ad30cfad5274f7ecd02370e9)
+
 ### [0.456.0](https://github.com/taiga-family/toolkit/compare/v0.455.0...v0.456.0) (2026-04-05)
 
 ### [0.455.0](https://github.com/taiga-family/toolkit/compare/v0.454.0...v0.455.0) (2026-04-05)
