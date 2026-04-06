@@ -722,6 +722,7 @@ export default defineConfig([
             ],
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
+            '@taiga-ui/experience-next/no-redundant-type-annotation': 'error',
             '@taiga-ui/experience-next/object-single-line': ['error', {printWidth: 90}],
             '@taiga-ui/experience-next/prefer-multi-arg-push': 'error',
             '@taiga-ui/experience-next/short-tui-imports': 'error',

@@ -49,6 +49,7 @@ export default [
 | no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
+| no-redundant-type-annotation        | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
 | no-string-literal-concat            | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
 | object-single-line                  | Enforce single-line formatting for single-property objects when it fits `printWidth`                | ✅  | 🔧  |     |
 | prefer-deep-imports                 | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
@@ -497,6 +498,42 @@ Spread elements are placed after named identifiers.
     {"decorators": ["Component", "Directive", "NgModule", "Pipe"]}
   ]
 }
+```
+
+---
+
+## no-redundant-type-annotation
+
+Disallow explicit type annotations on class properties and variable declarations when TypeScript can already infer the
+same type from the initializer. Requires type information (`parserOptions.project`).
+
+Works well in combination with `unused-imports/no-unused-imports` or `@typescript-eslint/no-unused-vars`, which will
+then clean up any import that is no longer referenced after the annotation is removed.
+
+```ts
+// ❌ error — type is already inferred from inject()
+private readonly options: TuiInputNumberOptions = inject(TUI_INPUT_NUMBER_OPTIONS);
+
+// ✅ after autofix
+private readonly options = inject(TUI_INPUT_NUMBER_OPTIONS);
+```
+
+```ts
+// ❌ error — variable declaration
+const service: MyService = inject(MyService);
+
+// ✅ after autofix
+const service = inject(MyService);
+```
+
+The rule does **not** report when the annotation intentionally widens or changes the type:
+
+```ts
+// ✅ ok — annotation widens Dog to Animal
+x: Animal = new Dog();
+
+// ✅ ok — annotation adds null to the union
+x: MyService | null = inject(MyService);
 ```
 
 ---
