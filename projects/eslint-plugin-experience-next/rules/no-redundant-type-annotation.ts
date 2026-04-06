@@ -33,6 +33,19 @@ export const rule = createRule<Options, MessageId>({
                 return;
             }
 
+            // If the initializer is a function expression or arrow function without
+            // its own return type annotation, the variable annotation may be the
+            // only explicit return type declaration (satisfying
+            // @typescript-eslint/explicit-function-return-type via
+            // allowTypedFunctionExpressions). Removing it would break that rule.
+            if (
+                (value.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+                    value.type === AST_NODE_TYPES.FunctionExpression) &&
+                !value.returnType
+            ) {
+                return;
+            }
+
             // If the initializer is a call to a generic function with no explicit
             // type arguments, the type parameters may be inferred from the
             // contextual return type provided by this annotation. Removing the
