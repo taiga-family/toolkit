@@ -1,4 +1,5 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {isCallExpression} from 'typescript';
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
@@ -30,6 +31,19 @@ export const rule = createRule<Options, MessageId>({
                 typeChecker.typeToString(inferredType)
             ) {
                 return;
+            }
+
+            // If the initializer is a call to a generic function with no explicit
+            // type arguments, the type parameters may be inferred from the
+            // contextual return type provided by this annotation. Removing the
+            // annotation could change the inferred type (e.g., T → unknown).
+            if (isCallExpression(tsValueNode) && !tsValueNode.typeArguments?.length) {
+                const sig = typeChecker.getResolvedSignature(tsValueNode);
+                const decl = sig?.declaration;
+
+                if (decl && 'typeParameters' in decl && decl.typeParameters?.length) {
+                    return;
+                }
             }
 
             context.report({

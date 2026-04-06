@@ -143,5 +143,25 @@ ruleTester.run('no-redundant-type-annotation', rule, {
                 }
             `,
         },
+        {
+            // Generic function without explicit type args: T is inferred from the
+            // contextual return type of the annotation. Removing the annotation
+            // changes T → unknown.
+            code: /* TypeScript */ `
+                function getValue<T>(): T {
+                    return undefined as any;
+                }
+
+                const value: number = getValue();
+            `,
+        },
+        {
+            // Array.from is generic; without the annotation T → unknown[].
+            code: /* TypeScript */ `
+                declare const node: unknown;
+
+                const decorators: any[] = Array.from((node as any).decorators ?? []);
+            `,
+        },
     ],
 });

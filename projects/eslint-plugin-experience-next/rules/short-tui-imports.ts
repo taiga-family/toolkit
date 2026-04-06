@@ -17,7 +17,7 @@ export type Options = [
 
 export type MessageIds = 'replaceTuiImport';
 
-export const MESSAGE_ID = 'replaceTuiImport';
+export const MESSAGE_ID: MessageIds = 'replaceTuiImport';
 
 const DEFAULT_DECORATORS = ['Component', 'Directive', 'NgModule', 'Pipe'];
 
