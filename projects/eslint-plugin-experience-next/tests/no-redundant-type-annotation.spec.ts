@@ -163,5 +163,23 @@ ruleTester.run('no-redundant-type-annotation', rule, {
                 const decorators: any[] = Array.from((node as any).decorators ?? []);
             `,
         },
+        {
+            // Arrow function without its own return type: the variable annotation
+            // is the only explicit return type declaration and satisfies
+            // @typescript-eslint/explicit-function-return-type via
+            // allowTypedFunctionExpressions. Must not be removed.
+            code: /* TypeScript */ `
+                export const projectRoot: () => string = () =>
+                    process.env['ROOT_PATH'] || '/';
+            `,
+        },
+        {
+            // Same for function expressions.
+            code: /* TypeScript */ `
+                export const getRoot: () => string = function () {
+                    return process.env['ROOT_PATH'] || '/';
+                };
+            `,
+        },
     ],
 });
