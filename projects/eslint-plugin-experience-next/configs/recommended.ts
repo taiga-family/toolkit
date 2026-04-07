@@ -423,7 +423,7 @@ export default defineConfig([
             'max-depth': 'error',
             'max-nested-callbacks': ['error', 4],
             'max-params': ['error', 5],
-            'no-bitwise': 'error',
+            'no-bitwise': 'off',
             'no-case-declarations': 'error',
             'no-console': ['error', {allow: ['info', 'assert', 'warn', 'error']}],
             'no-constant-condition': 'error',

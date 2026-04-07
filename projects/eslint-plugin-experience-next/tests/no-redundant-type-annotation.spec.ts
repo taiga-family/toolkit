@@ -144,9 +144,6 @@ ruleTester.run('no-redundant-type-annotation', rule, {
             `,
         },
         {
-            // Generic function without explicit type args: T is inferred from the
-            // contextual return type of the annotation. Removing the annotation
-            // changes T → unknown.
             code: /* TypeScript */ `
                 function getValue<T>(): T {
                     return undefined as any;
@@ -156,7 +153,6 @@ ruleTester.run('no-redundant-type-annotation', rule, {
             `,
         },
         {
-            // Array.from is generic; without the annotation T → unknown[].
             code: /* TypeScript */ `
                 declare const node: unknown;
 
@@ -164,17 +160,17 @@ ruleTester.run('no-redundant-type-annotation', rule, {
             `,
         },
         {
-            // Arrow function without its own return type: the variable annotation
-            // is the only explicit return type declaration and satisfies
-            // @typescript-eslint/explicit-function-return-type via
-            // allowTypedFunctionExpressions. Must not be removed.
+            code: /* TypeScript */ `
+                const EMPTY_COORDINATES: [number, number] = [0, 0];
+            `,
+        },
+        {
             code: /* TypeScript */ `
                 export const projectRoot: () => string = () =>
                     process.env['ROOT_PATH'] || '/';
             `,
         },
         {
-            // Same for function expressions.
             code: /* TypeScript */ `
                 export const getRoot: () => string = function () {
                     return process.env['ROOT_PATH'] || '/';

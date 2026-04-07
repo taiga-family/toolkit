@@ -46,6 +46,16 @@ export const rule = createRule<Options, MessageId>({
                 return;
             }
 
+            // If the declared type is a tuple and the initializer is an array literal,
+            // the annotation provides contextual typing that narrows the inferred type
+            // from T[] to [T1, T2, ...]. Removing it would widen the type back to T[].
+            if (
+                value.type === AST_NODE_TYPES.ArrayExpression &&
+                typeChecker.isTupleType(declaredType)
+            ) {
+                return;
+            }
+
             // If the initializer is a call to a generic function with no explicit
             // type arguments, the type parameters may be inferred from the
             // contextual return type provided by this annotation. Removing the
