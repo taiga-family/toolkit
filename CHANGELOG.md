@@ -1,3 +1,14 @@
+### [0.458.0](https://github.com/taiga-family/toolkit/compare/v0.457.0...v0.458.0) (2026-04-07)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression (#1709)
+  [(13c5c56)](https://github.com/taiga-family/toolkit/commit/13c5c56703e271e75f81208c6f0c118a78863b58)
+- update dependency eslint-plugin-cypress to ^6.2.3 (#1708)
+  [(ab8774d)](https://github.com/taiga-family/toolkit/commit/ab8774d2fba5f37f7cfaa3d7965b9c39a230d8c5)
+- update dependency eslint-plugin-simple-import-sort to v13 (#1707)
+  [(83e66f6)](https://github.com/taiga-family/toolkit/commit/83e66f6e59d616f54b4fbf79964c44efaca7d1e8)
+
 ### [0.457.0](https://github.com/taiga-family/toolkit/compare/v0.456.0...v0.457.0) (2026-04-06)
 
 ### 🚀 Features
