@@ -49,6 +49,7 @@ export default [
 | no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
+| no-project-as-in-ng-template        | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               |     |     |     |
 | no-redundant-type-annotation        | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
 | no-string-literal-concat            | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
 | object-single-line                  | Enforce single-line formatting for single-property objects when it fits `printWidth`                | ✅  | 🔧  |     |
@@ -281,6 +282,36 @@ await page.getByLabel('Name').fill('');
 
 // ✅ after autofix
 await page.getByLabel('Name').clear();
+```
+
+---
+
+## no-project-as-in-ng-template
+
+`ngProjectAs` has no effect when the element is inside an `<ng-template>`, `*ngTemplateOutlet`, `*ngComponentOutlet`, or
+`*polymorpheusOutlet`. Content instantiated through these dynamic outlets does not participate in Angular's static
+content projection, so the attribute is silently ignored at runtime.
+
+```html
+<!-- ❌ error — inside <ng-template> -->
+<ng-template #tpl>
+  <div ngProjectAs="[someSlot]">content</div>
+</ng-template>
+
+<!-- ❌ error — on the outlet host itself -->
+<ng-container
+  *ngTemplateOutlet="tpl"
+  ngProjectAs="[someSlot]"
+></ng-container>
+
+<!-- ❌ error — polymorpheusOutlet -->
+<ng-container
+  *polymorpheusOutlet="content"
+  ngProjectAs="someSlot"
+></ng-container>
+
+<!-- ✅ ok — static content projection -->
+<div ngProjectAs="[someSlot]">content</div>
 ```
 
 ---

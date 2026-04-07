@@ -691,6 +691,7 @@
         "prebundle",
         "Descriptionless",
         "hardline",
-        "foobarbaz"
+        "foobarbaz",
+        "Tmpl"
     ]
 }

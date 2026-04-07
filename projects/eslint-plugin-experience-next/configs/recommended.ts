@@ -799,6 +799,7 @@ export default defineConfig([
             '@angular-eslint/template/prefer-self-closing-tags': 'error',
             '@angular-eslint/template/prefer-template-literal':
                 angularVersion >= modernAngularRules.templateLiteral ? 'error' : 'off',
+            '@taiga-ui/experience-next/no-project-as-in-ng-template': 'error',
         },
     },
     {
