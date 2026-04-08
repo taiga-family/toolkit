@@ -10,52 +10,6 @@ ruleTester.run('no-project-as-in-ng-template', rule, {
     invalid: [
         {
             code: /* HTML */ `
-                <ng-template #tpl>
-                    <div ngProjectAs="[someSlot]">content</div>
-                </ng-template>
-            `,
-            errors: [{messageId: 'no-project-as-in-ng-template'}],
-        },
-        {
-            code: /* HTML */ `
-                <ng-template #tpl>
-                    <span [ngProjectAs]="slotSelector">content</span>
-                </ng-template>
-            `,
-            errors: [{messageId: 'no-project-as-in-ng-template'}],
-        },
-        {
-            code: /* HTML */ `
-                <ng-template>
-                    <li ngProjectAs="[item]">item</li>
-                </ng-template>
-            `,
-            errors: [{messageId: 'no-project-as-in-ng-template'}],
-        },
-        {
-            code: /* HTML */ `
-                <ng-template #outer>
-                    <div>
-                        <span ngProjectAs="header">header text</span>
-                    </div>
-                </ng-template>
-            `,
-            errors: [{messageId: 'no-project-as-in-ng-template'}],
-        },
-        {
-            code: /* HTML */ `
-                <ng-template #tpl>
-                    <div ngProjectAs="[header]">header</div>
-                    <div ngProjectAs="[footer]">footer</div>
-                </ng-template>
-            `,
-            errors: [
-                {messageId: 'no-project-as-in-ng-template'},
-                {messageId: 'no-project-as-in-ng-template'},
-            ],
-        },
-        {
-            code: /* HTML */ `
                 <ng-container
                     *ngTemplateOutlet="banner"
                     ngProjectAs="tuiDocMobileNavigation"
@@ -90,6 +44,18 @@ ruleTester.run('no-project-as-in-ng-template', rule, {
             `,
             errors: [{messageId: 'no-project-as-in-ng-template'}],
         },
+        {
+            code: /* HTML */ `
+                <ng-container
+                    [ngTemplateOutlet]="(items[key] && items[key].template) || plain"
+                >
+                    <ng-template #plain>
+                        <td tuiTd>plain</td>
+                    </ng-template>
+                </ng-container>
+            `,
+            errors: [{messageId: 'no-nested-template-in-dynamic-outlet'}],
+        },
     ],
     valid: [
         {
@@ -107,6 +73,20 @@ ruleTester.run('no-project-as-in-ng-template', rule, {
         },
         {
             code: /* HTML */ '<ng-template ngProjectAs="[someSlot]"></ng-template>',
+        },
+        {
+            code: /* HTML */ `
+                <ng-template #tpl>
+                    <div ngProjectAs="[someSlot]">content</div>
+                </ng-template>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <ng-template #tpl>
+                    <span [ngProjectAs]="slotSelector">content</span>
+                </ng-template>
+            `,
         },
         {
             code: /* HTML */ `
@@ -133,6 +113,15 @@ ruleTester.run('no-project-as-in-ng-template', rule, {
                 >
                     A
                 </div>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <ng-container [ngTemplateOutlet]="tpl" />
+
+                <ng-template #tpl>
+                    <td tuiTd>plain</td>
+                </ng-template>
             `,
         },
     ],
