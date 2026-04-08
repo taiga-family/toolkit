@@ -3,14 +3,52 @@ import {isCallExpression} from 'typescript';
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
-type Options = [];
+type Options = [
+    {
+        ignoreTupleContextualTyping?: boolean;
+    }?,
+];
 
 type MessageId = 'redundantTypeAnnotation';
+
+function collectArrayExpressions(node: TSESTree.Node): TSESTree.ArrayExpression[] {
+    const result: TSESTree.ArrayExpression[] = [];
+
+    if (node.type === AST_NODE_TYPES.ArrayExpression) {
+        result.push(node);
+    }
+
+    switch (node.type) {
+        case AST_NODE_TYPES.BinaryExpression:
+        case AST_NODE_TYPES.LogicalExpression:
+            result.push(...collectArrayExpressions(node.left));
+            result.push(...collectArrayExpressions(node.right));
+            break;
+        case AST_NODE_TYPES.ConditionalExpression:
+            result.push(...collectArrayExpressions(node.consequent));
+            result.push(...collectArrayExpressions(node.alternate));
+            break;
+        case AST_NODE_TYPES.ObjectExpression:
+            for (const property of node.properties) {
+                if (property.type === AST_NODE_TYPES.Property) {
+                    result.push(...collectArrayExpressions(property.value));
+                }
+            }
+
+            break;
+        default:
+            break;
+    }
+
+    return result;
+}
 
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
+        const ignoreTupleContextualTyping =
+            context.options[0]?.ignoreTupleContextualTyping ?? true;
 
         function check(
             node: TSESTree.PropertyDefinition | TSESTree.VariableDeclarator,
@@ -46,14 +84,25 @@ export const rule = createRule<Options, MessageId>({
                 return;
             }
 
-            // If the declared type is a tuple and the initializer is an array literal,
-            // the annotation provides contextual typing that narrows the inferred type
-            // from T[] to [T1, T2, ...]. Removing it would widen the type back to T[].
-            if (
-                value.type === AST_NODE_TYPES.ArrayExpression &&
-                typeChecker.isTupleType(declaredType)
-            ) {
-                return;
+            // If the annotation provides contextual typing that narrows an array
+            // literal to a tuple (e.g. [0, 0] → readonly [number, number]), removing
+            // it would widen the inferred type. This covers both direct array literals
+            // and arrays nested inside object literals or conditional expressions.
+            if (ignoreTupleContextualTyping) {
+                const arrayExpressions = collectArrayExpressions(value);
+
+                for (const arrayExpression of arrayExpressions) {
+                    const tsArrayNode =
+                        parserServices.esTreeNodeToTSNodeMap.get(arrayExpression);
+
+                    if (
+                        typeChecker.isTupleType(
+                            typeChecker.getTypeAtLocation(tsArrayNode),
+                        )
+                    ) {
+                        return;
+                    }
+                }
             }
 
             // If the initializer is a call to a generic function with no explicit
@@ -101,7 +150,19 @@ export const rule = createRule<Options, MessageId>({
             redundantTypeAnnotation:
                 'Type annotation is redundant — the type is already inferred from the initializer',
         },
-        schema: [],
+        schema: [
+            {
+                additionalProperties: false,
+                properties: {
+                    ignoreTupleContextualTyping: {
+                        description:
+                            'Preserve annotations when they provide contextual typing that narrows an array literal to a tuple type. Defaults to true.',
+                        type: 'boolean',
+                    },
+                },
+                type: 'object',
+            },
+        ],
         type: 'suggestion',
     },
     name: 'no-redundant-type-annotation',

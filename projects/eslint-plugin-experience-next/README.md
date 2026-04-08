@@ -536,6 +536,32 @@ x: Animal = new Dog();
 x: MyService | null = inject(MyService);
 ```
 
+The rule does **not** report when the annotation provides contextual typing that narrows an array literal to a tuple.
+Without the annotation TypeScript would infer `number[]` instead of the required tuple type, widening the type and
+breaking compilation:
+
+```ts
+type SelectionRange = readonly [from: number, to: number];
+interface ElementState {
+  readonly value: string;
+  readonly selection: SelectionRange;
+}
+
+// ✅ ok — [0, 0] is inferred as SelectionRange only because of the annotation;
+//         removing it would widen the type to ElementState | {value: string; selection: number[]}
+const state: ElementState = flag ? {value: '', selection: [0, 0]} : existingState;
+```
+
+```json
+{
+  "@taiga-ui/experience-next/no-redundant-type-annotation": ["error", {"ignoreTupleContextualTyping": true}]
+}
+```
+
+| Option                        | Type      | Default | Description                                                                                            |
+| ----------------------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `ignoreTupleContextualTyping` | `boolean` | `true`  | Preserve annotations when they provide contextual typing that narrows an array literal to a tuple type |
+
 ---
 
 ## strict-tui-doc-example

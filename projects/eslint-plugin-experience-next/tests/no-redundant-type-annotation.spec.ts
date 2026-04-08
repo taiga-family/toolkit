@@ -89,6 +89,34 @@ ruleTester.run('no-redundant-type-annotation', rule, {
                 }
             `,
         },
+        {
+            code: /* TypeScript */ `
+                type SelectionRange = readonly [from: number, to: number];
+                interface ElementState {
+                    readonly value: string;
+                    readonly selection: SelectionRange;
+                }
+                declare const state: ElementState;
+                declare const flag: boolean;
+                const initialElementState: ElementState = flag
+                    ? {value: 'test', selection: [0, 0]}
+                    : state;
+            `,
+            errors: [{messageId: 'redundantTypeAnnotation'}],
+            options: [{ignoreTupleContextualTyping: false}],
+            output: /* TypeScript */ `
+                type SelectionRange = readonly [from: number, to: number];
+                interface ElementState {
+                    readonly value: string;
+                    readonly selection: SelectionRange;
+                }
+                declare const state: ElementState;
+                declare const flag: boolean;
+                const initialElementState = flag
+                    ? {value: 'test', selection: [0, 0]}
+                    : state;
+            `,
+        },
     ],
     valid: [
         {
@@ -162,6 +190,33 @@ ruleTester.run('no-redundant-type-annotation', rule, {
         {
             code: /* TypeScript */ `
                 const EMPTY_COORDINATES: [number, number] = [0, 0];
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                type SelectionRange = readonly [from: number, to: number];
+                interface ElementState {
+                    readonly value: string;
+                    readonly selection: SelectionRange;
+                }
+                declare const state: ElementState;
+                declare const flag: boolean;
+                const initialElementState: ElementState = flag
+                    ? {value: 'test', selection: [0, 0]}
+                    : state;
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                type SelectionRange = readonly [from: number, to: number];
+                interface ElementState {
+                    readonly value: string;
+                    readonly selection: SelectionRange;
+                }
+                const initialElementState: ElementState = {
+                    value: 'test',
+                    selection: [0, 0],
+                };
             `,
         },
         {
