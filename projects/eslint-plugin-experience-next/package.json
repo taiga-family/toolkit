@@ -31,7 +31,7 @@
         "glob": "13.0.6"
     },
     "peerDependencies": {
-        "@eslint/compat": "^2.0.4",
+        "@eslint/compat": "^2.0.5",
         "@eslint/markdown": "^8.0.1",
         "@html-eslint/eslint-plugin": "^0.59.0",
         "@html-eslint/parser": "^0.59.0",
