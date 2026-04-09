@@ -1,3 +1,23 @@
+### [0.460.0](https://github.com/taiga-family/toolkit/compare/v0.459.0...v0.460.0) (2026-04-09)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-project-as-in-ng-template` (#1711)
+  [(305acb3)](https://github.com/taiga-family/toolkit/commit/305acb3444c2a4a37211486f01e3bfc3d9a3c1df)
+- **eslint-plugin-experience-next**: add `ignoreTupleContextualTyping` option (#1714)
+  [(3a133f4)](https://github.com/taiga-family/toolkit/commit/3a133f456b8cee45a309b223ce99314315c3b289)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-cypress to ^6.3.0 (#1717)
+  [(d433571)](https://github.com/taiga-family/toolkit/commit/d433571929f938a032c8358fe2d7cf3d2e15c611)
+- update dependency @eslint/compat to ^2.0.5 (#1715)
+  [(75a5c93)](https://github.com/taiga-family/toolkit/commit/75a5c933dc29ef3f43ac0371459d8836d1b08561)
+- update @typescript-eslint/\* deps to ^8.58.1 (#1713)
+  [(9732041)](https://github.com/taiga-family/toolkit/commit/9732041cf1c8d6917b7df4ab7e8872dd3e0bb1d3)
+- update dependency postcss to ^8.5.9 (#1712)
+  [(0379869)](https://github.com/taiga-family/toolkit/commit/037986918c19c0679d59baf8ce98f6c964b8f55f)
+
 ### [0.459.0](https://github.com/taiga-family/toolkit/compare/v0.458.0...v0.459.0) (2026-04-07)
 
 ### 🐞 Bug Fixes
