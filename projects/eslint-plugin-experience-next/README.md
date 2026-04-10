@@ -46,7 +46,7 @@ export default [
 | injection-token-description         | They are required to provide a description for `InjectionToken`                                     | ✅  |     |     |
 | no-deep-imports                     | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
 | no-deep-imports-to-indexed-packages | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
-| no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              |     | 🔧  |     |
+| no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template        | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               |     |     |     |
@@ -231,6 +231,8 @@ import {Foo} from '@my-lib/internal';
 ---
 
 ## no-href-with-router-link
+
+> ✅ Included in `recommended` — processed by the angular-eslint template parser (`**/*.html`).
 
 Disallows using both `href` and `routerLink` on the same `<a>` element in Angular templates. Autofix removes the `href`
 attribute.
