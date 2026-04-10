@@ -402,6 +402,7 @@ module.exports = {
             'vw',
             'fr',
             'svh',
+            'lh',
         ],
         'unit-no-unknown': true,
         'value-keyword-case': [
