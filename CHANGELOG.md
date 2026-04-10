@@ -1,3 +1,14 @@
+### [0.461.0](https://github.com/taiga-family/toolkit/compare/v0.460.0...v0.461.0) (2026-04-10)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: allow `lh` unit (#1722)
+  [(2490dad)](https://github.com/taiga-family/toolkit/commit/2490dade99aa0e33c51ce8b62b38f0a688a52cd0)
+- update dependency prettier to ^3.8.2 (#1721)
+  [(921e5a6)](https://github.com/taiga-family/toolkit/commit/921e5a6aef5364c362045afd2f9659de7899ebdf)
+- update dependency eslint-plugin-jest to ^29.15.2 (#1720)
+  [(b6069d5)](https://github.com/taiga-family/toolkit/commit/b6069d59539cb35f0631381d615834f1a4b4768a)
+
 ### [0.460.0](https://github.com/taiga-family/toolkit/compare/v0.459.0...v0.460.0) (2026-04-09)
 
 ### 🚀 Features
