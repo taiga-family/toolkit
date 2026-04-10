@@ -1,3 +1,10 @@
+### [0.462.0](https://github.com/taiga-family/toolkit/compare/v0.461.0...v0.462.0) (2026-04-10)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: valid configuration (#1723)
+  [(9c4af8d)](https://github.com/taiga-family/toolkit/commit/9c4af8da42ee69447bf568511702bb219c861f30)
+
 ### [0.461.0](https://github.com/taiga-family/toolkit/compare/v0.460.0...v0.461.0) (2026-04-10)
 
 ### 🐞 Bug Fixes
