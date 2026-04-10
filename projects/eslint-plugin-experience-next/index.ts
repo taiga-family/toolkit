@@ -70,6 +70,7 @@ Object.assign(plugin.configs, {
     ],
     recommended: [
         {files: ALL_TS_JS_FILES, plugins: {'@taiga-ui/experience-next': plugin}},
+        {files: ['**/*.html'], plugins: {'@taiga-ui/experience-next': plugin}},
         ...recommended,
     ],
     ['taiga-specific']: [
