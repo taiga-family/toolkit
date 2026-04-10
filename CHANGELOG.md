@@ -1,3 +1,10 @@
+### [0.463.0](https://github.com/taiga-family/toolkit/compare/v0.462.0...v0.463.0) (2026-04-10)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: move no-href-with-router-link to angular-eslint parser (#1726)
+  [(be35945)](https://github.com/taiga-family/toolkit/commit/be3594581204fc76be1676087776a8079d8a17d7)
+
 ### [0.462.0](https://github.com/taiga-family/toolkit/compare/v0.461.0...v0.462.0) (2026-04-10)
 
 ### 🐞 Bug Fixes

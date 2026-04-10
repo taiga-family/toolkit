@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/auto-changelog-config",
-    "version": "0.462.0",
+    "version": "0.463.0",
     "description": "Taiga UI auto-changelog config",
     "keywords": [
         "auto-changelog"
