@@ -1,60 +1,51 @@
+import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
 const MESSAGE_ID = 'no-href-with-router-link';
 const ERROR_MESSAGE =
     'Do not use href and routerLink attributes together on the same element';
 
-interface HTMLAttribute {
-    key: {value?: string};
-    value?: {value: string};
-    range?: [number, number];
-}
-
-interface HTMLTag {
-    name?: string;
-    attributes?: HTMLAttribute[];
-    range?: [number, number];
-}
-
 const config: Rule.RuleModule = {
     create(context: Rule.RuleContext) {
         return {
-            Tag(node: unknown) {
-                const htmlNode = node as HTMLTag | undefined;
+            Element(rawNode: unknown) {
+                const node = rawNode as TmplAstElement;
 
-                if (htmlNode?.name?.toLowerCase() !== 'a') {
+                if (node.name !== 'a') {
                     return;
                 }
 
-                let hrefAttribute: HTMLAttribute | null = null;
-                let routerLinkAttribute: HTMLAttribute | null = null;
-                let hasRouterLink = false;
-                let hasHref = false;
+                const hrefAttr = node.attributes.find((attr) => attr.name === 'href');
+                const hasRouterLink =
+                    node.attributes.some(
+                        (attr) => attr.name.toLowerCase() === 'routerlink',
+                    ) ||
+                    node.inputs.some(
+                        (input) => input.name.toLowerCase() === 'routerlink',
+                    );
 
-                for (const attr of htmlNode.attributes ?? []) {
-                    const attrName = attr.key.value;
-
-                    if (attrName?.toLowerCase() === 'href') {
-                        hasHref = true;
-                        hrefAttribute = attr;
-                    } else if (attrName?.toLowerCase() === 'routerlink') {
-                        hasRouterLink = true;
-                        routerLinkAttribute = attr;
-                    }
+                if (!hrefAttr || !hasRouterLink) {
+                    return;
                 }
 
-                if (hasHref && hasRouterLink) {
-                    context.report({
-                        fix: (fixer) =>
-                            hrefAttribute?.range
-                                ? fixer.removeRange(hrefAttribute.range)
-                                : null,
-                        messageId: MESSAGE_ID,
-                        node: (routerLinkAttribute ??
-                            hrefAttribute ??
-                            htmlNode) as unknown as Rule.Node,
-                    });
-                }
+                context.report({
+                    fix: (fixer) =>
+                        fixer.removeRange([
+                            hrefAttr.sourceSpan.start.offset,
+                            hrefAttr.sourceSpan.end.offset,
+                        ]),
+                    loc: {
+                        end: {
+                            column: hrefAttr.sourceSpan.end.col,
+                            line: hrefAttr.sourceSpan.end.line + 1,
+                        },
+                        start: {
+                            column: hrefAttr.sourceSpan.start.col,
+                            line: hrefAttr.sourceSpan.start.line + 1,
+                        },
+                    },
+                    messageId: MESSAGE_ID,
+                });
             },
         };
     },
@@ -62,6 +53,7 @@ const config: Rule.RuleModule = {
         docs: {description: ERROR_MESSAGE},
         fixable: 'code',
         messages: {[MESSAGE_ID]: ERROR_MESSAGE},
+        schema: [],
         type: 'problem',
     },
 };
