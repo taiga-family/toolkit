@@ -7,8 +7,6 @@
         "allowImportingTsExtensions": true,
         "esModuleInterop": true,
         "incremental": true,
-        "module": "ESNext",
-        "target": "ESNext",
         "typeRoots": ["node_modules/@types"],
         "types": ["node"]
     },

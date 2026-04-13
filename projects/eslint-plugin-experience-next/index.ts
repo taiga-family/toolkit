@@ -15,6 +15,7 @@ import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
+import noLegacyPeerDeps from './rules/no-legacy-peer-deps';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/no-project-as-in-ng-template';
 import noRedundantTypeAnnotation from './rules/no-redundant-type-annotation';
@@ -48,6 +49,7 @@ const plugin = {
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
+        'no-legacy-peer-deps': noLegacyPeerDeps,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,
         'no-redundant-type-annotation': noRedundantTypeAnnotation,
