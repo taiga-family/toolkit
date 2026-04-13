@@ -1,6 +1,5 @@
 import {readFileSync} from 'node:fs';
 
-import {type Linter} from 'eslint';
 import {type ConfigArray} from 'typescript-eslint';
 
 import htmlEslint from './configs/html-eslint';
@@ -82,7 +81,7 @@ Object.assign(plugin.configs, {
         {files: ALL_TS_JS_FILES, plugins: {'@taiga-ui/experience-next': plugin}},
         ...taigaSpecific,
     ],
-} as Linter.Config);
+} as (typeof plugin)['configs']);
 
 export {TUI_RECOMMENDED_NAMING_CONVENTION} from './rules/convention';
 
