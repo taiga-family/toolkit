@@ -9,6 +9,16 @@ const RULE_ID = '@taiga-ui/experience-next/no-project-as-in-ng-template';
 
 const testPlugin = {rules: {'no-project-as-in-ng-template': noProjectAsInNgTemplate}};
 
+function expectRuleViolation(
+    result: ESLint.LintResult | undefined,
+    ruleId: string,
+    shouldExist: boolean,
+): void {
+    expect(result?.messages.some((message) => message.ruleId === ruleId)).toBe(
+        shouldExist,
+    );
+}
+
 describe('recommended config — HTML integration', () => {
     let eslint: ESLint;
 
@@ -37,7 +47,7 @@ describe('recommended config — HTML integration', () => {
             {filePath: 'test.html'},
         );
 
-        expect(result?.messages.some((message) => message.ruleId === RULE_ID)).toBe(true);
+        expectRuleViolation(result, RULE_ID, true);
     });
 
     it('does not report no-project-as-in-ng-template for a plain element with ngProjectAs', async () => {
@@ -46,8 +56,6 @@ describe('recommended config — HTML integration', () => {
             {filePath: 'test.html'},
         );
 
-        expect(result?.messages.some((message) => message.ruleId === RULE_ID)).toBe(
-            false,
-        );
+        expectRuleViolation(result, RULE_ID, false);
     });
 });
