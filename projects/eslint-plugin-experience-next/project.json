@@ -15,7 +15,7 @@
                 "generateExportsField": true,
                 "main": "projects/{projectName}/index.ts",
                 "outputPath": "{workspaceRoot}/dist/{projectName}",
-                "tsConfig": "projects/{projectName}/tsconfig.lib.json"
+                "tsConfig": "projects/{projectName}/tsconfig.json"
             },
             "outputs": ["{workspaceRoot}/dist/{projectName}"]
         },

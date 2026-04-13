@@ -9,7 +9,7 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                    "npx tsc -p {projectRoot}/tsconfig.lib.json",
+                    "npx tsc -p {projectRoot}/tsconfig.json",
                     "cp {projectRoot}/README.md ./dist/{projectName}",
                     "cp {projectRoot}/package.json ./dist/{projectName}"
                 ],
