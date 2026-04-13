@@ -1,9 +1,10 @@
 import {RuleTester} from 'eslint';
+import templateParser from '@angular-eslint/template-parser';
 
 import rule from '../rules/html-logical-properties';
 
 const ruleTester = new RuleTester({
-    languageOptions: {parser: require('@angular-eslint/template-parser')},
+    languageOptions: {parser: templateParser},
 });
 
 ruleTester.run('html-logical-properties', rule, {
