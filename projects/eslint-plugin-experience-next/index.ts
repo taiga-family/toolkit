@@ -10,6 +10,7 @@ import arrayAsConst from './rules/array-as-const';
 import classPropertyNaming from './rules/class-property-naming';
 import decoratorKeySort from './rules/decorator-key-sort';
 import flatExports from './rules/flat-exports';
+import htmlLogicalProperties from './rules/html-logical-properties';
 import injectionTokenDescription from './rules/injection-token-description';
 import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
@@ -44,6 +45,7 @@ const plugin = {
         'class-property-naming': classPropertyNaming,
         'decorator-key-sort': decoratorKeySort,
         'flat-exports': flatExports,
+        'html-logical-properties': htmlLogicalProperties,
         'injection-token-description': injectionTokenDescription,
         'no-deep-imports': noDeepImports,
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
