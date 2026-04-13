@@ -1,7 +1,6 @@
 import {rule} from '../rules/no-legacy-peer-deps';
 import {parseForESLint} from '../rules/utils/npmrc-parser';
-
-const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
+import {RuleTester} from '@typescript-eslint/rule-tester';
 
 const ruleTester = new RuleTester({languageOptions: {parser: {parseForESLint}}});
 
