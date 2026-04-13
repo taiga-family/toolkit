@@ -1,5 +1,6 @@
-import {rule} from '../rules/no-redundant-type-annotation';
 import {RuleTester} from '@typescript-eslint/rule-tester';
+
+import {rule} from '../rules/no-redundant-type-annotation';
 
 const ruleTester = new RuleTester({
     languageOptions: {
