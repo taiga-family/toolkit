@@ -800,6 +800,7 @@ export default defineConfig([
             '@angular-eslint/template/prefer-self-closing-tags': 'error',
             '@angular-eslint/template/prefer-template-literal':
                 angularVersion >= modernAngularRules.templateLiteral ? 'error' : 'off',
+            '@taiga-ui/experience-next/html-logical-properties': 'error',
             '@taiga-ui/experience-next/no-href-with-router-link': 'error',
             '@taiga-ui/experience-next/no-project-as-in-ng-template': 'error',
         },
