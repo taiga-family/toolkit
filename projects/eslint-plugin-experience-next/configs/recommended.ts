@@ -29,6 +29,7 @@ import {
     TUI_MEMBER_ORDERING_CONVENTION,
     TUI_RECOMMENDED_NAMING_CONVENTION,
 } from '../rules/convention';
+import * as npmrcParser from '../rules/utils/npmrc-parser';
 import {angularVersion, modernAngularRules} from './utils/get-ng-version';
 import {projectJsonExist} from './utils/project-json-exist';
 
@@ -973,5 +974,10 @@ export default defineConfig([
     {
         files: ['**/*.md', '**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
         rules: {'no-irregular-whitespace': 'off'},
+    },
+    {
+        files: ['**/.npmrc'],
+        languageOptions: {parser: npmrcParser},
+        rules: {'@taiga-ui/experience-next/no-legacy-peer-deps': 'error'},
     },
 ]);
