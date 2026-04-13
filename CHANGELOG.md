@@ -1,3 +1,13 @@
+### [0.465.0](https://github.com/taiga-family/toolkit/compare/v0.464.0...v0.465.0) (2026-04-13)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add new rule (#1732)
+  [(e0df77d)](https://github.com/taiga-family/toolkit/commit/e0df77d4d21f8a01154f2ae2a4beb54e5fccb26b)
+- configs (#1731) [(61c48d2)](https://github.com/taiga-family/toolkit/commit/61c48d2a2db7c2994d74e088c29ebbf87df417c5)
+- **eslint-plugin-experience-next**: no legacy peer deps (#1730)
+  [(f6d91e4)](https://github.com/taiga-family/toolkit/commit/f6d91e4baf52c41a46d98c4cab06734629493cf5)
+
 ### [0.464.0](https://github.com/taiga-family/toolkit/compare/v0.463.0...v0.464.0) (2026-04-12)
 
 ### 🐞 Bug Fixes
