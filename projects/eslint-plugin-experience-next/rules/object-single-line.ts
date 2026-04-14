@@ -1,6 +1,8 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
+import {unwrapExpression} from './utils/ast-expressions';
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 type Options = [{printWidth: number}];
@@ -66,44 +68,6 @@ export const rule = createRule<Options, MessageIds>({
             const [onlyProperty] = node.properties;
 
             return onlyProperty ? !isForbiddenProperty(onlyProperty) : false;
-        };
-
-        const unwrapExpression = (
-            expression: TSESTree.Expression,
-        ): TSESTree.Expression => {
-            let current = expression;
-            let didUnwrap = true;
-
-            while (didUnwrap) {
-                didUnwrap = false;
-
-                switch (current.type) {
-                    case AST_NODE_TYPES.ChainExpression:
-                        current = current.expression as unknown as TSESTree.Expression;
-                        didUnwrap = true;
-                        break;
-
-                    case AST_NODE_TYPES.TSAsExpression:
-                        current = current.expression as unknown as TSESTree.Expression;
-                        didUnwrap = true;
-                        break;
-
-                    case AST_NODE_TYPES.TSNonNullExpression:
-                        current = current.expression as unknown as TSESTree.Expression;
-                        didUnwrap = true;
-                        break;
-
-                    case AST_NODE_TYPES.TSTypeAssertion:
-                        current = current.expression as unknown as TSESTree.Expression;
-                        didUnwrap = true;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return current;
         };
 
         const getParenthesizedInner = (
