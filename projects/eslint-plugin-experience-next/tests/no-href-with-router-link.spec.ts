@@ -19,9 +19,9 @@ ruleTester.run('no-href-with-router-link', rule, {
             output: '<a routerLink="/home"  class="link">Home</a>',
         },
         {
-            code: /* HTML */ '<a href="#section" routerlink="/docs">Documentation</a>',
+            code: /* HTML */ '<a href="#section" routerLink="/docs">Documentation</a>',
             errors: [{messageId: 'no-href-with-router-link'}],
-            output: '<a  routerlink="/docs">Documentation</a>',
+            output: '<a  routerLink="/docs">Documentation</a>',
         },
         {
             code: /* HTML */ '<a id="mylink" href="/page" routerLink="/page" title="Link">Go to page</a>',
