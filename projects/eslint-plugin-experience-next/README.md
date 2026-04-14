@@ -48,6 +48,7 @@ export default [
 | no-deep-imports-to-indexed-packages | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
 | no-href-with-router-link            | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | no-implicit-public                  | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
+| no-legacy-peer-deps                 | Disallow `legacy-peer-deps=true` in `.npmrc`                                                        | ✅  |     |     |
 | no-playwright-empty-fill            | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template        | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               |     |     |     |
 | no-redundant-type-annotation        | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
@@ -270,6 +271,26 @@ class MyService {
   public doSomething(): void {}
 }
 ```
+
+---
+
+## no-legacy-peer-deps
+
+> ✅ Included in `recommended` — applied to `**/.npmrc`.
+
+Disallows `legacy-peer-deps=true` in `.npmrc`. This npm option bypasses peer dependency resolution and can hide real
+version conflicts in the dependency graph. The preferred fix is to align incompatible package versions instead of
+disabling the resolver.
+
+```ini
+# ❌ error
+legacy-peer-deps=true
+
+# ✅ ok
+strict-peer-deps=true
+```
+
+Comments and empty lines are ignored, so the rule only reports an active `legacy-peer-deps=true` entry.
 
 ---
 
