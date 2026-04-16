@@ -13,16 +13,22 @@ import htmlLogicalProperties from './rules/html-logical-properties';
 import injectionTokenDescription from './rules/injection-token-description';
 import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
+import noFullyUntrackedEffect from './rules/no-fully-untracked-effect';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
 import noLegacyPeerDeps from './rules/no-legacy-peer-deps';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/no-project-as-in-ng-template';
 import noRedundantTypeAnnotation from './rules/no-redundant-type-annotation';
+import noSignalReadsAfterAwaitInReactiveContext from './rules/no-signal-reads-after-await-in-reactive-context';
 import noStringLiteralConcat from './rules/no-string-literal-concat';
+import noUntrackedOutsideReactiveContext from './rules/no-untracked-outside-reactive-context';
+import noUselessUntracked from './rules/no-useless-untracked';
 import objectSingleLine from './rules/object-single-line';
 import preferDeepImports from './rules/prefer-deep-imports';
 import preferMultiArgPush from './rules/prefer-multi-arg-push';
+import preferUntrackedIncidentalSignalReads from './rules/prefer-untracked-incidental-signal-reads';
+import preferUntrackedSignalGetter from './rules/prefer-untracked-signal-getter';
 import shortTuiImports from './rules/short-tui-imports';
 import standaloneImportsSort from './rules/standalone-imports-sort';
 import strictTuiDocExample from './rules/strict-tui-doc-example';
@@ -48,16 +54,23 @@ const plugin = {
         'injection-token-description': injectionTokenDescription,
         'no-deep-imports': noDeepImports,
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
+        'no-fully-untracked-effect': noFullyUntrackedEffect,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
         'no-legacy-peer-deps': noLegacyPeerDeps,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,
         'no-redundant-type-annotation': noRedundantTypeAnnotation,
+        'no-signal-reads-after-await-in-reactive-context':
+            noSignalReadsAfterAwaitInReactiveContext,
         'no-string-literal-concat': noStringLiteralConcat,
+        'no-untracked-outside-reactive-context': noUntrackedOutsideReactiveContext,
+        'no-useless-untracked': noUselessUntracked,
         'object-single-line': objectSingleLine,
         'prefer-deep-imports': preferDeepImports,
         'prefer-multi-arg-push': preferMultiArgPush,
+        'prefer-untracked-incidental-signal-reads': preferUntrackedIncidentalSignalReads,
+        'prefer-untracked-signal-getter': preferUntrackedSignalGetter,
         'short-tui-imports': shortTuiImports,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
