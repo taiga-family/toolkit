@@ -598,8 +598,8 @@ effect(async () => {
 ordinary non-reactive code, nested callbacks, or code that runs after `await`, it usually does not prevent dependency
 tracking and only adds noise. This rule reports those cases, but intentionally allows a few imperative Angular escape
 hatches where `untracked()` can still be useful: `@Pipe().transform`, `ControlValueAccessor.writeValue`,
-`registerOnChange` including patched accessors such as `accessor.writeValue = (...) => {}`, callback-form wrappers
-used inside deferred scheduler / event-handler callbacks, and narrow lazy DI factory wrappers like
+`registerOnChange` including patched accessors such as `accessor.writeValue = (...) => {}`, callback-form wrappers used
+inside deferred scheduler / event-handler callbacks, and narrow lazy DI factory wrappers like
 `InjectionToken({factory})` / `useFactory` when they guard creation of a reactive owner such as `effect()` against an
 accidental ambient reactive context. For the narrow case `untracked(() => effect(...))` and similar outer wrappers
 around a reactive call in ordinary code, autofix removes only the useless outer `untracked()` wrapper.
