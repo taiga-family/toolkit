@@ -59,6 +59,17 @@ function getObjectPropertyName(node: TSESTree.Property): string | null {
     return typeof node.key.value === 'string' ? node.key.value : null;
 }
 
+function getMemberExpressionPropertyName(node: TSESTree.MemberExpression): string | null {
+    if (!node.computed && node.property.type === AST_NODE_TYPES.Identifier) {
+        return node.property.name;
+    }
+
+    return node.property.type === AST_NODE_TYPES.Literal &&
+        typeof node.property.value === 'string'
+        ? node.property.value
+        : null;
+}
+
 function getEnclosingClassMember(node: TSESTree.Node): ClassMember | null {
     for (let current = node.parent; current; current = current.parent) {
         if (
@@ -124,15 +135,41 @@ function isPipeTransformMember(member: ClassMember): boolean {
     return hasNamedDecorator(member.parent.parent, 'Pipe');
 }
 
+function hasAllowedImperativeAssignment(node: TSESTree.Node): boolean {
+    for (let current = node.parent; current; current = current.parent) {
+        if (!isFunctionLike(current)) {
+            continue;
+        }
+
+        const parent = current.parent;
+
+        if (
+            parent.type === AST_NODE_TYPES.AssignmentExpression &&
+            parent.right === current &&
+            parent.left.type === AST_NODE_TYPES.MemberExpression
+        ) {
+            const memberName = getMemberExpressionPropertyName(parent.left);
+
+            if (memberName && IMPERATIVE_UNTRACKED_METHODS.has(memberName)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 function isAllowedImperativeAngularContext(node: TSESTree.Node): boolean {
     const member = getEnclosingClassMember(node);
     const memberName = member ? getClassMemberName(member) : null;
 
-    if (!member || !memberName) {
-        return false;
-    }
-
-    return IMPERATIVE_UNTRACKED_METHODS.has(memberName) || isPipeTransformMember(member);
+    return (
+        (!!member &&
+            !!memberName &&
+            (IMPERATIVE_UNTRACKED_METHODS.has(memberName) ||
+                isPipeTransformMember(member))) ||
+        hasAllowedImperativeAssignment(node)
+    );
 }
 
 function isDirectCallbackArgument(fn: FunctionLikeNode): boolean {
