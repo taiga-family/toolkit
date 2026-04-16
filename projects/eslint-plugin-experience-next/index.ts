@@ -20,6 +20,7 @@ import noLegacyPeerDeps from './rules/no-legacy-peer-deps';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/no-project-as-in-ng-template';
 import noRedundantTypeAnnotation from './rules/no-redundant-type-annotation';
+import noSideEffectsInComputed from './rules/no-side-effects-in-computed';
 import noSignalReadsAfterAwaitInReactiveContext from './rules/no-signal-reads-after-await-in-reactive-context';
 import noStringLiteralConcat from './rules/no-string-literal-concat';
 import noUntrackedOutsideReactiveContext from './rules/no-untracked-outside-reactive-context';
@@ -61,6 +62,7 @@ const plugin = {
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,
         'no-redundant-type-annotation': noRedundantTypeAnnotation,
+        'no-side-effects-in-computed': noSideEffectsInComputed,
         'no-signal-reads-after-await-in-reactive-context':
             noSignalReadsAfterAwaitInReactiveContext,
         'no-string-literal-concat': noStringLiteralConcat,
