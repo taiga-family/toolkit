@@ -883,6 +883,32 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
                 console.log(Test);
             `,
         },
+        // Patching an accessor.writeValue callback is the same imperative
+        // forms hook and may also need untracked
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, untracked} from '@angular/core';
+                class Test {
+                    private readonly options = signal('mask');
+
+                    constructor() {
+                        const accessor: ControlValueAccessor = {
+                            writeValue: (_value: unknown): void => {},
+                            registerOnChange: (_fn: (value: unknown) => void): void => {},
+                        };
+
+                        accessor.writeValue = (value: unknown): void => {
+                            const options = untracked(this.options);
+
+                            console.log(options, value);
+                        };
+                    }
+                }
+
+                console.log(Test);
+            `,
+        },
         // registerOnChange may install nested callbacks that need signal
         // snapshots without creating reactive dependencies
         {
