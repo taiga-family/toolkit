@@ -44,7 +44,7 @@ export default [
 | decorator-key-sort                              | Sorts the keys of the object passed to the `@Component/@Injectable/@NgModule/@Pipe` decorator       | ✅  | 🔧  |     |
 | flat-exports                                    | Spread nested arrays when exporting Angular entity collections                                      |     | 🔧  |     |
 | host-attributes-sort                            | Sort Angular host metadata attributes using configurable attribute groups                           | ✅  | 🔧  |     |
-| injection-token-description                     | They are required to provide a description for `InjectionToken`                                     | ✅  |     |     |
+| injection-token-description                     | Require `InjectionToken` descriptions to include the token name                                     | ✅  | 🔧  |     |
 | no-deep-imports                                 | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
 | no-deep-imports-to-indexed-packages             | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
 | no-fully-untracked-effect                       | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
@@ -282,17 +282,25 @@ Use atomic presets when you want a custom order instead of one of the bundled al
 
 ## injection-token-description
 
-<sup>`✅ Recommended`</sup>
+<sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
-The description string passed to `new InjectionToken(...)` must contain the name of the variable it is assigned to. This
-makes token names visible in Angular DevTools and error messages.
+The description passed to `new InjectionToken(...)` must contain the name of the variable it is assigned to. The rule
+accepts both direct string descriptions and Angular's `ngDevMode ? '...' : ''` pattern, and the autofix rewrites invalid
+descriptions to the dev-only form. If `ngDevMode` is not declared in the file, the autofix inserts
+`declare const ngDevMode: boolean;` after imports.
 
 ```ts
-// ❌ error — description does not mention TUI_MY_TOKEN
-const TUI_MY_TOKEN = new InjectionToken<string>('some description');
+// ❌ error
+import {InjectionToken} from '@angular/core';
+
+export const TUI_MY_TOKEN = new InjectionToken<string>('some description');
 
 // ✅ after autofix
-const TUI_MY_TOKEN = new InjectionToken<string>('[TUI_MY_TOKEN]: some description');
+import {InjectionToken} from '@angular/core';
+
+declare const ngDevMode: boolean;
+
+export const TUI_MY_TOKEN = new InjectionToken<string>(ngDevMode ? '[TUI_MY_TOKEN]: some description' : '');
 ```
 
 ---
