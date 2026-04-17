@@ -713,6 +713,7 @@ export default defineConfig([
                     Pipe: ['standalone', 'name', 'pure'],
                 },
             ],
+            '@taiga-ui/experience-next/host-attributes-sort': 'error',
             '@taiga-ui/experience-next/injection-token-description': 'error',
             '@taiga-ui/experience-next/no-deep-imports': [
                 'error',
