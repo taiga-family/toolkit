@@ -53,17 +53,11 @@ export default createRule<RuleOptions, MessageIds>({
 
                 const rootPackageName = getRootPackageName(rawImportPath);
 
-                if (!rootPackageName) {
-                    return;
-                }
-
-                if (!allowedPackages.includes(rootPackageName)) {
-                    return;
-                }
-
                 if (
-                    !isStrictMode &&
-                    isAlreadyNestedImport(rawImportPath, rootPackageName)
+                    !rootPackageName ||
+                    !allowedPackages.includes(rootPackageName) ||
+                    (!isStrictMode &&
+                        isAlreadyNestedImport(rawImportPath, rootPackageName))
                 ) {
                     return;
                 }
@@ -393,11 +387,7 @@ function mapSymbolsToEntryPointsUsingTypeChecker(
         for (const relativeEntryDir of candidateEntryPoints) {
             const exportedNames = exportTableByEntryPoint.get(relativeEntryDir);
 
-            if (!exportedNames) {
-                continue;
-            }
-
-            if (!exportedNames.has(importedSymbol)) {
+            if (!exportedNames?.has(importedSymbol)) {
                 continue;
             }
 

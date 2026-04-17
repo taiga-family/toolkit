@@ -116,11 +116,8 @@ function hasOpaqueSynchronousCalls(
             return;
         }
 
-        if (node.type !== AST_NODE_TYPES.CallExpression) {
-            return;
-        }
-
         if (
+            node.type !== AST_NODE_TYPES.CallExpression ||
             isAngularUntrackedCall(node, program) ||
             isSignalReadCall(node, checker, esTreeNodeToTSNodeMap) ||
             isWritableSignalWrite(node, checker, esTreeNodeToTSNodeMap)
@@ -181,13 +178,12 @@ export const rule = createUntrackedRule<[], MessageId>({
                 program,
             );
 
-            if (reads.length > 0) {
+            if (
+                reads.length > 0 ||
+                hasOpaqueSynchronousCalls(arg, checker, esTreeNodeToTSNodeMap, program)
+            ) {
                 // Snapshot reads inside reactive callbacks are a valid Angular
                 // pattern even when the snapshot later influences branching.
-                return;
-            }
-
-            if (hasOpaqueSynchronousCalls(arg, checker, esTreeNodeToTSNodeMap, program)) {
                 return;
             }
 

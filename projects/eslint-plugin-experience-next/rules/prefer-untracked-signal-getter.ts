@@ -42,24 +42,21 @@ function getWrappedSignalGetter(
 ): TSESTree.Expression | null {
     const [arg] = node.arguments;
 
-    if (!arg || arg.type === AST_NODE_TYPES.SpreadElement) {
-        return null;
-    }
-
     if (
-        arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
-        arg.type !== AST_NODE_TYPES.FunctionExpression
+        !arg ||
+        arg.type === AST_NODE_TYPES.SpreadElement ||
+        (arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
+            arg.type !== AST_NODE_TYPES.FunctionExpression)
     ) {
         return null;
     }
 
     const body = getReturnedExpression(arg);
 
-    if (body?.type !== AST_NODE_TYPES.CallExpression) {
-        return null;
-    }
-
-    if (!isSignalReadCall(body, checker, esTreeNodeToTSNodeMap)) {
+    if (
+        body?.type !== AST_NODE_TYPES.CallExpression ||
+        !isSignalReadCall(body, checker, esTreeNodeToTSNodeMap)
+    ) {
         return null;
     }
 

@@ -344,11 +344,10 @@ export function isWritableSignalWrite(
 
     const {object, property} = node.callee;
 
-    if (property.type !== AST_NODE_TYPES.Identifier) {
-        return false;
-    }
-
-    if (!SIGNAL_WRITE_METHODS.has(property.name)) {
+    if (
+        property.type !== AST_NODE_TYPES.Identifier ||
+        !SIGNAL_WRITE_METHODS.has(property.name)
+    ) {
         return false;
     }
 
