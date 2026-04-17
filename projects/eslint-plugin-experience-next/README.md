@@ -213,8 +213,8 @@ outputs.
 ```
 
 The rule understands the same preset names as `prettier-plugin-organize-attributes`. You can use aggregate presets such
-as `$ANGULAR`, `$HTML`, and `$CODE_GUIDE`, or compose atomic presets such as `$CLASS`, `$ID`, `$ARIA`,
-`$ANGULAR_INPUT`, `$ANGULAR_TWO_WAY_BINDING`, and `$ANGULAR_OUTPUT`.
+as `$ANGULAR`, `$HTML`, and `$CODE_GUIDE`, or compose atomic presets such as `$CLASS`, `$ID`, `$ARIA`, `$ANGULAR_INPUT`,
+`$ANGULAR_TWO_WAY_BINDING`, and `$ANGULAR_OUTPUT`.
 
 ```json
 {
