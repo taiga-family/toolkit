@@ -105,3 +105,12 @@ Then add a `## <rule-name>` section below the table with:
 - One-paragraph description of what the rule checks.
 - `❌ error` / `✅ after autofix` code examples.
 - An options table if the rule has schema options.
+
+## Verification
+
+- After finishing changes, always run the relevant build target for the touched project before wrapping up.
+- For `eslint-plugin-experience-next`, run `nx run eslint-plugin-experience-next:build`.
+
+## Code Style
+
+- Do not use `for (;;) {` or `while (true)` in this project. Prefer loops with explicit exit conditions.
