@@ -1,3 +1,10 @@
+### [0.471.0](https://github.com/taiga-family/toolkit/compare/v0.470.0...v0.471.0) (2026-04-17)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `host-attributes-sort` rule (#1746)
+  [(0ea1bcf)](https://github.com/taiga-family/toolkit/commit/0ea1bcff239e1d11e65250435aca263c24404670)
+
 ### [0.470.0](https://github.com/taiga-family/toolkit/compare/v0.469.0...v0.470.0) (2026-04-17)
 
 ### 🐞 Bug Fixes
