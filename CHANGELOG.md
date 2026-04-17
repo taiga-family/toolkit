@@ -1,3 +1,10 @@
+### [0.473.0](https://github.com/taiga-family/toolkit/compare/v0.472.0...v0.473.0) (2026-04-17)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `prefer-combined-if-control-flow` (#1748)
+  [(7d15c18)](https://github.com/taiga-family/toolkit/commit/7d15c184cbc8faed58039225110650e4035ab54d)
+
 ### [0.472.0](https://github.com/taiga-family/toolkit/compare/v0.471.0...v0.472.0) (2026-04-17)
 
 ### 🚀 Features
