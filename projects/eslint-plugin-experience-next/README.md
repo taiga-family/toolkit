@@ -53,6 +53,7 @@ export default [
 | no-playwright-empty-fill                        | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
 | no-redundant-type-annotation                    | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
+| no-side-effects-in-computed                     | Disallow observable side effects inside Angular `computed()` callbacks                              | ✅  |     |     |
 | no-signal-reads-after-await-in-reactive-context | Disallow signal reads after `await` inside reactive callbacks                                       | ✅  |     |     |
 | no-string-literal-concat                        | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
 | no-untracked-outside-reactive-context           | Disallow `untracked()` outside the synchronous body of reactive callbacks                           | ✅  | 🔧  |     |
@@ -562,6 +563,37 @@ const doubled = computed(() => {
 
   return this.count() * 2;
 });
+```
+
+---
+
+## no-side-effects-in-computed
+
+<sup>`✅ Recommended`</sup>
+
+`computed()` should only derive a value from its inputs. This rule reports observable side effects inside Angular
+`computed()` callbacks, including signal writes (`.set()`, `.update()`, `.mutate()`), assignments to captured state,
+`++/--`, `delete`, and property mutations on objects that were not created inside the computation itself.
+
+```ts
+// ❌ error
+import {computed, signal} from '@angular/core';
+
+const source = signal(0);
+const target = signal(0);
+
+const derived = computed(() => {
+  target.set(source() + 1);
+  return target();
+});
+```
+
+```ts
+// ✅ ok
+import {computed, signal} from '@angular/core';
+
+const source = signal(0);
+const derived = computed(() => source() + 1);
 ```
 
 ---
