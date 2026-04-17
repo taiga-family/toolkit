@@ -54,9 +54,9 @@ export default [
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
 | no-redundant-type-annotation                    | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
 | no-side-effects-in-computed                     | Disallow observable side effects inside Angular `computed()` callbacks                              | ✅  |     |     |
-| no-signal-reads-after-await-in-reactive-context | Disallow signal reads after `await` inside reactive callbacks                                       | ✅  |     |     |
+| no-signal-reads-after-await-in-reactive-context | Disallow bare signal reads after `await` inside reactive callbacks                                  | ✅  |     |     |
 | no-string-literal-concat                        | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
-| no-untracked-outside-reactive-context           | Disallow `untracked()` outside the synchronous body of reactive callbacks                           | ✅  | 🔧  |     |
+| no-untracked-outside-reactive-context           | Disallow `untracked()` outside reactive callbacks, except explicit post-`await` snapshots           | ✅  | 🔧  |     |
 | no-useless-untracked                            | Disallow provably useless `untracked()` wrappers in reactive callbacks                              | ✅  | 🔧  |     |
 | object-single-line                              | Enforce single-line formatting for single-property objects when it fits `printWidth`                | ✅  | 🔧  |     |
 | prefer-deep-imports                             | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
@@ -602,8 +602,9 @@ const derived = computed(() => source() + 1);
 
 <sup>`✅ Recommended`</sup>
 
-Angular tracks signal reads only in synchronous code. If a reactive callback crosses an async boundary, any signal read
-after `await` will not become a dependency.
+Angular tracks signal reads only in synchronous code. If a reactive callback crosses an async boundary, any bare signal
+read after `await` will not become a dependency. Snapshot before `await` when you need the earlier value, or make an
+intentional post-`await` current-value read explicit with `untracked(...)`.
 
 ```ts
 // ❌ error
@@ -620,6 +621,14 @@ effect(async () => {
 });
 ```
 
+```ts
+// ✅ ok — explicit current-value read after await
+effect(async () => {
+  await this.fetchUser();
+  console.log(untracked(this.theme));
+});
+```
+
 ---
 
 ## no-untracked-outside-reactive-context
@@ -627,14 +636,15 @@ effect(async () => {
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
 `untracked()` usually only affects signal reads that happen inside the synchronous body of a reactive callback. In
-ordinary non-reactive code, nested callbacks, or code that runs after `await`, it usually does not prevent dependency
-tracking and only adds noise. This rule reports those cases, but intentionally allows a few imperative Angular escape
-hatches where `untracked()` can still be useful: `@Pipe().transform`, `ControlValueAccessor.writeValue`,
-`registerOnChange` including patched accessors such as `accessor.writeValue = (...) => {}`, callback-form wrappers used
-inside deferred scheduler / event-handler callbacks, and narrow lazy DI factory wrappers like
-`InjectionToken({factory})` / `useFactory` when they guard creation of a reactive owner such as `effect()` against an
-accidental ambient reactive context. For the narrow case `untracked(() => effect(...))` and similar outer wrappers
-around a reactive call in ordinary code, autofix removes only the useless outer `untracked()` wrapper.
+ordinary non-reactive code or nested callbacks it usually does not prevent dependency tracking and only adds noise. This
+rule reports those cases, but intentionally allows a few explicit escape hatches: post-`await` reads inside a reactive
+callback when `untracked()` is used to document an intentional current-value snapshot, imperative Angular hooks such as
+`@Pipe().transform`, `ControlValueAccessor.writeValue`, `registerOnChange` including patched accessors such as
+`accessor.writeValue = (...) => {}`, callback-form wrappers used inside deferred scheduler / event-handler callbacks,
+and narrow lazy DI factory wrappers like `InjectionToken({factory})` / `useFactory` when they guard creation of a
+reactive owner such as `effect()` against an accidental ambient reactive context. For the narrow case
+`untracked(() => effect(...))` and similar outer wrappers around a reactive call in ordinary code, autofix removes only
+the useless outer `untracked()` wrapper.
 
 ```ts
 // ❌ error
@@ -654,6 +664,17 @@ effect(() => {
 });
 
 const snapshot = computed(() => untracked(this.user));
+```
+
+```ts
+// ✅ ok — after await, untracked can mark an intentional current snapshot
+effect(async () => {
+  await this.refresh();
+
+  if (untracked(this.user) !== previousUser) {
+    console.log('changed');
+  }
+});
 ```
 
 ```ts

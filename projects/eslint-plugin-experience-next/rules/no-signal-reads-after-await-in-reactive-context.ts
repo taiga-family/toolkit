@@ -2,6 +2,7 @@ import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/uti
 
 import {
     getReactiveScopes,
+    isAngularUntrackedCall,
     isSignalReadCall,
     type NodeMap,
     walkAfterAsyncBoundaryAst,
@@ -30,6 +31,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                     walkAfterAsyncBoundaryAst(scope.callback, (inner) => {
                         if (
                             inner.type !== AST_NODE_TYPES.CallExpression ||
+                            isAngularUntrackedCall(inner, program) ||
                             !isSignalReadCall(inner, checker, esTreeNodeToTSNodeMap)
                         ) {
                             return;
@@ -59,12 +61,12 @@ export const rule = createUntrackedRule<[], MessageId>({
     meta: {
         docs: {
             description:
-                'Disallow signal reads that occur after `await` inside reactive callbacks, because Angular no longer tracks them as dependencies',
+                'Disallow bare signal reads that occur after `await` inside reactive callbacks, because Angular no longer tracks them as dependencies',
             url: ANGULAR_SIGNALS_ASYNC_GUIDE_URL,
         },
         messages: {
             readAfterAwait:
-                '`{{ name }}` is read after `await` inside `{{ kind }}`. Angular only tracks synchronous signal reads, so this dependency will not be tracked. Read it before `await` and store the snapshot. See Angular guide: https://angular.dev/guide/signals#reactive-context-and-async-operations',
+                '`{{ name }}` is read after `await` inside `{{ kind }}`. Angular only tracks synchronous signal reads, so this dependency will not be tracked. Read it before `await` and store the snapshot, or wrap the post-`await` read in `untracked(...)` when you intentionally need the current value at that point. See Angular guide: https://angular.dev/guide/signals#reactive-context-and-async-operations',
         },
         schema: [],
         type: 'problem',
