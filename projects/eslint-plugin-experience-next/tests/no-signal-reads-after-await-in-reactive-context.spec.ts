@@ -29,6 +29,7 @@ const PREAMBLE = /* TypeScript */ `
         }): {
             value: Signal<T | undefined>;
         };
+        function untracked<T>(value: (() => T) | Signal<T>): T;
     }
 `;
 
@@ -94,6 +95,34 @@ ruleTester.run('no-signal-reads-after-await-in-reactive-context', rule, {
                 const theme = signal('dark');
                 const label = computed(() => theme().toUpperCase());
                 console.log(label);
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, effect, untracked} from '@angular/core';
+                const theme = signal('dark');
+                async function fetchUserData(): Promise<void> {}
+                effect(async () => {
+                    await fetchUserData();
+                    console.log(untracked(theme));
+                });
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, resource, untracked} from '@angular/core';
+                const locale = signal('ru');
+                const userResource = resource({
+                    params: () => '42',
+                    loader: async ({params}) => {
+                        await Promise.resolve(params);
+
+                        return untracked(locale);
+                    },
+                });
+                console.log(userResource);
             `,
         },
     ],

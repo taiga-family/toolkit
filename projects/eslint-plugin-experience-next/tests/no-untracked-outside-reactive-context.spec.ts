@@ -182,18 +182,6 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
             `,
             errors: [{messageId: 'outsideReactiveContext'}],
         },
-        {
-            code: /* TypeScript */ `
-                ${PREAMBLE}
-                import {signal, effect, untracked} from '@angular/core';
-                const count = signal(0);
-                effect(async () => {
-                    await Promise.resolve();
-                    console.log(untracked(count));
-                });
-            `,
-            errors: [{messageId: 'outsideReactiveContext'}],
-        },
         // Class field initializer is outside any reactive context
         {
             code: /* TypeScript */ `
@@ -226,26 +214,6 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
                             this.button.addEventListener('click', () => {
                                 console.log(untracked(this.user));
                             });
-                        });
-                    }
-                }
-
-                new Test();
-            `,
-            errors: [{messageId: 'outsideReactiveContext'}],
-        },
-        // After await the effect body is no longer tracked synchronously
-        {
-            code: /* TypeScript */ `
-                ${PREAMBLE}
-                import {signal, effect, untracked} from '@angular/core';
-                class Test {
-                    private readonly user = signal('Alex');
-
-                    constructor() {
-                        effect(async () => {
-                            await Promise.resolve();
-                            console.log(untracked(this.user));
                         });
                     }
                 }
@@ -329,27 +297,6 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
                             return 0;
                         },
                         loader: async ({params}) => params,
-                    });
-                }
-
-                console.log(new Test().data);
-            `,
-            errors: [{messageId: 'outsideReactiveContext'}],
-        },
-        // resource().loader after await is outside the synchronous scope
-        {
-            code: /* TypeScript */ `
-                ${PREAMBLE}
-                import {signal, resource, untracked} from '@angular/core';
-                class Test {
-                    private readonly snapshot = signal(1);
-                    readonly data = resource({
-                        params: () => 0,
-                        loader: async ({params}) => {
-                            await Promise.resolve();
-
-                            return params + untracked(this.snapshot);
-                        },
                     });
                 }
 
@@ -502,6 +449,19 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
                 });
             `,
         },
+        // Post-await reads inside a reactive callback may use untracked to
+        // document an intentional current-value snapshot.
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, effect, untracked} from '@angular/core';
+                const count = signal(0);
+                effect(async () => {
+                    await Promise.resolve();
+                    console.log(untracked(count));
+                });
+            `,
+        },
         {
             code: /* TypeScript */ `
                 ${PREAMBLE}
@@ -521,6 +481,26 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
 
                     constructor() {
                         effect(() => {
+                            console.log(untracked(this.user));
+                        });
+                    }
+                }
+
+                new Test();
+            `,
+        },
+        // Class-based effect() may also use untracked after await when it
+        // intentionally compares the latest value after async work.
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, effect, untracked} from '@angular/core';
+                class Test {
+                    private readonly user = signal('Alex');
+
+                    constructor() {
+                        effect(async () => {
+                            await Promise.resolve();
                             console.log(untracked(this.user));
                         });
                     }
@@ -687,6 +667,27 @@ ruleTester.run('no-untracked-outside-reactive-context', rule, {
                     readonly data = resource({
                         params: () => 0,
                         loader: async ({params}) => params + untracked(this.snapshot),
+                    });
+                }
+
+                console.log(new Test().data);
+            `,
+        },
+        // resource().loader may also take an explicit current snapshot after
+        // await without creating a fake dependency.
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, resource, untracked} from '@angular/core';
+                class Test {
+                    private readonly snapshot = signal(1);
+                    readonly data = resource({
+                        params: () => 0,
+                        loader: async ({params}) => {
+                            await Promise.resolve();
+
+                            return params + untracked(this.snapshot);
+                        },
                     });
                 }
 

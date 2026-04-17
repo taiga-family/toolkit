@@ -2,7 +2,7 @@ import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import ts from 'typescript';
 
 import {getLocalNameForImport} from './angular-imports';
-import {walkSynchronousAst} from './ast-walk';
+import {walkAfterAsyncBoundaryAst, walkSynchronousAst} from './ast-walk';
 
 export {
     findAngularCoreImport,
@@ -214,6 +214,23 @@ export function isNodeInsideSynchronousReactiveScope(
     return found;
 }
 
+export function isNodeAfterAsyncBoundaryInReactiveScope(
+    node: TSESTree.Node,
+    callback: ReactiveCallback,
+): boolean {
+    let found = false;
+
+    walkAfterAsyncBoundaryAst(callback, (inner) => {
+        if (inner !== node) {
+            return;
+        }
+
+        found = true;
+    });
+
+    return found;
+}
+
 export function findEnclosingReactiveScope(
     node: TSESTree.Node,
     program: TSESTree.Program,
@@ -225,6 +242,25 @@ export function findEnclosingReactiveScope(
 
         for (const scope of getReactiveScopes(current, program)) {
             if (isNodeInsideSynchronousReactiveScope(node, scope.callback)) {
+                return scope;
+            }
+        }
+    }
+
+    return null;
+}
+
+export function findEnclosingReactiveScopeAfterAsyncBoundary(
+    node: TSESTree.Node,
+    program: TSESTree.Program,
+): ReactiveScope | null {
+    for (let current = node.parent; current; current = current.parent) {
+        if (current.type !== AST_NODE_TYPES.CallExpression) {
+            continue;
+        }
+
+        for (const scope of getReactiveScopes(current, program)) {
+            if (isNodeAfterAsyncBoundaryInReactiveScope(node, scope.callback)) {
                 return scope;
             }
         }

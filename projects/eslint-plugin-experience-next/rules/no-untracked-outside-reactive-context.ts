@@ -4,6 +4,7 @@ import type ts from 'typescript';
 
 import {
     findEnclosingReactiveScope,
+    findEnclosingReactiveScopeAfterAsyncBoundary,
     getLocalNameForImport,
     getReactiveScopes,
     isAngularUntrackedCall,
@@ -476,7 +477,10 @@ export const rule = createUntrackedRule<[], MessageId>({
                     return;
                 }
 
-                if (findEnclosingReactiveScope(node, program)) {
+                if (
+                    findEnclosingReactiveScope(node, program) ||
+                    findEnclosingReactiveScopeAfterAsyncBoundary(node, program)
+                ) {
                     return;
                 }
 
@@ -539,13 +543,13 @@ export const rule = createUntrackedRule<[], MessageId>({
     meta: {
         docs: {
             description:
-                'Disallow `untracked()` outside the synchronous body of a reactive callback, except for supported imperative Angular hooks, deferred callback wrappers, and lazy DI factories that may execute under an ambient reactive context',
+                'Disallow `untracked()` outside reactive callbacks, except for synchronous reactive reads, explicit post-`await` snapshot reads, and supported imperative/deferred/lazy-factory Angular escape hatches',
             url: ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
         },
         fixable: 'code',
         messages: {
             outsideReactiveContext:
-                '`untracked()` is used outside the synchronous body of a reactive callback and outside the supported imperative/deferred/lazy-factory exceptions, so it does not prevent dependency tracking and only adds noise. Remove it. See Angular guide: https://angular.dev/guide/signals#reading-without-tracking-dependencies',
+                '`untracked()` is used outside a reactive callback and outside the supported post-`await` / imperative / deferred / lazy-factory exceptions, so it does not prevent dependency tracking and only adds noise. Remove it. See Angular guide: https://angular.dev/guide/signals#reading-without-tracking-dependencies',
         },
         schema: [],
         type: 'problem',
