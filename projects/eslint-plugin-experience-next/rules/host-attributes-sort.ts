@@ -218,12 +218,9 @@ function getHostObject(
             property.type !== AST_NODE_TYPES.Property ||
             property.kind !== 'init' ||
             property.computed ||
-            property.method
+            property.method ||
+            getStaticPropertyName(property.key) !== 'host'
         ) {
-            continue;
-        }
-
-        if (getStaticPropertyName(property.key) !== 'host') {
             continue;
         }
 

@@ -27,6 +27,7 @@ import noStringLiteralConcat from './rules/no-string-literal-concat';
 import noUntrackedOutsideReactiveContext from './rules/no-untracked-outside-reactive-context';
 import noUselessUntracked from './rules/no-useless-untracked';
 import objectSingleLine from './rules/object-single-line';
+import preferCombinedIfControlFlow from './rules/prefer-combined-if-control-flow';
 import preferDeepImports from './rules/prefer-deep-imports';
 import preferMultiArgPush from './rules/prefer-multi-arg-push';
 import preferUntrackedIncidentalSignalReads from './rules/prefer-untracked-incidental-signal-reads';
@@ -71,6 +72,7 @@ const plugin = {
         'no-untracked-outside-reactive-context': noUntrackedOutsideReactiveContext,
         'no-useless-untracked': noUselessUntracked,
         'object-single-line': objectSingleLine,
+        'prefer-combined-if-control-flow': preferCombinedIfControlFlow,
         'prefer-deep-imports': preferDeepImports,
         'prefer-multi-arg-push': preferMultiArgPush,
         'prefer-untracked-incidental-signal-reads': preferUntrackedIncidentalSignalReads,

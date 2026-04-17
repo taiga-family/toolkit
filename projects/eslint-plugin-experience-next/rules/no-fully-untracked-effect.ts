@@ -28,11 +28,10 @@ function collectReadsInsideUntracked(
     const reads: TSESTree.CallExpression[] = [];
 
     walkSynchronousAst(root, (node) => {
-        if (node.type !== AST_NODE_TYPES.CallExpression) {
-            return;
-        }
-
-        if (!isAngularUntrackedCall(node, program)) {
+        if (
+            node.type !== AST_NODE_TYPES.CallExpression ||
+            !isAngularUntrackedCall(node, program)
+        ) {
             return;
         }
 

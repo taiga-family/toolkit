@@ -171,11 +171,10 @@ function isDomImperativeCall(
     const signature = checker.getResolvedSignature(tsNode);
     const declaration = signature?.declaration;
 
-    if (!declaration) {
-        return false;
-    }
-
-    if (!LIB_DOM_FILE_PATTERN.test(declaration.getSourceFile().fileName)) {
+    if (
+        !declaration ||
+        !LIB_DOM_FILE_PATTERN.test(declaration.getSourceFile().fileName)
+    ) {
         return false;
     }
 

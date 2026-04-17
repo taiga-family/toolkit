@@ -7,11 +7,12 @@ export const rule = createRule({
         const checkImplicitPublic = (node: any): void => {
             const classRef = getClass(node);
 
-            if (!classRef || node.kind === 'constructor' || !!node?.accessibility) {
-                return;
-            }
-
-            if (node.key?.type === AST_NODE_TYPES.PrivateIdentifier) {
+            if (
+                !classRef ||
+                node.kind === 'constructor' ||
+                !!node?.accessibility ||
+                node.key?.type === AST_NODE_TYPES.PrivateIdentifier
+            ) {
                 return;
             }
 

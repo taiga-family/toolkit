@@ -41,11 +41,7 @@ export function getDecoratorMetadata(
 
     const callee = expr.callee;
 
-    if (callee.type !== AST_NODE_TYPES.Identifier) {
-        return null;
-    }
-
-    if (!allowedNames.has(callee.name)) {
+    if (callee.type !== AST_NODE_TYPES.Identifier || !allowedNames.has(callee.name)) {
         return null;
     }
 

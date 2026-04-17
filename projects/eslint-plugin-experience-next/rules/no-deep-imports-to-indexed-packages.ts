@@ -195,15 +195,11 @@ export default createRule({
             ImportDeclaration(node: TSESTree.ImportDeclaration) {
                 const importSpecifier = node.source.value as string | null;
 
-                if (typeof importSpecifier !== 'string') {
-                    return;
-                }
-
-                if (!importSpecifier.includes('/')) {
-                    return;
-                }
-
-                if (!isExternalModuleSpecifier(importSpecifier)) {
+                if (
+                    typeof importSpecifier !== 'string' ||
+                    !importSpecifier.includes('/') ||
+                    !isExternalModuleSpecifier(importSpecifier)
+                ) {
                     return;
                 }
 
@@ -302,11 +298,10 @@ function getSubpath(
     importSpecifier: string,
     packageRootSpecifier: string,
 ): string | null {
-    if (importSpecifier === packageRootSpecifier) {
-        return null;
-    }
-
-    if (!importSpecifier.startsWith(`${packageRootSpecifier}/`)) {
+    if (
+        importSpecifier === packageRootSpecifier ||
+        !importSpecifier.startsWith(`${packageRootSpecifier}/`)
+    ) {
         return null;
     }
 

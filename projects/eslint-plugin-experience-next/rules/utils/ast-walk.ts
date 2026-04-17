@@ -20,11 +20,10 @@ function getOrderedChildren(node: TSESTree.Node): readonly TSESTree.Node[] {
         );
     }
 
-    if (node.type === AST_NODE_TYPES.BlockStatement) {
-        return node.body;
-    }
-
-    if (node.type === AST_NODE_TYPES.Program) {
+    if (
+        node.type === AST_NODE_TYPES.BlockStatement ||
+        node.type === AST_NODE_TYPES.Program
+    ) {
         return node.body;
     }
 
@@ -103,11 +102,7 @@ export function walkSynchronousAst(
     traverse(root, true);
 
     function traverse(node: TSESTree.Node, isRoot = false): boolean {
-        if (visitor(node) === false) {
-            return false;
-        }
-
-        if (!isRoot && isFunctionLike(node)) {
+        if (visitor(node) === false || (!isRoot && isFunctionLike(node))) {
             return false;
         }
 

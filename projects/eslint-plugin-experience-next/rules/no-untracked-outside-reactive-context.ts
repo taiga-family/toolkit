@@ -473,28 +473,18 @@ export const rule = createUntrackedRule<[], MessageId>({
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
-                if (!isAngularUntrackedCall(node, program)) {
-                    return;
-                }
-
                 if (
+                    !isAngularUntrackedCall(node, program) ||
                     findEnclosingReactiveScope(node, program) ||
-                    findEnclosingReactiveScopeAfterAsyncBoundary(node, program)
+                    findEnclosingReactiveScopeAfterAsyncBoundary(node, program) ||
+                    isAllowedImperativeAngularContext(node) ||
+                    isAllowedDeferredCallbackContext(
+                        node,
+                        checker,
+                        esTreeNodeToTSNodeMap,
+                    ) ||
+                    isAllowedLazyAngularFactoryContext(node, program)
                 ) {
-                    return;
-                }
-
-                if (isAllowedImperativeAngularContext(node)) {
-                    return;
-                }
-
-                if (
-                    isAllowedDeferredCallbackContext(node, checker, esTreeNodeToTSNodeMap)
-                ) {
-                    return;
-                }
-
-                if (isAllowedLazyAngularFactoryContext(node, program)) {
                     return;
                 }
 
