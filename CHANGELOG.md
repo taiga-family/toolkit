@@ -1,3 +1,12 @@
+### [0.469.0](https://github.com/taiga-family/toolkit/compare/v0.468.0...v0.469.0) (2026-04-17)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-side-effects-in-computed` (#1743)
+  [(8dc441c)](https://github.com/taiga-family/toolkit/commit/8dc441c22f43a94ca76021eef7108bb5ee6b23ef)
+- **cspell-config**: update config (#1744)
+  [(b36cc1f)](https://github.com/taiga-family/toolkit/commit/b36cc1fc7758c3b6a521fb07046a4be971f0debd)
+
 ### [0.468.0](https://github.com/taiga-family/toolkit/compare/v0.467.0...v0.468.0) (2026-04-16)
 
 ### 🐞 Bug Fixes
