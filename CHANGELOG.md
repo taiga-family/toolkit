@@ -1,3 +1,10 @@
+### [0.472.0](https://github.com/taiga-family/toolkit/compare/v0.471.0...v0.472.0) (2026-04-17)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve `injection-token-description` (#1747)
+  [(ecf6dd9)](https://github.com/taiga-family/toolkit/commit/ecf6dd9f4434b727e9a4964fde800dbcff50b79b)
+
 ### [0.471.0](https://github.com/taiga-family/toolkit/compare/v0.470.0...v0.471.0) (2026-04-17)
 
 ### 🚀 Features
