@@ -1,3 +1,10 @@
+### [0.474.0](https://github.com/taiga-family/toolkit/compare/v0.473.0...v0.474.0) (2026-04-18)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve `no-side-effects-in-computed` (#1749)
+  [(203f475)](https://github.com/taiga-family/toolkit/commit/203f475d71f449eb3ad60599cea6ce609e1b9605)
+
 ### [0.473.0](https://github.com/taiga-family/toolkit/compare/v0.472.0...v0.473.0) (2026-04-17)
 
 ### 🚀 Features
