@@ -1,8 +1,9 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {getDecoratorMetadata} from './utils/get-decorator-metadata';
-import {sameOrder} from './utils/same-order';
+import {getDecoratorMetadata} from './utils/angular/get-decorator-metadata';
+import {getStaticPropertyName} from './utils/ast/property-names';
+import {sameOrder} from './utils/collections/same-order';
 
 const DEFAULT_GROUP = '$DEFAULT';
 
@@ -257,29 +258,6 @@ function getHostAttributeProperties(
     }
 
     return properties;
-}
-
-function getStaticPropertyName(key: TSESTree.PropertyName): string | null {
-    if (key.type === AST_NODE_TYPES.Identifier) {
-        return key.name;
-    }
-
-    if (
-        key.type === AST_NODE_TYPES.Literal &&
-        (typeof key.value === 'string' || typeof key.value === 'number')
-    ) {
-        return String(key.value);
-    }
-
-    if (
-        key.type === AST_NODE_TYPES.TemplateLiteral &&
-        key.expressions.length === 0 &&
-        key.quasis.length === 1
-    ) {
-        return key.quasis[0]?.value.cooked ?? null;
-    }
-
-    return null;
 }
 
 function organizeProperties(

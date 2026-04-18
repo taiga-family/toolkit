@@ -1,6 +1,8 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 import {isCallExpression} from 'typescript';
 
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 type Options = [
@@ -45,8 +47,8 @@ function collectArrayExpressions(node: TSESTree.Node): TSESTree.ArrayExpression[
 
 export const rule = createRule<Options, MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const typeChecker = parserServices.program.getTypeChecker();
+        const {checker: typeChecker, esTreeNodeToTSNodeMap} =
+            getTypeAwareRuleContext(context);
         const ignoreTupleContextualTyping =
             context.options[0]?.ignoreTupleContextualTyping ?? true;
 
@@ -59,8 +61,8 @@ export const rule = createRule<Options, MessageId>({
                 return;
             }
 
-            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-            const tsValueNode = parserServices.esTreeNodeToTSNodeMap.get(value);
+            const tsNode = esTreeNodeToTSNodeMap.get(node);
+            const tsValueNode = esTreeNodeToTSNodeMap.get(value);
             const declaredType = typeChecker.getTypeAtLocation(tsNode);
             const inferredType = typeChecker.getTypeAtLocation(tsValueNode);
 
@@ -92,8 +94,7 @@ export const rule = createRule<Options, MessageId>({
                 const arrayExpressions = collectArrayExpressions(value);
 
                 for (const arrayExpression of arrayExpressions) {
-                    const tsArrayNode =
-                        parserServices.esTreeNodeToTSNodeMap.get(arrayExpression);
+                    const tsArrayNode = esTreeNodeToTSNodeMap.get(arrayExpression);
 
                     if (
                         typeChecker.isTupleType(

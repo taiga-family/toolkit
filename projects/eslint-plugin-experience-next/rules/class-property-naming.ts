@@ -1,7 +1,8 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {getFieldTypes} from './utils/get-field-types';
-import {intersect} from './utils/intersect';
+import {intersect} from './utils/collections/intersect';
+import {getFieldTypes} from './utils/typescript/get-field-types';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 export interface RuleConfig {
     fieldNames: string[];
@@ -13,8 +14,8 @@ const createRule = ESLintUtils.RuleCreator((name) => name);
 
 export default createRule<[RuleConfig[]], 'invalidName'>({
     create(context, [configs]) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const typeChecker = parserServices.program.getTypeChecker();
+        const {checker: typeChecker, esTreeNodeToTSNodeMap} =
+            getTypeAwareRuleContext(context);
         const flatConfig = configs.flat();
 
         return {
@@ -26,7 +27,7 @@ export default createRule<[RuleConfig[]], 'invalidName'>({
                     return;
                 }
 
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+                const tsNode = esTreeNodeToTSNodeMap.get(node);
                 const nodeType = typeChecker.getTypeAtLocation(tsNode);
                 const fieldTypes = getFieldTypes(nodeType, typeChecker);
 

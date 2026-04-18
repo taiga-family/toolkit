@@ -111,6 +111,18 @@ Then add a `## <rule-name>` section below the table with:
 - After finishing changes, always run the relevant build target for the touched project before wrapping up.
 - For `eslint-plugin-experience-next`, run `nx run eslint-plugin-experience-next:build`.
 
+## Utility Reuse
+
+- Before creating a new shared helper for `eslint-plugin-experience-next`, first check
+  `projects/eslint-plugin-experience-next/rules/utils` and its domain folders (`angular`, `ast`, `typescript`, `text`,
+  `collections`, etc.) and reuse existing code when it already fits.
+- If the same or very similar pattern appears in two or more rules, extract it into the appropriate domain folder under
+  `projects/eslint-plugin-experience-next/rules/utils` in the same change instead of duplicating it locally.
+- After extracting a shared util, update every affected rule in that change to consume the util immediately so the
+  abstraction stays real, not speculative.
+- Add or expand tests so new shared util behavior is covered directly, while the affected rules keep validating the
+  integration path.
+
 ## Code Style
 
 - Do not use `for (;;) {` or `while (true)` in this project. Prefer loops with explicit exit conditions.

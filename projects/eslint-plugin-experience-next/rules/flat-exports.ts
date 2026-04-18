@@ -1,9 +1,10 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 import type ts from 'typescript';
 
-import {getConstArray} from './utils/get-const-array';
-import {isClassType} from './utils/is-class-type';
-import {isExternalPureTuple} from './utils/is-external-tuple';
+import {getConstArray} from './utils/ast/get-const-array';
+import {isClassType} from './utils/typescript/is-class-type';
+import {isExternalPureTuple} from './utils/typescript/is-external-tuple';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
@@ -24,8 +25,8 @@ interface ArrayMeta {
 
 export default createRule<[], typeof MESSAGE_ID>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const typeChecker = parserServices.program.getTypeChecker();
+        const {checker: typeChecker, esTreeNodeToTSNodeMap} =
+            getTypeAwareRuleContext(context);
         const arrays = new Map<string, ArrayMeta>();
         const purityCache = new WeakMap<ArrayMeta, boolean>();
 
@@ -137,7 +138,7 @@ export default createRule<[], typeof MESSAGE_ID>({
                         continue;
                     }
 
-                    const tsNode = parserServices.esTreeNodeToTSNodeMap.get(el);
+                    const tsNode = esTreeNodeToTSNodeMap.get(el);
                     const elType = typeChecker.getTypeAtLocation(tsNode);
                     const isClass = isClassType(elType);
                     const isArrayLike =

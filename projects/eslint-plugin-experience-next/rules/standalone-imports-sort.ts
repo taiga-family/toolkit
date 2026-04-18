@@ -1,10 +1,10 @@
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {getDecoratorMetadata} from './utils/get-decorator-metadata';
-import {getImportsArray} from './utils/get-imports-array';
-import {getSortedNames} from './utils/get-sorted-names';
-import {nameOf} from './utils/name-of';
-import {sameOrder} from './utils/same-order';
+import {getDecoratorMetadata} from './utils/angular/get-decorator-metadata';
+import {getImportsArray} from './utils/angular/get-imports-array';
+import {nameOf} from './utils/ast/name-of';
+import {sameOrder} from './utils/collections/same-order';
+import {getSortedNames} from './utils/sorting/get-sorted-names';
 
 type Options = [{decorators?: string[]}];
 

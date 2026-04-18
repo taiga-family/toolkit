@@ -23,7 +23,7 @@
  * Always review suggestions before accepting the fix. If the reported read
  * IS meant to be a tracked dependency, disable the rule for that line.
  */
-import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import {type RuleFixer} from '@typescript-eslint/utils/ts-eslint';
 import type ts from 'typescript';
 
@@ -34,16 +34,22 @@ import {
     isNodeInsideSynchronousReactiveScope,
     isSignalReadCall,
     isWritableSignalWrite,
-    type NodeMap,
     type ReactiveScope,
     walkSynchronousAst,
-} from './utils/angular-signals';
-import {unwrapExpression} from './utils/ast-expressions';
-import {buildUntrackedImportFixes, findUntrackedAlias} from './utils/import-fix-helpers';
+} from './utils/angular/angular-signals';
+import {
+    buildUntrackedImportFixes,
+    findUntrackedAlias,
+} from './utils/angular/import-fix-helpers';
 import {
     ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
     createUntrackedRule,
-} from './utils/untracked-docs';
+} from './utils/angular/untracked-docs';
+import {isNodeInside, isNodeInsideAny} from './utils/ast/ancestors';
+import {unwrapExpression} from './utils/ast/ast-expressions';
+import {type NodeMap, type TsNodeToESTreeNodeMap} from './utils/typescript/node-map';
+import {getSymbolAtNode} from './utils/typescript/symbols';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 type MessageId = 'incidentalRead';
 const CONSOLE_METHODS = new Set([
@@ -68,7 +74,7 @@ interface AliasResolutionContext {
     readonly checker: import('typescript').TypeChecker;
     readonly esTreeNodeToTSNodeMap: NodeMap;
     readonly scope: ReactiveScope;
-    readonly tsNodeToESTreeNodeMap: Map<ts.Node, TSESTree.Node>;
+    readonly tsNodeToESTreeNodeMap: TsNodeToESTreeNodeMap;
 }
 
 interface SuspiciousRead {
@@ -100,27 +106,6 @@ function unwrapUsageExpression(node: TSESTree.Node): TSESTree.Node {
     }
 
     return current;
-}
-
-function isNodeInside(node: TSESTree.Node, ancestor: TSESTree.Node): boolean {
-    for (
-        let current: TSESTree.Node | undefined = node;
-        current;
-        current = current.parent
-    ) {
-        if (current === ancestor) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function isNodeInsideAny(
-    node: TSESTree.Node,
-    ancestors: readonly TSESTree.Node[],
-): boolean {
-    return ancestors.some((ancestor) => isNodeInside(node, ancestor));
 }
 
 function isStatementPositionCall(node: TSESTree.CallExpression): boolean {
@@ -217,13 +202,7 @@ function aliasHasExternalUsage(
     checker: import('typescript').TypeChecker,
     esTreeNodeToTSNodeMap: NodeMap,
 ): boolean {
-    const tsNode = esTreeNodeToTSNodeMap.get(alias);
-
-    if (!tsNode) {
-        return false;
-    }
-
-    const symbol = checker.getSymbolAtLocation(tsNode);
+    const symbol = getSymbolAtNode(alias, checker, esTreeNodeToTSNodeMap);
 
     if (!symbol) {
         return false;
@@ -241,10 +220,7 @@ function aliasHasExternalUsage(
             return;
         }
 
-        const referenceTsNode = esTreeNodeToTSNodeMap.get(node);
-        const referenceSymbol = referenceTsNode
-            ? checker.getSymbolAtLocation(referenceTsNode)
-            : null;
+        const referenceSymbol = getSymbolAtNode(node, checker, esTreeNodeToTSNodeMap);
 
         if (referenceSymbol !== symbol) {
             return;
@@ -285,13 +261,11 @@ function resolveSignalReadAlias(
         return null;
     }
 
-    const tsNode = context.esTreeNodeToTSNodeMap.get(unwrapped);
-
-    if (!tsNode) {
-        return null;
-    }
-
-    const symbol = context.checker.getSymbolAtLocation(tsNode);
+    const symbol = getSymbolAtNode(
+        unwrapped,
+        context.checker,
+        context.esTreeNodeToTSNodeMap,
+    );
 
     if (!symbol) {
         return null;
@@ -347,7 +321,7 @@ function collectSuspiciousReads(
     scope: ReactiveScope,
     checker: import('typescript').TypeChecker,
     esTreeNodeToTSNodeMap: NodeMap,
-    tsNodeToESTreeNodeMap: Map<ts.Node, TSESTree.Node>,
+    tsNodeToESTreeNodeMap: TsNodeToESTreeNodeMap,
     program: TSESTree.Program,
 ): SuspiciousRead[] {
     const suspicious = new Map<
@@ -430,17 +404,15 @@ function collectSuspiciousReads(
 
 export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
-        const esTreeNodeToTSNodeMap =
-            parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const tsNodeToESTreeNodeMap =
-            parserServices.tsNodeToESTreeNodeMap as unknown as Map<
-                ts.Node,
-                TSESTree.Node
-            >;
-        const {sourceCode} = context;
-        const program = sourceCode.ast as TSESTree.Program;
+        const {
+            checker,
+            esTreeNodeToTSNodeMap,
+            program,
+            sourceCode,
+            tsNodeToESTreeNodeMap,
+        } = getTypeAwareRuleContext(context);
+        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
+        const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
 
         function buildFix(
             read: TSESTree.CallExpression,
@@ -469,14 +441,14 @@ export const rule = createUntrackedRule<[], MessageId>({
                     const suspicious = collectSuspiciousReads(
                         scope,
                         checker,
-                        esTreeNodeToTSNodeMap,
-                        tsNodeToESTreeNodeMap,
+                        signalNodeMap,
+                        estreeNodeMap,
                         program,
                     );
                     const {reads: trackedReads} = collectSignalUsages(
                         scope.callback,
                         checker,
-                        esTreeNodeToTSNodeMap,
+                        signalNodeMap,
                         program,
                     );
                     const suspiciousReads = new Set(suspicious.map(({read}) => read));
@@ -496,7 +468,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                                 consumers,
                                 scope,
                                 checker,
-                                esTreeNodeToTSNodeMap,
+                                signalNodeMap,
                             ),
                         );
 

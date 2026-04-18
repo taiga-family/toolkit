@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {unwrapExpression} from './utils/ast-expressions';
+import {unwrapExpression} from './utils/ast/ast-expressions';
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 

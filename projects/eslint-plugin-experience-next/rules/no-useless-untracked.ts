@@ -1,42 +1,30 @@
-import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import {type SourceCode} from '@typescript-eslint/utils/ts-eslint';
 
 import {
     collectSignalUsages,
-    getLocalNameForImport,
+    getReactiveCallbackArgument,
     getReactiveScopes,
     isAngularUntrackedCall,
     isGetterMemberAccess,
     isSignalReadCall,
     isWritableSignalWrite,
-    type NodeMap,
-    walkAst,
     walkSynchronousAst,
-} from './utils/angular-signals';
-import {buildImportRemovalFixes} from './utils/import-fix-helpers';
+} from './utils/angular/angular-signals';
+import {
+    buildImportRemovalFixes,
+    findUntrackedAlias,
+} from './utils/angular/import-fix-helpers';
 import {
     ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
     createUntrackedRule,
-} from './utils/untracked-docs';
+} from './utils/angular/untracked-docs';
+import {collectCallExpressions} from './utils/ast/call-expressions';
+import {dedent} from './utils/text/dedent';
+import {type NodeMap} from './utils/typescript/node-map';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 type MessageId = 'uselessUntracked';
-
-/**
- * Removes `extraSpaces` leading spaces from every line of `text` that starts
- * with at least that many spaces.
- */
-function dedent(text: string, extraSpaces: number): string {
-    if (extraSpaces <= 0) {
-        return text;
-    }
-
-    const prefix = ' '.repeat(extraSpaces);
-
-    return text
-        .split('\n')
-        .map((line) => (line.startsWith(prefix) ? line.slice(extraSpaces) : line))
-        .join('\n');
-}
 
 /**
  * Builds the replacement text for the parent ExpressionStatement of an
@@ -53,17 +41,13 @@ function buildReplacement(
     parentStatement: TSESTree.ExpressionStatement,
     sourceCode: SourceCode,
 ): string | null {
-    const [arg] = untrackedCall.arguments;
+    const callback = getReactiveCallbackArgument(untrackedCall);
 
-    if (
-        !arg ||
-        (arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
-            arg.type !== AST_NODE_TYPES.FunctionExpression)
-    ) {
+    if (!callback) {
         return null;
     }
 
-    const {body} = arg;
+    const {body} = callback;
 
     if (body.type === AST_NODE_TYPES.BlockStatement) {
         const {body: stmts} = body;
@@ -83,18 +67,6 @@ function buildReplacement(
 
     // Expression body: arrow `() => expr` — just emit `expr;`
     return `${sourceCode.getText(body)};`;
-}
-
-function getAllCallExpressions(root: TSESTree.Node): TSESTree.CallExpression[] {
-    const result: TSESTree.CallExpression[] = [];
-
-    walkAst(root, (node) => {
-        if (node.type === AST_NODE_TYPES.CallExpression) {
-            result.push(node);
-        }
-    });
-
-    return result;
 }
 
 function hasOpaqueSynchronousCalls(
@@ -135,21 +107,15 @@ function hasOpaqueSynchronousCalls(
 
 export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
-        const esTreeNodeToTSNodeMap =
-            parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const {sourceCode} = context;
-        const program = sourceCode.ast as TSESTree.Program;
-
-        const getUntrackedLocalName = (): string | null =>
-            getLocalNameForImport(program, '@angular/core', 'untracked');
+        const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
+            getTypeAwareRuleContext(context);
+        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         function isUntrackedUsedElsewhere(
             localName: string,
             excludeNode: TSESTree.Node,
         ): boolean {
-            return getAllCallExpressions(program).some(
+            return collectCallExpressions(program).some(
                 (n) =>
                     n !== excludeNode &&
                     n.callee.type === AST_NODE_TYPES.Identifier &&
@@ -161,26 +127,22 @@ export const rule = createUntrackedRule<[], MessageId>({
             untrackedCall: TSESTree.CallExpression,
             kind: string,
         ): void {
-            const [arg] = untrackedCall.arguments;
+            const callback = getReactiveCallbackArgument(untrackedCall);
 
-            if (
-                !arg ||
-                (arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
-                    arg.type !== AST_NODE_TYPES.FunctionExpression)
-            ) {
+            if (!callback) {
                 return;
             }
 
             const {reads} = collectSignalUsages(
-                arg,
+                callback,
                 checker,
-                esTreeNodeToTSNodeMap,
+                signalNodeMap,
                 program,
             );
 
             if (
                 reads.length > 0 ||
-                hasOpaqueSynchronousCalls(arg, checker, esTreeNodeToTSNodeMap, program)
+                hasOpaqueSynchronousCalls(callback, checker, signalNodeMap, program)
             ) {
                 // Snapshot reads inside reactive callbacks are a valid Angular
                 // pattern even when the snapshot later influences branching.
@@ -207,7 +169,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                               return null;
                           }
 
-                          const untrackedLocalName = getUntrackedLocalName();
+                          const untrackedLocalName = findUntrackedAlias(program);
                           const stillUsed =
                               untrackedLocalName !== null &&
                               isUntrackedUsedElsewhere(untrackedLocalName, untrackedCall);

@@ -1,7 +1,7 @@
 import {type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 
-import {isSpread} from './is-spread';
-import {nameOf} from './name-of';
+import {isSpread} from '../ast/is-spread';
+import {nameOf} from '../ast/name-of';
 
 /**
  * Sorts Angular standalone import elements into a deterministic, alphabetical order.

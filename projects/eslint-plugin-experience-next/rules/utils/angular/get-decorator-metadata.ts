@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
 
-import {isObject} from './is-object';
+import {isObject} from '../ast/is-object';
 
 /**
  * Extracts the metadata object from a class decorator such as

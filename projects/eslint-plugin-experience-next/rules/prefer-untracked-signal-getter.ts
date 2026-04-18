@@ -1,57 +1,36 @@
-import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 import {
+    getReactiveCallbackArgument,
     isAngularUntrackedCall,
     isGetterMemberAccess,
     isSignalReadCall,
     isSignalType,
-    type NodeMap,
-} from './utils/angular-signals';
-import {unwrapExpression} from './utils/ast-expressions';
+} from './utils/angular/angular-signals';
 import {
     ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
     createUntrackedRule,
-} from './utils/untracked-docs';
+} from './utils/angular/untracked-docs';
+import {unwrapExpression} from './utils/ast/ast-expressions';
+import {getReturnedExpression} from './utils/ast/returned-expression';
+import {type NodeMap} from './utils/typescript/node-map';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 type MessageId = 'preferGetterForm';
-
-function getReturnedExpression(
-    node: TSESTree.ArrowFunctionExpression | TSESTree.FunctionExpression,
-): TSESTree.Expression | null {
-    if (node.body.type !== AST_NODE_TYPES.BlockStatement) {
-        return unwrapExpression(node.body);
-    }
-
-    if (node.body.body.length !== 1) {
-        return null;
-    }
-
-    const statement = node.body.body[0];
-
-    if (statement?.type !== AST_NODE_TYPES.ReturnStatement || !statement.argument) {
-        return null;
-    }
-
-    return unwrapExpression(statement.argument);
-}
 
 function getWrappedSignalGetter(
     node: TSESTree.CallExpression,
     checker: import('typescript').TypeChecker,
     esTreeNodeToTSNodeMap: NodeMap,
 ): TSESTree.Expression | null {
-    const [arg] = node.arguments;
+    const callback = getReactiveCallbackArgument(node);
 
-    if (
-        !arg ||
-        arg.type === AST_NODE_TYPES.SpreadElement ||
-        (arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
-            arg.type !== AST_NODE_TYPES.FunctionExpression)
-    ) {
+    if (!callback) {
         return null;
     }
 
-    const body = getReturnedExpression(arg);
+    const returnedExpression = getReturnedExpression(callback);
+    const body = returnedExpression ? unwrapExpression(returnedExpression) : null;
 
     if (
         body?.type !== AST_NODE_TYPES.CallExpression ||
@@ -74,12 +53,9 @@ function getWrappedSignalGetter(
 
 export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
-        const esTreeNodeToTSNodeMap =
-            parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const {sourceCode} = context;
-        const program = sourceCode.ast as TSESTree.Program;
+        const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
+            getTypeAwareRuleContext(context);
+        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
@@ -87,11 +63,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                     return;
                 }
 
-                const getter = getWrappedSignalGetter(
-                    node,
-                    checker,
-                    esTreeNodeToTSNodeMap,
-                );
+                const getter = getWrappedSignalGetter(node, checker, signalNodeMap);
 
                 if (!getter) {
                     return;

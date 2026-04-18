@@ -1,5 +1,5 @@
 import {rule} from '../rules/no-legacy-peer-deps';
-import {parseForESLint} from '../rules/utils/npmrc-parser';
+import {parseForESLint} from '../rules/utils/parsers/npmrc-parser';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

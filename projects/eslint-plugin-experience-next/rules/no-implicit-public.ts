@@ -1,11 +1,13 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
+import {getEnclosingClass} from './utils/ast/ancestors';
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 export const rule = createRule({
     create(context) {
         const checkImplicitPublic = (node: any): void => {
-            const classRef = getClass(node);
+            const classRef = getEnclosingClass(node);
 
             if (
                 !classRef ||
@@ -76,19 +78,5 @@ export const rule = createRule({
     },
     name: 'explicit-public-member',
 });
-
-function getClass(
-    node: TSESTree.Node | null | undefined,
-): TSESTree.ClassDeclaration | null {
-    if (!node) {
-        return null;
-    }
-
-    if (node.type === AST_NODE_TYPES.ClassDeclaration) {
-        return node;
-    }
-
-    return getClass(node.parent);
-}
 
 export default rule;
