@@ -127,6 +127,13 @@ export function isAngularEffectCall(
     return isAngularCoreCall(node, program, 'effect');
 }
 
+export function isAngularInjectCall(
+    node: TSESTree.CallExpression,
+    program: TSESTree.Program,
+): boolean {
+    return isAngularCoreCall(node, program, 'inject');
+}
+
 export function isAngularUntrackedCall(
     node: TSESTree.CallExpression,
     program: TSESTree.Program,

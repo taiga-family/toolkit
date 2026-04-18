@@ -5,6 +5,7 @@ const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 const PREAMBLE = /* TypeScript */ `
     declare const ɵSIGNAL: unique symbol;
     declare module '@angular/core' {
+        type EffectCleanupRegisterFn = (cleanupFn: () => void) => void;
         interface Signal<T> {
             (): T;
             readonly [ɵSIGNAL]: unknown;
@@ -16,6 +17,8 @@ const PREAMBLE = /* TypeScript */ `
         }
         function signal<T>(initialValue: T): WritableSignal<T>;
         function computed<T>(computation: () => T): Signal<T>;
+        function effect(effectFn: (onCleanup: EffectCleanupRegisterFn) => void): void;
+        function inject<T>(token: unknown): T;
         function untracked<T>(nonReactiveReadsFn: () => T): T;
     }
 `;
@@ -66,11 +69,93 @@ ruleTester.run('no-side-effects-in-computed', rule, {
                 ${PREAMBLE}
                 import {computed, signal} from '@angular/core';
                 const source = signal(0);
+                const target = signal(0);
+                function writeToTarget(): void {
+                    target.set(source() + 1);
+                }
+                const derived = computed(() => {
+                    writeToTarget();
+
+                    return target();
+                });
+                console.log(derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, effect, signal} from '@angular/core';
+                const source = signal(0);
+                const helpers = {
+                    watch(): void {
+                        effect(() => {
+                            console.log(source());
+                        });
+                    },
+                };
+                const derived = computed(() => {
+                    helpers.watch();
+
+                    return source();
+                });
+                console.log(derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, inject} from '@angular/core';
+                type CounterService = {
+                    readonly count: () => number;
+                };
+                function readInjectedCounter(): number {
+                    return inject<CounterService>({}).count();
+                }
+                const derived = computed(() => readInjectedCounter());
+                console.log(derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, inject} from '@angular/core';
+                type CounterService = {
+                    readonly count: () => number;
+                };
+                const derived = computed(() => inject<CounterService>({}).count());
+                console.log(derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                const source = signal(0);
                 let cache = 0;
                 const derived = computed(() => {
                     cache = source();
 
                     return cache;
+                });
+                console.log(derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, effect, signal} from '@angular/core';
+                const source = signal(0);
+                const derived = computed(() => {
+                    effect(() => {
+                        console.log(source());
+                    });
+
+                    return source();
                 });
                 console.log(derived);
             `,
@@ -103,6 +188,29 @@ ruleTester.run('no-side-effects-in-computed', rule, {
                         delete this.state.count;
 
                         return this.source();
+                    });
+                }
+
+                console.log(new Test().derived);
+            `,
+            errors: [{messageId: 'sideEffectInComputed'}],
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                class Test {
+                    private readonly source = signal(0);
+                    private readonly target = signal(0);
+
+                    private syncTarget(): void {
+                        this.target.update((value) => value + this.source());
+                    }
+
+                    readonly derived = computed(() => {
+                        this.syncTarget();
+
+                        return this.target();
                     });
                 }
 
@@ -150,6 +258,35 @@ ruleTester.run('no-side-effects-in-computed', rule, {
                 import {computed, signal} from '@angular/core';
                 const source = signal(0);
                 const derived = computed(() => source() * 2);
+                console.log(derived);
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                const source = signal(0);
+                function double(): number {
+                    return source() * 2;
+                }
+                const derived = computed(() => double());
+                console.log(derived);
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                const source = signal(0);
+                function buildLocalTotal(): number {
+                    let total = 0;
+
+                    total += 1;
+                    total += source();
+
+                    return total;
+                }
+                const derived = computed(() => buildLocalTotal());
                 console.log(derived);
             `,
         },
@@ -206,6 +343,23 @@ ruleTester.run('no-side-effects-in-computed', rule, {
                 const derived = computed(() => source() * 2);
                 increment();
                 console.log({counter, derived});
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                const source = signal(0);
+                const derived = computed(() =>
+                    (() => {
+                        let total = 0;
+
+                        total += source();
+
+                        return total;
+                    })(),
+                );
+                console.log(derived);
             `,
         },
         {

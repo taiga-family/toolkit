@@ -54,7 +54,7 @@ export default [
 | no-playwright-empty-fill                        | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
 | no-redundant-type-annotation                    | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
-| no-side-effects-in-computed                     | Disallow observable side effects inside Angular `computed()` callbacks                              | ✅  |     |     |
+| no-side-effects-in-computed                     | Disallow side effects and effectful helper calls inside Angular `computed()` callbacks              | ✅  |     |     |
 | no-signal-reads-after-await-in-reactive-context | Disallow bare signal reads after `await` inside reactive callbacks                                  | ✅  |     |     |
 | no-string-literal-concat                        | Disallow string literal concatenation; merge adjacent literals into one                             | ✅  | 🔧  |     |
 | no-untracked-outside-reactive-context           | Disallow `untracked()` outside reactive callbacks, except explicit post-`await` snapshots           | ✅  | 🔧  |     |
@@ -681,8 +681,9 @@ const doubled = computed(() => {
 <sup>`✅ Recommended`</sup>
 
 `computed()` should only derive a value from its inputs. This rule reports observable side effects inside Angular
-`computed()` callbacks, including signal writes (`.set()`, `.update()`, `.mutate()`), assignments to captured state,
-`++/--`, `delete`, and property mutations on objects that were not created inside the computation itself.
+`computed()` callbacks, including signal writes (`.set()`, `.update()`, `.mutate()`), `effect()`, `inject()`,
+assignments to captured state, `++/--`, `delete`, property mutations on objects that were not created inside the
+computation itself, and calls to local helper functions or methods when their bodies perform those operations.
 
 ```ts
 // ❌ error
@@ -691,8 +692,12 @@ import {computed, signal} from '@angular/core';
 const source = signal(0);
 const target = signal(0);
 
-const derived = computed(() => {
+function syncTarget(): void {
   target.set(source() + 1);
+}
+
+const derived = computed(() => {
+  syncTarget();
   return target();
 });
 ```
