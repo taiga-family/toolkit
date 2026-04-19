@@ -50,6 +50,7 @@ export default [
 | no-fully-untracked-effect                       | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
 | no-href-with-router-link                        | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | no-implicit-public                              | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
+| no-infinite-loop                                | Disallow `while (true)` and `for` loops without an explicit condition                               | ✅  |     |     |
 | no-legacy-peer-deps                             | Disallow `legacy-peer-deps=true` in `.npmrc`                                                        | ✅  |     |     |
 | no-playwright-empty-fill                        | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
@@ -436,6 +437,48 @@ class MyService {
 class MyService {
   public value = 42;
   public doSomething(): void {}
+}
+```
+
+---
+
+## no-infinite-loop
+
+<sup>`✅ Recommended`</sup>
+
+Disallows the two loop forms banned by this project: `while (true)` and `for` loops without a condition, including the
+canonical `for (;;)` form. These loops hide the real exit condition inside the body, which makes control flow harder to
+scan and review.
+
+```ts
+// ❌ error
+while (true) {
+  if (isDone) {
+    break;
+  }
+
+  process();
+}
+
+// ✅ ok
+while (!isDone) {
+  process();
+}
+```
+
+```ts
+// ❌ error
+for (;;) {
+  if (queue.length === 0) {
+    break;
+  }
+
+  flush(queue.shift());
+}
+
+// ✅ ok
+for (; queue.length > 0; ) {
+  flush(queue.shift());
 }
 ```
 

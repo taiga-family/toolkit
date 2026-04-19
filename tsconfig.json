@@ -8,8 +8,9 @@
         "esModuleInterop": true,
         "incremental": true,
         "module": "ESNext",
+        "moduleResolution": "node",
         "typeRoots": ["node_modules/@types"],
-        "types": ["node"]
+        "types": ["jest", "node"]
     },
     "include": ["**/*.ts", "**/*.js"],
     "exclude": ["**/node_modules"]

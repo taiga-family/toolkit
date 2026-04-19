@@ -725,6 +725,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-fully-untracked-effect': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
+            '@taiga-ui/experience-next/no-infinite-loop': 'error',
             '@taiga-ui/experience-next/no-redundant-type-annotation': 'error',
             '@taiga-ui/experience-next/no-side-effects-in-computed': 'error',
             '@taiga-ui/experience-next/no-signal-reads-after-await-in-reactive-context':

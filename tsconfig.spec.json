@@ -1,9 +1,5 @@
 {
     "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "moduleResolution": "node",
-        "types": ["jest", "node"]
-    },
     "include": ["**/*.spec.ts", "**/*.d.ts"],
     "exclude": []
 }
