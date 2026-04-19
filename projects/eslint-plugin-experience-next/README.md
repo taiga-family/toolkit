@@ -1095,12 +1095,12 @@ augmentations such as `declare module 'pkg' {}` are ignored.
 ```ts
 // ❌ error
 module Foo.Bar {
-    export type Value = string;
+  export type Value = string;
 }
 
 // ✅ after autofix
 namespace Foo.Bar {
-    export type Value = string;
+  export type Value = string;
 }
 ```
 
