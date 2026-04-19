@@ -17,6 +17,7 @@ import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-p
 import noFullyUntrackedEffect from './rules/no-fully-untracked-effect';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
+import noInfiniteLoop from './rules/no-infinite-loop';
 import noLegacyPeerDeps from './rules/no-legacy-peer-deps';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/no-project-as-in-ng-template';
@@ -61,6 +62,7 @@ const plugin = {
         'no-fully-untracked-effect': noFullyUntrackedEffect,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
+        'no-infinite-loop': noInfiniteLoop,
         'no-legacy-peer-deps': noLegacyPeerDeps,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,

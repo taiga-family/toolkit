@@ -109,6 +109,7 @@ Then add a `## <rule-name>` section below the table with:
 ## Verification
 
 - After finishing changes, always run the relevant build target for the touched project before wrapping up.
+- After adding or changing lint rules, always run ESLint on the touched files or project before wrapping up.
 - For `eslint-plugin-experience-next`, run `nx run eslint-plugin-experience-next:build`.
 
 ## Utility Reuse
