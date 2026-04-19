@@ -45,10 +45,12 @@ export default [
 | flat-exports                                    | Spread nested arrays when exporting Angular entity collections                                      |     | 🔧  |     |
 | host-attributes-sort                            | Sort Angular host metadata attributes using configurable attribute groups                           | ✅  | 🔧  |     |
 | injection-token-description                     | Require `InjectionToken` descriptions to include the token name                                     | ✅  | 🔧  |     |
+| no-commonjs-import-patterns                     | Disallow legacy CommonJS interop import patterns                                                    | ✅  |     |     |
 | no-deep-imports                                 | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
 | no-deep-imports-to-indexed-packages             | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
 | no-fully-untracked-effect                       | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
 | no-href-with-router-link                        | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
+| no-import-assertions                            | Replace legacy `assert { ... }` import assertions with `with { ... }`                               | ✅  | 🔧  |     |
 | no-implicit-public                              | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-infinite-loop                                | Disallow `while (true)` and `for` loops without an explicit condition                               | ✅  |     |     |
 | no-legacy-peer-deps                             | Disallow `legacy-peer-deps=true` in `.npmrc`                                                        | ✅  |     |     |
@@ -64,6 +66,7 @@ export default [
 | prefer-combined-if-control-flow                 | Combine consecutive `if` statements that use the same `return`, `break`, `continue`, or `throw`     | ✅  | 🔧  |     |
 | prefer-deep-imports                             | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
 | prefer-multi-arg-push                           | Combine consecutive `.push()` calls on the same array into a single multi-argument call             | ✅  | 🔧  |     |
+| prefer-namespace-keyword                        | Replace `module Foo {}` with `namespace Foo {}` for TypeScript namespace declarations               | ✅  | 🔧  |     |
 | prefer-untracked-incidental-signal-reads        | Wrap likely-incidental signal reads with `untracked()` in reactive callbacks                        | ✅  | 🔧  |     |
 | prefer-untracked-signal-getter                  | Prefer `untracked(signalGetter)` over `untracked(() => signalGetter())` for a single signal getter  | ✅  | 🔧  |     |
 | short-tui-imports                               | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
@@ -307,6 +310,29 @@ export const TUI_MY_TOKEN = new InjectionToken<string>(ngDevMode ? '[TUI_MY_TOKE
 
 ---
 
+## no-commonjs-import-patterns
+
+<sup>`✅ Recommended`</sup>
+
+Disallows legacy CommonJS interop import patterns that are brittle under modern ESM-oriented toolchains. It reports
+`import foo = require('foo')` and namespace imports that are used as callable values, constructors, or tag functions.
+
+```ts
+// ❌ error
+import toolkit = require('@taiga-ui/cdk');
+
+import * as createClient from 'legacy-client';
+createClient();
+
+// ✅ ok
+import toolkit from '@taiga-ui/cdk';
+
+import createClient from 'legacy-client';
+createClient();
+```
+
+---
+
 ## no-deep-imports
 
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
@@ -415,6 +441,22 @@ attribute.
 
 <!-- ✅ after autofix -->
 <a routerLink="/home">Home</a>
+```
+
+---
+
+## no-import-assertions
+
+<sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
+
+Disallows legacy `assert { ... }` import assertions and rewrites them to `with { ... }` import attributes.
+
+```ts
+// ❌ error
+import data from './file.json' assert {type: 'json'};
+
+// ✅ after autofix
+import data from './file.json' with {type: 'json'};
 ```
 
 ---
@@ -1039,6 +1081,27 @@ output.push('');
 
 // ✅ after autofix
 output.push('# Getting Started', '');
+```
+
+---
+
+## prefer-namespace-keyword
+
+<sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
+
+Prefers `namespace Foo {}` over the older `module Foo {}` syntax for TypeScript namespace declarations. External module
+augmentations such as `declare module 'pkg' {}` are ignored.
+
+```ts
+// ❌ error
+module Foo.Bar {
+    export type Value = string;
+}
+
+// ✅ after autofix
+namespace Foo.Bar {
+    export type Value = string;
+}
 ```
 
 ---
