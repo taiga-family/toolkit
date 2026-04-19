@@ -1,3 +1,12 @@
+### [0.475.0](https://github.com/taiga-family/toolkit/compare/v0.474.0...v0.475.0) (2026-04-19)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `no-infinite-loop` rule (#1751)
+  [(2f3ad63)](https://github.com/taiga-family/toolkit/commit/2f3ad63e9a79f3b3fcd92ecc59f3750223931fdd)
+- reuse utils (#1750)
+  [(ea93392)](https://github.com/taiga-family/toolkit/commit/ea9339260d52b8d2632ae1cefe69d0b5d19a18e9)
+
 ### [0.474.0](https://github.com/taiga-family/toolkit/compare/v0.473.0...v0.474.0) (2026-04-18)
 
 ### 🚀 Features
