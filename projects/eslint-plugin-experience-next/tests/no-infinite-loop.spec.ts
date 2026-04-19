@@ -1,10 +1,10 @@
-import parser from '@typescript-eslint/parser';
-
 import {rule} from '../rules/no-infinite-loop';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
-const ruleTester = new RuleTester({languageOptions: {parser}});
+const ruleTester = new RuleTester({
+    languageOptions: {parser: require('@typescript-eslint/parser')},
+});
 
 ruleTester.run('no-infinite-loop', rule, {
     invalid: [
@@ -36,6 +36,34 @@ ruleTester.run('no-infinite-loop', rule, {
             `,
             errors: [{messageId: 'forLoop'}],
         },
+        {
+            code: /* TypeScript */ `
+                do {
+                    process();
+                } while (true);
+            `,
+            errors: [{messageId: 'doWhileLoop'}],
+        },
+        {
+            code: /* TypeScript */ `
+                while (1) {
+                    process();
+                }
+            `,
+            errors: [{messageId: 'whileLoop'}],
+        },
+        {
+            code: 'while (((1))) { process(); }',
+            errors: [{messageId: 'whileLoop'}],
+        },
+        {
+            code: /* TypeScript */ `
+                do {
+                    process();
+                } while (1);
+            `,
+            errors: [{messageId: 'doWhileLoop'}],
+        },
     ],
     valid: [
         {
@@ -63,7 +91,28 @@ ruleTester.run('no-infinite-loop', rule, {
             code: /* TypeScript */ `
                 do {
                     process();
-                } while (true);
+                } while (isRunning);
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                do {
+                    process();
+                } while (index < items.length);
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                while (count) {
+                    process();
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                do {
+                    process();
+                } while (count);
             `,
         },
     ],
