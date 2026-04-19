@@ -12,11 +12,13 @@ import flatExports from './rules/flat-exports';
 import hostAttributesSort from './rules/host-attributes-sort';
 import htmlLogicalProperties from './rules/html-logical-properties';
 import injectionTokenDescription from './rules/injection-token-description';
+import noCommonjsImportPatterns from './rules/no-commonjs-import-patterns';
 import noDeepImports from './rules/no-deep-imports';
 import noDeepImportsToIndexedPackages from './rules/no-deep-imports-to-indexed-packages';
 import noFullyUntrackedEffect from './rules/no-fully-untracked-effect';
 import noHrefWithRouterLink from './rules/no-href-with-router-link';
 import noImplicitPublic from './rules/no-implicit-public';
+import noImportAssertions from './rules/no-import-assertions';
 import noInfiniteLoop from './rules/no-infinite-loop';
 import noLegacyPeerDeps from './rules/no-legacy-peer-deps';
 import noPlaywrightEmptyFill from './rules/no-playwright-empty-fill';
@@ -31,6 +33,7 @@ import objectSingleLine from './rules/object-single-line';
 import preferCombinedIfControlFlow from './rules/prefer-combined-if-control-flow';
 import preferDeepImports from './rules/prefer-deep-imports';
 import preferMultiArgPush from './rules/prefer-multi-arg-push';
+import preferNamespaceKeyword from './rules/prefer-namespace-keyword';
 import preferUntrackedIncidentalSignalReads from './rules/prefer-untracked-incidental-signal-reads';
 import preferUntrackedSignalGetter from './rules/prefer-untracked-signal-getter';
 import shortTuiImports from './rules/short-tui-imports';
@@ -57,11 +60,13 @@ const plugin = {
         'host-attributes-sort': hostAttributesSort,
         'html-logical-properties': htmlLogicalProperties,
         'injection-token-description': injectionTokenDescription,
+        'no-commonjs-import-patterns': noCommonjsImportPatterns,
         'no-deep-imports': noDeepImports,
         'no-deep-imports-to-indexed-packages': noDeepImportsToIndexedPackages,
         'no-fully-untracked-effect': noFullyUntrackedEffect,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,
+        'no-import-assertions': noImportAssertions,
         'no-infinite-loop': noInfiniteLoop,
         'no-legacy-peer-deps': noLegacyPeerDeps,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
@@ -77,6 +82,7 @@ const plugin = {
         'prefer-combined-if-control-flow': preferCombinedIfControlFlow,
         'prefer-deep-imports': preferDeepImports,
         'prefer-multi-arg-push': preferMultiArgPush,
+        'prefer-namespace-keyword': preferNamespaceKeyword,
         'prefer-untracked-incidental-signal-reads': preferUntrackedIncidentalSignalReads,
         'prefer-untracked-signal-getter': preferUntrackedSignalGetter,
         'short-tui-imports': shortTuiImports,

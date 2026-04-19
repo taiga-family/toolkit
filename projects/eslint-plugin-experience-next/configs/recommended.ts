@@ -715,6 +715,7 @@ export default defineConfig([
             ],
             '@taiga-ui/experience-next/host-attributes-sort': 'error',
             '@taiga-ui/experience-next/injection-token-description': 'error',
+            '@taiga-ui/experience-next/no-commonjs-import-patterns': 'error',
             '@taiga-ui/experience-next/no-deep-imports': [
                 'error',
                 {
@@ -725,6 +726,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
             '@taiga-ui/experience-next/no-fully-untracked-effect': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
+            '@taiga-ui/experience-next/no-import-assertions': 'error',
             '@taiga-ui/experience-next/no-infinite-loop': 'error',
             '@taiga-ui/experience-next/no-redundant-type-annotation': 'error',
             '@taiga-ui/experience-next/no-side-effects-in-computed': 'error',
@@ -735,6 +737,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/object-single-line': ['error', {printWidth: 90}],
             '@taiga-ui/experience-next/prefer-combined-if-control-flow': 'error',
             '@taiga-ui/experience-next/prefer-multi-arg-push': 'error',
+            '@taiga-ui/experience-next/prefer-namespace-keyword': 'error',
             '@taiga-ui/experience-next/prefer-untracked-incidental-signal-reads': 'error',
             '@taiga-ui/experience-next/prefer-untracked-signal-getter': 'error',
             '@taiga-ui/experience-next/short-tui-imports': 'error',
