@@ -1,3 +1,12 @@
+### [0.476.0](https://github.com/taiga-family/toolkit/compare/v0.475.0...v0.476.0) (2026-04-19)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add rules for TS6 migration (#1753)
+  [(7dc8fd1)](https://github.com/taiga-family/toolkit/commit/7dc8fd1d49e5765cecf10195fe1014ead66d4e5c)
+- **eslint-plugin-experience-next**: improve `no-infinite-loop` rule (#1752)
+  [(cf04ff7)](https://github.com/taiga-family/toolkit/commit/cf04ff75f35741bbb64fe4be01569f02a0f31be5)
+
 ### [0.475.0](https://github.com/taiga-family/toolkit/compare/v0.474.0...v0.475.0) (2026-04-19)
 
 ### 🚀 Features
