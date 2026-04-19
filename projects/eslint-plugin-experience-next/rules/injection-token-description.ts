@@ -6,15 +6,19 @@ import {
     type SourceCode,
 } from '@typescript-eslint/utils/ts-eslint';
 
+import {
+    isEmptyStaticString,
+    isStringLiteral,
+    type StringLiteral,
+} from './utils/ast/string-literals';
+
 const MESSAGE_ID = 'invalid-injection-token-description' as const;
 const ERROR_MESSAGE = "InjectionToken's description should contain token's name";
 const NG_DEV_MODE = 'ngDevMode' as const;
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
-type StringDescriptionNode = TSESTree.Literal & {value: string};
-
-type StringLikeNode = StringDescriptionNode | TSESTree.TemplateLiteral;
+type StringLikeNode = StringLiteral | TSESTree.TemplateLiteral;
 
 function getVariableName(node: TSESTree.NewExpression): string | undefined {
     if (node.parent.type !== AST_NODE_TYPES.VariableDeclarator) {
@@ -24,10 +28,6 @@ function getVariableName(node: TSESTree.NewExpression): string | undefined {
     const {id} = node.parent;
 
     return id.type === AST_NODE_TYPES.Identifier ? id.name : undefined;
-}
-
-function isStringLiteral(node: TSESTree.Expression): node is StringDescriptionNode {
-    return node.type === AST_NODE_TYPES.Literal && typeof node.value === 'string';
 }
 
 function isStringLike(node: TSESTree.Expression): node is StringLikeNode {
@@ -44,8 +44,8 @@ function getStringValue(node: StringLikeNode): string {
 
 function isEmptyString(node: StringLikeNode): boolean {
     return (
-        getStringValue(node) === '' &&
-        (!('expressions' in node) || !node.expressions.length)
+        isEmptyStaticString(node) &&
+        (!('expressions' in node) || node.expressions.length === 0)
     );
 }
 

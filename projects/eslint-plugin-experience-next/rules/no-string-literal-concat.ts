@@ -1,18 +1,14 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 import type ts from 'typescript';
 
+import {hasAncestor} from './utils/ast/ancestors';
+import {isStringLiteral} from './utils/ast/string-literals';
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 type Options = [];
 
 type MessageId = 'flattenTemplate' | 'mergeLiterals' | 'useTemplate';
-
-function isStringLiteral(node: TSESTree.Node): node is TSESTree.StringLiteral {
-    return (
-        node.type === AST_NODE_TYPES.Literal &&
-        typeof (node as TSESTree.Literal).value === 'string'
-    );
-}
 
 function collectParts(node: TSESTree.Node): TSESTree.Node[] {
     if (node.type === AST_NODE_TYPES.BinaryExpression && node.operator === '+') {
@@ -87,20 +83,6 @@ function templateContent(
                 }`,
         )
         .join('');
-}
-
-function hasTemplateLiteralAncestor(node: TSESTree.Node): boolean {
-    let current: TSESTree.Node | undefined = node.parent;
-
-    while (current != null) {
-        if (current.type === AST_NODE_TYPES.TemplateLiteral) {
-            return true;
-        }
-
-        current = current.parent;
-    }
-
-    return false;
 }
 
 export const rule = createRule<Options, MessageId>({
@@ -186,7 +168,12 @@ export const rule = createRule<Options, MessageId>({
 
                 // Nested inside a template but not direct child — would produce
                 // `${`${a}${b}`.method()}`, so skip
-                if (hasTemplateLiteralAncestor(node)) {
+                if (
+                    hasAncestor(
+                        node,
+                        (ancestor) => ancestor.type === AST_NODE_TYPES.TemplateLiteral,
+                    )
+                ) {
                     return;
                 }
 

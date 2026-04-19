@@ -2,6 +2,9 @@ import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 import type ts from 'typescript';
 
+import {isEmptyStaticString} from './utils/ast/string-literals';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 type Options = [];
@@ -10,8 +13,8 @@ type MessageId = 'useClear';
 
 export const rule = createRule<Options, MessageId>({
     create(context) {
-        const services = ESLintUtils.getParserServices(context);
-        const checker = services.program.getTypeChecker();
+        const {checker, esTreeNodeToTSNodeMap, sourceCode} =
+            getTypeAwareRuleContext(context);
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
@@ -33,12 +36,12 @@ export const rule = createRule<Options, MessageId>({
 
                 const [argument] = node.arguments;
 
-                if (!argument || !isEmptyString(argument)) {
+                if (!argument || !isEmptyStaticString(argument)) {
                     return;
                 }
 
                 const objectExpression = callee.object;
-                const tsNode = services.esTreeNodeToTSNodeMap.get(objectExpression);
+                const tsNode = esTreeNodeToTSNodeMap.get(objectExpression);
                 const type = checker.getTypeAtLocation(tsNode);
 
                 if (!isPlaywrightLocator(type, checker)) {
@@ -47,7 +50,7 @@ export const rule = createRule<Options, MessageId>({
 
                 context.report({
                     fix(fixer) {
-                        const objectText = context.sourceCode.getText(objectExpression);
+                        const objectText = sourceCode.getText(objectExpression);
 
                         return fixer.replaceText(node, `${objectText}.clear()`);
                     },
@@ -73,16 +76,6 @@ export const rule = createRule<Options, MessageId>({
 });
 
 export default rule;
-
-function isEmptyString(node: TSESTree.Node): boolean {
-    return (
-        (node.type === AST_NODE_TYPES.Literal && node.value === '') ||
-        (node.type === AST_NODE_TYPES.TemplateLiteral &&
-            node.expressions.length === 0 &&
-            node.quasis.length === 1 &&
-            node.quasis[0]?.value.cooked === '')
-    );
-}
 
 function isPlaywrightLocator(type: ts.Type, checker: ts.TypeChecker): boolean {
     if (isPlaywrightLocatorType(type)) {

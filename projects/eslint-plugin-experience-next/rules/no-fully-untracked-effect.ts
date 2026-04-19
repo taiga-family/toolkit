@@ -1,73 +1,24 @@
-import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {type TSESTree} from '@typescript-eslint/utils';
 
 import {
+    collectSignalReadsInsideUntracked,
     collectSignalUsages,
     getReactiveScopes,
-    isAngularUntrackedCall,
-    isSignalReadCall,
-    type NodeMap,
-    walkSynchronousAst,
-} from './utils/angular-signals';
+} from './utils/angular/angular-signals';
 import {
     ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
     createUntrackedRule,
-} from './utils/untracked-docs';
+} from './utils/angular/untracked-docs';
+import {type NodeMap} from './utils/typescript/node-map';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 type MessageId = 'noTrackedReads';
 
-/**
- * Collects signal reads that appear inside `untracked(...)` callbacks within
- * `root`, without descending into nested `untracked(...)` scopes.
- */
-function collectReadsInsideUntracked(
-    root: TSESTree.Node,
-    checker: import('typescript').TypeChecker,
-    esTreeNodeToTSNodeMap: NodeMap,
-    program: TSESTree.Program,
-): TSESTree.CallExpression[] {
-    const reads: TSESTree.CallExpression[] = [];
-
-    walkSynchronousAst(root, (node) => {
-        if (
-            node.type !== AST_NODE_TYPES.CallExpression ||
-            !isAngularUntrackedCall(node, program)
-        ) {
-            return;
-        }
-
-        const [arg] = node.arguments;
-
-        if (
-            !arg ||
-            (arg.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
-                arg.type !== AST_NODE_TYPES.FunctionExpression)
-        ) {
-            return false;
-        }
-
-        walkSynchronousAst(arg, (inner) => {
-            if (
-                inner.type === AST_NODE_TYPES.CallExpression &&
-                isSignalReadCall(inner, checker, esTreeNodeToTSNodeMap)
-            ) {
-                reads.push(inner);
-            }
-        });
-
-        return false; // Do not descend into nested untracked from the outer walk
-    });
-
-    return reads;
-}
-
 export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
-        const esTreeNodeToTSNodeMap =
-            parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const {sourceCode} = context;
-        const program = sourceCode.ast as TSESTree.Program;
+        const {checker, esTreeNodeToTSNodeMap, program} =
+            getTypeAwareRuleContext(context);
+        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
@@ -75,7 +26,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                     const {reads: trackedReads} = collectSignalUsages(
                         scope.callback,
                         checker,
-                        esTreeNodeToTSNodeMap,
+                        signalNodeMap,
                         program,
                     );
 
@@ -83,10 +34,10 @@ export const rule = createUntrackedRule<[], MessageId>({
                         continue;
                     }
 
-                    const untrackedReads = collectReadsInsideUntracked(
+                    const untrackedReads = collectSignalReadsInsideUntracked(
                         scope.callback,
                         checker,
-                        esTreeNodeToTSNodeMap,
+                        signalNodeMap,
                         program,
                     );
 

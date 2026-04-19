@@ -1,6 +1,6 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
-import {isArray} from './is-array';
+import {isArray} from '../ast/is-array';
 
 export function isImportsArrayProperty(
     property?: TSESTree.Property,

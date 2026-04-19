@@ -1,9 +1,12 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import ts from 'typescript';
 
+import {walkAfterAsyncBoundaryAst, walkSynchronousAst} from '../ast/ast-walk';
+import {type NodeMap} from '../typescript/node-map';
 import {getLocalNameForImport} from './angular-imports';
-import {walkAfterAsyncBoundaryAst, walkSynchronousAst} from './ast-walk';
 
+export {walkAfterAsyncBoundaryAst, walkAst, walkSynchronousAst} from '../ast/ast-walk';
+export type {NodeMap} from '../typescript/node-map';
 export {
     findAngularCoreImport,
     findAngularCoreImports,
@@ -11,11 +14,6 @@ export {
     findRuntimeAngularCoreImport,
     getLocalNameForImport,
 } from './angular-imports';
-export {walkAfterAsyncBoundaryAst, walkAst, walkSynchronousAst} from './ast-walk';
-
-export interface NodeMap {
-    get(node: TSESTree.Node): ts.Node | undefined;
-}
 
 const ANGULAR_CORE = '@angular/core';
 const SIGNAL_WRITE_METHODS = new Set(['mutate', 'set', 'update']);
@@ -26,7 +24,9 @@ const AFTER_RENDER_EFFECT_PHASES = new Map([
     ['write', 'afterRenderEffect().write'],
 ]);
 
-type ReactiveCallback = TSESTree.ArrowFunctionExpression | TSESTree.FunctionExpression;
+export type ReactiveCallback =
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionExpression;
 
 export interface ReactiveScope {
     readonly callback: ReactiveCallback;
@@ -40,13 +40,21 @@ export interface SignalUsage {
     readonly writes: TSESTree.CallExpression[];
 }
 
-function isReactiveCallback(
+export function isReactiveCallback(
     node: TSESTree.Node | null | undefined,
 ): node is ReactiveCallback {
     return (
         node?.type === AST_NODE_TYPES.ArrowFunctionExpression ||
         node?.type === AST_NODE_TYPES.FunctionExpression
     );
+}
+
+export function getReactiveCallbackArgument(
+    node: TSESTree.CallExpression,
+): ReactiveCallback | null {
+    const [arg] = node.arguments;
+
+    return isReactiveCallback(arg) ? arg : null;
 }
 
 function getPropertyName(property: TSESTree.Property): string | null {
@@ -84,13 +92,13 @@ function appendFirstArgReactiveScope(
     call: TSESTree.CallExpression,
     kind: string,
 ): void {
-    const [arg] = call.arguments;
+    const callback = getReactiveCallbackArgument(call);
 
-    if (!isReactiveCallback(arg)) {
+    if (!callback) {
         return;
     }
 
-    scopes.push({callback: arg, kind, owner: call, reportNode: call});
+    scopes.push({callback, kind, owner: call, reportNode: call});
 }
 
 function appendObjectPropertyReactiveScopes(
@@ -439,4 +447,93 @@ export function collectSignalUsages(
     });
 
     return {reads, writes};
+}
+
+export function collectSignalReadsInsideUntracked(
+    root: TSESTree.Node,
+    checker: ts.TypeChecker,
+    esTreeNodeToTSNodeMap: NodeMap,
+    program: TSESTree.Program,
+): TSESTree.CallExpression[] {
+    const reads: TSESTree.CallExpression[] = [];
+
+    walkSynchronousAst(root, (node) => {
+        if (
+            node.type !== AST_NODE_TYPES.CallExpression ||
+            !isAngularUntrackedCall(node, program)
+        ) {
+            return;
+        }
+
+        const callback = getReactiveCallbackArgument(node);
+
+        if (!callback) {
+            return false;
+        }
+
+        walkSynchronousAst(callback, (inner) => {
+            if (
+                inner.type === AST_NODE_TYPES.CallExpression &&
+                isSignalReadCall(inner, checker, esTreeNodeToTSNodeMap)
+            ) {
+                reads.push(inner);
+            }
+        });
+
+        return false;
+    });
+
+    return reads;
+}
+
+export function isReactiveOwnerCall(
+    node: TSESTree.Node,
+    program: TSESTree.Program,
+): node is TSESTree.CallExpression {
+    return (
+        node.type === AST_NODE_TYPES.CallExpression &&
+        getReactiveScopes(node, program).length > 0
+    );
+}
+
+export function getReturnedReactiveOwnerCall(
+    node: TSESTree.CallExpression,
+    program: TSESTree.Program,
+): TSESTree.CallExpression | null {
+    const callback = getReactiveCallbackArgument(node);
+
+    if (!callback) {
+        return null;
+    }
+
+    if (isReactiveOwnerCall(callback.body, program)) {
+        return callback.body;
+    }
+
+    if (
+        callback.body.type !== AST_NODE_TYPES.BlockStatement ||
+        callback.body.body.length !== 1
+    ) {
+        return null;
+    }
+
+    const [statement] = callback.body.body;
+
+    if (
+        statement?.type === AST_NODE_TYPES.ReturnStatement &&
+        statement.argument &&
+        isReactiveOwnerCall(statement.argument, program)
+    ) {
+        return statement.argument;
+    }
+
+    if (
+        node.parent.type === AST_NODE_TYPES.ExpressionStatement &&
+        statement?.type === AST_NODE_TYPES.ExpressionStatement &&
+        isReactiveOwnerCall(statement.expression, program)
+    ) {
+        return statement.expression;
+    }
+
+    return null;
 }

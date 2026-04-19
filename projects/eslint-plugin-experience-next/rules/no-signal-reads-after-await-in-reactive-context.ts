@@ -1,27 +1,25 @@
-import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 import {
     getReactiveScopes,
     isAngularUntrackedCall,
     isSignalReadCall,
-    type NodeMap,
     walkAfterAsyncBoundaryAst,
-} from './utils/angular-signals';
+} from './utils/angular/angular-signals';
 import {
     ANGULAR_SIGNALS_ASYNC_GUIDE_URL,
     createUntrackedRule,
-} from './utils/untracked-docs';
+} from './utils/angular/untracked-docs';
+import {type NodeMap} from './utils/typescript/node-map';
+import {getTypeAwareRuleContext} from './utils/typescript/type-aware-context';
 
 type MessageId = 'readAfterAwait';
 
 export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
-        const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
-        const esTreeNodeToTSNodeMap =
-            parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const {sourceCode} = context;
-        const program = sourceCode.ast as TSESTree.Program;
+        const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
+            getTypeAwareRuleContext(context);
+        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
@@ -32,7 +30,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                         if (
                             inner.type !== AST_NODE_TYPES.CallExpression ||
                             isAngularUntrackedCall(inner, program) ||
-                            !isSignalReadCall(inner, checker, esTreeNodeToTSNodeMap)
+                            !isSignalReadCall(inner, checker, signalNodeMap)
                         ) {
                             return;
                         }

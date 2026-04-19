@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
 
-import {isArray} from './is-array';
+import {isArray} from '../ast/is-array';
 
 export function getImportsArray(
     meta: TSESTree.ObjectExpression,

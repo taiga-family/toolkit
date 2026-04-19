@@ -1,5 +1,7 @@
 import {type Rule} from 'eslint';
 
+import {sameOrder} from './utils/collections/same-order';
+
 const config: Rule.RuleModule = {
     create(context) {
         const order = context.options[0] || {};
@@ -26,7 +28,12 @@ const config: Rule.RuleModule = {
 
                             const correct = getCorrectOrderRelative(orderList, current);
 
-                            if (!isCorrectSortedAccording(correct, current)) {
+                            if (
+                                !sameOrder(
+                                    correct,
+                                    current.filter((item) => correct.includes(item)),
+                                )
+                            ) {
                                 context.report({
                                     fix: (fixer) => {
                                         const fileContent = context.sourceCode.text;
@@ -78,13 +85,6 @@ const config: Rule.RuleModule = {
         type: 'problem',
     },
 };
-
-function isCorrectSortedAccording(correct: string[], current: string[]): boolean {
-    return (
-        JSON.stringify(correct) ===
-        JSON.stringify(current.filter((item) => correct.includes(item)))
-    );
-}
 
 function getCorrectOrderRelative(correct: string[], current: string[]): string[] {
     return correct.filter((item) => current.includes(item));

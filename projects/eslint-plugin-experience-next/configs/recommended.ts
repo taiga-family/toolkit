@@ -29,7 +29,7 @@ import {
     TUI_MEMBER_ORDERING_CONVENTION,
     TUI_RECOMMENDED_NAMING_CONVENTION,
 } from '../rules/convention';
-import * as npmrcParser from '../rules/utils/npmrc-parser';
+import * as npmrcParser from '../rules/utils/parsers/npmrc-parser';
 import {angularVersion, modernAngularRules} from './utils/get-ng-version';
 import {projectJsonExist} from './utils/project-json-exist';
 

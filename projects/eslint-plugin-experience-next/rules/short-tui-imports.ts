@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {getImportedName} from './utils/get-imported-name';
-import {isImportsArrayProperty} from './utils/is-imports-array-property';
+import {isImportsArrayProperty} from './utils/angular/is-imports-array-property';
+import {getImportedName} from './utils/imports/get-imported-name';
 
 export interface ShortImportsException {
     from: string;

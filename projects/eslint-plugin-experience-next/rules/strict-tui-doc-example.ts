@@ -1,6 +1,6 @@
 import {AST_NODE_TYPES, ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
 
-import {getTypeName} from './utils/get-type-name';
+import {getTypeName} from './utils/typescript/get-type-name';
 
 const INVALID_KEY_MESSAGE_ID = 'strict-doc-example-extensions-invalid-key' as const;
 const INVALID_VALUE_MESSAGE_ID = 'strict-doc-example-extensions-invalid-value' as const;
