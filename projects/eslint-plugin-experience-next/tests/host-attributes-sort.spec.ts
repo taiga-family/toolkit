@@ -150,6 +150,96 @@ ruleTester.run('host-attributes-sort', rule, {
                 class TestDirective {}
             `,
         },
+        {
+            code: `
+                @Component({
+                    host: {
+                        '[style.--tui-ticks-gradient]': 'ticksGradient()',
+                        /**
+                         * For change detection.
+                         */
+                        '(input)': '0',
+                        '[style.--tui-slider-fill-ratio]': 'valueRatio'
+                    }
+                })
+                class TestComponent {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Host attributes should be sorted as [[style.--tui-slider-fill-ratio], [style.--tui-ticks-gradient], (input)]',
+                },
+            ],
+            output: `
+                @Component({
+                    host: {
+                        '[style.--tui-slider-fill-ratio]': 'valueRatio',
+                        '[style.--tui-ticks-gradient]': 'ticksGradient()',
+                        /**
+                         * For change detection.
+                         */
+                        '(input)': '0'
+                    }
+                })
+                class TestComponent {}
+            `,
+        },
+        {
+            code: `
+                @Component({
+                    host: {
+                        '(mousedown)': 'prevent($event)',
+                        // Hide Android text select handle
+                        '[class._mobile]': 'isMobile',
+                        '(scroll.zoneless)': 'onScroll()'
+                    }
+                })
+                class TestComponent {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Host attributes should be sorted as [[class._mobile], (mousedown), (scroll.zoneless)]',
+                },
+            ],
+            output: `
+                @Component({
+                    host: {
+                        // Hide Android text select handle
+                        '[class._mobile]': 'isMobile',
+                        '(mousedown)': 'prevent($event)',
+                        '(scroll.zoneless)': 'onScroll()'
+                    }
+                })
+                class TestComponent {}
+            `,
+        },
+        {
+            code: `
+                @Component({
+                    host: {
+                        '(mousedown)': 'prevent($event)', // Hide Android text select handle
+                        '[class._mobile]': 'isMobile'
+                    }
+                })
+                class TestComponent {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Host attributes should be sorted as [[class._mobile], (mousedown)]',
+                },
+            ],
+            output: `
+                @Component({
+                    host: {
+                        '[class._mobile]': 'isMobile',
+                        '(mousedown)': 'prevent($event)' // Hide Android text select handle
+                    }
+                })
+                class TestComponent {}
+            `,
+        },
     ],
     valid: [
         {
