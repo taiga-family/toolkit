@@ -23,6 +23,7 @@ export default defineConfig([
         ignores: ['**/*.spec.ts', '**/*.cy.ts'],
         rules: {
             '@taiga-ui/experience-next/no-deep-imports': 'off',
+            '@taiga-ui/experience-next/no-restricted-attr-values': 'off',
             '@taiga-ui/experience-next/prefer-deep-imports': [
                 'error',
                 {
