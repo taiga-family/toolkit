@@ -1,6 +1,8 @@
 import {type TmplAstBoundAttribute} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {sourceSpanToLoc} from './utils/angular/source-span';
+
 const DIRECTIONAL_TO_LOGICAL: Record<string, string> = {
     'border-bottom': 'border-block-end',
     'border-left': 'border-inline-start',
@@ -69,16 +71,7 @@ const config: Rule.RuleModule = {
                             [propertyStart, propertyEnd],
                             logicalProperty,
                         ),
-                    loc: {
-                        end: {
-                            column: keySpan.end.col,
-                            line: keySpan.end.line + 1,
-                        },
-                        start: {
-                            column: keySpan.start.col,
-                            line: keySpan.start.line + 1,
-                        },
-                    },
+                    loc: sourceSpanToLoc(keySpan),
                     messageId: MESSAGE_ID,
                 });
             },

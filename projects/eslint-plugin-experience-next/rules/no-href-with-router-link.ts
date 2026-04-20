@@ -1,6 +1,8 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {sourceSpanToLoc} from './utils/angular/source-span';
+
 const MESSAGE_ID = 'no-href-with-router-link';
 const ERROR_MESSAGE =
     'Do not use href and routerLink attributes together on the same element';
@@ -34,16 +36,7 @@ const config: Rule.RuleModule = {
                             hrefAttr.sourceSpan.start.offset,
                             hrefAttr.sourceSpan.end.offset,
                         ]),
-                    loc: {
-                        end: {
-                            column: hrefAttr.sourceSpan.end.col,
-                            line: hrefAttr.sourceSpan.end.line + 1,
-                        },
-                        start: {
-                            column: hrefAttr.sourceSpan.start.col,
-                            line: hrefAttr.sourceSpan.start.line + 1,
-                        },
-                    },
+                    loc: sourceSpanToLoc(hrefAttr.sourceSpan),
                     messageId: MESSAGE_ID,
                 });
             },

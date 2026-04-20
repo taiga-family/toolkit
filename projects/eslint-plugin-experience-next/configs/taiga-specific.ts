@@ -33,6 +33,24 @@ export default defineConfig([
         },
     },
     {
+        files: ['**/*.html'],
+        rules: {
+            '@taiga-ui/experience-next/no-restricted-attr-values': [
+                'error',
+                {
+                    attrPatterns: ['iconStart', 'iconEnd', 'icon'],
+                    attrValuePatterns: ['@tui'],
+                    message:
+                        'Icons must be configured, for example: \n<button tuiIconButton [iconStart]="options.iconStart" [iconEnd]="options.iconEnd" /> \n<tui-icon [icon]="options.icon" />',
+                },
+            ],
+        },
+    },
+    {
+        files: ['**/demo/**/*.html'],
+        rules: {'@taiga-ui/experience-next/no-restricted-attr-values': 'off'},
+    },
+    {
         files: ['**/*.ts'],
         rules: {
             '@taiga-ui/experience-next/array-as-const': 'error',

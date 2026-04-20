@@ -1,10 +1,10 @@
 import {
-    type ParseSourceSpan,
     type TmplAstElement,
     TmplAstTemplate,
 } from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
-import {type SourceLocation} from 'estree';
+
+import {sourceSpanToLoc} from './utils/angular/source-span';
 
 const MESSAGE_ID = 'no-project-as-in-ng-template';
 const NESTED_TEMPLATE_MESSAGE_ID = 'no-nested-template-in-dynamic-outlet';
@@ -23,19 +23,6 @@ const DYNAMIC_OUTLET_DIRECTIVES = new Set([
 
 interface AnyTmplAstNode {
     parent?: AnyTmplAstNode;
-}
-
-function toLoc(span: ParseSourceSpan): SourceLocation {
-    return {
-        end: {
-            column: span.end.col,
-            line: span.end.line + 1,
-        },
-        start: {
-            column: span.start.col,
-            line: span.start.line + 1,
-        },
-    };
 }
 
 function isInsideDynamicOutlet(node: TmplAstElement): boolean {
@@ -66,7 +53,7 @@ function checkProjectAsOnDynamicOutlet(
 
     if (ngProjectAsAttr && isInsideDynamicOutlet(node)) {
         context.report({
-            loc: toLoc(ngProjectAsAttr.sourceSpan),
+            loc: sourceSpanToLoc(ngProjectAsAttr.sourceSpan),
             messageId: MESSAGE_ID,
         });
     }
@@ -87,7 +74,7 @@ function checkNestedTemplateInDynamicOutlet(
     for (const child of node.children) {
         if (child instanceof TmplAstTemplate && child.tagName === 'ng-template') {
             context.report({
-                loc: toLoc(child.sourceSpan),
+                loc: sourceSpanToLoc(child.sourceSpan),
                 messageId: NESTED_TEMPLATE_MESSAGE_ID,
             });
         }
