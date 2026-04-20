@@ -1,5 +1,5 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
-import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {ESLintUtils, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 
 import {getDecoratorMetadata} from './utils/angular/get-decorator-metadata';
 import {getStaticPropertyName} from './utils/ast/property-names';
@@ -92,6 +92,11 @@ interface HostAttributeProperty {
     readonly node: TSESTree.Property;
 }
 
+interface AttachedComments {
+    readonly leading: TSESTree.Comment[];
+    readonly trailing: TSESTree.Comment | null;
+}
+
 interface Group<T> {
     readonly query: string;
     readonly regexp?: RegExp;
@@ -148,7 +153,14 @@ export const rule = createRule<Options, MessageIds>({
                         node: hostObject,
                     };
 
-                    if (sourceCode.getCommentsInside(hostObject).length > 0) {
+                    const fixText = getFixText(
+                        hostObject,
+                        properties,
+                        sortedProperties,
+                        sourceCode,
+                    );
+
+                    if (!fixText) {
                         context.report(report);
 
                         continue;
@@ -156,15 +168,7 @@ export const rule = createRule<Options, MessageIds>({
 
                     context.report({
                         ...report,
-                        fix: (fixer) =>
-                            fixer.replaceTextRange(
-                                hostObject.range,
-                                `{${sortedProperties
-                                    .map(({node: property}) =>
-                                        sourceCode.getText(property),
-                                    )
-                                    .join(', ')}}`,
-                            ),
+                        fix: (fixer) => fixer.replaceTextRange(hostObject.range, fixText),
                     });
                 }
             },
@@ -353,3 +357,195 @@ function createDefaultGroup(): Group<HostAttributeProperty> {
 }
 
 export default rule;
+
+function getFixText(
+    hostObject: TSESTree.ObjectExpression,
+    properties: HostAttributeProperty[],
+    sortedProperties: HostAttributeProperty[],
+    sourceCode: Readonly<TSESLint.SourceCode>,
+): string | null {
+    const comments = sourceCode.getCommentsInside(hostObject);
+
+    if (comments.length === 0) {
+        return `{${sortedProperties
+            .map(({node: property}) => sourceCode.getText(property))
+            .join(', ')}}`;
+    }
+
+    const attachedComments = getAttachedComments(
+        hostObject,
+        properties,
+        sourceCode,
+        comments,
+    );
+
+    if (!attachedComments) {
+        return null;
+    }
+
+    return renderFixWithComments(
+        hostObject,
+        sortedProperties,
+        sourceCode,
+        attachedComments,
+    );
+}
+
+function getAttachedComments(
+    hostObject: TSESTree.ObjectExpression,
+    properties: HostAttributeProperty[],
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    comments: TSESTree.Comment[],
+): Map<TSESTree.Property, AttachedComments> | null {
+    const attached = new Map<TSESTree.Property, AttachedComments>();
+    const usedComments = new Set<string>();
+
+    for (const [index, {node}] of properties.entries()) {
+        const previousProperty = properties[index - 1]?.node ?? null;
+        const nextProperty = properties[index + 1]?.node ?? null;
+        const leading = sourceCode
+            .getCommentsBefore(node)
+            .filter((comment) =>
+                isAttachedLeadingComment(hostObject, previousProperty, node, comment),
+            );
+        const trailing = comments.find((comment) =>
+            isAttachedTrailingComment(hostObject, node, nextProperty, comment),
+        );
+
+        for (const comment of leading) {
+            usedComments.add(getCommentKey(comment));
+        }
+
+        if (trailing) {
+            usedComments.add(getCommentKey(trailing));
+        }
+
+        attached.set(node, {leading, trailing: trailing ?? null});
+    }
+
+    return usedComments.size === comments.length ? attached : null;
+}
+
+function renderFixWithComments(
+    hostObject: TSESTree.ObjectExpression,
+    sortedProperties: HostAttributeProperty[],
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    attachedComments: Map<TSESTree.Property, AttachedComments>,
+): string {
+    const objectIndentation = getLineIndentation(sourceCode.text, hostObject.range[0]);
+    const propertyIndentation = getPropertyIndentation(
+        hostObject,
+        sortedProperties,
+        sourceCode.text,
+        attachedComments,
+    );
+
+    return `{\n${sortedProperties
+        .map(({node}, index) =>
+            renderPropertyWithComments(
+                node,
+                attachedComments.get(node),
+                sourceCode,
+                propertyIndentation,
+                index === sortedProperties.length - 1,
+            ),
+        )
+        .join('\n')}\n${objectIndentation}}`;
+}
+
+function renderPropertyWithComments(
+    property: TSESTree.Property,
+    attachedComments: AttachedComments | undefined,
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    propertyIndentation: string,
+    isLast: boolean,
+): string {
+    const lines =
+        attachedComments?.leading.map(
+            (comment) =>
+                `${propertyIndentation}${sourceCode.text.slice(...comment.range)}`,
+        ) ?? [];
+    const trailingComment = attachedComments?.trailing
+        ? ` ${sourceCode.text.slice(...attachedComments.trailing.range)}`
+        : '';
+
+    lines.push(
+        `${propertyIndentation}${sourceCode.getText(property)}${isLast ? '' : ','}${trailingComment}`,
+    );
+
+    return lines.join('\n');
+}
+
+function getPropertyIndentation(
+    hostObject: TSESTree.ObjectExpression,
+    properties: HostAttributeProperty[],
+    sourceText: string,
+    attachedComments: Map<TSESTree.Property, AttachedComments>,
+): string {
+    for (const {node} of properties) {
+        const comment = attachedComments.get(node)?.leading[0];
+        const offset = comment?.range[0] ?? node.range[0];
+
+        if (
+            (comment?.loc.start.line ?? node.loc.start.line) > hostObject.loc.start.line
+        ) {
+            return getLineIndentation(sourceText, offset);
+        }
+    }
+
+    return `${getLineIndentation(sourceText, hostObject.range[0])}    `;
+}
+
+function getLineIndentation(sourceText: string, offset: number): string {
+    let lineStart = offset;
+
+    while (
+        lineStart > 0 &&
+        sourceText[lineStart - 1] !== '\n' &&
+        sourceText[lineStart - 1] !== '\r'
+    ) {
+        lineStart--;
+    }
+
+    let indentationEnd = lineStart;
+
+    while (
+        indentationEnd < sourceText.length &&
+        (sourceText[indentationEnd] === ' ' || sourceText[indentationEnd] === '\t')
+    ) {
+        indentationEnd++;
+    }
+
+    return sourceText.slice(lineStart, indentationEnd);
+}
+
+function isAttachedLeadingComment(
+    hostObject: TSESTree.ObjectExpression,
+    previousProperty: TSESTree.Property | null,
+    property: TSESTree.Property,
+    comment: TSESTree.Comment,
+): boolean {
+    return (
+        comment.range[0] >= hostObject.range[0] &&
+        comment.range[1] <= property.range[0] &&
+        (!previousProperty || comment.range[0] >= previousProperty.range[1]) &&
+        comment.loc.start.line !== previousProperty?.loc.end.line
+    );
+}
+
+function isAttachedTrailingComment(
+    hostObject: TSESTree.ObjectExpression,
+    property: TSESTree.Property,
+    nextProperty: TSESTree.Property | null,
+    comment: TSESTree.Comment,
+): boolean {
+    return (
+        comment.range[0] >= property.range[1] &&
+        comment.range[1] <= (nextProperty?.range[0] ?? hostObject.range[1]) &&
+        comment.loc.start.line === property.loc.end.line
+    );
+}
+
+function getCommentKey(comment: TSESTree.Comment): string {
+    return `${comment.range[0]}:${comment.range[1]}`;
+}
