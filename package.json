@@ -52,7 +52,6 @@
         "@angular/core": "19.2.20",
         "@angular/platform-browser-dynamic": "19.2.20",
         "@nx/rollup": "22.6.5",
-        "@nx/workspace": "22.6.5",
         "nx": "22.6.5",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",

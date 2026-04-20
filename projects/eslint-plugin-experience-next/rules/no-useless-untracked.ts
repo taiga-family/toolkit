@@ -51,13 +51,14 @@ function buildReplacement(
 
     if (body.type === AST_NODE_TYPES.BlockStatement) {
         const {body: stmts} = body;
+        const [firstStmt] = stmts;
 
-        if (stmts.length === 0) {
+        if (!firstStmt) {
             return null; // Nothing to replace with — let caller delete the statement
         }
 
         const parentColumn = parentStatement.loc.start.column;
-        const firstStmtColumn = stmts[0]!.loc.start.column;
+        const firstStmtColumn = firstStmt.loc.start.column;
         const extra = firstStmtColumn - parentColumn;
 
         const indented = stmts.map((s) => dedent(sourceCode.getText(s), extra));

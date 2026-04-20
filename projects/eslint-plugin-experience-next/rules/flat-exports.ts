@@ -31,8 +31,10 @@ export default createRule<[], typeof MESSAGE_ID>({
         const purityCache = new WeakMap<ArrayMeta, boolean>();
 
         const isPureArray = (arr: ArrayMeta): boolean => {
-            if (purityCache.has(arr)) {
-                return purityCache.get(arr)!;
+            const cachedPurity = purityCache.get(arr);
+
+            if (cachedPurity !== undefined) {
+                return cachedPurity;
             }
 
             if (arr.isDirty) {

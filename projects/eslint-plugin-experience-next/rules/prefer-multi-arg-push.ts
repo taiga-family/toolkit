@@ -38,7 +38,11 @@ export const rule = createRule<Options, MessageId>({
             let i = 0;
 
             while (i < statements.length) {
-                const stmt = statements[i]!;
+                const stmt = statements[i];
+
+                if (!stmt) {
+                    break;
+                }
 
                 if (stmt.type !== AST_NODE_TYPES.ExpressionStatement) {
                     i++;
@@ -57,9 +61,9 @@ export const rule = createRule<Options, MessageId>({
                 let j = i + 1;
 
                 while (j < statements.length) {
-                    const nextStmt = statements[j]!;
+                    const nextStmt = statements[j];
 
-                    if (nextStmt.type !== AST_NODE_TYPES.ExpressionStatement) {
+                    if (nextStmt?.type !== AST_NODE_TYPES.ExpressionStatement) {
                         break;
                     }
 
@@ -91,7 +95,11 @@ export const rule = createRule<Options, MessageId>({
                                               )
                                               .map((arg) => sourceCode.getText(arg))
                                               .join(', ');
-                                          const lastStmt = group[group.length - 1]!;
+                                          const lastStmt = group[group.length - 1];
+
+                                          if (!lastStmt) {
+                                              return null;
+                                          }
 
                                           return fixer.replaceTextRange(
                                               [groupStmt.range[0], lastStmt.range[1]],

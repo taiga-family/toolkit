@@ -33,9 +33,10 @@ export default createRule({
             }
 
             const key = `${containingDir}\0${moduleSpecifier}`;
+            const cachedFile = cache.get(key);
 
-            if (cache.has(key)) {
-                return cache.get(key)!;
+            if (cachedFile !== undefined) {
+                return cachedFile;
             }
 
             const resolved = ts.resolveModuleName(
@@ -57,9 +58,10 @@ export default createRule({
             fileName: string,
         ): string | null {
             const key = `${startDirectory}\0${fileName}`;
+            const cachedPath = nearestFileUpCache.get(key);
 
-            if (nearestFileUpCache.has(key)) {
-                return nearestFileUpCache.get(key)!;
+            if (cachedPath !== undefined) {
+                return cachedPath;
             }
 
             let currentDirectory = startDirectory;
@@ -90,8 +92,10 @@ export default createRule({
         function pickPackageMarkerFileCached(
             resolvedRootFilePath: string,
         ): string | null {
-            if (markerCache.has(resolvedRootFilePath)) {
-                return markerCache.get(resolvedRootFilePath)!;
+            const cachedMarker = markerCache.get(resolvedRootFilePath);
+
+            if (cachedMarker !== undefined) {
+                return cachedMarker;
             }
 
             const resolvedRootDirectory = path.dirname(resolvedRootFilePath);
@@ -112,8 +116,10 @@ export default createRule({
         }
 
         function pickIndexFileInDirectoryCached(packageDirectory: string): string | null {
-            if (indexFileCache.has(packageDirectory)) {
-                return indexFileCache.get(packageDirectory)!;
+            const cachedIndexFile = indexFileCache.get(packageDirectory);
+
+            if (cachedIndexFile !== undefined) {
+                return cachedIndexFile;
             }
 
             const indexTypescriptPath = path.join(packageDirectory, 'index.ts');
