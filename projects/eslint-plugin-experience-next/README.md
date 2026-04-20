@@ -40,22 +40,30 @@ export default [
 | Rule                                            | Description                                                                                         | ✅  | 🔧  | 💡  |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | --- | --- | --- |
 | array-as-const                                  | Exported array of class references should be marked with `as const`                                 |     | 🔧  |     |
+| attrs-newline                                   | Enforce one attribute per line when a start tag spans multiple lines                                |     | 🔧  |     |
 | class-property-naming                           | Enforce custom naming for class properties based on their type                                      |     | 🔧  |     |
 | decorator-key-sort                              | Sorts the keys of the object passed to the `@Component/@Injectable/@NgModule/@Pipe` decorator       | ✅  | 🔧  |     |
+| element-newline                                 | Require line breaks around block-level child nodes in HTML templates                                |     | 🔧  |     |
 | flat-exports                                    | Spread nested arrays when exporting Angular entity collections                                      |     | 🔧  |     |
 | host-attributes-sort                            | Sort Angular host metadata attributes using configurable attribute groups                           | ✅  | 🔧  |     |
 | injection-token-description                     | Require `InjectionToken` descriptions to include the token name                                     | ✅  | 🔧  |     |
 | no-commonjs-import-patterns                     | Disallow legacy CommonJS interop import patterns                                                    | ✅  |     |     |
 | no-deep-imports                                 | Disables deep imports of Taiga UI packages                                                          | ✅  | 🔧  |     |
 | no-deep-imports-to-indexed-packages             | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
+| no-duplicate-attrs                              | Disallow duplicate attributes on the same HTML element                                              |     |     |     |
+| no-duplicate-id                                 | Disallow duplicate static `id` values in HTML templates                                             |     |     |     |
+| no-duplicate-in-head                            | Disallow duplicate `title`, `base`, and key metadata tags inside `<head>`                          |     |     |     |
 | no-fully-untracked-effect                       | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
 | no-href-with-router-link                        | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | no-import-assertions                            | Replace legacy `assert { ... }` import assertions with `with { ... }`                               | ✅  | 🔧  |     |
 | no-implicit-public                              | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-infinite-loop                                | Disallow `while (true)` and `for` loops without an explicit condition                               | ✅  |     |     |
 | no-legacy-peer-deps                             | Disallow `legacy-peer-deps=true` in `.npmrc`                                                        | ✅  |     |     |
+| no-obsolete-attrs                               | Disallow obsolete HTML attributes                                                                    |     |     |     |
+| no-obsolete-tags                                | Disallow obsolete HTML tags                                                                          |     |     |     |
 | no-playwright-empty-fill                        | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
+| no-restricted-attr-values                       | Disallow configured attribute values in Angular templates                                           |     |     |     |
 | no-redundant-type-annotation                    | Disallow redundant type annotations when the type is already inferred from the initializer          | ✅  | 🔧  |     |
 | no-side-effects-in-computed                     | Disallow side effects and effectful helper calls inside Angular `computed()` callbacks              | ✅  |     |     |
 | no-signal-reads-after-await-in-reactive-context | Disallow bare signal reads after `await` inside reactive callbacks                                  | ✅  |     |     |
@@ -69,6 +77,12 @@ export default [
 | prefer-namespace-keyword                        | Replace `module Foo {}` with `namespace Foo {}` for TypeScript namespace declarations               | ✅  | 🔧  |     |
 | prefer-untracked-incidental-signal-reads        | Wrap likely-incidental signal reads with `untracked()` in reactive callbacks                        | ✅  | 🔧  |     |
 | prefer-untracked-signal-getter                  | Prefer `untracked(signalGetter)` over `untracked(() => signalGetter())` for a single signal getter  | ✅  | 🔧  |     |
+| quotes                                          | Enforce double quotes around HTML attribute values                                                   |     | 🔧  |     |
+| require-doctype                                 | Require `<!DOCTYPE html>` at the top of HTML documents                                               |     | 🔧  |     |
+| require-img-alt                                 | Require `alt` on `<img>` elements, including Angular attribute bindings                              |     |     |     |
+| require-lang                                    | Require a non-empty `lang` attribute on `<html>`                                                     |     |     |     |
+| require-li-container                            | Require `<li>` to be nested inside `<ul>`, `<ol>`, or `<menu>`                                      |     |     |     |
+| require-title                                   | Require a non-empty `<title>` inside `<head>`                                                        |     |     |     |
 | short-tui-imports                               | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
 | single-line-class-property-spacing              | Group consecutive single-line class properties and separate multiline ones with a blank line        | ✅  | 🔧  |     |
 | standalone-imports-sort                         | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
@@ -89,6 +103,27 @@ export const PROVIDERS = [FooService, BarService];
 
 // ✅ after autofix
 export const PROVIDERS = [FooService, BarService] as const;
+```
+
+---
+
+## attrs-newline
+
+<sup>`Fixable`</sup>
+
+Requires line breaks between attributes when a start tag has more than two attributes. This keeps larger HTML tags
+readable and makes attribute diffs much easier to scan in Angular templates.
+
+```html
+<!-- ❌ error -->
+<div id="a" class="b" title="c"></div>
+
+<!-- ✅ after autofix -->
+<div
+id="a"
+class="b"
+title="c"
+></div>
 ```
 
 ---
@@ -164,6 +199,25 @@ Enforces a consistent key order inside Angular decorator objects (`@Component`, 
     selector: 'app-root',
     templateUrl: './app.component.html',
 })
+```
+
+---
+
+## element-newline
+
+<sup>`Fixable`</sup>
+
+Requires line breaks around block-level child nodes. Inline text and inline elements can stay on one line, but block
+content should be visually separated from its container.
+
+```html
+<!-- ❌ error -->
+<div><section>Content</section></div>
+
+<!-- ✅ after autofix -->
+<div>
+<section>Content</section>
+</div>
 ```
 
 ---
@@ -389,6 +443,60 @@ import {Foo} from '@my-lib/internal';
 
 ---
 
+## no-duplicate-attrs
+
+Disallows repeated attributes on the same element. The rule works on Angular template AST and catches duplicate plain
+HTML attributes before they become ambiguous or silently override one another.
+
+```html
+<!-- ❌ error -->
+<div class="a" class="b"></div>
+
+<!-- ✅ ok -->
+<div class="a" id="b"></div>
+```
+
+---
+
+## no-duplicate-id
+
+Disallows duplicate static `id` values within the same HTML template. This helps keep selectors, label associations,
+and accessibility relationships deterministic.
+
+```html
+<!-- ❌ error -->
+<label for="name"></label>
+<input id="name" />
+<div id="name"></div>
+
+<!-- ✅ ok -->
+<label for="name"></label>
+<input id="name" />
+<div id="description"></div>
+```
+
+---
+
+## no-duplicate-in-head
+
+Disallows duplicate singleton tags inside `<head>`, including `<title>`, `<base>`, `meta[charset]`,
+`meta[name="viewport"]`, and `link[rel="canonical"]`. Multiple copies of these tags make document metadata unreliable.
+
+```html
+<!-- ❌ error -->
+<head>
+  <title>One</title>
+  <title>Two</title>
+</head>
+
+<!-- ✅ ok -->
+<head>
+  <title>One</title>
+</head>
+```
+
+---
+
 ## no-fully-untracked-effect
 
 <sup>`✅ Recommended`</sup>
@@ -549,6 +657,36 @@ Comments and empty lines are ignored, so the rule only reports an active `legacy
 
 ---
 
+## no-obsolete-attrs
+
+Disallows obsolete HTML attributes such as presentational or deprecated legacy attributes that should be replaced with
+modern HTML or CSS.
+
+```html
+<!-- ❌ error -->
+<table border="1"></table>
+
+<!-- ✅ ok -->
+<table class="with-border"></table>
+```
+
+---
+
+## no-obsolete-tags
+
+Disallows obsolete HTML tags that should no longer appear in modern markup. This keeps templates aligned with current
+HTML standards and avoids legacy presentational elements.
+
+```html
+<!-- ❌ error -->
+<center>Title</center>
+
+<!-- ✅ ok -->
+<div class="centered">Title</div>
+```
+
+---
+
 ## no-playwright-empty-fill
 
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
@@ -594,6 +732,39 @@ content projection, so the attribute is silently ignored at runtime.
 
 <!-- ✅ ok — static content projection -->
 <div ngProjectAs="[someSlot]">content</div>
+```
+
+---
+
+## no-restricted-attr-values
+
+<sup>`Taiga-specific`</sup>
+
+Disallows configured string values for Angular template attributes, including both plain HTML attributes and literal
+string bindings like `[icon]="'@tui.x'"`. This is useful when a project wants to ban hardcoded design-system tokens in
+markup and require them to come from component inputs or options objects instead.
+
+```json
+{
+  "@taiga-ui/experience-next/no-restricted-attr-values": [
+    "error",
+    {
+      "attrPatterns": ["iconStart", "iconEnd", "icon"],
+      "attrValuePatterns": ["@tui"],
+      "message": "Icons must be configured"
+    }
+  ]
+}
+```
+
+```html
+<!-- ❌ error -->
+<button iconStart="@tui.x"></button>
+<tui-icon [icon]="'@tui.chevron-down'"></tui-icon>
+
+<!-- ✅ ok -->
+<button [iconStart]="options.iconStart"></button>
+<tui-icon [icon]="options.icon"></tui-icon>
 ```
 
 ---
@@ -1185,6 +1356,104 @@ const snapshot = untracked(() => this.counter());
 
 // ✅ after autofix
 const snapshot = untracked(this.counter);
+```
+
+---
+
+## quotes
+
+<sup>`Fixable`</sup>
+
+Enforces double quotes around HTML attribute values, including Angular template bindings written in markup. It also
+adds missing quotes when the attribute value is currently unquoted.
+
+```html
+<!-- ❌ error -->
+<div class='foo' title=bar></div>
+
+<!-- ✅ after autofix -->
+<div class="foo" title="bar"></div>
+```
+
+---
+
+## require-doctype
+
+<sup>`Fixable`</sup>
+
+Requires `<!DOCTYPE html>` at the beginning of HTML documents. Even though Angular's template parser does not expose
+doctype nodes directly, the rule still validates and autofixes the source text.
+
+```html
+<!-- ❌ error -->
+<html lang="en"></html>
+
+<!-- ✅ after autofix -->
+<!DOCTYPE html>
+<html lang="en"></html>
+```
+
+---
+
+## require-img-alt
+
+Requires an accessible text alternative on `<img>` elements. The rule accepts plain `alt`, `[alt]`, and `[attr.alt]`
+so it works naturally with Angular bindings.
+
+```html
+<!-- ❌ error -->
+<img src="avatar.png" />
+
+<!-- ✅ ok -->
+<img src="avatar.png" alt="Profile" />
+<img [src]="avatar" [attr.alt]="description" />
+```
+
+---
+
+## require-lang
+
+Requires a non-empty `lang` attribute on the root `<html>` element. Bound Angular forms such as `[attr.lang]` are also
+accepted.
+
+```html
+<!-- ❌ error -->
+<html><body></body></html>
+
+<!-- ✅ ok -->
+<html lang="en"><body></body></html>
+<html [attr.lang]="locale()"><body></body></html>
+```
+
+---
+
+## require-li-container
+
+Requires `<li>` elements to appear inside `<ul>`, `<ol>`, or `<menu>`. This prevents structurally invalid list markup
+in Angular templates.
+
+```html
+<!-- ❌ error -->
+<div><li>Item</li></div>
+
+<!-- ✅ ok -->
+<ul><li>Item</li></ul>
+```
+
+---
+
+## require-title
+
+Requires a non-empty `<title>` inside `<head>`. Plain text and Angular interpolation are both treated as valid title
+content.
+
+```html
+<!-- ❌ error -->
+<html lang="en"><head></head><body></body></html>
+
+<!-- ✅ ok -->
+<html lang="en"><head><title>Page</title></head><body></body></html>
+<html lang="en"><head><title>{{ pageTitle }}</title></head><body></body></html>
 ```
 
 ---

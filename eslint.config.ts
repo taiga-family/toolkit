@@ -5,8 +5,26 @@ import {globalIgnores} from 'eslint/config';
 
 export default process.env.HTML_ESLINT
     ? [
-          // Eslint doesn't support multiple parsers for different rules
-          ...taiga.configs['html-eslint'],
+          ...taiga.configs.recommended,
+          ...taiga.configs['taiga-specific'],
+          {
+              files: ['**/*.html'],
+              rules: {
+                  '@taiga-ui/experience-next/attrs-newline': 'error',
+                  '@taiga-ui/experience-next/element-newline': 'error',
+                  '@taiga-ui/experience-next/no-duplicate-attrs': 'error',
+                  '@taiga-ui/experience-next/no-duplicate-id': 'error',
+                  '@taiga-ui/experience-next/no-duplicate-in-head': 'error',
+                  '@taiga-ui/experience-next/no-obsolete-attrs': 'error',
+                  '@taiga-ui/experience-next/no-obsolete-tags': 'error',
+                  '@taiga-ui/experience-next/quotes': 'error',
+                  '@taiga-ui/experience-next/require-doctype': 'error',
+                  '@taiga-ui/experience-next/require-img-alt': 'error',
+                  '@taiga-ui/experience-next/require-lang': 'error',
+                  '@taiga-ui/experience-next/require-li-container': 'error',
+                  '@taiga-ui/experience-next/require-title': 'error',
+              },
+          },
           globalIgnores(['**/*.{ts,js,css,less,scss}']),
       ]
     : [
