@@ -1,3 +1,10 @@
+### [0.479.0](https://github.com/taiga-family/toolkit/compare/v0.478.0...v0.479.0) (2026-04-20)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add html eslint rules (#1756)
+  [(6e32236)](https://github.com/taiga-family/toolkit/commit/6e32236ecff59cad0e260cda62a9f5aa75cca365)
+
 ### [0.478.0](https://github.com/taiga-family/toolkit/compare/v0.477.0...v0.478.0) (2026-04-20)
 
 ### 🚀 Features
