@@ -52,15 +52,15 @@ export default [
 | no-deep-imports-to-indexed-packages             | Disallow deep imports from packages that expose an index.ts next to ng-package.json or package.json | ✅  | 🔧  |     |
 | no-duplicate-attrs                              | Disallow duplicate attributes on the same HTML element                                              |     |     |     |
 | no-duplicate-id                                 | Disallow duplicate static `id` values in HTML templates                                             |     |     |     |
-| no-duplicate-in-head                            | Disallow duplicate `title`, `base`, and key metadata tags inside `<head>`                          |     |     |     |
+| no-duplicate-in-head                            | Disallow duplicate `title`, `base`, and key metadata tags inside `<head>`                           |     |     |     |
 | no-fully-untracked-effect                       | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
 | no-href-with-router-link                        | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | no-import-assertions                            | Replace legacy `assert { ... }` import assertions with `with { ... }`                               | ✅  | 🔧  |     |
 | no-implicit-public                              | Require explicit `public` modifier for class members and parameter properties                       | ✅  | 🔧  |     |
 | no-infinite-loop                                | Disallow `while (true)` and `for` loops without an explicit condition                               | ✅  |     |     |
 | no-legacy-peer-deps                             | Disallow `legacy-peer-deps=true` in `.npmrc`                                                        | ✅  |     |     |
-| no-obsolete-attrs                               | Disallow obsolete HTML attributes                                                                    |     |     |     |
-| no-obsolete-tags                                | Disallow obsolete HTML tags                                                                          |     |     |     |
+| no-obsolete-attrs                               | Disallow obsolete HTML attributes                                                                   |     |     |     |
+| no-obsolete-tags                                | Disallow obsolete HTML tags                                                                         |     |     |     |
 | no-playwright-empty-fill                        | Enforce `clear()` over `fill('')` in Playwright tests                                               | ✅  | 🔧  |     |
 | no-project-as-in-ng-template                    | `ngProjectAs` has no effect inside `<ng-template>` or dynamic outlets                               | ✅  |     |     |
 | no-restricted-attr-values                       | Disallow configured attribute values in Angular templates                                           |     |     |     |
@@ -77,12 +77,12 @@ export default [
 | prefer-namespace-keyword                        | Replace `module Foo {}` with `namespace Foo {}` for TypeScript namespace declarations               | ✅  | 🔧  |     |
 | prefer-untracked-incidental-signal-reads        | Wrap likely-incidental signal reads with `untracked()` in reactive callbacks                        | ✅  | 🔧  |     |
 | prefer-untracked-signal-getter                  | Prefer `untracked(signalGetter)` over `untracked(() => signalGetter())` for a single signal getter  | ✅  | 🔧  |     |
-| quotes                                          | Enforce double quotes around HTML attribute values                                                   |     | 🔧  |     |
-| require-doctype                                 | Require `<!DOCTYPE html>` at the top of HTML documents                                               |     | 🔧  |     |
-| require-img-alt                                 | Require `alt` on `<img>` elements, including Angular attribute bindings                              |     |     |     |
-| require-lang                                    | Require a non-empty `lang` attribute on `<html>`                                                     |     |     |     |
+| quotes                                          | Enforce double quotes around HTML attribute values                                                  |     | 🔧  |     |
+| require-doctype                                 | Require `<!DOCTYPE html>` at the top of HTML documents                                              |     | 🔧  |     |
+| require-img-alt                                 | Require `alt` on `<img>` elements, including Angular attribute bindings                             |     |     |     |
+| require-lang                                    | Require a non-empty `lang` attribute on `<html>`                                                    |     |     |     |
 | require-li-container                            | Require `<li>` to be nested inside `<ul>`, `<ol>`, or `<menu>`                                      |     |     |     |
-| require-title                                   | Require a non-empty `<title>` inside `<head>`                                                        |     |     |     |
+| require-title                                   | Require a non-empty `<title>` inside `<head>`                                                       |     |     |     |
 | short-tui-imports                               | Shorten TuiXxxComponent / TuiYyyDirective in Angular metadata                                       | ✅  | 🔧  |     |
 | single-line-class-property-spacing              | Group consecutive single-line class properties and separate multiline ones with a blank line        | ✅  | 🔧  |     |
 | standalone-imports-sort                         | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
@@ -116,13 +116,17 @@ readable and makes attribute diffs much easier to scan in Angular templates.
 
 ```html
 <!-- ❌ error -->
-<div id="a" class="b" title="c"></div>
+<div
+  class="b"
+  id="a"
+  title="c"
+></div>
 
 <!-- ✅ after autofix -->
 <div
-id="a"
-class="b"
-title="c"
+  class="b"
+  id="a"
+  title="c"
 ></div>
 ```
 
@@ -216,7 +220,7 @@ content should be visually separated from its container.
 
 <!-- ✅ after autofix -->
 <div>
-<section>Content</section>
+  <section>Content</section>
 </div>
 ```
 
@@ -450,18 +454,24 @@ HTML attributes before they become ambiguous or silently override one another.
 
 ```html
 <!-- ❌ error -->
-<div class="a" class="b"></div>
+<div
+  class="a"
+  class="b"
+></div>
 
 <!-- ✅ ok -->
-<div class="a" id="b"></div>
+<div
+  class="a"
+  id="b"
+></div>
 ```
 
 ---
 
 ## no-duplicate-id
 
-Disallows duplicate static `id` values within the same HTML template. This helps keep selectors, label associations,
-and accessibility relationships deterministic.
+Disallows duplicate static `id` values within the same HTML template. This helps keep selectors, label associations, and
+accessibility relationships deterministic.
 
 ```html
 <!-- ❌ error -->
@@ -1364,15 +1374,21 @@ const snapshot = untracked(this.counter);
 
 <sup>`Fixable`</sup>
 
-Enforces double quotes around HTML attribute values, including Angular template bindings written in markup. It also
-adds missing quotes when the attribute value is currently unquoted.
+Enforces double quotes around HTML attribute values, including Angular template bindings written in markup. It also adds
+missing quotes when the attribute value is currently unquoted.
 
 ```html
 <!-- ❌ error -->
-<div class='foo' title=bar></div>
+<div
+  class="foo"
+  title="bar"
+></div>
 
 <!-- ✅ after autofix -->
-<div class="foo" title="bar"></div>
+<div
+  class="foo"
+  title="bar"
+></div>
 ```
 
 ---
@@ -1397,16 +1413,22 @@ doctype nodes directly, the rule still validates and autofixes the source text.
 
 ## require-img-alt
 
-Requires an accessible text alternative on `<img>` elements. The rule accepts plain `alt`, `[alt]`, and `[attr.alt]`
-so it works naturally with Angular bindings.
+Requires an accessible text alternative on `<img>` elements. The rule accepts plain `alt`, `[alt]`, and `[attr.alt]` so
+it works naturally with Angular bindings.
 
 ```html
 <!-- ❌ error -->
 <img src="avatar.png" />
 
 <!-- ✅ ok -->
-<img src="avatar.png" alt="Profile" />
-<img [src]="avatar" [attr.alt]="description" />
+<img
+  src="avatar.png"
+  alt="Profile"
+/>
+<img
+  [src]="avatar"
+  [attr.alt]="description"
+/>
 ```
 
 ---
@@ -1418,26 +1440,34 @@ accepted.
 
 ```html
 <!-- ❌ error -->
-<html><body></body></html>
+<html>
+  <body></body>
+</html>
 
 <!-- ✅ ok -->
-<html lang="en"><body></body></html>
-<html [attr.lang]="locale()"><body></body></html>
+<html lang="en">
+  <body></body>
+</html>
+<html [attr.lang]="locale()">
+  <body></body>
+</html>
 ```
 
 ---
 
 ## require-li-container
 
-Requires `<li>` elements to appear inside `<ul>`, `<ol>`, or `<menu>`. This prevents structurally invalid list markup
-in Angular templates.
+Requires `<li>` elements to appear inside `<ul>`, `<ol>`, or `<menu>`. This prevents structurally invalid list markup in
+Angular templates.
 
 ```html
 <!-- ❌ error -->
 <div><li>Item</li></div>
 
 <!-- ✅ ok -->
-<ul><li>Item</li></ul>
+<ul>
+  <li>Item</li>
+</ul>
 ```
 
 ---
@@ -1449,11 +1479,24 @@ content.
 
 ```html
 <!-- ❌ error -->
-<html lang="en"><head></head><body></body></html>
+<html lang="en">
+  <head></head>
+  <body></body>
+</html>
 
 <!-- ✅ ok -->
-<html lang="en"><head><title>Page</title></head><body></body></html>
-<html lang="en"><head><title>{{ pageTitle }}</title></head><body></body></html>
+<html lang="en">
+  <head>
+    <title>Page</title>
+  </head>
+  <body></body>
+</html>
+<html lang="en">
+  <head>
+    <title>{{ pageTitle }}</title>
+  </head>
+  <body></body>
+</html>
 ```
 
 ---
