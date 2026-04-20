@@ -1,3 +1,12 @@
+### [0.478.0](https://github.com/taiga-family/toolkit/compare/v0.477.0...v0.478.0) (2026-04-20)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: improve `host-attributes-sort` (#1755)
+  [(393d138)](https://github.com/taiga-family/toolkit/commit/393d13867f457e5bf89bb58f1dd9e28fa32f7587)
+- **eslint-plugin-experience-next**: add `single-line-class-property-spacing` (#1754)
+  [(8b7ed57)](https://github.com/taiga-family/toolkit/commit/8b7ed5727f69dc9ded7211565a758264c883ce7d)
+
 ### [0.477.0](https://github.com/taiga-family/toolkit/compare/v0.476.0...v0.477.0) (2026-04-19)
 
 ### [0.476.0](https://github.com/taiga-family/toolkit/compare/v0.475.0...v0.476.0) (2026-04-19)
