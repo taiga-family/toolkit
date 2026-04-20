@@ -37,6 +37,7 @@ import preferNamespaceKeyword from './rules/prefer-namespace-keyword';
 import preferUntrackedIncidentalSignalReads from './rules/prefer-untracked-incidental-signal-reads';
 import preferUntrackedSignalGetter from './rules/prefer-untracked-signal-getter';
 import shortTuiImports from './rules/short-tui-imports';
+import singleLineClassPropertySpacing from './rules/single-line-class-property-spacing';
 import standaloneImportsSort from './rules/standalone-imports-sort';
 import strictTuiDocExample from './rules/strict-tui-doc-example';
 
@@ -86,6 +87,7 @@ const plugin = {
         'prefer-untracked-incidental-signal-reads': preferUntrackedIncidentalSignalReads,
         'prefer-untracked-signal-getter': preferUntrackedSignalGetter,
         'short-tui-imports': shortTuiImports,
+        'single-line-class-property-spacing': singleLineClassPropertySpacing,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
     },

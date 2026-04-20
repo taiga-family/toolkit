@@ -18,9 +18,8 @@ jobs:
           audit: true
 
       - run: npm run cspell -- --no-progress
+      - run: npx nx run-many --target=build
       - run: |
-          npx nx run-many --target=build
-
           if [[ "${{ env.SUPPORT_AUTO_PUSH }}" == "true" ]]; then
               npm run stylelint -- --fix
               npm run prettier -- --write

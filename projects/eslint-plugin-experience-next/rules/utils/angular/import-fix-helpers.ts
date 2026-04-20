@@ -43,12 +43,13 @@ export function buildUntrackedImportFixes(
     );
 
     if (namedSpecifiers.length > 0) {
-        return [
-            fixer.insertTextAfter(
-                namedSpecifiers[namedSpecifiers.length - 1]!,
-                ', untracked',
-            ),
-        ];
+        const lastNamedSpecifier = namedSpecifiers[namedSpecifiers.length - 1];
+
+        if (!lastNamedSpecifier) {
+            return [];
+        }
+
+        return [fixer.insertTextAfter(lastNamedSpecifier, ', untracked')];
     }
 
     const defaultImport = coreImport.specifiers.find(
@@ -96,9 +97,10 @@ export function buildImportRemovalFixes(
     // Try to remove a trailing comma
     const textAfter = importText.slice(specEnd - importStart);
     const trailingComma = /^(\s*,)/.exec(textAfter);
+    const [matchedTrailingComma] = trailingComma ?? [];
 
-    if (trailingComma) {
-        return [fixer.removeRange([specStart, specEnd + trailingComma[1]!.length])];
+    if (matchedTrailingComma) {
+        return [fixer.removeRange([specStart, specEnd + matchedTrailingComma.length])];
     }
 
     // Try to remove a leading comma (last specifier)

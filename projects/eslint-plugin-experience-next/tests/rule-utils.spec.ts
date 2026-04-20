@@ -13,6 +13,16 @@ import {
     isNodeInside,
 } from '../rules/utils/ast/ancestors';
 import {collectCallExpressions} from '../rules/utils/ast/call-expressions';
+import {
+    getLeadingIndentation,
+    getLineBreak,
+    hasBlankLine,
+    hasCommentLikeText,
+    isAccessorMember,
+    isFieldLikeMember,
+    isRelevantSpacingClassMember,
+    isSingleLineNode,
+} from '../rules/utils/ast/class-members';
 import {collectMutationTargets} from '../rules/utils/ast/mutation-targets';
 import {
     getParenthesizedInner,
@@ -265,11 +275,58 @@ describe('rule utils', () => {
             name: 'value',
             type: AST_NODE_TYPES.Identifier,
         });
-        expect(returned).not.toBeNull();
-        expect(unwrapParenthesized(returned!)).toMatchObject({
+
+        if (!returned) {
+            throw new Error('Expected a returned expression');
+        }
+
+        expect(unwrapParenthesized(returned)).toMatchObject({
             name: 'value',
             type: AST_NODE_TYPES.Identifier,
         });
+    });
+
+    it('recognizes field-like and accessor class members for spacing utilities', () => {
+        const classDeclaration = parseProgram(`
+            abstract class Test {
+                protected readonly field = 1;
+                abstract title: string;
+                get value() { return this.field; }
+                set value(next: number) { this.field = next; }
+            }
+        `).body[0];
+
+        if (classDeclaration?.type !== AST_NODE_TYPES.ClassDeclaration) {
+            throw new Error('Expected a class declaration');
+        }
+
+        const [field, abstractField, getter, setter] = classDeclaration.body.body;
+
+        if (!field || !abstractField || !getter || !setter) {
+            throw new Error('Expected class members');
+        }
+
+        expect(isFieldLikeMember(field)).toBe(true);
+        expect(isFieldLikeMember(abstractField)).toBe(true);
+        expect(isAccessorMember(getter)).toBe(true);
+        expect(isAccessorMember(setter)).toBe(true);
+        expect(isRelevantSpacingClassMember(getter)).toBe(true);
+        expect(isSingleLineNode(field)).toBe(true);
+    });
+
+    it('handles line-break and spacing helpers for class-member text gaps', () => {
+        expect(hasCommentLikeText(' /* note */ ')).toBe(true);
+        expect(hasCommentLikeText('\n    // note')).toBe(true);
+        expect(hasCommentLikeText('\n    next')).toBe(false);
+        expect(hasBlankLine('\n\n    next')).toBe(true);
+        expect(hasBlankLine('\r\n\r\n    next')).toBe(true);
+        expect(hasBlankLine('\n    next')).toBe(false);
+        expect(getLineBreak('\r\n    next')).toBe('\r\n');
+        expect(getLineBreak('\r    next')).toBe('\r');
+        expect(getLineBreak('\n    next')).toBe('\n');
+        expect(getLeadingIndentation('    value')).toBe('    ');
+        expect(getLeadingIndentation('\t\tvalue')).toBe('\t\t');
+        expect(getLeadingIndentation('value')).toBe('');
     });
 
     it('collects calls and mutation targets from generic AST helpers', () => {

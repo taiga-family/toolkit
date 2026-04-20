@@ -473,7 +473,11 @@ function buildRewrittenImports(
             groupedByTarget.set(targetSpecifier, []);
         }
 
-        groupedByTarget.get(targetSpecifier)!.push(symbolName);
+        const targetGroup = groupedByTarget.get(targetSpecifier);
+
+        if (targetGroup) {
+            targetGroup.push(symbolName);
+        }
     }
 
     const importStatements: string[] = [];

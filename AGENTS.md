@@ -2,7 +2,12 @@
 
 ## Adding a new rule
 
-Every new rule requires **all four** of the following steps. Do not skip any.
+Before adding a new ESLint rule, first verify that the desired behavior is not already covered by an existing built-in
+rule, a third-party rule already used in the repo, or an established project convention that should simply be
+documented/configured. Add a custom rule only when the existing ecosystem cannot express the required behavior precisely
+enough.
+
+Every new rule requires **all five** of the following steps. Do not skip any.
 
 ### 1. Implement the rule
 
@@ -112,6 +117,15 @@ Then add a `## <rule-name>` section below the table with:
 - After adding or changing lint rules, always run ESLint on the touched files or project before wrapping up.
 - For `eslint-plugin-experience-next`, run `nx run eslint-plugin-experience-next:build`.
 
+## Rule Performance
+
+- Write ESLint rules so they stay fast on large codebases and repeated full-project runs.
+- Prefer the narrowest possible visitors and bail out early before doing any expensive work.
+- Avoid whole-file scans, repeated `sourceCode.getText()` calls, repeated regex work on large strings, and type-aware
+  analysis unless the rule truly needs it.
+- Cache reusable derived data inside the rule when the same computation can be hit multiple times per file.
+- Keep autofix construction lazy and local to reported nodes; do not precompute large fix payloads.
+
 ## Utility Reuse
 
 - Before creating a new shared helper for `eslint-plugin-experience-next`, first check
@@ -127,3 +141,5 @@ Then add a `## <rule-name>` section below the table with:
 ## Code Style
 
 - Do not use `for (;;) {` or `while (true)` in this project. Prefer loops with explicit exit conditions.
+- Do not use non-null assertions (`!`) or other assertion-style shortcuts to silence TypeScript. Prefer explicit
+  narrowing, guards, early returns, and type-safe control flow.

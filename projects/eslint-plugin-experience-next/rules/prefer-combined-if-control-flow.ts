@@ -41,12 +41,12 @@ function getControlFlowStatement(
         return node;
     }
 
-    if (
-        node.type === AST_NODE_TYPES.BlockStatement &&
-        node.body.length === 1 &&
-        isSupportedControlFlowStatement(node.body[0]!)
-    ) {
-        return node.body[0];
+    if (node.type === AST_NODE_TYPES.BlockStatement && node.body.length === 1) {
+        const [onlyStatement] = node.body;
+
+        if (onlyStatement && isSupportedControlFlowStatement(onlyStatement)) {
+            return onlyStatement;
+        }
     }
 
     return null;
@@ -129,7 +129,11 @@ export const rule = createRule<Options, MessageId>({
             let i = 0;
 
             while (i < statements.length) {
-                const statement = statements[i]!;
+                const statement = statements[i];
+
+                if (!statement) {
+                    break;
+                }
 
                 if (statement.type !== AST_NODE_TYPES.IfStatement) {
                     i++;
@@ -147,16 +151,23 @@ export const rule = createRule<Options, MessageId>({
                 let j = i + 1;
 
                 while (j < statements.length) {
-                    const nextStatement = statements[j]!;
+                    const nextStatement = statements[j];
+
+                    if (!nextStatement) {
+                        break;
+                    }
+
+                    const previousStatement = group[group.length - 1];
 
                     if (nextStatement.type !== AST_NODE_TYPES.IfStatement) {
                         break;
                     }
 
                     if (
+                        previousStatement &&
                         !hasNonWhitespaceBetween(
                             sourceCode,
-                            group[group.length - 1]!,
+                            previousStatement,
                             nextStatement,
                         ) &&
                         sourceCode.getCommentsInside(nextStatement).length === 0 &&
@@ -176,8 +187,13 @@ export const rule = createRule<Options, MessageId>({
                             ...(index === 0
                                 ? {
                                       fix(fixer) {
-                                          const firstIf = group[0]!;
-                                          const lastIf = group[group.length - 1]!;
+                                          const [firstIf] = group;
+                                          const lastIf = group[group.length - 1];
+
+                                          if (!firstIf || !lastIf) {
+                                              return null;
+                                          }
+
                                           const condition = group
                                               .map((item) =>
                                                   renderTest(item.test, sourceCode),
