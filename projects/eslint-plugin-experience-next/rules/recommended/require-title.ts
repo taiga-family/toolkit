@@ -76,9 +76,9 @@ export const rule = createRule({
         meta: {
             docs: {description: 'Require a non-empty title element inside head'},
             messages: {
-                [MESSAGE_IDS.EMPTY_TITLE]: 'Unexpected empty text in `<title><title/>`',
+                [MESSAGE_IDS.EMPTY_TITLE]: 'Unexpected empty text in `<title></title>`',
                 [MESSAGE_IDS.MISSING_TITLE]:
-                    'Missing `<title><title/>` in the `<head><head/>`',
+                    'Missing `<title></title>` in the `<head></head>`',
             },
             schema: [],
             type: 'problem',
