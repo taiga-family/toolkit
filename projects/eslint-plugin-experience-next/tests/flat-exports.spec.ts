@@ -1,4 +1,4 @@
-import rule from '../rules/flat-exports';
+import {rule} from '../rules/taiga-specific/flat-exports';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

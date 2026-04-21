@@ -1,4 +1,4 @@
-import {rule} from '../rules/prefer-untracked-incidental-signal-reads';
+import {rule} from '../rules/recommended/prefer-untracked-incidental-signal-reads';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

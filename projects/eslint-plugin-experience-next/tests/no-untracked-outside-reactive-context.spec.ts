@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-untracked-outside-reactive-context';
+import {rule} from '../rules/recommended/no-untracked-outside-reactive-context';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

@@ -1,4 +1,4 @@
-import rule from '../rules/class-property-naming';
+import {rule} from '../rules/taiga-specific/class-property-naming';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

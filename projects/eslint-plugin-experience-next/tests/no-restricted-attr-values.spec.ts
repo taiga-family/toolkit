@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import noRestrictedAttrValues from '../rules/no-restricted-attr-values';
+import noRestrictedAttrValues from '../rules/taiga-specific/no-restricted-attr-values';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

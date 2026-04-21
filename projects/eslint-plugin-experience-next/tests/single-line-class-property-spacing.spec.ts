@@ -1,4 +1,4 @@
-import {rule} from '../rules/single-line-class-property-spacing';
+import {rule} from '../rules/recommended/single-line-class-property-spacing';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

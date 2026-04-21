@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-fully-untracked-effect';
+import {rule} from '../rules/recommended/no-fully-untracked-effect';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

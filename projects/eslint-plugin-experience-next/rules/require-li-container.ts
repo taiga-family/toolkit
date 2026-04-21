@@ -2,6 +2,7 @@ import {TmplAstElement, TmplAstTemplate} from '@angular-eslint/bundled-angular-c
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from './utils/angular/source-span';
+import {createRule} from './utils/create-rule';
 
 const MESSAGE_ID = 'invalid';
 const VALID_CONTAINERS = new Set(['menu', 'ol', 'ul']);
@@ -30,38 +31,43 @@ function getClosestParentElement(node: TmplAstElement): TmplAstElement | null {
     return null;
 }
 
-export const rule: Rule.RuleModule = {
-    create(context: Rule.RuleContext) {
-        return {
-            Element(rawNode: unknown) {
-                const node = rawNode as TmplAstElement;
+export const rule = createRule({
+    name: 'require-li-container',
+    rule: {
+        create(context: Rule.RuleContext) {
+            return {
+                Element(rawNode: unknown) {
+                    const node = rawNode as TmplAstElement;
 
-                if (node.name !== 'li') {
-                    return;
-                }
+                    if (node.name !== 'li') {
+                        return;
+                    }
 
-                const parent = getClosestParentElement(node);
+                    const parent = getClosestParentElement(node);
 
-                if (parent && VALID_CONTAINERS.has(parent.name)) {
-                    return;
-                }
+                    if (parent && VALID_CONTAINERS.has(parent.name)) {
+                        return;
+                    }
 
-                context.report({
-                    loc: sourceSpanToLoc(node.startSourceSpan),
-                    messageId: MESSAGE_ID,
-                });
-            },
-        };
-    },
-    meta: {
-        docs: {description: 'Require li elements to be placed inside ul, ol, or menu'},
-        messages: {
-            [MESSAGE_ID]:
-                'Invalid container of `<li>`. <li>` should be in `<ul>`, `<ol>` or `<menu>`.',
+                    context.report({
+                        loc: sourceSpanToLoc(node.startSourceSpan),
+                        messageId: MESSAGE_ID,
+                    });
+                },
+            };
         },
-        schema: [],
-        type: 'problem',
+        meta: {
+            docs: {
+                description: 'Require li elements to be placed inside ul, ol, or menu',
+            },
+            messages: {
+                [MESSAGE_ID]:
+                    'Invalid container of `<li>`. <li>` should be in `<ul>`, `<ol>` or `<menu>`.',
+            },
+            schema: [],
+            type: 'problem',
+        },
     },
-};
+});
 
 export default rule;

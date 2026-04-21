@@ -1,6 +1,6 @@
 import parser from '@typescript-eslint/parser';
 
-import {rule} from '../rules/no-string-literal-concat';
+import {rule} from '../rules/recommended/no-string-literal-concat';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

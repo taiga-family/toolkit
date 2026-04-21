@@ -1,6 +1,8 @@
 import angular from 'angular-eslint';
 import {type Rule} from 'eslint';
 
+import {createRule} from './utils/create-rule';
+
 const noDuplicateAttributesRule =
     angular.templatePlugin.rules?.['no-duplicate-attributes'];
 
@@ -10,6 +12,9 @@ if (!noDuplicateAttributesRule) {
     );
 }
 
-export const rule = noDuplicateAttributesRule as Rule.RuleModule;
+export const rule = createRule({
+    name: 'no-duplicate-attrs',
+    rule: noDuplicateAttributesRule as Rule.RuleModule,
+});
 
 export default rule;

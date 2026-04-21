@@ -1,4 +1,4 @@
-import {MESSAGE_ID, rule} from '../rules/short-tui-imports.ts';
+import {MESSAGE_ID, rule} from '../rules/recommended/short-tui-imports.ts';
 
 const {RuleTester} = require('@typescript-eslint/rule-tester');
 

@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-signal-reads-after-await-in-reactive-context';
+import {rule} from '../rules/recommended/no-signal-reads-after-await-in-reactive-context';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

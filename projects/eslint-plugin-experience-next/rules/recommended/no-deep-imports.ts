@@ -1,0 +1,154 @@
+import path from 'node:path';
+
+import {type TSESTree} from '@typescript-eslint/utils';
+
+import {createRule} from '../utils/create-rule';
+
+const MESSAGE_ID = 'no-deep-imports' as const;
+const ERROR_MESSAGE = 'Deep imports of Taiga UI packages are prohibited';
+
+const CODE_EXTENSIONS = new Set([
+    '.cjs',
+    '.cts',
+    '.js',
+    '.jsx',
+    '.mjs',
+    '.mts',
+    '.ts',
+    '.tsx',
+]);
+
+const DEFAULT_OPTIONS = {
+    currentProject: '',
+    deepImport: String.raw`(?<=^@taiga-ui/[\w-]+)(/.+)$`,
+    ignoreImports: [] as string[],
+    importDeclaration: '^@taiga-ui*',
+    projectName: String.raw`(?<=^@taiga-ui/)([-\w]+)`,
+};
+
+export const rule = createRule({
+    create(context) {
+        const {
+            currentProject,
+            deepImport,
+            ignoreImports,
+            importDeclaration,
+            projectName,
+        } = {...DEFAULT_OPTIONS, ...context.options[0]};
+
+        const hasNonCodeExtension = (source?: string): boolean => {
+            if (!source) {
+                return false;
+            }
+
+            const cleanSource = source.split(/[?#]/, 1)[0] ?? '';
+            const extension = path.posix.extname(cleanSource).toLowerCase();
+
+            return !!extension && !CODE_EXTENSIONS.has(extension);
+        };
+
+        const isDeepImport = (source?: string): boolean =>
+            !!source && new RegExp(deepImport, 'g').test(source);
+
+        const isSideEffectImport = (node: TSESTree.ImportDeclaration): boolean =>
+            node.specifiers.length === 0;
+
+        const isInsideTheSameEntryPoint = (source?: string): boolean => {
+            const filePath = path
+                .relative(context.cwd, context.filename)
+                .replaceAll(/\\+/g, '/');
+
+            const [currentFileProjectName] =
+                (currentProject && new RegExp(currentProject, 'g').exec(filePath)) ?? [];
+
+            const [importSourceProjectName] =
+                source?.match(new RegExp(projectName, 'g')) ?? [];
+
+            return Boolean(
+                currentFileProjectName &&
+                importSourceProjectName &&
+                currentFileProjectName === importSourceProjectName,
+            );
+        };
+
+        const shouldIgnore = (source?: string): boolean =>
+            !!source && ignoreImports.some((p) => new RegExp(p, 'g').test(source));
+
+        return {
+            [`ImportDeclaration[source.value=/${importDeclaration}/]`](
+                node?: TSESTree.ImportDeclaration,
+            ) {
+                if (!node || isSideEffectImport(node)) {
+                    return;
+                }
+
+                const importSource = node.source.value;
+
+                if (
+                    !importSource ||
+                    !isDeepImport(importSource) ||
+                    isInsideTheSameEntryPoint(importSource) ||
+                    shouldIgnore(importSource) ||
+                    hasNonCodeExtension(importSource)
+                ) {
+                    return;
+                }
+
+                context.report({
+                    fix: (fixer) => {
+                        const [start, end] = node.source.range;
+
+                        return fixer.replaceTextRange(
+                            [start + 1, end - 1],
+                            importSource.replaceAll(new RegExp(deepImport, 'g'), ''),
+                        );
+                    },
+                    messageId: MESSAGE_ID,
+                    node: node.source,
+                });
+            },
+        };
+    },
+    meta: {
+        defaultOptions: [DEFAULT_OPTIONS],
+        docs: {description: ERROR_MESSAGE},
+        fixable: 'code',
+        messages: {[MESSAGE_ID]: ERROR_MESSAGE},
+        schema: [
+            {
+                additionalProperties: false,
+                properties: {
+                    currentProject: {
+                        description:
+                            'RegExp string to pick out current project name of processed file',
+                        type: 'string',
+                    },
+                    deepImport: {
+                        description: 'RegExp string to pick out deep import part',
+                        type: 'string',
+                    },
+                    ignoreImports: {
+                        description:
+                            'RegExp string to exclude import declarations which is selected by importDeclaration-option',
+                        items: {type: 'string'},
+                        type: 'array',
+                    },
+                    importDeclaration: {
+                        description:
+                            'RegExp string to detect import declarations for which this rule should be applied',
+                        type: 'string',
+                    },
+                    projectName: {
+                        description: 'RegExp string to extract project name from import',
+                        type: 'string',
+                    },
+                },
+                type: 'object',
+            },
+        ],
+        type: 'problem',
+    },
+    name: 'no-deep-imports',
+});
+
+export default rule;

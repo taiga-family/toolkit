@@ -1,4 +1,4 @@
-import {rule} from '../rules/host-attributes-sort';
+import {rule} from '../rules/recommended/host-attributes-sort';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-infinite-loop';
+import {rule} from '../rules/recommended/no-infinite-loop';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

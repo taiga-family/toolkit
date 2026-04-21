@@ -6,6 +6,7 @@ import {
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from './utils/angular/source-span';
+import {createRule} from './utils/create-rule';
 
 const MESSAGE_IDS = {
     EMPTY_TITLE: 'empty',
@@ -20,49 +21,52 @@ function hasMeaningfulTitleContent(node: TmplAstElement): boolean {
     );
 }
 
-export const rule: Rule.RuleModule = {
-    create(context: Rule.RuleContext) {
-        return {
-            Element(rawNode: unknown) {
-                const node = rawNode as TmplAstElement;
+export const rule = createRule({
+    name: 'require-title',
+    rule: {
+        create(context: Rule.RuleContext) {
+            return {
+                Element(rawNode: unknown) {
+                    const node = rawNode as TmplAstElement;
 
-                if (node.name !== 'head') {
-                    return;
-                }
+                    if (node.name !== 'head') {
+                        return;
+                    }
 
-                const title = node.children.find(
-                    (child): child is TmplAstElement =>
-                        child instanceof TmplAstElement && child.name === 'title',
-                );
+                    const title = node.children.find(
+                        (child): child is TmplAstElement =>
+                            child instanceof TmplAstElement && child.name === 'title',
+                    );
 
-                if (!title) {
-                    context.report({
-                        loc: sourceSpanToLoc(node.startSourceSpan),
-                        messageId: MESSAGE_IDS.MISSING_TITLE,
-                    });
+                    if (!title) {
+                        context.report({
+                            loc: sourceSpanToLoc(node.startSourceSpan),
+                            messageId: MESSAGE_IDS.MISSING_TITLE,
+                        });
 
-                    return;
-                }
+                        return;
+                    }
 
-                if (!hasMeaningfulTitleContent(title)) {
-                    context.report({
-                        loc: sourceSpanToLoc(title.startSourceSpan),
-                        messageId: MESSAGE_IDS.EMPTY_TITLE,
-                    });
-                }
-            },
-        };
-    },
-    meta: {
-        docs: {description: 'Require a non-empty title element inside head'},
-        messages: {
-            [MESSAGE_IDS.EMPTY_TITLE]: 'Unexpected empty text in `<title><title/>`',
-            [MESSAGE_IDS.MISSING_TITLE]:
-                'Missing `<title><title/>` in the `<head><head/>`',
+                    if (!hasMeaningfulTitleContent(title)) {
+                        context.report({
+                            loc: sourceSpanToLoc(title.startSourceSpan),
+                            messageId: MESSAGE_IDS.EMPTY_TITLE,
+                        });
+                    }
+                },
+            };
         },
-        schema: [],
-        type: 'problem',
+        meta: {
+            docs: {description: 'Require a non-empty title element inside head'},
+            messages: {
+                [MESSAGE_IDS.EMPTY_TITLE]: 'Unexpected empty text in `<title><title/>`',
+                [MESSAGE_IDS.MISSING_TITLE]:
+                    'Missing `<title><title/>` in the `<head><head/>`',
+            },
+            schema: [],
+            type: 'problem',
+        },
     },
-};
+});
 
 export default rule;

@@ -1,4 +1,4 @@
-import {rule} from '../rules/prefer-untracked-signal-getter';
+import {rule} from '../rules/recommended/prefer-untracked-signal-getter';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
