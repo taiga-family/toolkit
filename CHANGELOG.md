@@ -1,3 +1,10 @@
+### [0.481.0](https://github.com/taiga-family/toolkit/compare/v0.480.0...v0.481.0) (2026-04-21)
+
+### 🚀 Features
+
+- add documentation URL (#1758)
+  [(9706aef)](https://github.com/taiga-family/toolkit/commit/9706aeff64253291bd1740ef3fe8b7b51b8ff0c2)
+
 ### [0.480.0](https://github.com/taiga-family/toolkit/compare/v0.479.0...v0.480.0) (2026-04-20)
 
 ### 🐞 Bug Fixes
