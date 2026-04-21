@@ -1,7 +1,7 @@
 import angular from 'angular-eslint';
 import {type Rule} from 'eslint';
 
-import {createRule} from './utils/create-rule';
+import {createRule} from '../utils/create-rule';
 
 const noDuplicateAttributesRule =
     angular.templatePlugin.rules?.['no-duplicate-attributes'];

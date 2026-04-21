@@ -1,9 +1,9 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
-import {sourceSpanToLoc} from './utils/angular/source-span';
-import {createRule} from './utils/create-rule';
-import {OBSOLETE_HTML_TAGS} from './utils/html/obsolete-tags';
+import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {createRule} from '../utils/create-rule';
+import {OBSOLETE_HTML_TAGS} from '../utils/html/obsolete-tags';
 
 const MESSAGE_ID = 'unexpected';
 

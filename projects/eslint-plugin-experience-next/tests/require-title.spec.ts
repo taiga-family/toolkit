@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import requireTitle from '../rules/require-title';
+import requireTitle from '../rules/recommended/require-title';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

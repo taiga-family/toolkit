@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import requireLiContainer from '../rules/require-li-container';
+import requireLiContainer from '../rules/recommended/require-li-container';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

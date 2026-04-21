@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import noObsoleteTags from '../rules/no-obsolete-tags';
+import noObsoleteTags from '../rules/recommended/no-obsolete-tags';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

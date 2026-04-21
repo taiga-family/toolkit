@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import noObsoleteAttrs from '../rules/no-obsolete-attrs';
+import noObsoleteAttrs from '../rules/recommended/no-obsolete-attrs';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

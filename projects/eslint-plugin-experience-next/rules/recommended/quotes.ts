@@ -6,9 +6,9 @@ import {
 } from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
-import {getAttributeValueSpan} from './utils/angular/element-attributes';
-import {sourceSpanToLoc} from './utils/angular/source-span';
-import {createRule} from './utils/create-rule';
+import {getAttributeValueSpan} from '../utils/angular/element-attributes';
+import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {createRule} from '../utils/create-rule';
 
 const MESSAGE_IDS = {
     MISSING: 'missing',

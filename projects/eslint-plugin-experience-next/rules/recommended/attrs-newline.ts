@@ -1,9 +1,9 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
-import {getElementAttributeLikes} from './utils/angular/element-attributes';
-import {sourceSpanToLoc} from './utils/angular/source-span';
-import {createRule} from './utils/create-rule';
+import {getElementAttributeLikes} from '../utils/angular/element-attributes';
+import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {createRule} from '../utils/create-rule';
 
 const MESSAGE_IDS = {
     CLOSE_STYLE_WRONG: 'closeStyleWrong',
