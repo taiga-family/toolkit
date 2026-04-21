@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import rule from '../rules/no-href-with-router-link';
+import {rule} from '../rules/recommended/no-href-with-router-link';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

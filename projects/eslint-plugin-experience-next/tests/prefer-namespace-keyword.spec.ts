@@ -1,4 +1,4 @@
-import {rule} from '../rules/prefer-namespace-keyword';
+import {rule} from '../rules/recommended/prefer-namespace-keyword';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

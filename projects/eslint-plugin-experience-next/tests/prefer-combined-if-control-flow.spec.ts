@@ -1,4 +1,4 @@
-import {rule} from '../rules/prefer-combined-if-control-flow';
+import {rule} from '../rules/recommended/prefer-combined-if-control-flow';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

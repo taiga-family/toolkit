@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import rule from '../rules/no-project-as-in-ng-template';
+import {rule} from '../rules/recommended/no-project-as-in-ng-template';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

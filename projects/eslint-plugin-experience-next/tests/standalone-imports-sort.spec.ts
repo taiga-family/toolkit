@@ -1,4 +1,4 @@
-import rule from '../rules/standalone-imports-sort';
+import {rule} from '../rules/recommended/standalone-imports-sort';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

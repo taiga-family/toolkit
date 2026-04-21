@@ -1,4 +1,4 @@
-import rule from '../rules/decorator-key-sort';
+import {rule} from '../rules/recommended/decorator-key-sort';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

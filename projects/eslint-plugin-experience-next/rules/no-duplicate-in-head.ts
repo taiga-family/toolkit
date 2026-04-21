@@ -5,6 +5,7 @@ import {
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from './utils/angular/source-span';
+import {createRule} from './utils/create-rule';
 
 const MESSAGE_ID = 'duplicateTag';
 
@@ -41,63 +42,68 @@ function getTrackingKey(node: TmplAstElement): string | null {
     return null;
 }
 
-export const rule: Rule.RuleModule = {
-    create(context: Rule.RuleContext) {
-        const nodes = new Map<string, TmplAstElement[]>();
-        let headDepth = 0;
+export const rule = createRule({
+    name: 'no-duplicate-in-head',
+    rule: {
+        create(context: Rule.RuleContext) {
+            const nodes = new Map<string, TmplAstElement[]>();
+            let headDepth = 0;
 
-        return {
-            Element(rawNode: unknown) {
-                const node = rawNode as TmplAstElement;
+            return {
+                Element(rawNode: unknown) {
+                    const node = rawNode as TmplAstElement;
 
-                if (node.name === 'head') {
-                    headDepth++;
+                    if (node.name === 'head') {
+                        headDepth++;
 
-                    return;
-                }
-
-                if (headDepth === 0) {
-                    return;
-                }
-
-                const trackingKey = getTrackingKey(node);
-
-                if (!trackingKey) {
-                    return;
-                }
-
-                nodes.set(trackingKey, [...(nodes.get(trackingKey) ?? []), node]);
-            },
-            'Element:exit'(rawNode: unknown) {
-                const node = rawNode as TmplAstElement;
-
-                if (node.name === 'head') {
-                    headDepth--;
-                }
-            },
-            'Program:exit'() {
-                for (const [tag, duplicates] of nodes) {
-                    if (duplicates.length <= 1) {
-                        continue;
+                        return;
                     }
 
-                    for (const duplicate of duplicates.slice(1)) {
-                        context.report({
-                            data: {tag},
-                            loc: sourceSpanToLoc(duplicate.startSourceSpan),
-                            messageId: MESSAGE_ID,
-                        });
+                    if (headDepth === 0) {
+                        return;
                     }
-                }
+
+                    const trackingKey = getTrackingKey(node);
+
+                    if (!trackingKey) {
+                        return;
+                    }
+
+                    nodes.set(trackingKey, [...(nodes.get(trackingKey) ?? []), node]);
+                },
+                'Element:exit'(rawNode: unknown) {
+                    const node = rawNode as TmplAstElement;
+
+                    if (node.name === 'head') {
+                        headDepth--;
+                    }
+                },
+                'Program:exit'() {
+                    for (const [tag, duplicates] of nodes) {
+                        if (duplicates.length <= 1) {
+                            continue;
+                        }
+
+                        for (const duplicate of duplicates.slice(1)) {
+                            context.report({
+                                data: {tag},
+                                loc: sourceSpanToLoc(duplicate.startSourceSpan),
+                                messageId: MESSAGE_ID,
+                            });
+                        }
+                    }
+                },
+            };
+        },
+        meta: {
+            docs: {
+                description: 'Disallow duplicate title/base/meta/link tags inside head',
             },
-        };
+            messages: {[MESSAGE_ID]: 'Duplicate <{{tag}}> tag in <head>.'},
+            schema: [],
+            type: 'problem',
+        },
     },
-    meta: {
-        docs: {description: 'Disallow duplicate title/base/meta/link tags inside head'},
-        messages: {[MESSAGE_ID]: 'Duplicate <{{tag}}> tag in <head>.'},
-        schema: [],
-        type: 'problem',
-    },
-};
+});
 
 export default rule;

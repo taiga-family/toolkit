@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-useless-untracked';
+import {rule} from '../rules/recommended/no-useless-untracked';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

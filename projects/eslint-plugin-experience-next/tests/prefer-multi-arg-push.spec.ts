@@ -1,4 +1,4 @@
-import {rule} from '../rules/prefer-multi-arg-push';
+import {rule} from '../rules/recommended/prefer-multi-arg-push';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

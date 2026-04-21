@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-commonjs-import-patterns';
+import {rule} from '../rules/recommended/no-commonjs-import-patterns';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

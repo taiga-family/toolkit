@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-redundant-type-annotation';
+import {rule} from '../rules/recommended/no-redundant-type-annotation';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 

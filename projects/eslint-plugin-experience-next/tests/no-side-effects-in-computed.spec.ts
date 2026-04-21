@@ -1,4 +1,4 @@
-import {rule} from '../rules/no-side-effects-in-computed';
+import {rule} from '../rules/recommended/no-side-effects-in-computed';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
