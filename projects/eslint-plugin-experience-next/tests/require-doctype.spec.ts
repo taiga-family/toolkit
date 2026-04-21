@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import requireDoctype from '../rules/require-doctype';
+import requireDoctype from '../rules/recommended/require-doctype';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

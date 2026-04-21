@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import requireLang from '../rules/require-lang';
+import requireLang from '../rules/recommended/require-lang';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

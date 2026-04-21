@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import attrsNewline from '../rules/attrs-newline';
+import attrsNewline from '../rules/recommended/attrs-newline';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

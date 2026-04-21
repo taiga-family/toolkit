@@ -5,9 +5,9 @@ import {
 } from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
-import {sourceSpanToLoc} from './utils/angular/source-span';
-import {createRule} from './utils/create-rule';
-import {INLINE_HTML_ELEMENTS} from './utils/html/inline-elements';
+import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {createRule} from '../utils/create-rule';
+import {INLINE_HTML_ELEMENTS} from '../utils/html/inline-elements';
 
 const MESSAGE_ID = 'expectAfter';
 const SKIP_CHILDREN = new Set(['code', 'pre']);

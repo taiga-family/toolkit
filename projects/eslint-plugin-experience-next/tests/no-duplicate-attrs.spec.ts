@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import noDuplicateAttrs from '../rules/no-duplicate-attrs';
+import noDuplicateAttrs from '../rules/recommended/no-duplicate-attrs';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

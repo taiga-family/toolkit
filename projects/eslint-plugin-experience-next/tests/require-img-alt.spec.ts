@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import requireImgAlt from '../rules/require-img-alt';
+import requireImgAlt from '../rules/recommended/require-img-alt';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

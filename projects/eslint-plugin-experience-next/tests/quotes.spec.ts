@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import quotes from '../rules/quotes';
+import quotes from '../rules/recommended/quotes';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},

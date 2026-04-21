@@ -1,6 +1,6 @@
 import {RuleTester} from 'eslint';
 
-import noDuplicateId from '../rules/no-duplicate-id';
+import noDuplicateId from '../rules/recommended/no-duplicate-id';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},
