@@ -1,8 +1,4 @@
-import {
-    TmplAstBoundText,
-    TmplAstElement,
-    TmplAstText,
-} from '@angular-eslint/bundled-angular-compiler';
+import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from './utils/angular/source-span';
@@ -14,42 +10,63 @@ const MESSAGE_IDS = {
 } as const;
 
 function hasMeaningfulTitleContent(node: TmplAstElement): boolean {
-    return node.children.some(
-        (child) =>
-            child instanceof TmplAstBoundText ||
-            (child instanceof TmplAstText && child.value.trim().length > 0),
-    );
+    return node.children.some((child) => {
+        if (!('value' in child)) {
+            return false;
+        }
+
+        const {value} = child as Record<'value', unknown>;
+
+        return (
+            typeof value === 'object' ||
+            (typeof value === 'string' && value.trim().length > 0)
+        );
+    });
 }
 
 export const rule = createRule({
     name: 'require-title',
     rule: {
         create(context: Rule.RuleContext) {
+            let headNode: TmplAstElement | undefined;
+            let headDepth = 0;
+            let titleNode: TmplAstElement | undefined;
+
             return {
                 Element(rawNode: unknown) {
                     const node = rawNode as TmplAstElement;
 
-                    if (node.name !== 'head') {
+                    if (node.name === 'head') {
+                        headNode = node;
+                        headDepth++;
+                    } else if (headDepth > 0 && node.name === 'title') {
+                        titleNode = node;
+                    }
+                },
+                'Element:exit'(rawNode: unknown) {
+                    const node = rawNode as TmplAstElement;
+
+                    if (node.name === 'head') {
+                        headDepth--;
+                    }
+                },
+                'Program:exit'() {
+                    if (!headNode) {
                         return;
                     }
 
-                    const title = node.children.find(
-                        (child): child is TmplAstElement =>
-                            child instanceof TmplAstElement && child.name === 'title',
-                    );
-
-                    if (!title) {
+                    if (!titleNode) {
                         context.report({
-                            loc: sourceSpanToLoc(node.startSourceSpan),
+                            loc: sourceSpanToLoc(headNode.startSourceSpan),
                             messageId: MESSAGE_IDS.MISSING_TITLE,
                         });
 
                         return;
                     }
 
-                    if (!hasMeaningfulTitleContent(title)) {
+                    if (!hasMeaningfulTitleContent(titleNode)) {
                         context.report({
-                            loc: sourceSpanToLoc(title.startSourceSpan),
+                            loc: sourceSpanToLoc(titleNode.startSourceSpan),
                             messageId: MESSAGE_IDS.EMPTY_TITLE,
                         });
                     }

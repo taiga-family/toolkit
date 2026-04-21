@@ -143,3 +143,6 @@ Then add a `## <rule-name>` section below the table with:
 - Do not use `for (;;) {` or `while (true)` in this project. Prefer loops with explicit exit conditions.
 - Do not use non-null assertions (`!`) or other assertion-style shortcuts to silence TypeScript. Prefer explicit
   narrowing, guards, early returns, and type-safe control flow.
+- Never use `any`. This applies even when duck-typing AST nodes or working around `instanceof` failures caused by
+  bundled module copies. Use `unknown` and narrow with `'key' in child` guards, then cast to `Record<'key', unknown>` to
+  access the property safely.
