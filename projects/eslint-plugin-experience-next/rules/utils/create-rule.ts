@@ -8,10 +8,10 @@ const ruleCreator = ESLintUtils.RuleCreator(
     (name: string) => `${RULE_DOCS_BASE_URL}/${name}.md`,
 );
 
-export function createRule<Options extends readonly unknown[]>(options: {
+export function createRule(options: {
     name: string;
     rule: Rule.RuleModule;
-}): TSESLint.RuleModule<string, Options> & {name: string};
+}): Rule.RuleModule & {name: string};
 export function createRule<Options extends readonly unknown[], MessageIds extends string>(
     options: Parameters<typeof ruleCreator<Options, MessageIds>>[0],
 ): ReturnType<typeof ruleCreator<Options, MessageIds>>;
