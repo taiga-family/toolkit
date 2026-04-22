@@ -24,7 +24,7 @@ export function getTypeAwareRuleContext<
         checker: parserServices.program.getTypeChecker(),
         esTreeNodeToTSNodeMap: parserServices.esTreeNodeToTSNodeMap,
         parserServices,
-        program: sourceCode.ast as TSESTree.Program,
+        program: sourceCode.ast,
         sourceCode,
         tsNodeToESTreeNodeMap: parserServices.tsNodeToESTreeNodeMap,
         tsProgram: parserServices.program,
