@@ -255,7 +255,7 @@ function getHostAttributeProperties(
 
         const name = getStaticPropertyName(property.key);
 
-        if (name === null) {
+        if (name == null) {
             return null;
         }
 

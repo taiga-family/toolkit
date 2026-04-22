@@ -201,7 +201,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                               const untrackedLocalName = findUntrackedAlias(program);
 
                               const stillUsed =
-                                  untrackedLocalName !== null &&
+                                  untrackedLocalName != null &&
                                   isUntrackedUsedElsewhere(untrackedLocalName, node);
 
                               if (!stillUsed) {

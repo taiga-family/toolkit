@@ -92,7 +92,7 @@ function prependTokenName(text: string, name: string): string {
 function isNgDevModeVisible(sourceCode: SourceCode, node: TSESTree.Node): boolean {
     for (
         let scope: ReturnType<SourceCode['getScope']> | null = sourceCode.getScope(node);
-        scope !== null;
+        scope != null;
         scope = scope.upper
     ) {
         if (scope.variables.some((variable) => variable.name === NG_DEV_MODE)) {

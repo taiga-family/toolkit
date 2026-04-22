@@ -15,9 +15,7 @@ function getOrderedChildren(node: TSESTree.Node): readonly TSESTree.Node[] {
             node.body,
         ];
 
-        return children.filter(
-            (child): child is TSESTree.Node => child !== undefined && child !== null,
-        );
+        return children.filter((child): child is TSESTree.Node => child != null);
     }
 
     if (
@@ -53,7 +51,7 @@ function getOrderedChildren(node: TSESTree.Node): readonly TSESTree.Node[] {
             node.body,
         ];
 
-        return children.filter((child): child is TSESTree.Node => child !== null);
+        return children.filter((child): child is TSESTree.Node => child != null);
     }
 
     if (
