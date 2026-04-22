@@ -1,4 +1,4 @@
-import {TmplAstElement, TmplAstTemplate} from '@angular-eslint/bundled-angular-compiler';
+import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from '../utils/angular/source-span';
@@ -7,25 +7,29 @@ import {createRule} from '../utils/create-rule';
 const MESSAGE_ID = 'invalid';
 const VALID_CONTAINERS = new Set(['menu', 'ol', 'ul']);
 
-interface ParentNode {
-    parent?: ParentNode;
+/**
+ * Duck-type check for TmplAstElement — avoids instanceof which breaks when
+ * the plugin's bundled-angular-compiler differs from the one used by the
+ * template parser (e.g. when the plugin is consumed from a different project).
+ */
+function isElement(node: unknown): node is TmplAstElement {
+    return (
+        typeof node === 'object' &&
+        node !== null &&
+        typeof (node as Record<string, unknown>)['name'] === 'string' &&
+        Array.isArray((node as Record<string, unknown>)['children'])
+    );
 }
 
 function getClosestParentElement(node: TmplAstElement): TmplAstElement | null {
-    let parent = (node as ParentNode & TmplAstElement).parent;
+    let current = (node as unknown as Record<string, unknown>)['parent'];
 
-    while (parent) {
-        if (parent instanceof TmplAstElement) {
-            return parent;
+    while (current !== null && current !== undefined) {
+        if (isElement(current)) {
+            return current;
         }
 
-        if (parent instanceof TmplAstTemplate) {
-            parent = parent.parent;
-
-            continue;
-        }
-
-        break;
+        current = (current as Record<string, unknown>)['parent'];
     }
 
     return null;

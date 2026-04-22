@@ -838,6 +838,7 @@ export default defineConfig([
         extends: [playwright.configs['flat/recommended']],
         rules: {
             '@taiga-ui/experience-next/no-playwright-empty-fill': 'error',
+            '@taiga-ui/experience-next/no-restricted-attr-values': 'off',
             'compat/compat': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/consistent-spacing-between-blocks': 'error',
@@ -876,6 +877,7 @@ export default defineConfig([
         files: ['**/*.spec.ts'],
         extends: [jest.configs['flat/recommended']],
         rules: {
+            '@taiga-ui/experience-next/no-restricted-attr-values': 'off',
             '@typescript-eslint/no-extraneous-class': 'off',
             'compat/compat': 'off',
             'jest/expect-expect': 'off',
@@ -965,6 +967,7 @@ export default defineConfig([
         files: ['**/*.cy.ts'],
         plugins: {cypress},
         rules: {
+            '@taiga-ui/experience-next/no-restricted-attr-values': 'off',
             'compat/compat': 'off',
             'cypress/no-unnecessary-waiting': 'off',
             'cypress/unsafe-to-chain-command': 'off',

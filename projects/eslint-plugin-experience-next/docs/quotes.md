@@ -7,14 +7,9 @@ missing quotes when the attribute value is currently unquoted.
 
 ```html
 <!-- ❌ error -->
-<div
-  class="foo"
-  title="bar"
-></div>
+<div id="foo"></div>
 
 <!-- ✅ after autofix -->
-<div
-  class="foo"
-  title="bar"
-></div>
+<div id="foo"></div>
+<div id='containing "double" quotes'></div>
 ```

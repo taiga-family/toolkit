@@ -15,7 +15,17 @@ ruleTester.run('require-li-container', requireLiContainer, {
     ],
     valid: [
         {code: /* HTML */ '<ul><li>Item</li></ul>'},
+        {code: /* HTML */ '<ol><li>Item</li></ol>'},
         {code: /* HTML */ '<menu><li>Item</li></menu>'},
         {code: /* HTML */ '<ul><li *ngFor="let item of items">{{ item }}</li></ul>'},
+        {code: /* HTML */ '<ol><li *ngFor="let item of items">{{ item }}</li></ol>'},
+        {
+            code: /* HTML */ '<ul>@for (item of items; track item) {<li>{{ item }}</li>}</ul>',
+        },
+        {
+            code: /* HTML */ '<ol>@for (item of items; track item) {<li>{{ item }}</li>}</ol>',
+        },
+        {code: /* HTML */ '<ul>@if (show) {<li>Item</li>}</ul>'},
+        {code: /* HTML */ '<ul>@if (show) {<li>A</li>} @else {<li>B</li>}</ul>'},
     ],
 });
