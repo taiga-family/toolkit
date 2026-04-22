@@ -108,9 +108,7 @@ export const rule = createRule<Options, MessageIds>({
             property: TSESTree.ObjectLiteralElement,
         ): string => {
             if (property.type === AST_NODE_TYPES.SpreadElement) {
-                return renderSpreadOneLine(
-                    property.argument as unknown as TSESTree.Expression,
-                );
+                return renderSpreadOneLine(property.argument);
             }
 
             if (

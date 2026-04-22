@@ -60,7 +60,7 @@ function getOrderedChildren(node: TSESTree.Node): readonly TSESTree.Node[] {
         node.type === AST_NODE_TYPES.ForInStatement ||
         node.type === AST_NODE_TYPES.ForOfStatement
     ) {
-        return [node.left as unknown as TSESTree.Node, node.right, node.body];
+        return [node.left, node.right, node.body];
     }
 
     const children: TSESTree.Node[] = [];

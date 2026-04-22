@@ -14,22 +14,22 @@ export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expr
 
         switch (current.type) {
             case AST_NODE_TYPES.ChainExpression:
-                current = current.expression as unknown as TSESTree.Expression;
+                current = current.expression;
                 didUnwrap = true;
                 break;
 
             case AST_NODE_TYPES.TSAsExpression:
-                current = current.expression as unknown as TSESTree.Expression;
+                current = current.expression;
                 didUnwrap = true;
                 break;
 
             case AST_NODE_TYPES.TSNonNullExpression:
-                current = current.expression as unknown as TSESTree.Expression;
+                current = current.expression;
                 didUnwrap = true;
                 break;
 
             case AST_NODE_TYPES.TSTypeAssertion:
-                current = current.expression as unknown as TSESTree.Expression;
+                current = current.expression;
                 didUnwrap = true;
                 break;
 

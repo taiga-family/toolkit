@@ -20,10 +20,7 @@ function collectParts(node: TSESTree.Node): TSESTree.Node[] {
 function isRootConcat(node: TSESTree.BinaryExpression): boolean {
     const {parent} = node;
 
-    return (
-        parent.type !== AST_NODE_TYPES.BinaryExpression ||
-        (parent as TSESTree.BinaryExpression).operator !== '+'
-    );
+    return parent.type !== AST_NODE_TYPES.BinaryExpression || parent.operator !== '+';
 }
 
 function isStringType(type: ts.Type, checker: ts.TypeChecker): boolean {

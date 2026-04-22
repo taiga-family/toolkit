@@ -27,7 +27,6 @@
     ],
     "type": "module",
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "8.58.1",
         "glob": "13.0.6"
     },
     "peerDependencies": {
@@ -36,7 +35,6 @@
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/glob": "*",
-        "@typescript-eslint/eslint-plugin": "^8.58.1",
         "angular-eslint": "^20.7.0",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.7",
@@ -59,7 +57,7 @@
         "eslint-plugin-unused-imports": "^4.4.1",
         "glob": "*",
         "globals": "^17.5.0",
-        "typescript-eslint": "^8.58.1"
+        "typescript-eslint": "^8.59.0"
     },
     "publishConfig": {
         "access": "public"
