@@ -1,3 +1,10 @@
+### [0.484.0](https://github.com/taiga-family/toolkit/compare/v0.483.0...v0.484.0) (2026-04-22)
+
+### 🚀 Features
+
+- bump ts lint (#1763)
+  [(7920613)](https://github.com/taiga-family/toolkit/commit/7920613f4048851dce51b25ca6456bab49819acc)
+
 ### [0.483.0](https://github.com/taiga-family/toolkit/compare/v0.482.0...v0.483.0) (2026-04-21)
 
 ### [0.482.0](https://github.com/taiga-family/toolkit/compare/v0.481.0...v0.482.0) (2026-04-21)
