@@ -46,21 +46,51 @@ export const rule = createRule({
                             continue;
                         }
 
-                        const rawValue = sourceText.slice(
-                            valueSpan.start.offset,
-                            valueSpan.end.offset,
-                        );
+                        let openQuoteOffset = valueSpan.start.offset - 1;
+
+                        while (
+                            openQuoteOffset >= 0 &&
+                            (sourceText[openQuoteOffset] === ' ' ||
+                                sourceText[openQuoteOffset] === '\n' ||
+                                sourceText[openQuoteOffset] === '\r' ||
+                                sourceText[openQuoteOffset] === '\t')
+                        ) {
+                            openQuoteOffset--;
+                        }
+
+                        const openingQuote = sourceText[openQuoteOffset];
+                        const isQuotedAttribute =
+                            openingQuote === SINGLE_QUOTE ||
+                            openingQuote === DOUBLE_QUOTE;
+
+                        let closeQuoteOffset = valueSpan.end.offset;
+
+                        if (isQuotedAttribute) {
+                            while (
+                                closeQuoteOffset < sourceText.length &&
+                                (sourceText[closeQuoteOffset] === ' ' ||
+                                    sourceText[closeQuoteOffset] === '\n' ||
+                                    sourceText[closeQuoteOffset] === '\r' ||
+                                    sourceText[closeQuoteOffset] === '\t')
+                            ) {
+                                closeQuoteOffset++;
+                            }
+                        }
+
+                        const closingQuote = sourceText[closeQuoteOffset];
+                        const hasMatchingQuotes =
+                            isQuotedAttribute && openingQuote === closingQuote;
+
+                        const rawValue = hasMatchingQuotes
+                            ? sourceText.slice(openQuoteOffset + 1, closeQuoteOffset)
+                            : sourceText.slice(
+                                  valueSpan.start.offset,
+                                  valueSpan.end.offset,
+                              );
 
                         if (rawValue.includes(EXPECTED_QUOTE)) {
                             continue;
                         }
-
-                        const openingQuote = sourceText[valueSpan.start.offset - 1];
-                        const closingQuote = sourceText[valueSpan.end.offset];
-                        const hasMatchingQuotes =
-                            (openingQuote === SINGLE_QUOTE ||
-                                openingQuote === DOUBLE_QUOTE) &&
-                            openingQuote === closingQuote;
 
                         if (hasMatchingQuotes && openingQuote !== EXPECTED_QUOTE) {
                             context.report({
@@ -70,10 +100,7 @@ export const rule = createRule({
                                 },
                                 fix: (fixer) =>
                                     fixer.replaceTextRange(
-                                        [
-                                            valueSpan.start.offset - 1,
-                                            valueSpan.end.offset + 1,
-                                        ],
+                                        [openQuoteOffset, closeQuoteOffset + 1],
                                         `${EXPECTED_QUOTE}${rawValue}${EXPECTED_QUOTE}`,
                                     ),
                                 loc: sourceSpanToLoc(attr.sourceSpan),

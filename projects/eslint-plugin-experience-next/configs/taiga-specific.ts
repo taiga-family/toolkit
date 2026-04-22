@@ -47,7 +47,7 @@ export default defineConfig([
         },
     },
     {
-        files: ['**/demo/**/*.html', '**/*.spec.ts', '**/*.cy.ts'],
+        files: ['**/demo/**/*.html'],
         rules: {'@taiga-ui/experience-next/no-restricted-attr-values': 'off'},
     },
     {
