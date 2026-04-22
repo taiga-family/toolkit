@@ -35,7 +35,7 @@ export const rule = createRule({
             const key = `${containingDir}\0${moduleSpecifier}`;
             const cachedFile = cache.get(key);
 
-            if (cachedFile !== undefined) {
+            if (cachedFile != null) {
                 return cachedFile;
             }
 
@@ -60,7 +60,7 @@ export const rule = createRule({
             const key = `${startDirectory}\0${fileName}`;
             const cachedPath = nearestFileUpCache.get(key);
 
-            if (cachedPath !== undefined) {
+            if (cachedPath != null) {
                 return cachedPath;
             }
 
@@ -94,7 +94,7 @@ export const rule = createRule({
         ): string | null {
             const cachedMarker = markerCache.get(resolvedRootFilePath);
 
-            if (cachedMarker !== undefined) {
+            if (cachedMarker != null) {
                 return cachedMarker;
             }
 
@@ -118,7 +118,7 @@ export const rule = createRule({
         function pickIndexFileInDirectoryCached(packageDirectory: string): string | null {
             const cachedIndexFile = indexFileCache.get(packageDirectory);
 
-            if (cachedIndexFile !== undefined) {
+            if (cachedIndexFile != null) {
                 return cachedIndexFile;
             }
 
