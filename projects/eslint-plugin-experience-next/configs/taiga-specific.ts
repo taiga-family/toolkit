@@ -11,29 +11,37 @@ import {
 const allPackageJSONs = globSync('**/package.json', {
     ignore: ['**/node_modules/**', '**/dist/**'],
 }).filter((path) => !readJSON(path).private);
-const packageNames = allPackageJSONs.map((path) => readJSON(path).name).filter(Boolean);
 
-const packageSourceGlobs = allPackageJSONs.map((p) =>
-    p.replaceAll(/\\+/g, '/').replace('package.json', '**/*.ts'),
-);
+function pattern(type: string): string[] {
+    return allPackageJSONs.map((p) =>
+        p.replaceAll(/\\+/g, '/').replace('package.json', type),
+    );
+}
 
 export default defineConfig([
     {
-        files: packageSourceGlobs,
+        files: pattern('**/*.ts'),
         ignores: ['**/*.spec.ts', '**/*.cy.ts'],
         rules: {
             '@taiga-ui/experience-next/no-deep-imports': 'off',
             '@taiga-ui/experience-next/prefer-deep-imports': [
                 'error',
                 {
-                    importFilter: packageNames,
+                    importFilter: allPackageJSONs
+                        .map((path) => readJSON(path).name)
+                        .filter(Boolean),
                     strict: !!process.env.CI,
                 },
             ],
         },
     },
     {
-        files: ['**/*.html'],
+        files: pattern('**/*.html'),
+        ignores: [
+            // Angular ESLint virtual files for inline templates in spec/cy files
+            '**/*.spec.ts/**/*.html',
+            '**/*.cy.ts/**/*.html',
+        ],
         rules: {
             '@taiga-ui/experience-next/no-restricted-attr-values': [
                 'error',
@@ -45,10 +53,6 @@ export default defineConfig([
                 },
             ],
         },
-    },
-    {
-        files: ['**/demo/**/*.html'],
-        rules: {'@taiga-ui/experience-next/no-restricted-attr-values': 'off'},
     },
     {
         files: ['**/*.ts'],
