@@ -9,8 +9,8 @@ the branches read the signal again to use or narrow the type. The autofix extrac
 variable declared immediately before the containing statement, and replaces every occurrence — including any `as Type`
 casts — with the variable.
 
-Non-nullable signals (`Signal<T>` where `T` excludes `null` and `undefined`) are intentionally ignored: repeating
-them in a conditional is always safe and does not involve type-narrowing.
+Non-nullable signals (`Signal<T>` where `T` excludes `null` and `undefined`) are intentionally ignored: repeating them
+in a conditional is always safe and does not involve type-narrowing.
 
 ```ts
 // ❌ error — height is Signal<number | null>
@@ -33,21 +33,23 @@ protected get hostHeight(): number | string | null {
 ```ts
 // ❌ error — value is Signal<string | null>
 if (value()) {
-    process(value() as string);
+  process(value() as string);
 }
 
 // ✅ after autofix
 const valueVal = value();
 
 if (valueVal) {
-    process(valueVal);
+  process(valueVal);
 }
 ```
 
 ```ts
 // ✅ not changed — flag is Signal<boolean> (non-nullable)
 const r = flag() ? on() : flag();
-if (flag()) { doSomething(flag()); }
+if (flag()) {
+  doSomething(flag());
+}
 ```
 
 ```ts
