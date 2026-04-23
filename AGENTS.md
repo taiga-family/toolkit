@@ -13,6 +13,10 @@ Every new rule requires **all five** of the following steps. Do not skip any.
 
 Create `rules/<rule-name>.ts`. Export a named `rule` and a default export.
 
+**Naming convention**: the file name (kebab-case) and every `messageId` (camelCase) must correspond directly.
+`no-repeated-signal-in-conditional.ts` → `noRepeatedSignalInConditional`. If a rule has multiple message IDs,
+prefix each with the camelCase rule name (e.g. `noRepeatedSignalInConditionalFix`).
+
 ```ts
 import {ESLintUtils} from '@typescript-eslint/utils';
 
