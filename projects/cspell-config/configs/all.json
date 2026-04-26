@@ -716,6 +716,7 @@
         "bottommargin",
         "bordercolor",
         "bgcolor",
-        "sameline"
+        "sameline",
+        "Tarjan"
     ]
 }
