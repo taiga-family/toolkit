@@ -64,6 +64,9 @@ export default defineConfig([
             '**.git/**',
             '**/.idea/**',
             '**/LICENSE',
+            '**/llms-full.html',
+            '**/import-map.md',
+            '**/sitemap.xml',
         ],
     },
     {
