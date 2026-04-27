@@ -1,3 +1,5 @@
+### [0.488.0](https://github.com/taiga-family/toolkit/compare/v0.487.0...v0.488.0) (2026-04-26)
+
 ### [0.487.0](https://github.com/taiga-family/toolkit/compare/v0.486.0...v0.487.0) (2026-04-26)
 
 ### [0.486.0](https://github.com/taiga-family/toolkit/compare/v0.485.0...v0.486.0) (2026-04-23)
