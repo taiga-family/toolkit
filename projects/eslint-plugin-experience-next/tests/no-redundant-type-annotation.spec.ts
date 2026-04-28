@@ -193,6 +193,20 @@ ruleTester.run('no-redundant-type-annotation', rule, {
             `,
         },
         {
+            // Array of tuples: removing the annotation widens [number, number][]
+            // to number[][], so the annotation must be preserved.
+            code: /* TypeScript */ `
+                const cases: [number, number][] = [
+                    [0, 0],
+                    [0, 25],
+                    [0, 50],
+                    [25, 50],
+                    [50, 75],
+                    [50, 100],
+                ];
+            `,
+        },
+        {
             code: /* TypeScript */ `
                 type SelectionRange = readonly [from: number, to: number];
                 interface ElementState {
