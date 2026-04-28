@@ -1,3 +1,10 @@
+### [0.489.0](https://github.com/taiga-family/toolkit/compare/v0.488.0...v0.489.0) (2026-04-28)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression `no-redundant-type-annotation` (#1778)
+  [(728fea8)](https://github.com/taiga-family/toolkit/commit/728fea88ab6616327512b4c285f10c9b7c191eca)
+
 ### [0.488.0](https://github.com/taiga-family/toolkit/compare/v0.487.0...v0.488.0) (2026-04-26)
 
 ### [0.487.0](https://github.com/taiga-family/toolkit/compare/v0.486.0...v0.487.0) (2026-04-26)
