@@ -20,6 +20,14 @@ function collectArrayExpressions(node: TSESTree.Node): TSESTree.ArrayExpression[
     }
 
     switch (node.type) {
+        case AST_NODE_TYPES.ArrayExpression:
+            for (const element of node.elements) {
+                if (element !== null) {
+                    result.push(...collectArrayExpressions(element));
+                }
+            }
+
+            break;
         case AST_NODE_TYPES.BinaryExpression:
         case AST_NODE_TYPES.LogicalExpression:
             result.push(...collectArrayExpressions(node.left));
