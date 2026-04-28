@@ -33,7 +33,7 @@ export const rule = createRule<Options, MessageIds>({
 
                     const elements = arr.elements.filter(
                         (el): el is TSESTree.Expression | TSESTree.SpreadElement =>
-                            el !== null,
+                            el != null,
                     );
 
                     if (elements.length <= 1) {

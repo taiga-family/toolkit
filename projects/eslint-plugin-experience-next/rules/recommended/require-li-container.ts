@@ -15,7 +15,7 @@ const VALID_CONTAINERS = new Set(['menu', 'ol', 'ul']);
 function isElement(node: unknown): node is TmplAstElement {
     return (
         typeof node === 'object' &&
-        node !== null &&
+        node != null &&
         typeof (node as Record<string, unknown>)['name'] === 'string' &&
         Array.isArray((node as Record<string, unknown>)['children'])
     );
@@ -24,7 +24,7 @@ function isElement(node: unknown): node is TmplAstElement {
 function getClosestParentElement(node: TmplAstElement): TmplAstElement | null {
     let current = (node as unknown as Record<string, unknown>)['parent'];
 
-    while (current !== null && current !== undefined) {
+    while (current != null) {
         if (isElement(current)) {
             return current;
         }

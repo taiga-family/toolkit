@@ -166,13 +166,13 @@ export const rule = createUntrackedRule<[], MessageId>({
                               sourceCode,
                           );
 
-                          if (replacement === null) {
+                          if (replacement == null) {
                               return null;
                           }
 
                           const untrackedLocalName = findUntrackedAlias(program);
                           const stillUsed =
-                              untrackedLocalName !== null &&
+                              untrackedLocalName != null &&
                               isUntrackedUsedElsewhere(untrackedLocalName, untrackedCall);
                           const fixes = [fixer.replaceText(parentStmt, replacement)];
 

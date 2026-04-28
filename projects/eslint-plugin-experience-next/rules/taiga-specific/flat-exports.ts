@@ -32,7 +32,7 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
         const isPureArray = (arr: ArrayMeta): boolean => {
             const cachedPurity = purityCache.get(arr);
 
-            if (cachedPurity !== undefined) {
+            if (cachedPurity != null) {
                 return cachedPurity;
             }
 
