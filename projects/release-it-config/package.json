@@ -32,7 +32,7 @@
     "peerDependencies": {
         "@release-it/conventional-changelog": "^10.0.6",
         "conventional-changelog-conventionalcommits": "^9.3.1",
-        "release-it": "^19.2.4"
+        "release-it": "^20.0.0"
     },
     "publishConfig": {
         "access": "public"
