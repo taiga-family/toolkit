@@ -1,3 +1,17 @@
+### [0.490.0](https://github.com/taiga-family/toolkit/compare/v0.489.0...v0.490.0) (2026-04-29)
+
+### 🚀 Features
+
+- **prettier-config**: do not prettify css variables (#1783)
+  [(6a6f12f)](https://github.com/taiga-family/toolkit/commit/6a6f12f3ad102245b54d325c7c8954ac9229ad99)
+
+### 🐞 Bug Fixes
+
+- update dependency prettier to ^3.8.3 (#1785)
+  [(1a0f007)](https://github.com/taiga-family/toolkit/commit/1a0f007bc4ba4be3007939fa63f9949813d48749)
+- update dependency eslint-plugin-cypress to ^6.3.1 (#1784)
+  [(3f92e27)](https://github.com/taiga-family/toolkit/commit/3f92e27f5857d773c4ba8d80f5eb865ece531c35)
+
 ### [0.489.0](https://github.com/taiga-family/toolkit/compare/v0.488.0...v0.489.0) (2026-04-28)
 
 ### 🐞 Bug Fixes
