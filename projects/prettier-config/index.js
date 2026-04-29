@@ -5,6 +5,13 @@ module.exports = {
     plugins: [
         require.resolve('stylelint-prettier'),
         require.resolve('prettier-plugin-organize-attributes'),
+        require.resolve(
+            path.resolve(
+                __dirname,
+                'plugins',
+                'prettier-plugin-css-custom-properties.js',
+            ),
+        ),
     ],
     arrowParens: 'always',
     bracketSpacing: false,
