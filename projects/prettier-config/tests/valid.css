@@ -1,0 +1,7 @@
+:root {
+    --tui-inline: 0;
+    --tui-height-m: 1rem;
+    --thumb-diameter: 1rem;
+    --tui-slider-thumb-transform: translateX(calc(var(--tui-inline) * -50%)) translateX(calc(var(--tui-inline) * var(--thumb-diameter) / -12));
+    --t-input-number-offset-end: calc(var(--tui-height-m) /* width of step button */ + 0.125rem);
+}

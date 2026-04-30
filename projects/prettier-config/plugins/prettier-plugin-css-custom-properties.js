@@ -5,7 +5,7 @@ const originalPostcssPrinter = postcss.printers.postcss;
 
 /**
  * @param {unknown} node
- * @returns {node is {type: string; prop: string}}
+ * @returns {node is {type: string; prop: string; value: string}}
  */
 function isCustomPropertyDeclaration(node) {
     return (
@@ -17,6 +17,44 @@ function isCustomPropertyDeclaration(node) {
         typeof node.prop === 'string' &&
         node.prop.startsWith('--')
     );
+}
+
+/**
+ * Returns true when a Prettier doc contains comment text (`//` or `/*`).
+ * Checking the printed doc is more reliable than checking `node.value` because
+ * postcss may store inline comments in `node.raws` rather than `node.value`.
+ *
+ * @param {import('prettier').Doc} doc
+ * @returns {boolean}
+ */
+function docContainsComment(doc) {
+    if (typeof doc === 'string') {
+        return doc.includes('//') || doc.includes('/*');
+    }
+
+    if (Array.isArray(doc)) {
+        return doc.some(docContainsComment);
+    }
+
+    if (typeof doc !== 'object' || doc === null) {
+        return false;
+    }
+
+    if (doc.type === 'fill') {
+        return doc.parts.some(docContainsComment);
+    }
+
+    if (doc.type === 'if-break') {
+        return (
+            docContainsComment(doc.breakContents) || docContainsComment(doc.flatContents)
+        );
+    }
+
+    if ('contents' in doc) {
+        return docContainsComment(doc.contents);
+    }
+
+    return false;
 }
 
 /**
@@ -88,7 +126,11 @@ exports.printers = {
         print(path, options, print) {
             const printed = originalPostcssPrinter.print(path, options, print);
 
-            return isCustomPropertyDeclaration(path.node) ? flattenDoc(printed) : printed;
+            if (!isCustomPropertyDeclaration(path.node)) {
+                return printed;
+            }
+
+            return docContainsComment(printed) ? printed : flattenDoc(printed);
         },
     },
 };
