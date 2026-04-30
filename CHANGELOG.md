@@ -1,3 +1,10 @@
+### [0.491.0](https://github.com/taiga-family/toolkit/compare/v0.490.0...v0.491.0) (2026-04-30)
+
+### 🐞 Bug Fixes
+
+- **prettier-config**: fix regression (#1787)
+  [(54c11fa)](https://github.com/taiga-family/toolkit/commit/54c11fa652679a9d8c5744c9dccb93a40a945769)
+
 ### [0.490.0](https://github.com/taiga-family/toolkit/compare/v0.489.0...v0.490.0) (2026-04-29)
 
 ### 🚀 Features
