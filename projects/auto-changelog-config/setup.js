@@ -1,18 +1,28 @@
 /* eslint-disable @typescript-eslint/no-invalid-this */
 module.exports = function (Handlebars) {
-    const getPullRequestId = (href) => href?.match(/\/pull\/(\d+)/)?.[1] ?? '';
+    const firstNonEmptyString = (...values) =>
+        values.map((value) => String(value ?? '').trim()).find(Boolean) ?? '';
+
+    const getPullRequestId = (href) => {
+        const [, id = ''] =
+            String(href ?? '').match(
+                /\/(?:pull|merge_requests|pull-requests)\/(\d+)(?:$|[/?#])/,
+            ) ?? [];
+
+        return id;
+    };
 
     const normalizePullRequest = (commit) => {
         const pullRequest = commit.pullRequest ?? {};
-        const href = pullRequest.href ?? commit.href ?? '';
-        const id =
-            pullRequest.id ??
-            pullRequest.number ??
-            commit.id ??
-            commit.number ??
-            getPullRequestId(href);
+        const href = firstNonEmptyString(pullRequest.href, commit.href);
 
-        if (!href && !id) {
+        const id = firstNonEmptyString(
+            pullRequest.id,
+            pullRequest.number,
+            getPullRequestId(href),
+        );
+
+        if (!id) {
             return;
         }
 
@@ -25,47 +35,46 @@ module.exports = function (Handlebars) {
     };
 
     const normalizeCommit = (commit) => {
-        const subject =
-            commit.subject ??
-            commit.message ??
-            commit.title ??
-            commit.pullRequest?.title ??
-            '';
+        const subject = firstNonEmptyString(
+            commit.subject,
+            commit.message,
+            commit.title,
+            commit.pullRequest?.title,
+        );
 
         const pullRequest = normalizePullRequest(commit);
 
         return {
             ...commit,
-            message: commit.message ?? subject,
+            message: firstNonEmptyString(commit.message, subject),
             pullRequest,
             subject,
         };
     };
 
-    const getCommitAuthor = (commit) => {
-        const author =
-            commit.pullRequest?.author?.login ??
-            commit.pullRequest?.user?.login ??
-            commit.author?.login ??
-            commit.user?.login ??
-            commit.pullRequest?.author ??
-            commit.author ??
-            '';
-
-        return String(author);
-    };
+    const getCommitAuthor = (commit) =>
+        commit.pullRequest?.author?.login ??
+        commit.pullRequest?.user?.login ??
+        commit.author?.login ??
+        commit.user?.login ??
+        commit.pullRequest?.author ??
+        commit.author ??
+        '';
 
     const isGithubLogin = (name) => /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/i.test(name);
 
     const normalizeContributor = (author) => {
         const name = String(author).trim().replace(/^@/, '');
+        const lowerName = name.toLowerCase();
 
         const isBot =
-            name.endsWith('[bot]') ||
-            name.endsWith('-bot') ||
-            name.endsWith('bot') ||
-            name === 'github-actions' ||
-            name === 'renovate';
+            lowerName.endsWith('[bot]') ||
+            lowerName.endsWith('-bot') ||
+            lowerName === 'dependabot' ||
+            lowerName === 'renovatebot' ||
+            lowerName === 'github-actions' ||
+            lowerName === 'renovate' ||
+            lowerName === 'gemini-code-assist';
 
         if (!name || isBot || !isGithubLogin(name)) {
             return '';
@@ -96,11 +105,13 @@ module.exports = function (Handlebars) {
         const unique = [
             ...new Map(
                 commits.map((commit) => [
-                    commit.hash ??
-                        commit.shorthash ??
-                        commit.pullRequest?.href ??
-                        commit.href ??
+                    firstNonEmptyString(
+                        commit.hash,
+                        commit.shorthash,
+                        commit.pullRequest?.href,
+                        commit.href,
                         commit.subject,
+                    ),
                     commit,
                 ]),
             ).values(),
@@ -113,7 +124,7 @@ module.exports = function (Handlebars) {
         const commit =
             /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
 
-        const string = String(context.fn(this));
+        const string = String(context.fn(this)).trim();
         const {scope = '', title = ''} = commit.exec(string)?.groups ?? {};
         const result = scope ? `**${scope.toLowerCase()}**: ${title}` : title;
 
@@ -121,7 +132,7 @@ module.exports = function (Handlebars) {
     });
 
     Handlebars.registerHelper('replaceTitle', function (context) {
-        const string = String(context.fn(this));
+        const string = String(context.fn(this)).trim();
 
         return string.replace(/^v/, '');
     });
