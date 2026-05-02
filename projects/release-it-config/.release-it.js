@@ -19,7 +19,6 @@ const createChangelog = (template) =>
     ].join(' ');
 
 const changelog = createChangelog('template.hbs');
-const releaseNotes = createChangelog('release-template.hbs');
 
 module.exports = {
     plugins: {
@@ -34,7 +33,7 @@ module.exports = {
     },
     git: {
         addUntrackedFiles: true,
-        changelog: `${releaseNotes} --unreleased-only --stdout`,
+        changelog: `${changelog} --unreleased-only --stdout`,
         commitArgs: '--no-verify',
         commitMessage: 'chore(release): v${version}',
         getLatestTagFromAllRefs: true,
@@ -52,15 +51,14 @@ module.exports = {
             submit: true,
         },
         release: true,
-        releaseNotes: `${releaseNotes} --unreleased-only --stdout`,
+        releaseNotes: `${changelog} --unreleased-only --stdout`,
         timeout: 60_000,
     },
     hooks: {
         'after:bump': [
+            'git tag v${version}', // for include last tag inside CHANGELOG
             'echo "new version is v${version}"',
-            'git tag -f v${version}', // temporary tag for auto-changelog
-            `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`, // CHANGELOG.md: without contributors
-            'git tag -d v${version}', // remove temporary tag before release-it creates final annotated tag
+            `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`,
             'npx prettier CHANGELOG.md --write > /dev/null',
             'git fetch --prune --prune-tags origin',
             'git add CHANGELOG.md',

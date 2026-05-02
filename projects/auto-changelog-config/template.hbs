@@ -18,6 +18,10 @@
             - {{changelogEntry}}
         {{/commit-list}}
 
+        {{#commit-list this heading='### ⚡ Performance Improvements' message='^perf:|^perf\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
+            - {{changelogEntry}}
+        {{/commit-list}}
+
     {{/commit-parser}}
 
 {{/each}}
