@@ -3,7 +3,8 @@ const configPath = require('node:path').resolve(
     'node_modules/@taiga-ui/auto-changelog-config',
 );
 
-const commitPattern = String.raw`^(feat|fix|perf|deprecate)(\([^)]*\))?!?:`;
+const commitPattern = String.raw`^(feat|fix|perf)(\([^)]*\))?!?:`;
+const breakingPattern = String.raw`^(feat|fix|perf)(\([^)]*\))!:`;
 
 const changelog = [
     'npx auto-changelog',
@@ -11,6 +12,7 @@ const changelog = [
     `--template ${configPath}/template.hbs`,
     `--handlebars-setup ${configPath}/setup.js`,
     `--commit-pattern ${JSON.stringify(commitPattern)}`,
+    `--breaking-pattern ${JSON.stringify(breakingPattern)}`,
 ].join(' ');
 
 module.exports = {

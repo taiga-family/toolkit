@@ -28,7 +28,7 @@
             "name": "Nikita Barsukov"
         }
     ],
-    "main": "index.js",
+    "main": ".release-it.js",
     "peerDependencies": {
         "@release-it/conventional-changelog": "^10.0.6",
         "conventional-changelog-conventionalcommits": "^9.3.1",

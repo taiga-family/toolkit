@@ -6,19 +6,15 @@
 
     {{#commit-parser merges commits}}
 
-        {{#commit-list this heading='### ⚠ BREAKING CHANGES' message='breaking change:|breaking:' }}
+        {{#commit-list this heading='### ⚠️ BREAKING CHANGES' message='^(feat|fix|perf)(\([^)]*\))!:' }}
             - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
         {{/commit-list}}
 
-        {{#commit-list this heading='### 🚀 Features' message='^feat:|^feat\(' exclude='breaking change:|breaking:'}}
+        {{#commit-list this heading='### 🚀 Features' message='^feat:|^feat\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
             - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
         {{/commit-list}}
 
-        {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(' exclude='breaking change:|breaking:'}}
-            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
-        {{/commit-list}}
-
-        {{#commit-list this heading='### ⚠️ Deprecations' message='^deprecate:|^deprecate\(' exclude='breaking change:|breaking:'}}
+        {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
             - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
         {{/commit-list}}
 
