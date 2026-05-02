@@ -1,3 +1,9 @@
+### [0.495.0](https://github.com/taiga-family/toolkit/compare/v0.494.0...v0.495.0) (2026-05-02)
+
+### 🐞 Bug Fixes
+
+- **auto-changelog-config**: update templates ([#1804](https://github.com/taiga-family/toolkit/pull/1804))
+
 ### [0.494.0](https://github.com/taiga-family/toolkit/compare/v0.493.0...v0.494.0) (2026-05-02)
 
 ### 🐞 Bug Fixes
