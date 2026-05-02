@@ -1,19 +1,8 @@
 ### [0.492.0](https://github.com/taiga-family/toolkit/compare/v0.491.0...v0.492.0) (2026-05-02)
 
-### 🚀 Features
-
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1799)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1798)
-
 ### 🐞 Bug Fixes
 
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1800)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1797)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1791)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1794)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1792)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1790)
-- empty commit name [()](https://github.com/taiga-family/toolkit/pull/1789)
+- minor changes
 
 ### [0.491.0](https://github.com/taiga-family/toolkit/compare/v0.490.0...v0.491.0) (2026-04-30)
 

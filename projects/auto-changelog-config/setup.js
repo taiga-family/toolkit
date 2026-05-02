@@ -1,21 +1,73 @@
 /* eslint-disable @typescript-eslint/no-invalid-this */
 module.exports = function (Handlebars) {
-    const getCommitAuthor = (commit) =>
-        commit.pullRequest?.author?.login ??
-        commit.pullRequest?.author ??
-        commit.author ??
-        '';
+    const getPullRequestId = (href) => href?.match(/\/pull\/(\d+)/)?.[1] ?? '';
+
+    const normalizePullRequest = (commit) => {
+        const pullRequest = commit.pullRequest ?? {};
+        const href = pullRequest.href ?? commit.href ?? '';
+        const id =
+            pullRequest.id ??
+            pullRequest.number ??
+            commit.id ??
+            commit.number ??
+            getPullRequestId(href);
+
+        if (!href && !id) {
+            return;
+        }
+
+        return {
+            ...pullRequest,
+            id,
+            author: pullRequest.author ?? commit.author,
+            href,
+        };
+    };
+
+    const normalizeCommit = (commit) => {
+        const subject =
+            commit.subject ??
+            commit.message ??
+            commit.title ??
+            commit.pullRequest?.title ??
+            '';
+
+        const pullRequest = normalizePullRequest(commit);
+
+        return {
+            ...commit,
+            message: commit.message ?? subject,
+            pullRequest,
+            subject,
+        };
+    };
+
+    const getCommitAuthor = (commit) => {
+        const author =
+            commit.pullRequest?.author?.login ??
+            commit.pullRequest?.user?.login ??
+            commit.author?.login ??
+            commit.user?.login ??
+            commit.pullRequest?.author ??
+            commit.author ??
+            '';
+
+        return String(author);
+    };
+
+    const isGithubLogin = (name) => /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/i.test(name);
 
     const normalizeContributor = (author) => {
-        const name = String(author).trim().replace(/^@/, '') ?? '';
+        const name = String(author).trim().replace(/^@/, '');
 
         const isBot =
-            name.endsWith('bot') ||
             name.endsWith('[bot]') ||
+            name.endsWith('-bot') ||
+            name.endsWith('bot') ||
             name === 'github-actions' ||
             name === 'renovate';
 
-        if (!name || isBot) {
+        if (!name || isBot || !isGithubLogin(name)) {
             return '';
         }
 
@@ -39,12 +91,16 @@ module.exports = function (Handlebars) {
     Handlebars.registerHelper('commit-parser', function (...args) {
         const options = args.pop();
 
-        const commits = args.flat().filter(Boolean);
+        const commits = args.flat().filter(Boolean).map(normalizeCommit);
 
         const unique = [
             ...new Map(
                 commits.map((commit) => [
-                    commit.hash ?? commit.shorthash ?? commit.href ?? commit.subject,
+                    commit.hash ??
+                        commit.shorthash ??
+                        commit.pullRequest?.href ??
+                        commit.href ??
+                        commit.subject,
                     commit,
                 ]),
             ).values(),
@@ -61,7 +117,7 @@ module.exports = function (Handlebars) {
         const {scope = '', title = ''} = commit.exec(string)?.groups ?? {};
         const result = scope ? `**${scope.toLowerCase()}**: ${title}` : title;
 
-        return result || 'empty commit name';
+        return result || string || 'empty commit name';
     });
 
     Handlebars.registerHelper('replaceTitle', function (context) {
@@ -73,7 +129,7 @@ module.exports = function (Handlebars) {
     Handlebars.registerHelper('contributors', function (...args) {
         const options = args.pop();
 
-        const commits = args.flat().filter(Boolean);
+        const commits = args.flat().filter(Boolean).map(normalizeCommit);
 
         const contributors = [
             ...new Set(
