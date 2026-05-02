@@ -1,3 +1,10 @@
+### [0.493.0](https://github.com/taiga-family/toolkit/compare/v0.492.0...v0.493.0) (2026-05-02)
+
+### 🐞 Bug Fixes
+
+- **auto-changelog-config**: extract pull request href ([#1802](https://github.com/taiga-family/toolkit/pull/1802))
+- **auto-changelog-config**: wrong commit parser ([#1801](https://github.com/taiga-family/toolkit/pull/1801))
+
 ### [0.492.0](https://github.com/taiga-family/toolkit/compare/v0.491.0...v0.492.0) (2026-05-02)
 
 ### 🐞 Bug Fixes
