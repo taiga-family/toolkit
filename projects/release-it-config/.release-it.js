@@ -57,9 +57,10 @@ module.exports = {
     },
     hooks: {
         'after:bump': [
-            'git tag v${version}', // for include last tag inside CHANGELOG
             'echo "new version is v${version}"',
+            'git tag -f v${version}', // temporary tag for auto-changelog
             `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`, // CHANGELOG.md: without contributors
+            'git tag -d v${version}', // remove temporary tag before release-it creates final annotated tag
             'npx prettier CHANGELOG.md --write > /dev/null',
             'git fetch --prune --prune-tags origin',
             'git add CHANGELOG.md',

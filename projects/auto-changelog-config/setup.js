@@ -7,14 +7,15 @@ module.exports = function (Handlebars) {
         '';
 
     const normalizeContributor = (author) => {
-        const name = String(author).trim().replace(/^@/, '');
+        const name = String(author).trim().replace(/^@/, '') ?? '';
 
-        if (
-            !name ||
-            name.includes('bot') ||
+        const isBot =
+            name.endsWith('bot') ||
+            name.endsWith('[bot]') ||
             name === 'github-actions' ||
-            name === 'renovate'
-        ) {
+            name === 'renovate';
+
+        if (!name || isBot) {
             return '';
         }
 
@@ -35,26 +36,43 @@ module.exports = function (Handlebars) {
         }`;
     };
 
+    Handlebars.registerHelper('commit-parser', function (...args) {
+        const options = args.pop();
+
+        const commits = args.flat().filter(Boolean);
+
+        const unique = [
+            ...new Map(
+                commits.map((commit) => [
+                    commit.hash ?? commit.shorthash ?? commit.href ?? commit.subject,
+                    commit,
+                ]),
+            ).values(),
+        ];
+
+        return options.fn(unique);
+    });
+
     Handlebars.registerHelper('replaceCommit', function (context) {
         const commit =
-            /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(\((.*?)\))?!?: (.*)$/g;
+            /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
 
-        const string = context.fn(this);
-        const parsed = Array.from(string.matchAll(commit) ?? [])[0] ?? [];
-        const [, , , scope = '', title = ''] = parsed;
-        const result = scope ? `**${scope.toLocaleLowerCase()}**: ${title}` : title;
+        const string = String(context.fn(this));
+        const {scope = '', title = ''} = commit.exec(string)?.groups ?? {};
+        const result = scope ? `**${scope.toLowerCase()}**: ${title}` : title;
 
         return result || 'empty commit name';
     });
 
     Handlebars.registerHelper('replaceTitle', function (context) {
-        const string = context.fn(this);
+        const string = String(context.fn(this));
 
-        return string.replace('v', '');
+        return string.replace(/^v/, '');
     });
 
     Handlebars.registerHelper('contributors', function (...args) {
         const options = args.pop();
+
         const commits = args.flat().filter(Boolean);
 
         const contributors = [
