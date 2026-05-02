@@ -3,6 +3,15 @@ module.exports = function (Handlebars) {
     const firstNonEmptyString = (...values) =>
         values.map((value) => String(value ?? '').trim()).find(Boolean) ?? '';
 
+    const escape = (value) => Handlebars.escapeExpression(String(value ?? ''));
+
+    const createMarkdownLink = (text, href) => {
+        const safeText = escape(text);
+        const safeHref = escape(href);
+
+        return href ? `[${safeText}](${safeHref})` : safeText;
+    };
+
     const getPullRequestId = (href) => {
         const [, id = ''] =
             String(href ?? '').match(
@@ -23,6 +32,9 @@ module.exports = function (Handlebars) {
             String(href ?? ''),
         );
 
+    const isCommitHref = (href) =>
+        /\/commit\/[a-f\d]{7,40}(?:$|[/?#])/.test(String(href ?? ''));
+
     const getCommitHashFromHref = (href) => {
         const [, hash = ''] =
             String(href ?? '').match(/\/commit\/([a-f\d]{7,40})(?:$|[/?#])/) ?? [];
@@ -37,39 +49,13 @@ module.exports = function (Handlebars) {
         return repositoryHref;
     };
 
-    const getCommitHref = (commit, pullRequest) => {
-        const href = firstNonEmptyString(commit.commitHref, commit.href);
-
-        if (href.includes('/commit/')) {
-            return href;
-        }
-
-        const hash = firstNonEmptyString(
-            commit.hash,
-            commit.shorthash,
-            getCommitHashFromHref(href),
-        );
-
-        const repositoryHref = getRepositoryHref(
-            firstNonEmptyString(pullRequest?.href, href),
-        );
-
-        return hash && repositoryHref ? `${repositoryHref}/commit/${hash}` : '';
-    };
-
-    const getCommitHash = (commit, commitHref) =>
-        firstNonEmptyString(
-            commit.commitHash,
-            commit.shorthash,
-            getCommitHashFromHref(commitHref),
-            String(commit.hash ?? '').slice(0, 7),
-        ).slice(0, 7);
-
     const normalizePullRequest = (commit, subject) => {
         const pullRequest = commit.pullRequest ?? {};
-        const href = [pullRequest.href, commit.pullRequestHref, commit.href]
-            .map(firstNonEmptyString)
-            .find(isPullRequestHref);
+
+        const href =
+            [pullRequest.href, commit.pullRequestHref, commit.href]
+                .map((value) => firstNonEmptyString(value))
+                .find(isPullRequestHref) ?? '';
 
         const id = firstNonEmptyString(
             pullRequest.id,
@@ -88,9 +74,37 @@ module.exports = function (Handlebars) {
             ...pullRequest,
             id,
             author: pullRequest.author ?? commit.author,
-            href: href ?? '',
+            href,
         };
     };
+
+    const getCommitHref = (commit, pullRequest) => {
+        const href = firstNonEmptyString(commit.commitHref, commit.href);
+
+        if (isCommitHref(href)) {
+            return href;
+        }
+
+        const hash = firstNonEmptyString(
+            commit.hash,
+            commit.shorthash,
+            getCommitHashFromHref(href),
+        );
+
+        const repositoryHref = getRepositoryHref(
+            firstNonEmptyString(commit.repositoryHref, href, pullRequest?.href),
+        );
+
+        return hash && repositoryHref ? `${repositoryHref}/commit/${hash}` : '';
+    };
+
+    const getCommitHash = (commit, commitHref) =>
+        firstNonEmptyString(
+            commit.commitHash,
+            commit.shorthash,
+            getCommitHashFromHref(commitHref),
+            String(commit.hash ?? '').slice(0, 7),
+        ).slice(0, 7);
 
     const normalizeCommit = (commit) => {
         const subject = firstNonEmptyString(
@@ -116,10 +130,10 @@ module.exports = function (Handlebars) {
 
     const getCommitKey = (commit) =>
         firstNonEmptyString(
-            commit.pullRequest?.id && `pr:${commit.pullRequest.id}`,
-            commit.hash && `hash:${commit.hash}`,
-            commit.commitHash && `hash:${commit.commitHash}`,
-            commit.subject && `subject:${commit.subject}`,
+            commit.pullRequest?.id ? `pr:${commit.pullRequest.id}` : '',
+            commit.hash ? `hash:${commit.hash}` : '',
+            commit.commitHash ? `hash:${commit.commitHash}` : '',
+            commit.subject ? `subject:${commit.subject}` : '',
         );
 
     const mergePullRequests = (left, right) => {
@@ -156,6 +170,52 @@ module.exports = function (Handlebars) {
         shorthash: firstNonEmptyString(left.shorthash, right.shorthash),
         subject: firstNonEmptyString(left.subject, right.subject),
     });
+
+    const formatCommitTitle = (subject) => {
+        const commit =
+            /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
+
+        const string = String(subject ?? '').trim();
+        const {scope = '', title = ''} = commit.exec(string)?.groups ?? {};
+        const cleanTitle = title.replace(/\s\(#\d+\)\s*$/, '');
+
+        if (!cleanTitle) {
+            return escape(string || 'empty commit name');
+        }
+
+        return scope
+            ? `**${escape(scope.toLowerCase())}**: ${escape(cleanTitle)}`
+            : escape(cleanTitle);
+    };
+
+    const formatPullRequestReference = (commit) => {
+        const pullRequest = commit.pullRequest;
+
+        if (!pullRequest?.id) {
+            return '';
+        }
+
+        const link = createMarkdownLink(`#${pullRequest.id}`, pullRequest.href);
+
+        return `(${link})`;
+    };
+
+    const formatCommitReference = (commit) => {
+        if (!commit.commitHash) {
+            return '';
+        }
+
+        return createMarkdownLink(`(${commit.commitHash})`, commit.commitHref);
+    };
+
+    const formatChangelogEntry = (commit) =>
+        [
+            formatCommitTitle(commit.subject),
+            formatPullRequestReference(commit),
+            formatCommitReference(commit),
+        ]
+            .filter(Boolean)
+            .join(' ');
 
     const getCommitAuthor = (commit) =>
         commit.pullRequest?.author?.login ??
@@ -225,15 +285,19 @@ module.exports = function (Handlebars) {
     });
 
     Handlebars.registerHelper('replaceCommit', function (context) {
-        const commit =
-            /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
+        return new Handlebars.SafeString(formatCommitTitle(context.fn(this)));
+    });
 
-        const string = String(context.fn(this)).trim();
-        const {scope = '', title = ''} = commit.exec(string)?.groups ?? {};
-        const cleanTitle = title.replace(/\s\(#\d+\)\s*$/, '');
-        const result = scope ? `**${scope.toLowerCase()}**: ${cleanTitle}` : cleanTitle;
+    Handlebars.registerHelper('pullRequestLink', function () {
+        return new Handlebars.SafeString(formatPullRequestReference(this));
+    });
 
-        return result || string || 'empty commit name';
+    Handlebars.registerHelper('commitLink', function () {
+        return new Handlebars.SafeString(formatCommitReference(this));
+    });
+
+    Handlebars.registerHelper('changelogEntry', function () {
+        return new Handlebars.SafeString(formatChangelogEntry(this));
     });
 
     Handlebars.registerHelper('replaceTitle', function (context) {

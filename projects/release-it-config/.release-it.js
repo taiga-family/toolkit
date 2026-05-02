@@ -34,7 +34,7 @@ module.exports = {
     },
     git: {
         addUntrackedFiles: true,
-        changelog: false,
+        changelog: `${releaseNotes} --unreleased-only --stdout`,
         commitArgs: '--no-verify',
         commitMessage: 'chore(release): v${version}',
         getLatestTagFromAllRefs: true,
@@ -52,7 +52,7 @@ module.exports = {
             submit: true,
         },
         release: true,
-        releaseNotes: `${releaseNotes} --unreleased-only --stdout`, // GitHub Release notes: with contributors
+        releaseNotes: `${releaseNotes} --unreleased-only --stdout`,
         timeout: 60_000,
     },
     hooks: {
