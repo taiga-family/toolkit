@@ -1,3 +1,10 @@
+### [0.496.0](https://github.com/taiga-family/toolkit/compare/v0.495.0...v0.496.0) (2026-05-02)
+
+### 🚀 Features
+
+- **release-it-config**: revert old logic ([#1805](https://github.com/taiga-family/toolkit/pull/1805))
+  [(80f3696)](https://github.com/taiga-family/toolkit/commit/80f3696ad87135a28c4a4761c0221287d620d6ab)
+
 ### [0.495.0](https://github.com/taiga-family/toolkit/compare/v0.494.0...v0.495.0) (2026-05-02)
 
 ### 🐞 Bug Fixes
