@@ -1,24 +1,28 @@
 /* eslint-disable @typescript-eslint/no-invalid-this */
 module.exports = function (Handlebars) {
-    const firstString = (...values) =>
+    const firstNonEmptyString = (...values) =>
         values.map((value) => String(value ?? '').trim()).find(Boolean) ?? '';
 
     const getPullRequestId = (href) => {
-        const [, id = ''] = String(href ?? '').match(/\/pull\/(\d+)(?:$|[/?#])/) ?? [];
+        const [, id = ''] =
+            String(href ?? '').match(
+                /\/(?:pull|merge_requests|pull-requests)\/(\d+)(?:$|[/?#])/,
+            ) ?? [];
 
         return id;
     };
 
     const normalizePullRequest = (commit) => {
         const pullRequest = commit.pullRequest ?? {};
-        const href = firstString(pullRequest.href, commit.href);
-        const id = firstString(
+        const href = firstNonEmptyString(pullRequest.href, commit.href);
+
+        const id = firstNonEmptyString(
             pullRequest.id,
             pullRequest.number,
             getPullRequestId(href),
         );
 
-        if (!id || !href.includes('/pull/')) {
+        if (!id) {
             return;
         }
 
@@ -31,7 +35,7 @@ module.exports = function (Handlebars) {
     };
 
     const normalizeCommit = (commit) => {
-        const subject = firstString(
+        const subject = firstNonEmptyString(
             commit.subject,
             commit.message,
             commit.title,
@@ -42,7 +46,7 @@ module.exports = function (Handlebars) {
 
         return {
             ...commit,
-            message: firstString(commit.message, subject),
+            message: firstNonEmptyString(commit.message, subject),
             pullRequest,
             subject,
         };
@@ -101,7 +105,7 @@ module.exports = function (Handlebars) {
         const unique = [
             ...new Map(
                 commits.map((commit) => [
-                    firstString(
+                    firstNonEmptyString(
                         commit.hash,
                         commit.shorthash,
                         commit.pullRequest?.href,
