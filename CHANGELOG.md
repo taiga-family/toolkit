@@ -1,3 +1,9 @@
+### [0.494.0](https://github.com/taiga-family/toolkit/compare/v0.493.0...v0.494.0) (2026-05-02)
+
+### 🐞 Bug Fixes
+
+- **auto-changelog-config**: extract short hash url ([#1803](https://github.com/taiga-family/toolkit/pull/1803))
+
 ### [0.493.0](https://github.com/taiga-family/toolkit/compare/v0.492.0...v0.493.0) (2026-05-02)
 
 ### 🐞 Bug Fixes
