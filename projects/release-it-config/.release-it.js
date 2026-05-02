@@ -49,10 +49,11 @@ module.exports = {
         comments: {
             issue: ':rocket: _This issue has been resolved in v${version}. See [${releaseName}](${releaseUrl}) for release notes._',
             pr: ':rocket: _This pull request is included in v${version}. See [${releaseName}](${releaseUrl}) for release notes._',
-            submit: false,
+            submit: true,
         },
         release: true,
         releaseNotes: `${releaseNotes} --unreleased-only --stdout`, // GitHub Release notes: with contributors
+        timeout: 60_000,
     },
     hooks: {
         'after:bump': [
