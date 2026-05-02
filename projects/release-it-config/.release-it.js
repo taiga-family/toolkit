@@ -1,4 +1,6 @@
-const configPath = require('node:path').resolve(
+const path = require('node:path');
+
+const configPath = path.resolve(
     process.cwd(),
     'node_modules/@taiga-ui/auto-changelog-config',
 );
@@ -6,14 +8,18 @@ const configPath = require('node:path').resolve(
 const commitPattern = String.raw`^(feat|fix|perf)(\([^)]*\))?!?:`;
 const breakingPattern = String.raw`^(feat|fix|perf)(\([^)]*\))!:`;
 
-const changelog = [
-    'npx auto-changelog',
-    `-c ${configPath}/index.json`,
-    `--template ${configPath}/template.hbs`,
-    `--handlebars-setup ${configPath}/setup.js`,
-    `--commit-pattern ${JSON.stringify(commitPattern)}`,
-    `--breaking-pattern ${JSON.stringify(breakingPattern)}`,
-].join(' ');
+const createChangelog = (template) =>
+    [
+        'npx auto-changelog',
+        `-c ${configPath}/index.json`,
+        `--template ${configPath}/${template}`,
+        `--handlebars-setup ${configPath}/setup.js`,
+        `--commit-pattern ${JSON.stringify(commitPattern)}`,
+        `--breaking-pattern ${JSON.stringify(breakingPattern)}`,
+    ].join(' ');
+
+const changelog = createChangelog('template.hbs');
+const releaseNotes = createChangelog('release-template.hbs');
 
 module.exports = {
     plugins: {
@@ -46,15 +52,15 @@ module.exports = {
             submit: false,
         },
         release: true,
-        releaseNotes: `${changelog} --unreleased-only --stdout`,
+        releaseNotes: `${releaseNotes} --unreleased-only --stdout`, // GitHub Release notes: with contributors
     },
     hooks: {
         'after:bump': [
             'git tag v${version}', // for include last tag inside CHANGELOG
             'echo "new version is v${version}"',
-            `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`,
+            `${changelog} --prepend --starting-version v$\{version} -p > /dev/null`, // CHANGELOG.md: without contributors
             'npx prettier CHANGELOG.md --write > /dev/null',
-            'git fetch --prune --prune-tags origin', // cleanup git workspace
+            'git fetch --prune --prune-tags origin',
             'git add CHANGELOG.md',
             'npx syncer || echo ""',
             'npm run after:bump -s || echo ""',
