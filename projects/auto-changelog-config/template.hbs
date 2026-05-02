@@ -1,27 +1,27 @@
 {{! prettier-ignore }}
 {{#each releases}}
     {{#if tag}}
-     ##{{#unless major}}#{{/unless}} [{{#replaceTitle}}{{title}}{{/replaceTitle}}]({{href}}) ({{isoDate}})
+        ##{{#unless major}}#{{/unless}} [{{#replaceTitle}}{{title}}{{/replaceTitle}}]({{href}}) ({{isoDate}})
     {{/if}}
 
-  {{#commit-parser merges commits}}
+    {{#commit-parser merges commits}}
 
-      {{#commit-list this heading='### ⚠ BREAKING CHANGES' message='breaking change:|breaking:' }}
-        - {{#replaceCommit}}{{subject}}{{/replaceCommit}} [({{shorthash}})]({{href}})
-      {{/commit-list}}
+        {{#commit-list this heading='### ⚠ BREAKING CHANGES' message='breaking change:|breaking:' }}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
+        {{/commit-list}}
 
-      {{#commit-list this heading='### 🚀 Features' message='^feat:|feat\(|^refactor:|^refactor\(' exclude='breaking change:|breaking:'}}
-        - {{#replaceCommit}}{{subject}}{{/replaceCommit}} [({{shorthash}})]({{href}})
-      {{/commit-list}}
+        {{#commit-list this heading='### 🚀 Features' message='^feat:|^feat\(' exclude='breaking change:|breaking:'}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
+        {{/commit-list}}
 
-      {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(|^perf:|^perf\(' exclude='breaking change:|breaking:'}}
-        - {{#replaceCommit}}{{subject}}{{/replaceCommit}} [({{shorthash}})]({{href}})
-      {{/commit-list}}
+        {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(' exclude='breaking change:|breaking:'}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
+        {{/commit-list}}
 
-      {{#commit-list this heading='### ⚠️ Deprecations' message='^deprecate:|^deprecate\(' exclude='breaking change:|breaking:'}}
-        - {{#replaceCommit}}{{subject}}{{/replaceCommit}} [({{shorthash}})]({{href}})
-      {{/commit-list}}
+        {{#commit-list this heading='### ⚠️ Deprecations' message='^deprecate:|^deprecate\(' exclude='breaking change:|breaking:'}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{/if}} [({{shorthash}})]({{href}})
+        {{/commit-list}}
 
-  {{/commit-parser}}
+    {{/commit-parser}}
 
 {{/each}}

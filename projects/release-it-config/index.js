@@ -1,9 +1,17 @@
-const path = require('node:path').resolve(
+const configPath = require('node:path').resolve(
     process.cwd(),
     'node_modules/@taiga-ui/auto-changelog-config',
 );
 
-const changelog = `npx auto-changelog -c ${path}/index.json --template ${path}/template.hbs --handlebars-setup ${path}/setup.js`;
+const commitPattern = String.raw`^(feat|fix|perf|deprecate)(\([^)]*\))?!?:`;
+
+const changelog = [
+    'npx auto-changelog',
+    `-c ${configPath}/index.json`,
+    `--template ${configPath}/template.hbs`,
+    `--handlebars-setup ${configPath}/setup.js`,
+    `--commit-pattern ${JSON.stringify(commitPattern)}`,
+].join(' ');
 
 module.exports = {
     plugins: {
@@ -14,17 +22,6 @@ module.exports = {
             infile: false,
             path: '.',
             preset: 'conventionalcommits',
-            types: [
-                {section: 'Features', type: 'feat'},
-                {section: 'Bug Fixes', type: 'fix'},
-                {hidden: true, type: 'refactor'},
-                {hidden: true, type: 'chore'},
-                {hidden: true, type: 'perf'},
-                {hidden: true, type: 'docs'},
-                {hidden: true, type: 'style'},
-                {hidden: true, type: 'ci'},
-                {hidden: true, type: 'test'},
-            ],
         },
     },
     git: {
