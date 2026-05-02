@@ -1,7 +1,6 @@
-import {readFileSync} from 'node:fs';
+import {globSync, readFileSync} from 'node:fs';
 
 import {defineConfig} from 'eslint/config';
-import {globSync} from 'glob';
 
 import {
     TUI_CUSTOM_TAIGA_NAMING_CONVENTION,
@@ -9,12 +8,12 @@ import {
 } from '../rules/convention';
 
 const allPackageJSONs = globSync('**/package.json', {
-    ignore: ['**/node_modules/**', '**/dist/**'],
+    exclude: ['**/node_modules/**', '**/dist/**'],
 }).filter((path) => !readJSON(path).private);
 
 function pattern(type: string): string[] {
     return allPackageJSONs.map((p) =>
-        p.replaceAll(/\\+/g, '/').replace('package.json', type),
+        p.replaceAll(/\\+/g, '/').replace(/package\.json$/, type),
     );
 }
 
@@ -28,7 +27,7 @@ export default defineConfig([
                 'error',
                 {
                     importFilter: allPackageJSONs
-                        .map((path) => readJSON(path).name)
+                        .map((packageJsonPath) => readJSON(packageJsonPath).name)
                         .filter(Boolean),
                     strict: !!process.env.CI,
                 },

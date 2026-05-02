@@ -33,7 +33,7 @@ module.exports = {
     },
     git: {
         addUntrackedFiles: true,
-        changelog: `${changelog} --unreleased-only --stdout`,
+        changelog: 'git log --pretty=format:"* %s (%H)" ${latestTag}...HEAD',
         commitArgs: '--no-verify',
         commitMessage: 'chore(release): v${version}',
         getLatestTagFromAllRefs: true,

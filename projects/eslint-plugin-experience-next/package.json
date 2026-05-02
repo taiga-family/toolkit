@@ -27,14 +27,13 @@
     ],
     "type": "module",
     "devDependencies": {
-        "glob": "13.0.6"
+        "@typescript-eslint/rule-tester": "^8.59.1"
     },
     "peerDependencies": {
         "@eslint/compat": "^2.0.5",
         "@eslint/markdown": "^8.0.1",
         "@smarttools/eslint-plugin-rxjs": "^1.0.22",
         "@stylistic/eslint-plugin": "^5.10.0",
-        "@types/glob": "*",
         "angular-eslint": "^20.7.0",
         "eslint": "^9.39.4",
         "eslint-config-prettier": "^10.1.7",
@@ -55,9 +54,8 @@
         "eslint-plugin-sonarjs": "^4.0.3",
         "eslint-plugin-unicorn": "^64.0.0",
         "eslint-plugin-unused-imports": "^4.4.1",
-        "glob": "*",
         "globals": "^17.5.0",
-        "typescript-eslint": "^8.59.0"
+        "typescript-eslint": "^8.59.1"
     },
     "publishConfig": {
         "access": "public"
