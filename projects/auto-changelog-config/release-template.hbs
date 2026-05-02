@@ -7,15 +7,15 @@
     {{#commit-parser merges commits}}
 
         {{#commit-list this heading='### ⚠️ BREAKING CHANGES' message='^(feat|fix|perf)(\([^)]*\))!:' }}
-            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if shorthash}}{{#if href}} [({{shorthash}})]({{href}}){{else}} ({{shorthash}}){{/if}}{{/if}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if commitHash}}{{#if commitHref}} [({{commitHash}})]({{commitHref}}){{else}} ({{commitHash}}){{/if}}{{/if}}
         {{/commit-list}}
 
         {{#commit-list this heading='### 🚀 Features' message='^feat:|^feat\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
-            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if shorthash}}{{#if href}} [({{shorthash}})]({{href}}){{else}} ({{shorthash}}){{/if}}{{/if}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if commitHash}}{{#if commitHref}} [({{commitHash}})]({{commitHref}}){{else}} ({{commitHash}}){{/if}}{{/if}}
         {{/commit-list}}
 
         {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
-            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if shorthash}}{{#if href}} [({{shorthash}})]({{href}}){{else}} ({{shorthash}}){{/if}}{{/if}}
+            - {{#replaceCommit}}{{subject}}{{/replaceCommit}}{{#if pullRequest}}{{#if pullRequest.href}} ([#{{pullRequest.id}}]({{pullRequest.href}})){{else}} (#{{pullRequest.id}}){{/if}}{{/if}}{{#if commitHash}}{{#if commitHref}} [({{commitHash}})]({{commitHref}}){{else}} ({{commitHash}}){{/if}}{{/if}}
         {{/commit-list}}
 
     {{/commit-parser}}
