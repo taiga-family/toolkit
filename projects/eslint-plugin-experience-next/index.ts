@@ -9,6 +9,7 @@ import decoratorKeySort from './rules/recommended/decorator-key-sort';
 import elementNewline from './rules/recommended/element-newline';
 import hostAttributesSort from './rules/recommended/host-attributes-sort';
 import htmlLogicalProperties from './rules/recommended/html-logical-properties';
+import importIntegrity from './rules/recommended/import-integrity';
 import injectionTokenDescription from './rules/recommended/injection-token-description';
 import noCommonjsImportPatterns from './rules/recommended/no-commonjs-import-patterns';
 import noDeepImports from './rules/recommended/no-deep-imports';
@@ -75,6 +76,7 @@ const plugin = {
         'flat-exports': flatExports,
         'host-attributes-sort': hostAttributesSort,
         'html-logical-properties': htmlLogicalProperties,
+        'import-integrity': importIntegrity,
         'injection-token-description': injectionTokenDescription,
         'no-commonjs-import-patterns': noCommonjsImportPatterns,
         'no-deep-imports': noDeepImports,
