@@ -17,12 +17,14 @@ const config: Rule.RuleModule = {
 
                     if (decoratorName in (order || {})) {
                         const orderList = order[decoratorName];
+
                         const decoratorArguments: any[] = Array.from(
                             expression.arguments ?? [],
                         );
 
                         for (const argument of decoratorArguments) {
                             const properties = Array.from(argument.properties ?? []);
+
                             const current = properties
                                 .map((prop: any) => prop.key?.name)
                                 .filter(Boolean);
@@ -38,6 +40,7 @@ const config: Rule.RuleModule = {
                                 context.report({
                                     fix: (fixer) => {
                                         const fileContent = context.sourceCode.text;
+
                                         const forgottenProps = current.filter(
                                             (key) => !orderList.includes(key),
                                         );

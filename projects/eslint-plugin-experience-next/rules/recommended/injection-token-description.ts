@@ -144,7 +144,6 @@ export const rule = createRule({
                 const name = getVariableName(node);
                 const token = getDescriptionValue(description);
                 const fixedDescription = getDescriptionNode(description);
-
                 const report = name && token && !token.includes(name);
 
                 if (report && fixedDescription) {
@@ -152,6 +151,7 @@ export const rule = createRule({
                         fix: (fixer) => {
                             const isNgDevModeGuarded =
                                 isNgDevModeConditional(description);
+
                             const fixes = [
                                 fixer.replaceText(
                                     isNgDevModeGuarded ? fixedDescription : description,

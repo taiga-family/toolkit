@@ -8,6 +8,7 @@ import ts from 'typescript';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'prefer-deep-imports';
+
 const ERROR_MESSAGE =
     'Import via root entry point is prohibited when nested entry points exist';
 
@@ -419,6 +420,7 @@ function mapSymbolsToEntryPointsUsingTypeChecker({
     state,
 }: MapSymbolsToEntryPointsParams): Map<string, string> {
     const symbolToEntryPoint = new Map<string, string>();
+
     const entryPointBySymbol = getCachedEntryPointBySymbol({
         candidateEntryPoints,
         rootEntryDirectory,

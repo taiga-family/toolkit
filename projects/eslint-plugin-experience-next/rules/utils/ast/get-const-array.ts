@@ -11,6 +11,7 @@ export function getConstArray(
     }
 
     const annotation = node.typeAnnotation;
+
     const isConst =
         annotation.type === AST_NODE_TYPES.TSTypeReference &&
         annotation.typeName.type === AST_NODE_TYPES.Identifier &&

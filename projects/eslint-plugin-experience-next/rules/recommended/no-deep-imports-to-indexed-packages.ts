@@ -10,6 +10,7 @@ const resolveCacheByOptions = new WeakMap<
     ts.CompilerOptions,
     Map<string, string | null>
 >();
+
 const nearestFileUpCache = new Map<string, string | null>();
 const markerCache = new Map<string, string | null>();
 const indexFileCache = new Map<string, string | null>();
@@ -21,7 +22,6 @@ export const rule = createRule({
         const program = parserServices.program;
         const compilerOptions = program.getCompilerOptions();
         const compilerHost = ts.createCompilerHost(compilerOptions, true);
-
         const containingDir = path.dirname(context.filename);
 
         function resolveTypescriptModuleCached(moduleSpecifier: string): string | null {
@@ -99,10 +99,12 @@ export const rule = createRule({
             }
 
             const resolvedRootDirectory = path.dirname(resolvedRootFilePath);
+
             const nearestNgPackageJson = findNearestFileUpwardsCached(
                 resolvedRootDirectory,
                 'ng-package.json',
             );
+
             const nearestPackageJson = findNearestFileUpwardsCached(
                 resolvedRootDirectory,
                 'package.json',
@@ -124,7 +126,6 @@ export const rule = createRule({
 
             const indexTypescriptPath = path.join(packageDirectory, 'index.ts');
             const indexTypesDeclarationPath = path.join(packageDirectory, 'index.d.ts');
-
             let indexFilePath = null;
 
             if (fs.existsSync(indexTypescriptPath)) {
@@ -154,6 +155,7 @@ export const rule = createRule({
             }
 
             const fileText = fs.readFileSync(indexFilePath, 'utf8');
+
             const sourceFile = ts.createSourceFile(
                 indexFilePath,
                 fileText,
@@ -190,6 +192,7 @@ export const rule = createRule({
             const expectedSpecifier = normalizeModuleSpecifier(
                 stripKnownExtensions(`./${subpath}`),
             );
+
             const expectedIndexSpecifier = normalizeModuleSpecifier(
                 stripKnownExtensions(`./${subpath}/index`),
             );

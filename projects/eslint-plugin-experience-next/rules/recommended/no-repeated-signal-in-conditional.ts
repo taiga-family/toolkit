@@ -80,6 +80,7 @@ export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, sourceCode} =
             getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         function checkNode(
@@ -136,10 +137,12 @@ export const rule = createRule<Options, MessageId>({
                         }
 
                         const varName = getCalleeName(firstCall);
+
                         const indent = getStatementIndent(
                             parentStatement,
                             sourceCode.text,
                         );
+
                         const fixes = [
                             fixer.insertTextBefore(
                                 parentStatement,
@@ -149,6 +152,7 @@ export const rule = createRule<Options, MessageId>({
 
                         for (const call of calls) {
                             const {parent} = call;
+
                             const target =
                                 parent.type === AST_NODE_TYPES.TSAsExpression
                                     ? parent

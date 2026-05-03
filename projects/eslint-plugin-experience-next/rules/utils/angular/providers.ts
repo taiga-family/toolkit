@@ -8,6 +8,7 @@ export function isAngularInjectionTokenFactoryFunction(
     program: TSESTree.Program,
 ): boolean {
     const parent = fn.parent;
+
     const injectionTokenName = getLocalNameForImport(
         program,
         '@angular/core',

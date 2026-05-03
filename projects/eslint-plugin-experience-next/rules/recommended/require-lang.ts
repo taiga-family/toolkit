@@ -22,6 +22,7 @@ export const rule = createRule({
                     }
 
                     const langAttr = node.attributes.find((attr) => attr.name === 'lang');
+
                     const hasBoundLang = node.inputs.some(
                         (input) =>
                             input.name === 'lang' ||

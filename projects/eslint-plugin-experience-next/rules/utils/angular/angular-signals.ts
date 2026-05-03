@@ -17,6 +17,7 @@ export {
 
 const ANGULAR_CORE = '@angular/core';
 const SIGNAL_WRITE_METHODS = new Set(['mutate', 'set', 'update']);
+
 const AFTER_RENDER_EFFECT_PHASES = new Map([
     ['earlyRead', 'afterRenderEffect().earlyRead'],
     ['mixedReadWrite', 'afterRenderEffect().mixedReadWrite'],

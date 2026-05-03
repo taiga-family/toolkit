@@ -85,6 +85,7 @@ function getResolutionState(program: ts.Program): ResolutionState {
     }
 
     const compilerOptions = program.getCompilerOptions();
+
     const state = {
         compilerHost: ts.createCompilerHost(compilerOptions, true),
         resolutionCache: ts.createModuleResolutionCache(
@@ -120,6 +121,7 @@ function resolveModule(
 ): ts.ResolvedModuleFull | null {
     const compilerOptions = program.getCompilerOptions();
     const {compilerHost, resolutionCache} = getResolutionState(program);
+
     const resolved =
         ts.resolveModuleName(
             moduleSpecifier,
@@ -235,9 +237,11 @@ function buildDependenciesByFileName(
     displayFileNameByFileName: Map<string, string>;
 } {
     const sourceFiles = program.getSourceFiles().filter(isProjectCodeFile);
+
     const projectFileNames = new Set(
         sourceFiles.map((sourceFile) => canonicalFileName(sourceFile.fileName)),
     );
+
     const dependenciesByFileName = new Map<string, ImportGraphEdge[]>();
     const displayFileNameByFileName = new Map<string, string>();
 
@@ -287,7 +291,6 @@ function findStronglyConnectedComponents(
 } {
     let nextComponentId = 0;
     let nextIndex = 0;
-
     const componentIdByFileName = new Map<string, number>();
     const componentSizeById = new Map<number, number>();
     const nodeStateByFileName = new Map<string, TarjanNodeState>();
@@ -387,10 +390,13 @@ function getImportGraph(program: ts.Program): ImportGraphCache {
     }
 
     const canonicalFileName = createCanonicalFileName();
+
     const {dependenciesByFileName, displayFileNameByFileName} =
         buildDependenciesByFileName(program, canonicalFileName);
+
     const {componentIdByFileName, componentSizeById} =
         findStronglyConnectedComponents(dependenciesByFileName);
+
     const cache = {
         componentIdByFileName,
         componentSizeById,
@@ -559,6 +565,7 @@ function findCyclicTargetFileName(
         const isSelfCycle =
             edge.targetFileName === currentFileName &&
             graph.selfCycleFileNames.has(currentFileName);
+
         const isSameComponentCycle =
             currentComponentSize > 1 &&
             graph.componentIdByFileName.get(edge.targetFileName) === currentComponentId;
@@ -751,12 +758,15 @@ export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, sourceCode, tsProgram} =
             getTypeAwareRuleContext(context);
+
         const checkCycles = context.options[0]?.checkCycles ?? true;
         const checkDefaultImports = context.options[0]?.checkDefaultImports ?? true;
         const checkNamedAsDefault = context.options[0]?.checkNamedAsDefault ?? true;
         const checkNamespaceMembers = context.options[0]?.checkNamespaceMembers ?? true;
+
         const ignoreExternalDefaultImports =
             context.options[0]?.ignoreExternalDefaultImports ?? true;
+
         const canonicalFileName = createCanonicalFileName();
         const currentFileName = canonicalFileName(context.filename);
         const namespaceImports = new Map<string, NamespaceImportUsage>();
@@ -784,6 +794,7 @@ export const rule = createRule<Options, MessageId>({
             }
 
             const graph = getImportGraph(tsProgram);
+
             const targetFileName = findCyclicTargetFileName(
                 graph,
                 currentFileName,

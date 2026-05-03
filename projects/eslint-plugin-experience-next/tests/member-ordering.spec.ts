@@ -15,7 +15,6 @@ const ruleTester = new RuleTester({
 });
 
 const rule = rules['member-ordering'];
-
 const config = {default: TUI_MEMBER_ORDERING_CONVENTION};
 
 ruleTester.run('member-ordering with public|protected-instance-field', rule, {

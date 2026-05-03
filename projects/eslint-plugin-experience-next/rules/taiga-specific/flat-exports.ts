@@ -26,6 +26,7 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
     create(context) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
             getTypeAwareRuleContext(context);
+
         const arrays = new Map<string, ArrayMeta>();
         const purityCache = new WeakMap<ArrayMeta, boolean>();
 
@@ -98,6 +99,7 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
                         }
 
                         const hasLocalArrayMeta = arrays.has(meta.name);
+
                         const isExternalPure = hasLocalArrayMeta
                             ? false
                             : isExternalPureTuple(typeChecker, meta.type);
@@ -142,6 +144,7 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
                     const tsNode = esTreeNodeToTSNodeMap.get(el);
                     const elType = typeChecker.getTypeAtLocation(tsNode);
                     const isClass = isClassType(elType);
+
                     const isArrayLike =
                         typeChecker.isArrayLikeType(elType) ||
                         typeChecker.isTupleType(elType);

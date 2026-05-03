@@ -48,6 +48,7 @@ import requireLiContainer from './rules/recommended/require-li-container';
 import requireTitle from './rules/recommended/require-title';
 import shortTuiImports from './rules/recommended/short-tui-imports';
 import singleLineClassPropertySpacing from './rules/recommended/single-line-class-property-spacing';
+import singleLineVariableSpacing from './rules/recommended/single-line-variable-spacing';
 import standaloneImportsSort from './rules/recommended/standalone-imports-sort';
 import arrayAsConst from './rules/taiga-specific/array-as-const';
 import classPropertyNaming from './rules/taiga-specific/class-property-naming';
@@ -118,6 +119,7 @@ const plugin = {
         'require-title': requireTitle,
         'short-tui-imports': shortTuiImports,
         'single-line-class-property-spacing': singleLineClassPropertySpacing,
+        'single-line-variable-spacing': singleLineVariableSpacing,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
     },

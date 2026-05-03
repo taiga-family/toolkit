@@ -60,7 +60,6 @@ function buildReplacement(
         const parentColumn = parentStatement.loc.start.column;
         const firstStmtColumn = firstStmt.loc.start.column;
         const extra = firstStmtColumn - parentColumn;
-
         const indented = stmts.map((s) => dedent(sourceCode.getText(s), extra));
 
         return indented.join(`\n${''.padStart(parentColumn)}`);
@@ -110,6 +109,7 @@ export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         function isUntrackedUsedElsewhere(
@@ -160,6 +160,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                 fix: canFix
                     ? (fixer) => {
                           const parentStmt = parent;
+
                           const replacement = buildReplacement(
                               untrackedCall,
                               parentStmt,
@@ -171,9 +172,11 @@ export const rule = createUntrackedRule<[], MessageId>({
                           }
 
                           const untrackedLocalName = findUntrackedAlias(program);
+
                           const stillUsed =
                               untrackedLocalName !== null &&
                               isUntrackedUsedElsewhere(untrackedLocalName, untrackedCall);
+
                           const fixes = [fixer.replaceText(parentStmt, replacement)];
 
                           if (!stillUsed) {

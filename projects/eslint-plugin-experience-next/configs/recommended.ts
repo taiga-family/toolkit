@@ -749,6 +749,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/prefer-untracked-signal-getter': 'error',
             '@taiga-ui/experience-next/short-tui-imports': 'error',
             '@taiga-ui/experience-next/single-line-class-property-spacing': 'error',
+            '@taiga-ui/experience-next/single-line-variable-spacing': 'error',
             '@taiga-ui/experience-next/standalone-imports-sort': [
                 'error',
                 {decorators: ['Component', 'Directive', 'NgModule', 'Pipe']},

@@ -15,6 +15,7 @@ export const rule = createRule<[RuleConfig[]], 'invalidName'>({
     create(context, [configs]) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
             getTypeAwareRuleContext(context);
+
         const flatConfig = configs.flat();
 
         return {

@@ -56,6 +56,7 @@ export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
             getTypeAwareRuleContext(context);
+
         const ignoreTupleContextualTyping =
             context.options[0]?.ignoreTupleContextualTyping ?? true;
 

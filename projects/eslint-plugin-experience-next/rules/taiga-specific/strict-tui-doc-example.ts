@@ -5,7 +5,6 @@ import {getTypeName} from '../utils/typescript/get-type-name';
 
 const INVALID_KEY_MESSAGE_ID = 'strict-doc-example-extensions-invalid-key' as const;
 const INVALID_VALUE_MESSAGE_ID = 'strict-doc-example-extensions-invalid-value' as const;
-
 const DOC_EXAMPLE_INTERFACE_NAME = 'TuiDocExample';
 
 const fileNameToExtension: Record<string, string> = {
@@ -90,6 +89,7 @@ export const rule = createRule<
                     }
 
                     const invalidNode = expectedExtension ? source : prop.key;
+
                     const messageId = expectedExtension
                         ? INVALID_VALUE_MESSAGE_ID
                         : INVALID_KEY_MESSAGE_ID;

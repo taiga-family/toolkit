@@ -142,6 +142,7 @@ export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         function isUntrackedUsedElsewhere(
@@ -196,7 +197,9 @@ export const rule = createUntrackedRule<[], MessageId>({
                                       ),
                                   ),
                               ];
+
                               const untrackedLocalName = findUntrackedAlias(program);
+
                               const stillUsed =
                                   untrackedLocalName !== null &&
                                   isUntrackedUsedElsewhere(untrackedLocalName, node);
