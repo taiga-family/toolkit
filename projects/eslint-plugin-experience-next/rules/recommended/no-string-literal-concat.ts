@@ -34,6 +34,7 @@ function isStringType(type: ts.Type, checker: ts.TypeChecker): boolean {
 function buildMergedString(parts: TSESTree.StringLiteral[]): string {
     const combined = parts.map((p) => p.value).join('');
     const quote = combined.includes("'") && !combined.includes('"') ? '"' : "'";
+
     const escaped = combined
         .replaceAll('\\', '\\\\')
         .replaceAll('\r', String.raw`\r`)
@@ -87,6 +88,7 @@ export const rule = createRule<Options, MessageId>({
 
         let parserServices: ReturnType<typeof ESLintUtils.getParserServices> | null =
             null;
+
         let checker: ts.TypeChecker | null = null;
 
         try {

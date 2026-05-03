@@ -55,6 +55,7 @@ export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         return {

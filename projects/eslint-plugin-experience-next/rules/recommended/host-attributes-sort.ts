@@ -108,6 +108,7 @@ interface Group<T> {
 export const rule = createRule<Options, MessageIds>({
     create(context, [options]) {
         const sourceCode = context.sourceCode;
+
         const settings = {
             attributeGroups: [...DEFAULT_ATTRIBUTE_GROUPS],
             attributeIgnoreCase: true,
@@ -115,6 +116,7 @@ export const rule = createRule<Options, MessageIds>({
             decorators: [...DEFAULT_DECORATORS],
             ...options,
         };
+
         const allowedDecorators = new Set(settings.decorators);
 
         return {
@@ -275,6 +277,7 @@ function organizeProperties(
         options.attributeGroups.length > 0 ? options.attributeGroups : ['$ANGULAR'],
         options.attributeIgnoreCase,
     );
+
     const defaultGroup = ensureDefaultGroup(groups);
 
     for (const property of properties) {
@@ -402,11 +405,13 @@ function getAttachedComments(
     for (const [index, {node}] of properties.entries()) {
         const previousProperty = properties[index - 1]?.node ?? null;
         const nextProperty = properties[index + 1]?.node ?? null;
+
         const leading = sourceCode
             .getCommentsBefore(node)
             .filter((comment) =>
                 isAttachedLeadingComment(hostObject, previousProperty, node, comment),
             );
+
         const trailing = comments.find((comment) =>
             isAttachedTrailingComment(hostObject, node, nextProperty, comment),
         );
@@ -432,6 +437,7 @@ function renderFixWithComments(
     attachedComments: Map<TSESTree.Property, AttachedComments>,
 ): string {
     const objectIndentation = getLineIndentation(sourceCode.text, hostObject.range[0]);
+
     const propertyIndentation = getPropertyIndentation(
         hostObject,
         sortedProperties,
@@ -464,6 +470,7 @@ function renderPropertyWithComments(
             (comment) =>
                 `${propertyIndentation}${sourceCode.text.slice(...comment.range)}`,
         ) ?? [];
+
     const trailingComment = attachedComments?.trailing
         ? ` ${sourceCode.text.slice(...attachedComments.trailing.range)}`
         : '';

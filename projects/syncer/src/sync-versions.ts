@@ -40,6 +40,7 @@ export function tuiSyncVersions(options: Options): void {
             null,
             INDENTATION,
         );
+
         const packageJson = JSON.parse(originalJSON);
         const prevVersion = packageJson.version;
 

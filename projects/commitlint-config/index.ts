@@ -23,12 +23,14 @@ export default {
         ],
         'type-enum': () => {
             const staged = getGitDiffLines();
+
             const demoChanges = staged.filter(
                 (path) =>
                     path.startsWith('projects/demo') || path.startsWith('apps/demo'),
             );
 
             const [level, applicable, types] = conventional.rules['type-enum'];
+
             const prefixes =
                 demoChanges.length === staged.length
                     ? ['chore']

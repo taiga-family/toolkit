@@ -28,7 +28,9 @@ function buildMultilineStartTag(node: TmplAstElement, sourceText: string): strin
         startTag.start.offset,
         firstAttr.sourceSpan.start.offset,
     );
+
     const lastAttr = attrs[attrs.length - 1];
+
     const closing = sourceText
         .slice(
             lastAttr ? lastAttr.sourceSpan.end.offset : startTag.end.offset,
@@ -76,6 +78,7 @@ export const rule = createRule({
                             ],
                             replacement,
                         );
+
                     const firstAttr = attrs[0];
 
                     if (!firstAttr) {
@@ -123,6 +126,7 @@ export const rule = createRule({
                     }
 
                     const lastAttr = attrs[attrs.length - 1];
+
                     const closeStyleActual =
                         lastAttr?.sourceSpan.end.line === node.startSourceSpan.end.line
                             ? 'sameline'

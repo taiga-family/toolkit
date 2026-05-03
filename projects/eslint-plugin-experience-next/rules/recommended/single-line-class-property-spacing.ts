@@ -1,15 +1,16 @@
 import {type TSESTree} from '@typescript-eslint/utils';
 
 import {
-    getLeadingIndentation,
-    getLineBreak,
-    hasBlankLine,
-    hasCommentLikeText,
     isAccessorMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
-    isSingleLineNode,
 } from '../utils/ast/class-members';
+import {
+    getSpacingReplacement,
+    hasBlankLine,
+    hasCommentLikeText,
+    isSingleLineNode,
+} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 type MessageIds =
@@ -21,16 +22,6 @@ type MessageIds =
 export const rule = createRule<[], MessageIds>({
     create(context) {
         const sourceCode = context.sourceCode;
-
-        const getIndentation = (line: number): string =>
-            getLeadingIndentation(sourceCode.lines[line - 1] ?? '');
-
-        const getSpacingReplacement = (
-            betweenText: string,
-            nextLine: number,
-            blankLineCount: number,
-        ): string =>
-            `${getLineBreak(betweenText).repeat(blankLineCount + 1)}${getIndentation(nextLine)}`;
 
         return {
             ClassBody(node: TSESTree.ClassBody) {
@@ -58,6 +49,7 @@ export const rule = createRule<[], MessageIds>({
 
                     const currentIsSingleLine = isSingleLineNode(current);
                     const blankLineBetween = hasBlankLine(betweenText);
+
                     const needsSeparatedLine =
                         isAccessorMember(current) || isAccessorMember(next);
 
@@ -73,6 +65,7 @@ export const rule = createRule<[], MessageIds>({
                                 fixer.replaceTextRange(
                                     [current.range[1], next.range[0]],
                                     getSpacingReplacement(
+                                        sourceCode,
                                         betweenText,
                                         next.loc.start.line,
                                         0,
@@ -91,6 +84,7 @@ export const rule = createRule<[], MessageIds>({
                                 fixer.replaceTextRange(
                                     [current.range[1], next.range[0]],
                                     getSpacingReplacement(
+                                        sourceCode,
                                         betweenText,
                                         next.loc.start.line,
                                         1,
@@ -115,6 +109,7 @@ export const rule = createRule<[], MessageIds>({
                                 fixer.replaceTextRange(
                                     [current.range[1], next.range[0]],
                                     getSpacingReplacement(
+                                        sourceCode,
                                         betweenText,
                                         next.loc.start.line,
                                         1,
@@ -138,6 +133,7 @@ export const rule = createRule<[], MessageIds>({
                                 fixer.replaceTextRange(
                                     [current.range[1], next.range[0]],
                                     getSpacingReplacement(
+                                        sourceCode,
                                         betweenText,
                                         next.loc.start.line,
                                         1,

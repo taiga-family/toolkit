@@ -81,6 +81,7 @@ export function buildImportRemovalFixes(
     }
 
     const {importDecl, specifier: untrackedSpec} = match;
+
     const namedSpecifiers = importDecl.specifiers.filter(
         (s): s is TSESTree.ImportSpecifier => s.type === AST_NODE_TYPES.ImportSpecifier,
     );

@@ -59,6 +59,7 @@ export const rule = createRule({
                         }
 
                         const openingQuote = sourceText[openQuoteOffset];
+
                         const isQuotedAttribute =
                             openingQuote === SINGLE_QUOTE ||
                             openingQuote === DOUBLE_QUOTE;
@@ -78,6 +79,7 @@ export const rule = createRule({
                         }
 
                         const closingQuote = sourceText[closeQuoteOffset];
+
                         const hasMatchingQuotes =
                             isQuotedAttribute && openingQuote === closingQuote;
 

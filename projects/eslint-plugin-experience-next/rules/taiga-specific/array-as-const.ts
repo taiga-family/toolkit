@@ -30,6 +30,7 @@ const config: Rule.RuleModule = {
 
                         if (isArrayWithClasses) {
                             const sourceCode = context.sourceCode;
+
                             const afterArrayText = sourceCode
                                 .getText()
                                 .slice(init.range?.[1], d.range?.[1]);

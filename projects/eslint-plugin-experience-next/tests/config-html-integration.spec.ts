@@ -6,7 +6,6 @@ import {ESLint} from 'eslint';
 import noProjectAsInNgTemplate from '../rules/recommended/no-project-as-in-ng-template';
 
 const RULE_ID = '@taiga-ui/experience-next/no-project-as-in-ng-template';
-
 const testPlugin = {rules: {'no-project-as-in-ng-template': noProjectAsInNgTemplate}};
 
 function expectRuleViolation(

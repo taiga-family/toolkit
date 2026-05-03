@@ -5,6 +5,7 @@ import {sourceSpanToLoc} from '../utils/angular/source-span';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'no-href-with-router-link';
+
 const ERROR_MESSAGE =
     'Do not use href and routerLink attributes together on the same element';
 
@@ -19,6 +20,7 @@ const config: Rule.RuleModule = {
                 }
 
                 const hrefAttr = node.attributes.find((attr) => attr.name === 'href');
+
                 const hasRouterLink =
                     node.attributes.some(
                         (attr) => attr.name.toLowerCase() === 'routerlink',

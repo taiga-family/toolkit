@@ -14,14 +14,9 @@ import {
 } from '../rules/utils/ast/ancestors';
 import {collectCallExpressions} from '../rules/utils/ast/call-expressions';
 import {
-    getLeadingIndentation,
-    getLineBreak,
-    hasBlankLine,
-    hasCommentLikeText,
     isAccessorMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
-    isSingleLineNode,
 } from '../rules/utils/ast/class-members';
 import {collectMutationTargets} from '../rules/utils/ast/mutation-targets';
 import {
@@ -35,6 +30,13 @@ import {
     getStaticPropertyName,
 } from '../rules/utils/ast/property-names';
 import {getReturnedExpression} from '../rules/utils/ast/returned-expression';
+import {
+    getLeadingIndentation,
+    getLineBreak,
+    hasBlankLine,
+    hasCommentLikeText,
+    isSingleLineNode,
+} from '../rules/utils/ast/spacing';
 import {
     getStaticStringValue,
     isEmptyStaticString,
@@ -161,6 +163,7 @@ describe('rule utils', () => {
 
         const computedMember = getFirstExpression("control['writeValue']");
         const dynamicMember = getFirstExpression('control[methodName]');
+
         const classDeclaration = parseProgram(
             "class Test { transform() {} ['writeValue']() {} #hidden = 0; }",
         ).body[0];
@@ -220,6 +223,7 @@ describe('rule utils', () => {
                 }
             }
         `);
+
         const [transformMethod] = classDeclaration.body.body;
 
         if (transformMethod?.type !== AST_NODE_TYPES.MethodDefinition) {
@@ -255,6 +259,7 @@ describe('rule utils', () => {
     it('unwraps parenthesized expressions and extracts returned expressions', () => {
         const identifier = getFirstExpression('value');
         const arrow = getFirstExpression('() => ((value))');
+
         const parenthesized = {
             expression: {
                 expression: identifier,
@@ -314,7 +319,7 @@ describe('rule utils', () => {
         expect(isSingleLineNode(field)).toBe(true);
     });
 
-    it('handles line-break and spacing helpers for class-member text gaps', () => {
+    it('handles line-break and spacing helpers for text gaps', () => {
         expect(hasCommentLikeText(' /* note */ ')).toBe(true);
         expect(hasCommentLikeText('\n    // note')).toBe(true);
         expect(hasCommentLikeText('\n    next')).toBe(false);
@@ -356,6 +361,7 @@ describe('rule utils', () => {
             const TOKEN = new InjectionToken('token', {factory: () => 1});
             const provider = {provide: TOKEN, useFactory: function () { return 2; }};
         `);
+
         const tokenDeclaration = program.body[1];
         const providerDeclaration = program.body[2];
 

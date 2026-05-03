@@ -95,6 +95,7 @@ export const rule = createRule<Options, MessageId>({
                                               )
                                               .map((arg) => sourceCode.getText(arg))
                                               .join(', ');
+
                                           const lastStmt = group[group.length - 1];
 
                                           if (!lastStmt) {

@@ -67,6 +67,7 @@ const CONSOLE_METHODS = new Set([
     'trace',
     'warn',
 ]);
+
 const HIGH_CONFIDENCE_DOM_METHODS = new Set(['requestFullscreen']);
 const LIB_DOM_FILE_PATTERN = /(?:^|[\\/])lib\.dom(?:\.[^\\/]+)?\.d\.ts$/;
 
@@ -332,6 +333,7 @@ function collectSuspiciousReads(
             read: TSESTree.CallExpression;
         }
     >();
+
     const aliasResolutionContext: AliasResolutionContext = {
         checker,
         esTreeNodeToTSNodeMap,
@@ -375,6 +377,7 @@ function collectSuspiciousReads(
             if (read) {
                 const key = String(read.range);
                 const existing = suspicious.get(key);
+
                 const alias =
                     unwrappedArg.type === AST_NODE_TYPES.Identifier ? unwrappedArg : null;
 
@@ -411,6 +414,7 @@ export const rule = createUntrackedRule<[], MessageId>({
             sourceCode,
             tsNodeToESTreeNodeMap,
         } = getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
         const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
 
@@ -419,6 +423,7 @@ export const rule = createUntrackedRule<[], MessageId>({
         ): (fixer: RuleFixer) => Array<ReturnType<RuleFixer['replaceText']>> {
             const untrackedAlias = findUntrackedAlias(program);
             const alreadyHasUntracked = untrackedAlias !== null;
+
             const wrapped = buildUntrackedWrap(
                 read,
                 sourceCode,
@@ -445,12 +450,14 @@ export const rule = createUntrackedRule<[], MessageId>({
                         estreeNodeMap,
                         program,
                     );
+
                     const {reads: trackedReads} = collectSignalUsages(
                         scope.callback,
                         checker,
                         signalNodeMap,
                         program,
                     );
+
                     const suspiciousReads = new Set(suspicious.map(({read}) => read));
 
                     for (const {aliases, consumers, read} of suspicious) {

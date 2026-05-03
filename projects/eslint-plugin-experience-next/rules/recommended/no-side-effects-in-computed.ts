@@ -255,9 +255,11 @@ function resolveCalledFunctions(
     context: AnalysisContext,
 ): readonly FunctionLikeScope[] {
     const resolved = new Map<string, FunctionLikeScope>();
+
     const tsNode = context.esTreeNodeToTSNodeMap.get(node) as
         | ts.CallLikeExpression
         | undefined;
+
     const signature = tsNode ? context.checker.getResolvedSignature(tsNode) : undefined;
     const declarations = new Set<ts.Declaration>();
 
@@ -514,6 +516,7 @@ export const rule = createRule<[], MessageId>({
             sourceCode,
             tsNodeToESTreeNodeMap,
         } = getTypeAwareRuleContext(context);
+
         const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
         const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
 

@@ -36,6 +36,7 @@ export const rule = createRule<Options, MessageIds>({
         [{decorators = DEFAULT_DECORATORS, exceptions = DEFAULT_EXCEPTIONS}],
     ) {
         const sourceCode = context.getSourceCode();
+
         const importedFromTaiga: Record<
             string,
             {module: string; importedAs: string; isType: boolean}
@@ -95,6 +96,7 @@ export const rule = createRule<Options, MessageIds>({
                     }
 
                     const exception = exceptions.find((ex) => ex.from === importedAs);
+
                     const short = exception
                         ? exception.to
                         : importedAs.replace(/(?:Component|Directive)$/, '');
@@ -147,6 +149,7 @@ export const rule = createRule<Options, MessageIds>({
                                 .map((specifier) => `type ${getImportedName(specifier)}`);
 
                             const allNames = [...typeImports, ...[...nextNames].sort()];
+
                             const newImport = `import { ${allNames.join(
                                 ', ',
                             )} } from '${module}';`;
