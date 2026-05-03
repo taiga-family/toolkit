@@ -733,6 +733,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-import-assertions': 'error',
             '@taiga-ui/experience-next/no-infinite-loop': 'error',
             '@taiga-ui/experience-next/no-redundant-type-annotation': 'error',
+            '@taiga-ui/experience-next/no-repeated-signal-in-conditional': 'error',
             '@taiga-ui/experience-next/no-side-effects-in-computed': 'error',
             '@taiga-ui/experience-next/no-signal-reads-after-await-in-reactive-context':
                 'error',

@@ -27,6 +27,7 @@ import noObsoleteTags from './rules/recommended/no-obsolete-tags';
 import noPlaywrightEmptyFill from './rules/recommended/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/recommended/no-project-as-in-ng-template';
 import noRedundantTypeAnnotation from './rules/recommended/no-redundant-type-annotation';
+import noRepeatedSignalInConditional from './rules/recommended/no-repeated-signal-in-conditional';
 import noSideEffectsInComputed from './rules/recommended/no-side-effects-in-computed';
 import noSignalReadsAfterAwaitInReactiveContext from './rules/recommended/no-signal-reads-after-await-in-reactive-context';
 import noStringLiteralConcat from './rules/recommended/no-string-literal-concat';
@@ -92,6 +93,7 @@ const plugin = {
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,
         'no-redundant-type-annotation': noRedundantTypeAnnotation,
+        'no-repeated-signal-in-conditional': noRepeatedSignalInConditional,
         'no-restricted-attr-values': noRestrictedAttrValues,
         'no-side-effects-in-computed': noSideEffectsInComputed,
         'no-signal-reads-after-await-in-reactive-context':
