@@ -76,11 +76,6 @@ export const rule = createRule<RuleOptions, MessageIds>({
                 );
 
                 if (!rootEntryDirectory) {
-                    context.report({
-                        messageId: MESSAGE_ID,
-                        node,
-                    });
-
                     return;
                 }
 
@@ -88,11 +83,6 @@ export const rule = createRule<RuleOptions, MessageIds>({
                     findNestedEntryPointRelativePaths(rootEntryDirectory);
 
                 if (nestedEntryPointRelativePaths.length === 0) {
-                    context.report({
-                        messageId: MESSAGE_ID,
-                        node,
-                    });
-
                     return;
                 }
 
