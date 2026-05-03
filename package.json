@@ -20,9 +20,6 @@
             "@taiga-ui/commitlint-config"
         ]
     },
-    "release-it": {
-        "extends": "./projects/release-it-config/.release-it.js"
-    },
     "lint-staged": {
         "*.{js,ts,html,svg,yml,md,less,json}": [
             "prettier --write",
@@ -67,6 +64,9 @@
         "import": [
             "@taiga-ui/cspell-config/cspell.config.js"
         ]
+    },
+    "release-it": {
+        "extends": "./projects/release-it-config/.release-it.js"
     },
     "syncer": {
         "includePaths": [
