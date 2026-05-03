@@ -1,9 +1,8 @@
-import fs from 'node:fs';
+import fs, {globSync} from 'node:fs';
 import path from 'node:path';
 
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
-import {globSync} from 'glob';
 import ts from 'typescript';
 
 import {createRule} from '../utils/create-rule';
@@ -278,35 +277,13 @@ function resolveRootEntryDirectory(
  *     "schematics/collection.json"     → "schematics"
  */
 function findNestedEntryPointRelativePaths(rootEntryDirectory: string): string[] {
-    const ngPackageJsonFiles = globSync('**/ng-package.json', {
-        absolute: false,
-        cwd: rootEntryDirectory,
-    });
+    const files = ['**/ng-package.json', '**/collection.json'].flatMap((pattern) =>
+        globSync(pattern, {cwd: rootEntryDirectory}),
+    );
 
-    const collectionJsonFiles = globSync('**/collection.json', {
-        absolute: false,
-        cwd: rootEntryDirectory,
-    });
-
-    const directories: string[] = [];
-
-    for (const file of ngPackageJsonFiles) {
-        const normalized = file.replaceAll('\\', '/').replace(/\/ng-package\.json$/, '');
-
-        if (normalized && normalized !== '.') {
-            directories.push(normalized);
-        }
-    }
-
-    for (const file of collectionJsonFiles) {
-        const normalized = file.replaceAll('\\', '/').replace(/\/collection\.json$/, '');
-
-        if (normalized && normalized !== '.') {
-            directories.push(normalized);
-        }
-    }
-
-    return directories;
+    return files
+        .map((file) => path.dirname(file).replaceAll('\\', '/'))
+        .filter((directory) => directory && directory !== '.');
 }
 
 /**
