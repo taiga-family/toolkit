@@ -2,7 +2,7 @@ import fs, {globSync} from 'node:fs';
 import path from 'node:path';
 
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
-import {ESLintUtils, type TSESTree} from '@typescript-eslint/utils';
+import {ESLintUtils, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 import ts from 'typescript';
 
 import {createRule} from '../utils/create-rule';
@@ -34,13 +34,113 @@ type RuleOptions = [
 
 type MessageIds = typeof MESSAGE_ID;
 
+type RootEntryDirectoryCache = Map<string, string | null>;
+
+type NestedEntryPointPathsCache = Map<string, string[]>;
+
+type EntryPointBySymbolCache = Map<string, Map<string, string>>;
+
+type ImportSpecifier = TSESTree.ImportDeclaration['specifiers'][number];
+
+interface SharedPreferDeepImportsState {
+    readonly rootEntryDirectoryByImport: RootEntryDirectoryCache;
+    readonly nestedEntryPointPathsByRoot: NestedEntryPointPathsCache;
+    readonly entryPointBySymbolCache: EntryPointBySymbolCache;
+}
+
+interface PreferDeepImportsState {
+    readonly allowedPackages: ReadonlySet<string>;
+    readonly isStrictMode: boolean;
+    readonly program: ts.Program;
+    readonly typeChecker: ts.TypeChecker;
+    readonly sourceCode: Readonly<TSESLint.SourceCode>;
+    readonly shared: SharedPreferDeepImportsState;
+}
+
+interface GetCachedRootEntryDirectoryParams {
+    importPath: string;
+    fromFile: string;
+    state: PreferDeepImportsState;
+}
+
+interface MapSymbolsToEntryPointsParams {
+    importedSymbols: string[];
+    candidateEntryPoints: string[];
+    rootEntryDirectory: string;
+    state: PreferDeepImportsState;
+}
+
+interface GetCachedEntryPointBySymbolParams {
+    candidateEntryPoints: string[];
+    rootEntryDirectory: string;
+    state: PreferDeepImportsState;
+}
+
+interface BuildEntryPointBySymbolIndexParams {
+    candidateEntryPoints: string[];
+    rootEntryDirectory: string;
+    state: PreferDeepImportsState;
+}
+
+interface GetExportedNamesForEntryPointParams {
+    rootEntryDirectory: string;
+    relativeEntryDirectory: string;
+    state: PreferDeepImportsState;
+}
+
+interface BuildRewrittenImportsParams {
+    node: TSESTree.ImportDeclaration;
+    baseImportPath: string;
+    symbolToEntryPoint: Map<string, string>;
+    state: PreferDeepImportsState;
+}
+
+interface BuildNamedImportStatementParams {
+    specifiers: TSESTree.ImportSpecifier[];
+    importPath: string;
+    importKind: TSESTree.ImportDeclaration['importKind'];
+    state: PreferDeepImportsState;
+}
+
+interface BuildImportStatementParams {
+    specifiers: ImportSpecifier[];
+    importPath: string;
+    importKind: TSESTree.ImportDeclaration['importKind'];
+    state: PreferDeepImportsState;
+}
+
+const sharedStateByProgram = new WeakMap<ts.Program, SharedPreferDeepImportsState>();
+
 export const rule = createRule<RuleOptions, MessageIds>({
     create(context, [options]) {
-        const allowedPackages = normalizeImportFilter(options.importFilter);
+        const allowedPackages = new Set(normalizeImportFilter(options.importFilter));
+
+        if (allowedPackages.size === 0) {
+            return {};
+        }
+
         const isStrictMode = options.strict ?? false;
-        const parserServices = ESLintUtils.getParserServices(context);
-        const program = parserServices.program;
-        const typeChecker = program.getTypeChecker();
+        let state: PreferDeepImportsState | null = null;
+
+        function getState(): PreferDeepImportsState {
+            if (state) {
+                return state;
+            }
+
+            const parserServices = ESLintUtils.getParserServices(context);
+            const program = parserServices.program;
+
+            state = {
+                allowedPackages,
+                isStrictMode,
+                program,
+                shared: getSharedState(program),
+                sourceCode: context.sourceCode,
+                typeChecker: program.getTypeChecker(),
+            };
+
+            return state;
+        }
 
         return {
             ImportDeclaration(node: TSESTree.ImportDeclaration) {
@@ -54,7 +154,7 @@ export const rule = createRule<RuleOptions, MessageIds>({
 
                 if (
                     !rootPackageName ||
-                    !allowedPackages.includes(rootPackageName) ||
+                    !allowedPackages.has(rootPackageName) ||
                     (!isStrictMode &&
                         isAlreadyNestedImport(rawImportPath, rootPackageName))
                 ) {
@@ -67,20 +167,23 @@ export const rule = createRule<RuleOptions, MessageIds>({
                     return;
                 }
 
-                const currentFileName = context.getFilename();
+                const currentState = getState();
 
-                const rootEntryDirectory = resolveRootEntryDirectory(
-                    rawImportPath,
-                    currentFileName,
-                    program,
-                );
+                const rootEntryDirectory = getCachedRootEntryDirectory({
+                    fromFile: context.getFilename(),
+                    importPath: rawImportPath,
+                    state: currentState,
+                });
 
                 if (!rootEntryDirectory) {
                     return;
                 }
 
                 const nestedEntryPointRelativePaths =
-                    findNestedEntryPointRelativePaths(rootEntryDirectory);
+                    getCachedNestedEntryPointRelativePaths(
+                        rootEntryDirectory,
+                        currentState.shared.nestedEntryPointPathsByRoot,
+                    );
 
                 if (nestedEntryPointRelativePaths.length === 0) {
                     return;
@@ -88,30 +191,30 @@ export const rule = createRule<RuleOptions, MessageIds>({
 
                 const candidateEntryPointPaths = selectCandidateEntryPointsForMode(
                     nestedEntryPointRelativePaths,
-                    isStrictMode,
+                    currentState.isStrictMode,
                 );
 
                 if (candidateEntryPointPaths.length === 0) {
                     return;
                 }
 
-                const symbolToEntryPoint = mapSymbolsToEntryPointsUsingTypeChecker(
+                const symbolToEntryPoint = mapSymbolsToEntryPointsUsingTypeChecker({
+                    candidateEntryPoints: candidateEntryPointPaths,
                     importedSymbols,
-                    candidateEntryPointPaths,
                     rootEntryDirectory,
-                    program,
-                    typeChecker,
-                );
+                    state: currentState,
+                });
 
                 if (symbolToEntryPoint.size === 0) {
                     return;
                 }
 
-                const newImportBlock = buildRewrittenImports(
+                const newImportBlock = buildRewrittenImports({
+                    baseImportPath: rawImportPath,
                     node,
-                    rawImportPath,
+                    state: currentState,
                     symbolToEntryPoint,
-                );
+                });
 
                 context.report({
                     fix(fixer) {
@@ -137,7 +240,15 @@ export const rule = createRule<RuleOptions, MessageIds>({
             {
                 additionalProperties: false,
                 properties: {
-                    importFilter: {type: ['string', 'array']},
+                    importFilter: {
+                        oneOf: [
+                            {type: 'string'},
+                            {
+                                items: {type: 'string'},
+                                type: 'array',
+                            },
+                        ],
+                    },
                     strict: {type: 'boolean'},
                 },
                 type: 'object',
@@ -145,29 +256,33 @@ export const rule = createRule<RuleOptions, MessageIds>({
         ],
         type: 'problem',
     },
-
     name: 'prefer-deep-imports',
 });
 
 export default rule;
 
-/**
- * Normalize "importFilter" option to a flat array of package names.
- * The rule expects concrete package names, not regular expression strings.
- */
-function normalizeImportFilter(importFilter: string[] | string): string[] {
-    return Array.isArray(importFilter) ? importFilter : [importFilter];
+function getSharedState(program: ts.Program): SharedPreferDeepImportsState {
+    const cached = sharedStateByProgram.get(program);
+
+    if (cached) {
+        return cached;
+    }
+
+    const state: SharedPreferDeepImportsState = {
+        entryPointBySymbolCache: new Map(),
+        nestedEntryPointPathsByRoot: new Map(),
+        rootEntryDirectoryByImport: new Map(),
+    };
+
+    sharedStateByProgram.set(program, state);
+
+    return state;
 }
 
-/**
- * Extract the package root name from an import specifier.
- *
- * Examples:
- *  "@taiga-ui/core"               → "@taiga-ui/core"
- *  "@taiga-ui/core/components"   → "@taiga-ui/core"
- *  "some-lib"                    → "some-lib"
- *  "some-lib/utils"              → "some-lib"
- */
+function normalizeImportFilter(importFilter: string[] | string): string[] {
+    return (Array.isArray(importFilter) ? importFilter : [importFilter]).filter(Boolean);
+}
+
 function getRootPackageName(importPath: string): string | null {
     if (importPath.startsWith('@')) {
         const segments = importPath.split('/');
@@ -184,15 +299,6 @@ function getRootPackageName(importPath: string): string | null {
     return parts[0] ?? null;
 }
 
-/**
- * Check whether the current import path is already nested below the root package.
- *
- * Example:
- *   root = "@taiga-ui/core"
- *   "@taiga-ui/core"               → false (root import)
- *   "@taiga-ui/core/components"    → true
- *   "@taiga-ui/core/components/x"  → true
- */
 function isAlreadyNestedImport(importPath: string, rootPackageName: string): boolean {
     if (!importPath.startsWith(rootPackageName)) {
         return false;
@@ -204,86 +310,90 @@ function isAlreadyNestedImport(importPath: string, rootPackageName: string): boo
     return importSegments.length > rootSegments.length;
 }
 
-/**
- * Extract only named imported symbols:
- *
- * Examples:
- *   import {A, B as C} from 'x';  → ['A', 'B']
- *
- * Namespace imports and default imports are ignored for this rule.
- */
 function extractNamedImportedSymbols(node: TSESTree.ImportDeclaration): string[] {
     return node.specifiers
         .filter(
             (specifier): specifier is TSESTree.ImportSpecifier =>
                 specifier.type === AST_NODE_TYPES.ImportSpecifier,
         )
-        .map((specifier) =>
-            specifier.imported.type === AST_NODE_TYPES.Identifier
-                ? specifier.imported.name
-                : specifier.imported.value,
-        );
+        .map(getImportedName);
 }
 
-/**
- * Resolve the physical directory of the module being imported.
- * We rely on the same module resolution that TypeScript uses for the program.
- */
-function resolveRootEntryDirectory(
-    importPath: string,
-    fromFile: string,
-    program: ts.Program,
-): string | null {
-    const compilerOptions = program.getCompilerOptions();
+function getImportedName(specifier: TSESTree.ImportSpecifier): string {
+    return specifier.imported.type === AST_NODE_TYPES.Identifier
+        ? specifier.imported.name
+        : specifier.imported.value;
+}
 
+function getCachedRootEntryDirectory({
+    fromFile,
+    importPath,
+    state,
+}: GetCachedRootEntryDirectoryParams): string | null {
+    const cacheKey = `${path.dirname(fromFile)}\0${importPath}`;
+    const cache = state.shared.rootEntryDirectoryByImport;
+
+    if (cache.has(cacheKey)) {
+        return cache.get(cacheKey) ?? null;
+    }
+
+    const rootEntryDirectory = resolveRootEntryDirectory({
+        fromFile,
+        importPath,
+        program: state.program,
+    });
+
+    cache.set(cacheKey, rootEntryDirectory);
+
+    return rootEntryDirectory;
+}
+
+function resolveRootEntryDirectory({
+    fromFile,
+    importPath,
+    program,
+}: {
+    importPath: string;
+    fromFile: string;
+    program: ts.Program;
+}): string | null {
     const resolution = ts.resolveModuleName(
         importPath,
         fromFile,
-        compilerOptions,
+        program.getCompilerOptions(),
         ts.sys,
     ).resolvedModule;
 
-    if (!resolution) {
-        return null;
-    }
-
-    return path.dirname(resolution.resolvedFileName);
+    return resolution ? path.dirname(resolution.resolvedFileName) : null;
 }
 
-/**
- * Find all nested entry points relative to the given root directory.
- *
- * A directory is considered a nested entry point if it contains either:
- *   - "ng-package.json"  (Angular library entry)
- *   - "collection.json"  (Angular schematics collection)
- *
- * Returned paths are relative to "rootEntryDirectory".
- *
- * Example:
- *   rootEntryDirectory = ".../core/src"
- *   found:
- *     "utils/ng-package.json"          → "utils"
- *     "utils/dom/ng-package.json"      → "utils/dom"
- *     "schematics/collection.json"     → "schematics"
- */
+function getCachedNestedEntryPointRelativePaths(
+    rootEntryDirectory: string,
+    cache: NestedEntryPointPathsCache,
+): string[] {
+    if (cache.has(rootEntryDirectory)) {
+        return cache.get(rootEntryDirectory) ?? [];
+    }
+
+    const entryPoints = findNestedEntryPointRelativePaths(rootEntryDirectory);
+
+    cache.set(rootEntryDirectory, entryPoints);
+
+    return entryPoints;
+}
+
 function findNestedEntryPointRelativePaths(rootEntryDirectory: string): string[] {
     const files = ['**/ng-package.json', '**/collection.json'].flatMap((pattern) =>
         globSync(pattern, {cwd: rootEntryDirectory}),
     );
 
-    return files
-        .map((file) => path.dirname(file).replaceAll('\\', '/'))
+    const directories = files
+        .map((file) => path.posix.dirname(file.replaceAll('\\', '/')))
         .filter((directory) => directory && directory !== '.');
+
+    return [...new Set(directories)];
 }
 
-/**
- * For strict = false:
- *   Only first-level nested directories are candidates.
- *
- * For strict = true:
- *   All nested directories are candidates, sorted from deepest to shallowest
- *   so that the deepest match wins.
- */
 function selectCandidateEntryPointsForMode(
     allNestedRelativePaths: string[],
     strict: boolean,
@@ -302,84 +412,112 @@ function selectCandidateEntryPointsForMode(
     });
 }
 
-/**
- * Build a map from exported symbol name to nested entry point relative path.
- *
- * Implementation strategy:
- *   1. For each candidate nested entry point:
- *      - Determine its entry file (using ng-package.json or collection.json).
- *      - Ask TypeScript for the module symbol and its exports.
- *   2. For each imported symbol:
- *      - Find the first entry point whose export table contains that symbol.
- *      - strict = true: candidates were sorted deepest-first.
- *      - strict = false: candidates contain only first-level nested entry points.
- */
-function mapSymbolsToEntryPointsUsingTypeChecker(
-    importedSymbols: string[],
-    candidateEntryPoints: string[],
-    rootEntryDirectory: string,
-    program: ts.Program,
-    typeChecker: ts.TypeChecker,
-): Map<string, string> {
+function mapSymbolsToEntryPointsUsingTypeChecker({
+    candidateEntryPoints,
+    importedSymbols,
+    rootEntryDirectory,
+    state,
+}: MapSymbolsToEntryPointsParams): Map<string, string> {
     const symbolToEntryPoint = new Map<string, string>();
-    const exportTableByEntryPoint = new Map<string, Set<string>>();
-
-    for (const relativeEntryDir of candidateEntryPoints) {
-        const entryFile = getEntryFileForNestedEntryPoint(
-            rootEntryDirectory,
-            relativeEntryDir,
-        );
-
-        if (!entryFile) {
-            continue;
-        }
-
-        const sourceFile = program.getSourceFile(entryFile);
-
-        if (!sourceFile) {
-            continue;
-        }
-
-        const moduleSymbol = typeChecker.getSymbolAtLocation(sourceFile);
-
-        if (!moduleSymbol) {
-            continue;
-        }
-
-        const exports = typeChecker.getExportsOfModule(moduleSymbol);
-        const exportedNames = new Set<string>(exports.map((symbol) => symbol.getName()));
-
-        exportTableByEntryPoint.set(relativeEntryDir, exportedNames);
-    }
+    const entryPointBySymbol = getCachedEntryPointBySymbol({
+        candidateEntryPoints,
+        rootEntryDirectory,
+        state,
+    });
 
     for (const importedSymbol of importedSymbols) {
-        for (const relativeEntryDir of candidateEntryPoints) {
-            const exportedNames = exportTableByEntryPoint.get(relativeEntryDir);
+        const entryPoint = entryPointBySymbol.get(importedSymbol);
 
-            if (!exportedNames?.has(importedSymbol)) {
-                continue;
-            }
-
-            symbolToEntryPoint.set(importedSymbol, relativeEntryDir);
-            break;
+        if (entryPoint) {
+            symbolToEntryPoint.set(importedSymbol, entryPoint);
         }
     }
 
     return symbolToEntryPoint;
 }
 
-/**
- * Determine the physical entry file for a nested entry point.
- *
- * Priority:
- *   1. If "ng-package.json" exists:
- *        - use lib.entryFile if present
- *        - otherwise fall back to "index.ts"
- *   2. Else if "collection.json" exists:
- *        - treat this directory as a schematic collection package
- *        - entry file is "index.ts" if it exists
- *   3. Otherwise: no entry file can be determined → return null
- */
+function getCachedEntryPointBySymbol({
+    candidateEntryPoints,
+    rootEntryDirectory,
+    state,
+}: GetCachedEntryPointBySymbolParams): Map<string, string> {
+    const cacheKey = `${rootEntryDirectory}\0${candidateEntryPoints.join('\0')}`;
+    const cache = state.shared.entryPointBySymbolCache;
+
+    if (cache.has(cacheKey)) {
+        return cache.get(cacheKey) ?? new Map();
+    }
+
+    const entryPointBySymbol = buildEntryPointBySymbolIndex({
+        candidateEntryPoints,
+        rootEntryDirectory,
+        state,
+    });
+
+    cache.set(cacheKey, entryPointBySymbol);
+
+    return entryPointBySymbol;
+}
+
+function buildEntryPointBySymbolIndex({
+    candidateEntryPoints,
+    rootEntryDirectory,
+    state,
+}: BuildEntryPointBySymbolIndexParams): Map<string, string> {
+    const entryPointBySymbol = new Map<string, string>();
+
+    for (const relativeEntryDir of candidateEntryPoints) {
+        const exportedNames = getExportedNamesForEntryPoint({
+            relativeEntryDirectory: relativeEntryDir,
+            rootEntryDirectory,
+            state,
+        });
+
+        if (!exportedNames) {
+            continue;
+        }
+
+        for (const exportedName of exportedNames) {
+            if (!entryPointBySymbol.has(exportedName)) {
+                entryPointBySymbol.set(exportedName, relativeEntryDir);
+            }
+        }
+    }
+
+    return entryPointBySymbol;
+}
+
+function getExportedNamesForEntryPoint({
+    relativeEntryDirectory,
+    rootEntryDirectory,
+    state,
+}: GetExportedNamesForEntryPointParams): Set<string> | null {
+    const entryFile = getEntryFileForNestedEntryPoint(
+        rootEntryDirectory,
+        relativeEntryDirectory,
+    );
+
+    if (!entryFile) {
+        return null;
+    }
+
+    const sourceFile = state.program.getSourceFile(entryFile);
+
+    if (!sourceFile) {
+        return null;
+    }
+
+    const moduleSymbol = state.typeChecker.getSymbolAtLocation(sourceFile);
+
+    if (!moduleSymbol) {
+        return null;
+    }
+
+    const exports = state.typeChecker.getExportsOfModule(moduleSymbol);
+
+    return new Set(exports.map((symbol) => symbol.getName()));
+}
+
 function getEntryFileForNestedEntryPoint(
     rootEntryDirectory: string,
     relativeEntryDirectory: string,
@@ -411,78 +549,121 @@ function getEntryFileForNestedEntryPoint(
     return null;
 }
 
-/**
- * Build the final text block with rewritten import declarations.
- *
- * Example:
- *   original:
- *     import {A, B as C, D} from '@taiga-ui/core';
- *
- *   symbolMap (strict = true):
- *     A -> "components/button"
- *     B -> "components/button"
- *     D -> "components/other"
- *
- *   result:
- *     import {A, B as C} from '@taiga-ui/core/components/button';
- *     import {D} from '@taiga-ui/core/components/other';
- */
-function buildRewrittenImports(
-    node: TSESTree.ImportDeclaration,
-    baseImportPath: string,
-    symbolToEntryPoint: Map<string, string>,
-): string {
-    const isTypeOnlyImport = node.importKind === 'type';
-    const groupedByTarget = new Map<string, string[]>();
+function buildRewrittenImports({
+    baseImportPath,
+    node,
+    state,
+    symbolToEntryPoint,
+}: BuildRewrittenImportsParams): string {
+    const groupedByTarget = new Map<string, TSESTree.ImportSpecifier[]>();
+    const remainingSpecifiers: ImportSpecifier[] = [];
 
-    for (const [symbolName, relativeEntryPath] of symbolToEntryPoint.entries()) {
+    for (const specifier of node.specifiers) {
+        if (specifier.type !== AST_NODE_TYPES.ImportSpecifier) {
+            remainingSpecifiers.push(specifier);
+            continue;
+        }
+
+        const importedName = getImportedName(specifier);
+        const relativeEntryPath = symbolToEntryPoint.get(importedName);
+
+        if (!relativeEntryPath) {
+            remainingSpecifiers.push(specifier);
+            continue;
+        }
+
         const targetSpecifier = `${baseImportPath}/${relativeEntryPath}`;
 
         if (!groupedByTarget.has(targetSpecifier)) {
             groupedByTarget.set(targetSpecifier, []);
         }
 
-        const targetGroup = groupedByTarget.get(targetSpecifier);
-
-        if (targetGroup) {
-            targetGroup.push(symbolName);
-        }
+        groupedByTarget.get(targetSpecifier)?.push(specifier);
     }
 
     const importStatements: string[] = [];
 
-    for (const [targetSpecifier, symbols] of groupedByTarget.entries()) {
-        const parts = symbols.map((symbolName) => {
-            const matchingSpecifier = node.specifiers.find(
-                (specifier): specifier is TSESTree.ImportSpecifier =>
-                    specifier.type === AST_NODE_TYPES.ImportSpecifier &&
-                    (specifier.imported.type === AST_NODE_TYPES.Identifier
-                        ? specifier.imported.name === symbolName
-                        : specifier.imported.value === symbolName),
-            );
+    for (const [targetSpecifier, specifiers] of groupedByTarget.entries()) {
+        importStatements.push(
+            buildNamedImportStatement({
+                importKind: node.importKind,
+                importPath: targetSpecifier,
+                specifiers,
+                state,
+            }),
+        );
+    }
 
-            if (!matchingSpecifier) {
-                return symbolName;
-            }
+    const remainingImportStatement = buildImportStatement({
+        importKind: node.importKind,
+        importPath: baseImportPath,
+        specifiers: remainingSpecifiers,
+        state,
+    });
 
-            const importedName =
-                matchingSpecifier.imported.type === AST_NODE_TYPES.Identifier
-                    ? matchingSpecifier.imported.name
-                    : matchingSpecifier.imported.value;
-
-            const localName = matchingSpecifier.local.name;
-
-            return importedName === localName
-                ? importedName
-                : `${importedName} as ${localName}`;
-        });
-
-        const statement = `import ${isTypeOnlyImport ? 'type ' : ''}{${parts.join(
-            ', ',
-        )}} from '${targetSpecifier}';`;
-
-        importStatements.push(statement);
+    if (remainingImportStatement) {
+        importStatements.push(remainingImportStatement);
     }
 
     return importStatements.join('\n');
+}
+
+function buildNamedImportStatement({
+    importKind,
+    importPath,
+    specifiers,
+    state,
+}: BuildNamedImportStatementParams): string {
+    const importKeyword = importKind === 'type' ? 'import type' : 'import';
+    const parts = specifiers.map((specifier) => state.sourceCode.getText(specifier));
+
+    return `${importKeyword} {${parts.join(', ')}} from '${importPath}';`;
+}
+
+function buildImportStatement({
+    importKind,
+    importPath,
+    specifiers,
+    state,
+}: BuildImportStatementParams): string | null {
+    if (specifiers.length === 0) {
+        return null;
+    }
+
+    const importKeyword = importKind === 'type' ? 'import type' : 'import';
+
+    const defaultSpecifier = specifiers.find(
+        (specifier) => specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+    );
+
+    const namespaceSpecifier = specifiers.find(
+        (specifier) => specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+    );
+
+    const namedSpecifiers = specifiers.filter(
+        (specifier): specifier is TSESTree.ImportSpecifier =>
+            specifier.type === AST_NODE_TYPES.ImportSpecifier,
+    );
+
+    const clauses: string[] = [];
+
+    if (defaultSpecifier) {
+        clauses.push(state.sourceCode.getText(defaultSpecifier));
+    }
+
+    if (namespaceSpecifier) {
+        clauses.push(state.sourceCode.getText(namespaceSpecifier));
+    }
+
+    if (namedSpecifiers.length > 0) {
+        clauses.push(
+            `{${namedSpecifiers.map((specifier) => state.sourceCode.getText(specifier)).join(', ')}}`,
+        );
+    }
+
+    if (clauses.length === 0) {
+        return null;
+    }
+
+    return `${importKeyword} ${clauses.join(', ')} from '${importPath}';`;
 }
