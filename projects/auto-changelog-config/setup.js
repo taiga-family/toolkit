@@ -8,7 +8,9 @@ module.exports = function (Handlebars) {
     const escape = (value) => Handlebars.escapeExpression(String(value ?? ''));
 
     const commitPattern =
-        /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
+        /^(?:build|chore|ci|docs|feat|fix|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
+
+    const publicChangePattern = /^(?:feat|fix)(?:\([^)]*\))?!?:/;
 
     const getPullRequestId = (href) => {
         const [, id = ''] =
@@ -170,5 +172,13 @@ module.exports = function (Handlebars) {
         const string = String(context.fn(this)).trim();
 
         return string.replace(/^v/, '');
+    });
+
+    Handlebars.registerHelper('if-public-changes', function (commits, options) {
+        const hasPublicChanges = toArray(commits).some((commit) =>
+            publicChangePattern.test(firstNonEmptyString(commit.subject, commit.message)),
+        );
+
+        return hasPublicChanges ? options.fn(this) : options.inverse(this);
     });
 };

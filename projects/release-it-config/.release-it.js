@@ -1,12 +1,11 @@
 const path = require('node:path');
 
-const configPath = path.resolve(
-    process.cwd(),
-    'node_modules/@taiga-ui/auto-changelog-config',
+const configPath = path.dirname(
+    require.resolve('@taiga-ui/auto-changelog-config/package.json'),
 );
 
-const commitPattern = String.raw`^(feat|fix|perf)(\([^)]*\))?!?:`;
-const breakingPattern = String.raw`^(feat|fix|perf)(\([^)]*\))!:`;
+const commitPattern = String.raw`^(feat|fix)(\([^)]*\))?!?:`;
+const breakingPattern = String.raw`^(feat|fix)(\([^)]*\))!:`;
 
 const createChangelog = (template) =>
     [
