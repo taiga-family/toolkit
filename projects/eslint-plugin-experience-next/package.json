@@ -27,7 +27,7 @@
     ],
     "type": "module",
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "^8.59.1"
+        "@typescript-eslint/rule-tester": "8.59.1"
     },
     "peerDependencies": {
         "@eslint/compat": "^2.0.5",
