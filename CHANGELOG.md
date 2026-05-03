@@ -1,5 +1,26 @@
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
+### [0.499.0](https://github.com/taiga-family/toolkit/compare/v0.498.0...v0.499.0) (2026-05-03)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: single-line-variable-spacing
+  ([#1813](https://github.com/taiga-family/toolkit/pull/1813))
+  [(bbbd1ca)](https://github.com/taiga-family/toolkit/commit/bbbd1ca0237b27e41ce1861d1c027d970855b080)
+- **eslint-plugin-experience-next**: add &#x60;import-integrity&#x60;
+  ([#1775](https://github.com/taiga-family/toolkit/pull/1775))
+  [(5a50125)](https://github.com/taiga-family/toolkit/commit/5a50125ca30f13a78a819af7552b32fd478da437)
+- **eslint-plugin-experience-next**: add &#x60;no-repeated-signal-in-conditional&#x60;
+  ([#1767](https://github.com/taiga-family/toolkit/pull/1767))
+  [(3be2ffe)](https://github.com/taiga-family/toolkit/commit/3be2ffef004be100be50e771c07cb836826754ca)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-perfectionist to ^5.9.0 ([#1812](https://github.com/taiga-family/toolkit/pull/1812))
+  [(95f84d1)](https://github.com/taiga-family/toolkit/commit/95f84d17cd6f1d043a778a90aaa15833c64e596a)
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
 ### [0.498.0](https://github.com/taiga-family/toolkit/compare/v0.497.0...v0.498.0) (2026-05-03)
 
 ### 🚀 Features
