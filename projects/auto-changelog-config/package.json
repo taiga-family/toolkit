@@ -30,7 +30,7 @@
     ],
     "main": "index.json",
     "peerDependencies": {
-        "auto-changelog": "2.5.0"
+        "auto-changelog": "^2.5.0"
     },
     "publishConfig": {
         "access": "public"

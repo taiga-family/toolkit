@@ -6,21 +6,25 @@
 
     {{#commit-parser merges commits}}
 
-        {{#commit-list this heading='### ⚠️ BREAKING CHANGES' message='^(feat|fix|perf)(\([^)]*\))!:' }}
-            - {{changelogEntry}}
-        {{/commit-list}}
+        {{#if-public-changes this}}
 
-        {{#commit-list this heading='### 🚀 Features' message='^feat:|^feat\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
-            - {{changelogEntry}}
-        {{/commit-list}}
+            {{#commit-list this heading='### 🚀 Features' message='^feat(?:\([^)]*\))?!?:' exclude='^(feat|fix)(\([^)]*\))!:'}}
+                - {{changelogEntry}}
+            {{/commit-list}}
 
-        {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix:|^fix\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
-            - {{changelogEntry}}
-        {{/commit-list}}
+            {{#commit-list this heading='### 🐞 Bug Fixes' message='^fix(?:\([^)]*\))?!?:' exclude='^(feat|fix)(\([^)]*\))!:'}}
+                - {{changelogEntry}}
+            {{/commit-list}}
 
-        {{#commit-list this heading='### ⚡ Performance Improvements' message='^perf:|^perf\(' exclude='^(feat|fix|perf)(\([^)]*\))!:'}}
-            - {{changelogEntry}}
-        {{/commit-list}}
+            {{#commit-list this heading='### ⚠️ BREAKING CHANGES' message='^(feat|fix)(\([^)]*\))!:'}}
+                - {{changelogEntry}}
+            {{/commit-list}}
+
+        {{else}}
+
+            This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
+        {{/if-public-changes}}
 
     {{/commit-parser}}
 
