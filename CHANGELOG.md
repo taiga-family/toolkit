@@ -1,3 +1,17 @@
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
+### [0.498.0](https://github.com/taiga-family/toolkit/compare/v0.497.0...v0.498.0) (2026-05-03)
+
+### 🚀 Features
+
+- update dependency release-it to v20 ([#1796](https://github.com/taiga-family/toolkit/pull/1796))
+  [(8b11f6c)](https://github.com/taiga-family/toolkit/commit/8b11f6cd86f456e5b24c9c9c11bd4476792d0741)
+- **eslint-plugin-experience-next**: cache prefer-deep-imports entry point lookups
+  ([#1809](https://github.com/taiga-family/toolkit/pull/1809))
+  [(155bc7a)](https://github.com/taiga-family/toolkit/commit/155bc7a4169bd8817d77026e7dfe932c96b6f3ca)
+- **eslint-plugin-experience-next**: regression ([#1807](https://github.com/taiga-family/toolkit/pull/1807))
+  [(7099502)](https://github.com/taiga-family/toolkit/commit/70995029cd14c8555435e63313f295df8bfade35)
+
 ### [0.497.0](https://github.com/taiga-family/toolkit/compare/v0.496.0...v0.497.0) (2026-05-03)
 
 ### 🚀 Features
