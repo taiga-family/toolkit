@@ -33,6 +33,39 @@ export default [
 ];
 ```
 
+## Recommended config contents
+
+`taiga.configs.recommended` combines the Taiga UI rules listed below with external ESLint presets and individual rules
+from third-party plugins. The exact severities and file globs live in
+[`configs/recommended.ts`](https://github.com/taiga-family/toolkit/blob/main/projects/eslint-plugin-experience-next/configs/recommended.ts).
+
+| Package                                                                                                                                            | What is included in `recommended`                                                                                 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [ESLint core](https://eslint.org/docs/latest/rules/)                                                                                               | `eslint.configs.recommended` and individual core rules for JS/TS files                                            |
+| [typescript-eslint](https://typescript-eslint.io/rules/)                                                                                           | `configs.all`, `configs.disableTypeChecked`, and individual `@typescript-eslint/*` rules                          |
+| [angular-eslint TS rules](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin/docs/rules)                            | `angular.configs.tsRecommended` and individual `@angular-eslint/*` rules for `**/*.{ts,tsx}`                      |
+| [angular-eslint template rules](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin-template/docs/rules)             | `templateRecommended`, `templateAccessibility`, and individual `@angular-eslint/template/*` rules for `**/*.html` |
+| [@eslint/markdown](https://github.com/eslint/markdown#rules)                                                                                       | `markdown.configs.recommended` for `**/*.md`                                                                      |
+| [@smarttools/eslint-plugin-rxjs](https://github.com/DaveMBush/eslint-plugin-rxjs#rules)                                                            | Individual `rxjs/*` rules for Angular/TypeScript files                                                            |
+| [@stylistic/eslint-plugin](https://eslint.style/rules)                                                                                             | Individual `@stylistic/*` formatting rules                                                                        |
+| [eslint-plugin-compat](https://github.com/amilajack/eslint-plugin-compat#readme)                                                                   | `compat.configs['flat/recommended']` for JS/TS files                                                              |
+| [eslint-plugin-cypress](https://github.com/cypress-io/eslint-plugin-cypress#rules)                                                                 | Registered for Cypress overrides; no `cypress/*` rules are enabled by default                                     |
+| [eslint-plugin-de-morgan](https://github.com/azat-io/eslint-plugin-de-morgan#rules)                                                                | `deMorganConfigs.recommended` for JS/TS files                                                                     |
+| [eslint-plugin-decorator-position](https://github.com/NullVoxPopuli/eslint-plugin-decorator-position/blob/master/docs/rules/decorator-position.md) | Individual `decorator-position/*` rules for JS/TS files                                                           |
+| [eslint-plugin-file-progress](https://github.com/sibiraj-s/eslint-plugin-file-progress#readme)                                                     | `progress.configs['recommended-ci']`                                                                              |
+| [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import#rules)                                                                    | `flatConfigs.recommended`, `flatConfigs.typescript`, and individual `import/*` rules for JS/TS files              |
+| [eslint-plugin-jest](https://github.com/jest-community/eslint-plugin-jest#rules)                                                                   | `jest.configs['flat/recommended']` and individual `jest/*` rules for `**/*.spec.ts`                               |
+| [eslint-plugin-package-json](https://github.com/michaelfaith/eslint-plugin-package-json#supported-rules)                                           | `packageJsonConfigs.recommended` and individual `package-json/*` rules for `**/package.json`                      |
+| [eslint-plugin-perfectionist](https://perfectionist.dev/rules)                                                                                     | Individual `perfectionist/*` sorting rules for JS/TS files                                                        |
+| [eslint-plugin-playwright](https://github.com/mskelton/eslint-plugin-playwright#rules)                                                             | `playwright.configs['flat/recommended']` and individual `playwright/*` rules for `**/*.pw.spec.ts`                |
+| [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier#readme)                                                                | Individual `prettier/*` rules for JS/TS files                                                                     |
+| [eslint-plugin-promise](https://github.com/eslint-community/eslint-plugin-promise#rules)                                                           | `promise.configs['flat/recommended']` and individual `promise/*` rules for JS/TS files                            |
+| [eslint-plugin-regexp](https://ota-meshi.github.io/eslint-plugin-regexp/rules/)                                                                    | `regexpConfigs['flat/recommended']` and individual `regexp/*` rules for JS/TS files                               |
+| [eslint-plugin-simple-import-sort](https://github.com/lydell/eslint-plugin-simple-import-sort#readme)                                              | Individual `simple-import-sort/*` rules for JS/TS files                                                           |
+| [eslint-plugin-sonarjs](https://github.com/SonarSource/SonarJS/blob/master/packages/analysis/src/jsts/rules/README.md)                             | Individual `sonarjs/*` rules for JS/TS files                                                                      |
+| [eslint-plugin-unicorn](https://github.com/sindresorhus/eslint-plugin-unicorn#rules)                                                               | Individual `unicorn/*` rules for JS/TS files                                                                      |
+| [eslint-plugin-unused-imports](https://github.com/sweepline/eslint-plugin-unused-imports#supported-rules)                                          | Individual `unused-imports/*` rules for JS/TS files                                                               |
+
 - ✅ = recommended
 - 🔧 = fixable
 - 💡 = has suggestions
