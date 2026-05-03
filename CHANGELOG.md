@@ -1,3 +1,10 @@
+### [0.497.0](https://github.com/taiga-family/toolkit/compare/v0.496.0...v0.497.0) (2026-05-03)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: use native glob ([#1806](https://github.com/taiga-family/toolkit/pull/1806))
+  [(59062ae)](https://github.com/taiga-family/toolkit/commit/59062ae47bb65c6f83d79ae6ab579d35981511cf)
+
 ### [0.496.0](https://github.com/taiga-family/toolkit/compare/v0.495.0...v0.496.0) (2026-05-02)
 
 ### 🚀 Features
