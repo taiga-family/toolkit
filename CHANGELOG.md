@@ -1,5 +1,11 @@
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
+### [0.501.0](https://github.com/taiga-family/toolkit/compare/v0.500.0...v0.501.0) (2026-05-04)
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
 ### [0.500.0](https://github.com/taiga-family/toolkit/compare/v0.499.0...v0.500.0) (2026-05-04)
 
 ### 🐞 Bug Fixes
