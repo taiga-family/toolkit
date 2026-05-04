@@ -77,6 +77,114 @@ ruleTester.run('import-integrity', rule, {
         },
         {
             code: /* TypeScript */ `
+                import {known} from './namespace-module';
+                import type {OnlyType} from './namespace-module';
+
+                known();
+            `,
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known, type OnlyType} from './namespace-module';
+
+                known();
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import type {known} from './namespace-module';
+                import {known} from './namespace-module';
+
+                known();
+            `,
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known} from './namespace-module';
+
+                known();
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import './namespace-module';
+                import {known} from './namespace-module';
+
+                known();
+            `,
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known} from './namespace-module';
+
+                known();
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import * as first from './namespace-module';
+                import * as second from './namespace-module';
+
+                first.known();
+                second.known();
+            `,
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: null,
+        },
+        {
+            code: /* TypeScript */ `
+                import {self} from './self-import';
+
+                export const value = self;
+            `,
+            errors: [{messageId: 'selfImport'}],
+            filename: fixtureFile('self-import.ts'),
+            options: [{checkCycles: false}],
+        },
+        {
+            code: "const self = require('./self-import');",
+            errors: [{messageId: 'selfImport'}],
+            filename: fixtureFile('self-import.ts'),
+        },
+        {
+            code: /* TypeScript */ `
                 import {cycleB} from './cycle-b';
 
                 export const cycleA = cycleB;
@@ -224,6 +332,46 @@ ruleTester.run('import-integrity', rule, {
             code: "import bar from './named-as-default-module';",
             filename: fixtureFile('default-consumer.ts'),
             options: [{checkNamedAsDefault: false}],
+        },
+        {
+            code: /* TypeScript */ `
+                import {known} from './namespace-module';
+                import type {OnlyType} from './namespace-module';
+
+                known();
+            `,
+            filename: fixtureFile('namespace-consumer.ts'),
+            options: [{checkDuplicateImports: false}],
+        },
+        {
+            code: /* TypeScript */ `
+                import './namespace-module?raw';
+                import './namespace-module?url';
+            `,
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import * as namespaceFixture from './namespace-module';
+                import {known} from './namespace-module';
+
+                namespaceFixture.known();
+                known();
+            `,
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {self} from './self-import';
+
+                export const value = self;
+            `,
+            filename: fixtureFile('self-import.ts'),
+            options: [{checkCycles: false, checkSelfImports: false}],
+        },
+        {
+            code: "import './self-import?raw';",
+            filename: fixtureFile('self-import.ts'),
         },
         {
             code: /* TypeScript */ `

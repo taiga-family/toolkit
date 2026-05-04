@@ -16,19 +16,23 @@ import {
 } from '../utils/typescript/type-aware-context';
 
 type MessageId =
+    | 'duplicateImport'
     | 'importCycle'
     | 'missingDefaultExport'
     | 'namedAsDefault'
     | 'namedAsDefaultMember'
+    | 'selfImport'
     | 'unknownNamespaceMember';
 
 type Options = [
     {
         checkCycles?: boolean;
         checkDefaultImports?: boolean;
+        checkDuplicateImports?: boolean;
         checkNamedAsDefault?: boolean;
         checkNamedAsDefaultMembers?: boolean;
         checkNamespaceMembers?: boolean;
+        checkSelfImports?: boolean;
         ignoreExternalDefaultImports?: boolean;
     }?,
 ];
@@ -75,6 +79,11 @@ interface DefaultImportUsage {
     readonly moduleSpecifier: string;
     readonly node: TSESTree.ImportDefaultSpecifier;
     readonly variable: TSESLint.Scope.Variable;
+}
+
+interface DuplicateImportMaps {
+    readonly importsByModule: Map<string, TSESTree.ImportDeclaration[]>;
+    readonly namespaceImportsByModule: Map<string, TSESTree.ImportDeclaration[]>;
 }
 
 const importGraphCacheByProgram = new WeakMap<ts.Program, ImportGraphCache>();
@@ -220,6 +229,94 @@ function resolveModuleFileName(
     }
 
     return resolved.resolvedFileName;
+}
+
+function getModuleSpecifierPath(moduleSpecifier: string): string {
+    const queryIndex = moduleSpecifier.indexOf('?');
+
+    return queryIndex === -1 ? moduleSpecifier : moduleSpecifier.slice(0, queryIndex);
+}
+
+function resolveModuleKey(
+    program: ts.Program,
+    containingFile: string,
+    moduleSpecifier: string,
+    canonicalFileName: (fileName: string) => string,
+): string {
+    const moduleSpecifierPath = getModuleSpecifierPath(moduleSpecifier);
+    const resolved = resolveModule(program, containingFile, moduleSpecifierPath);
+
+    if (!resolved) {
+        return moduleSpecifier;
+    }
+
+    const queryIndex = moduleSpecifier.indexOf('?');
+    const query = queryIndex === -1 ? '' : moduleSpecifier.slice(queryIndex);
+
+    return `${canonicalFileName(resolved.resolvedFileName)}${query}`;
+}
+
+function getDefaultImportName(node: TSESTree.ImportDeclaration): string | null {
+    const defaultImport = node.specifiers.find(
+        (specifier): specifier is TSESTree.ImportDefaultSpecifier =>
+            specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+    );
+
+    return defaultImport?.local.name ?? null;
+}
+
+function hasNamespaceImport(node: TSESTree.ImportDeclaration): boolean {
+    return node.specifiers.some(
+        (specifier) => specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+    );
+}
+
+function hasTypeOnlyDefaultImport(node: TSESTree.ImportDeclaration): boolean {
+    return node.importKind === 'type' && getDefaultImportName(node) !== null;
+}
+
+function hasImportAttributes(node: TSESTree.ImportDeclaration): boolean {
+    const record = node as unknown as Record<string, unknown>;
+    const attributes = record['attributes'];
+    const assertions = record['assertions'];
+
+    return (
+        (Array.isArray(attributes) && attributes.length > 0) ||
+        (Array.isArray(assertions) && assertions.length > 0)
+    );
+}
+
+function hasProblematicImportComments(
+    node: TSESTree.ImportDeclaration,
+    sourceCode: Readonly<TSESLint.SourceCode>,
+): boolean {
+    const text = sourceCode.getText(node);
+
+    return (
+        text.includes('/*') ||
+        text.includes('//') ||
+        sourceCode
+            .getCommentsBefore(node)
+            .some((comment) => comment.loc.end.line >= node.loc.start.line - 1) ||
+        sourceCode
+            .getCommentsAfter(node)
+            .some((comment) => comment.loc.start.line === node.loc.end.line)
+    );
+}
+
+function getNamedSpecifierText(
+    node: TSESTree.ImportDeclaration,
+    specifier: TSESTree.ImportSpecifier,
+    sourceCode: Readonly<TSESLint.SourceCode>,
+): string {
+    const text = sourceCode.getText(specifier);
+    const isTypeOnly = node.importKind === 'type' || specifier.importKind === 'type';
+
+    return isTypeOnly && !text.trimStart().startsWith('type ') ? `type ${text}` : text;
+}
+
+function getNamedSpecifierKey(text: string): string {
+    return text.trim().replace(/^type\s+/, '');
 }
 
 function importDeclarationHasRuntimeEdge(node: ts.ImportDeclaration): boolean {
@@ -1001,12 +1098,14 @@ export const rule = createRule<Options, MessageId>({
 
         const checkCycles = context.options[0]?.checkCycles ?? true;
         const checkDefaultImports = context.options[0]?.checkDefaultImports ?? true;
+        const checkDuplicateImports = context.options[0]?.checkDuplicateImports ?? true;
         const checkNamedAsDefault = context.options[0]?.checkNamedAsDefault ?? true;
 
         const checkNamedAsDefaultMembers =
             context.options[0]?.checkNamedAsDefaultMembers ?? true;
 
         const checkNamespaceMembers = context.options[0]?.checkNamespaceMembers ?? true;
+        const checkSelfImports = context.options[0]?.checkSelfImports ?? true;
 
         const ignoreExternalDefaultImports =
             context.options[0]?.ignoreExternalDefaultImports ?? true;
@@ -1014,7 +1113,252 @@ export const rule = createRule<Options, MessageId>({
         const canonicalFileName = createCanonicalFileName();
         const currentFileName = canonicalFileName(context.filename);
         const defaultImports = new Map<string, DefaultImportUsage>();
+
+        const duplicateImportMaps: DuplicateImportMaps = {
+            importsByModule: new Map(),
+            namespaceImportsByModule: new Map(),
+        };
+
         const namespaceImports = new Map<string, NamespaceImportUsage>();
+
+        function getDuplicateImportMap(
+            node: TSESTree.ImportDeclaration,
+        ): Map<string, TSESTree.ImportDeclaration[]> {
+            return hasNamespaceImport(node)
+                ? duplicateImportMaps.namespaceImportsByModule
+                : duplicateImportMaps.importsByModule;
+        }
+
+        function collectDuplicateImport(node: TSESTree.ImportDeclaration): void {
+            if (!checkDuplicateImports) {
+                return;
+            }
+
+            const moduleKey = resolveModuleKey(
+                tsProgram,
+                context.filename,
+                node.source.value,
+                canonicalFileName,
+            );
+
+            const importsByModule = getDuplicateImportMap(node);
+            const imports = importsByModule.get(moduleKey) ?? [];
+
+            imports.push(node);
+            importsByModule.set(moduleKey, imports);
+        }
+
+        function buildImportRemovalFix(
+            fixer: RuleFixer,
+            node: TSESTree.ImportDeclaration,
+        ): TSESLint.RuleFix[] {
+            const [start, end] = node.range;
+            const lineStart = sourceCode.text.lastIndexOf('\n', start - 1) + 1;
+
+            const removeStart = /^\s*$/.test(sourceCode.text.slice(lineStart, start))
+                ? lineStart
+                : start;
+
+            const removeEnd = sourceCode.text[end] === '\n' ? end + 1 : end;
+
+            return [fixer.removeRange([removeStart, removeEnd])];
+        }
+
+        function buildDuplicateImportFix(
+            fixer: RuleFixer,
+            first: TSESTree.ImportDeclaration,
+            rest: readonly TSESTree.ImportDeclaration[],
+        ): readonly TSESLint.RuleFix[] | null {
+            const nodes = [first, ...rest];
+
+            if (
+                nodes.some(
+                    (node) =>
+                        hasNamespaceImport(node) ||
+                        hasTypeOnlyDefaultImport(node) ||
+                        hasImportAttributes(node) ||
+                        hasProblematicImportComments(node, sourceCode),
+                )
+            ) {
+                return null;
+            }
+
+            const defaultNames = new Set(
+                nodes.flatMap((node) => {
+                    const name = getDefaultImportName(node);
+
+                    return name ? [name] : [];
+                }),
+            );
+
+            if (defaultNames.size > 1) {
+                return null;
+            }
+
+            const namedSpecifiersByKey = new Map<string, string>();
+
+            for (const node of nodes) {
+                for (const specifier of node.specifiers) {
+                    if (specifier.type !== AST_NODE_TYPES.ImportSpecifier) {
+                        continue;
+                    }
+
+                    const text = getNamedSpecifierText(
+                        node,
+                        specifier,
+                        sourceCode,
+                    ).trim();
+
+                    const key = getNamedSpecifierKey(text);
+                    const existing = namedSpecifiersByKey.get(key);
+                    const isTypeOnly = text.startsWith('type ');
+
+                    if (!existing || (existing.startsWith('type ') && !isTypeOnly)) {
+                        namedSpecifiersByKey.set(key, text);
+                    }
+                }
+            }
+
+            const namedSpecifiers = [...namedSpecifiersByKey.values()];
+            const [defaultName = null] = defaultNames;
+
+            const bindings = [
+                ...(defaultName ? [defaultName] : []),
+                ...(namedSpecifiers.length > 0
+                    ? [`{${namedSpecifiers.join(', ')}}`]
+                    : []),
+            ];
+
+            const sourceText = sourceCode.getText(first.source);
+            const semi = sourceCode.getText(first).endsWith(';') ? ';' : '';
+
+            const replacement =
+                bindings.length === 0
+                    ? `import ${sourceText}${semi}`
+                    : `import ${bindings.join(', ')} from ${sourceText}${semi}`;
+
+            return [
+                fixer.replaceText(first, replacement),
+                ...rest.flatMap((node) => buildImportRemovalFix(fixer, node)),
+            ];
+        }
+
+        function reportDuplicateImports(
+            importsByModule: ReadonlyMap<string, readonly TSESTree.ImportDeclaration[]>,
+        ): void {
+            for (const nodes of importsByModule.values()) {
+                if (nodes.length < 2) {
+                    continue;
+                }
+
+                const [first, ...rest] = nodes;
+
+                if (!first) {
+                    continue;
+                }
+
+                const moduleSpecifier = first.source.value;
+
+                context.report({
+                    data: {moduleSpecifier},
+                    fix: (fixer) => buildDuplicateImportFix(fixer, first, rest),
+                    messageId: 'duplicateImport',
+                    node: first.source,
+                });
+
+                for (const node of rest) {
+                    context.report({
+                        data: {moduleSpecifier},
+                        messageId: 'duplicateImport',
+                        node: node.source,
+                    });
+                }
+            }
+        }
+
+        function reportAllDuplicateImports(): void {
+            if (!checkDuplicateImports) {
+                return;
+            }
+
+            reportDuplicateImports(duplicateImportMaps.importsByModule);
+            reportDuplicateImports(duplicateImportMaps.namespaceImportsByModule);
+        }
+
+        function checkSelfImport(moduleSpecifier: string, node: TSESTree.Node): void {
+            if (
+                !checkSelfImports ||
+                context.filename === '<text>' ||
+                moduleSpecifier.includes('?')
+            ) {
+                return;
+            }
+
+            const resolved = resolveModule(
+                tsProgram,
+                context.filename,
+                getModuleSpecifierPath(moduleSpecifier),
+            );
+
+            if (
+                !resolved ||
+                canonicalFileName(resolved.resolvedFileName) !== currentFileName
+            ) {
+                return;
+            }
+
+            context.report({
+                messageId: 'selfImport',
+                node,
+            });
+        }
+
+        function checkDeclarationSelfImport(
+            node:
+                | TSESTree.ExportAllDeclaration
+                | TSESTree.ExportNamedDeclaration
+                | TSESTree.ImportDeclaration,
+        ): void {
+            if (!node.source || typeof node.source.value !== 'string') {
+                return;
+            }
+
+            checkSelfImport(node.source.value, node.source);
+        }
+
+        function checkRequireSelfImport(node: TSESTree.CallExpression): void {
+            if (
+                node.callee.type !== AST_NODE_TYPES.Identifier ||
+                node.callee.name !== 'require' ||
+                node.arguments.length !== 1
+            ) {
+                return;
+            }
+
+            const [moduleSpecifier] = node.arguments;
+
+            if (
+                moduleSpecifier?.type !== AST_NODE_TYPES.Literal ||
+                typeof moduleSpecifier.value !== 'string'
+            ) {
+                return;
+            }
+
+            checkSelfImport(moduleSpecifier.value, moduleSpecifier);
+        }
+
+        function checkDynamicSelfImport(node: TSESTree.ImportExpression): void {
+            const {source} = node;
+
+            if (
+                source.type !== AST_NODE_TYPES.Literal ||
+                typeof source.value !== 'string'
+            ) {
+                return;
+            }
+
+            checkSelfImport(source.value, source);
+        }
 
         function checkImportCycle(
             node:
@@ -1536,36 +1880,47 @@ export const rule = createRule<Options, MessageId>({
         }
 
         return {
-            ExportAllDeclaration: checkImportCycle,
+            CallExpression: checkRequireSelfImport,
+            ExportAllDeclaration(node: TSESTree.ExportAllDeclaration) {
+                checkImportCycle(node);
+                checkDeclarationSelfImport(node);
+            },
             ExportNamedDeclaration(node: TSESTree.ExportNamedDeclaration) {
                 checkImportCycle(node);
+                checkDeclarationSelfImport(node);
                 checkNamedAsDefaultExport(node);
             },
             ImportDeclaration(node: TSESTree.ImportDeclaration) {
                 checkImportCycle(node);
+                checkDeclarationSelfImport(node);
+                collectDuplicateImport(node);
                 checkDefaultImport(node);
                 collectNamespaceImport(node);
             },
+            ImportExpression: checkDynamicSelfImport,
             MemberExpression(node: TSESTree.MemberExpression) {
                 checkNamedAsDefaultMemberExpression(node);
                 checkNamespaceMember(node);
             },
+            'Program:exit': reportAllDuplicateImports,
             VariableDeclarator: checkNamedAsDefaultMemberDestructuring,
         };
     },
     meta: {
         docs: {
             description:
-                'Fast replacement for import/default, import/namespace, import/no-cycle, import/no-named-as-default, and import/no-named-as-default-member checks',
+                'Fast replacement for import/default, import/namespace, import/no-cycle, import/no-duplicates, import/no-named-as-default, import/no-named-as-default-member, and import/no-self-import checks',
         },
         fixable: 'code',
         messages: {
+            duplicateImport: '"{{moduleSpecifier}}" imported multiple times.',
             importCycle: 'Import cycle detected: {{cyclePath}}.',
             missingDefaultExport: 'No default export found in "{{moduleSpecifier}}".',
             namedAsDefault:
                 'Using exported name "{{name}}" as identifier for default export.',
             namedAsDefaultMember:
                 'Default import "{{defaultName}}" from "{{moduleSpecifier}}" also has a named export "{{memberName}}". Use a named import instead.',
+            selfImport: 'Module imports itself.',
             unknownNamespaceMember:
                 'Namespace import "{{namespaceName}}" from "{{moduleSpecifier}}" has no exported member "{{memberName}}".',
         },
@@ -1583,6 +1938,11 @@ export const rule = createRule<Options, MessageId>({
                             'Report default imports from modules without a default export. Defaults to true.',
                         type: 'boolean',
                     },
+                    checkDuplicateImports: {
+                        description:
+                            'Report repeated import declarations for the same resolved module. Defaults to true.',
+                        type: 'boolean',
+                    },
                     checkNamedAsDefault: {
                         description:
                             'Report default imports and default re-exports named after a named export from the same module. Defaults to true.',
@@ -1596,6 +1956,11 @@ export const rule = createRule<Options, MessageId>({
                     checkNamespaceMembers: {
                         description:
                             'Report static namespace import member accesses that are not exported by the imported module. Defaults to true.',
+                        type: 'boolean',
+                    },
+                    checkSelfImports: {
+                        description:
+                            'Report imports, re-exports, dynamic imports, and require() calls that resolve to the current file. Defaults to true.',
                         type: 'boolean',
                     },
                     ignoreExternalDefaultImports: {

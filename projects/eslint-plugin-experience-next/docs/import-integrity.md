@@ -2,13 +2,15 @@
 
 <sup>`✅ Recommended`</sup>
 
-Combines the useful parts of `import/default`, `import/namespace`, `import/no-cycle`, `import/no-named-as-default`, and
-`import/no-named-as-default-member` in a faster TypeScript-aware rule. It checks default imports against project-local
-default exports, reports default imports or default re-exports named after a named value export from the same module,
-reports default import property access or destructuring that looks like a named export access, checks static namespace
-import member access against the imported module value exports, and reports project-local static import or re-export
-cycles using a single cached import graph per TypeScript program. External modules are ignored for default import checks
-by default, and type-only import/export edges are ignored for cycle detection.
+Combines the useful parts of `import/default`, `import/namespace`, `import/no-cycle`, `import/no-duplicates`,
+`import/no-named-as-default`, `import/no-named-as-default-member`, and `import/no-self-import` in a faster
+TypeScript-aware rule. It checks default imports against project-local default exports, reports duplicate import
+declarations, reports modules importing themselves, reports default imports or default re-exports named after a named
+value export from the same module, reports default import property access or destructuring that looks like a named
+export access, checks static namespace import member access against the imported module value exports, and reports
+project-local static import or re-export cycles using a single cached import graph per TypeScript program. External
+modules are ignored for default import checks by default, and type-only import/export edges are ignored for cycle
+detection.
 
 ```ts
 // ❌ error
@@ -47,6 +49,23 @@ foo.bar;
 import foo from './foo';
 
 const {bar} = foo;
+```
+
+```ts
+// ❌ error
+import {createUser} from './users';
+import type {User} from './users';
+```
+
+```ts
+// ✅ after autofix
+import {createUser, type User} from './users';
+```
+
+```ts
+// ❌ error
+// users.ts
+import {createUser} from './users';
 ```
 
 ```ts
@@ -117,7 +136,9 @@ export const TOKEN = ContainerDirective;
 | ------------------------------ | --------- | ------- | ------------------------------------------------------------------ |
 | `checkCycles`                  | `boolean` | `true`  | Report static project-local import and re-export cycles.           |
 | `checkDefaultImports`          | `boolean` | `true`  | Report default imports from modules without a default export.      |
+| `checkDuplicateImports`        | `boolean` | `true`  | Report repeated imports for the same resolved module.              |
 | `checkNamedAsDefault`          | `boolean` | `true`  | Report default imports named after a named export.                 |
 | `checkNamedAsDefaultMembers`   | `boolean` | `true`  | Report default import members named after named exports.           |
 | `checkNamespaceMembers`        | `boolean` | `true`  | Report namespace member access that is not exported by the module. |
+| `checkSelfImports`             | `boolean` | `true`  | Report imports that resolve to the current file.                   |
 | `ignoreExternalDefaultImports` | `boolean` | `true`  | Skip default import checks for external libraries.                 |
