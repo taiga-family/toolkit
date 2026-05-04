@@ -1,8 +1,4 @@
-This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
-
 ### [0.501.0](https://github.com/taiga-family/toolkit/compare/v0.500.0...v0.501.0) (2026-05-04)
-
-This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
@@ -22,8 +18,6 @@ This release contains internal technical improvements only. No changes to functi
 - update dependency eslint-plugin-playwright to ^2.10.2 ([#1815](https://github.com/taiga-family/toolkit/pull/1815))
   [(9cd0251)](https://github.com/taiga-family/toolkit/commit/9cd02514be7f21e7157a5ad238b2f3c500df8f1c)
 
-This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
-
 ### [0.499.0](https://github.com/taiga-family/toolkit/compare/v0.498.0...v0.499.0) (2026-05-03)
 
 ### 🚀 Features
@@ -42,8 +36,6 @@ This release contains internal technical improvements only. No changes to functi
 
 - update dependency eslint-plugin-perfectionist to ^5.9.0 ([#1812](https://github.com/taiga-family/toolkit/pull/1812))
   [(95f84d1)](https://github.com/taiga-family/toolkit/commit/95f84d17cd6f1d043a778a90aaa15833c64e596a)
-
-This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
 ### [0.498.0](https://github.com/taiga-family/toolkit/compare/v0.497.0...v0.498.0) (2026-05-03)
 
