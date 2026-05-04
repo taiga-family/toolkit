@@ -1,5 +1,23 @@
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
 
+### [0.500.0](https://github.com/taiga-family/toolkit/compare/v0.499.0...v0.500.0) (2026-05-04)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression import-integrity
+  ([#1818](https://github.com/taiga-family/toolkit/pull/1818))
+  [(4640995)](https://github.com/taiga-family/toolkit/commit/4640995009b1ca833f3f577b2ff703f23c64bbf3)
+- **eslint-plugin-experience-next**: regression import-integrity
+  ([#1817](https://github.com/taiga-family/toolkit/pull/1817))
+  [(976a3a7)](https://github.com/taiga-family/toolkit/commit/976a3a78b9dead1dbb8726e98b8dbfefebbdbbba)
+- **eslint-plugin-experience-next**: regression no repeated signal in conditional
+  ([#1816](https://github.com/taiga-family/toolkit/pull/1816))
+  [(e3b670f)](https://github.com/taiga-family/toolkit/commit/e3b670f1bafb324c7dc41e5db0cc97001832d3a8)
+- update dependency eslint-plugin-playwright to ^2.10.2 ([#1815](https://github.com/taiga-family/toolkit/pull/1815))
+  [(9cd0251)](https://github.com/taiga-family/toolkit/commit/9cd02514be7f21e7157a5ad238b2f3c500df8f1c)
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
 ### [0.499.0](https://github.com/taiga-family/toolkit/compare/v0.498.0...v0.499.0) (2026-05-03)
 
 ### 🚀 Features
