@@ -384,7 +384,7 @@ export default defineConfig([
                 'error',
                 {
                     methods: 'above',
-                    printWidth: 120,
+                    printWidth: 90,
                     properties: 'above',
                 },
             ],
@@ -392,20 +392,20 @@ export default defineConfig([
             'func-style': ['error', 'declaration', {allowArrowFunctions: true}],
             'guard-for-in': 'error',
             'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
-            'import/default': 'off',
+            'import/default': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/enforce-node-protocol-usage': ['error', 'always'],
             'import/export': 'off',
             'import/first': 'error',
-            'import/namespace': 'off',
+            'import/namespace': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/newline-after-import': ['error', {count: 1}],
             'import/no-absolute-path': 'error',
-            'import/no-cycle': 'off',
-            'import/no-duplicates': ['error', {'prefer-inline': true}],
+            'import/no-cycle': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
+            'import/no-duplicates': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/no-extraneous-dependencies': 'off',
             'import/no-mutable-exports': 'error',
-            'import/no-named-as-default': 'off',
-            'import/no-named-as-default-member': 'off',
-            'import/no-self-import': 'error',
+            'import/no-named-as-default': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
+            'import/no-named-as-default-member': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
+            'import/no-self-import': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/no-unresolved': 'off',
             'import/no-useless-path-segments': ['error', {noUselessIndex: true}],
             'import/no-webpack-loader-syntax': 'error',
