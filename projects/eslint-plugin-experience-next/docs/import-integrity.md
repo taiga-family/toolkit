@@ -6,10 +6,11 @@ Combines the useful parts of `import/default`, `import/namespace`, `import/no-cy
 `import/no-named-as-default`, `import/no-named-as-default-member`, and `import/no-self-import` in a faster
 TypeScript-aware rule. It checks default imports against project-local default exports, reports duplicate import
 declarations, reports modules importing themselves, reports default imports or default re-exports named after a named
-value export from the same module, reports default import property access or destructuring that looks like a named export
-access, checks static namespace import member access against the imported module value exports, and reports project-local
-static import or re-export cycles using a single cached import graph per TypeScript program. External modules are ignored
-for default import checks by default, and type-only import/export edges are ignored for cycle detection.
+value export from the same module, reports default import property access or destructuring that looks like a named
+export access, checks static namespace import member access against the imported module value exports, and reports
+project-local static import or re-export cycles using a single cached import graph per TypeScript program. External
+modules are ignored for default import checks by default, and type-only import/export edges are ignored for cycle
+detection.
 
 ```ts
 // ❌ error
