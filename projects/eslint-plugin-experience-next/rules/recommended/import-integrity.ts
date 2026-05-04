@@ -8,6 +8,7 @@ import {
     getMemberExpressionPropertyName,
     getObjectPropertyName,
 } from '../utils/ast/property-names';
+import {isStringLiteral, type StringLiteral} from '../utils/ast/string-literals';
 import {createRule} from '../utils/create-rule';
 import {getResolvedVariable} from '../utils/eslint/scope';
 import {
@@ -22,7 +23,8 @@ type MessageId =
     | 'namedAsDefault'
     | 'namedAsDefaultMember'
     | 'selfImport'
-    | 'unknownNamespaceMember';
+    | 'unknownNamespaceMember'
+    | 'uselessPathSegments';
 
 type Options = [
     {
@@ -33,9 +35,15 @@ type Options = [
         checkNamedAsDefaultMembers?: boolean;
         checkNamespaceMembers?: boolean;
         checkSelfImports?: boolean;
+        checkUselessPathSegments?: boolean;
         ignoreExternalDefaultImports?: boolean;
     }?,
 ];
+
+interface ModuleSpecifierParts {
+    readonly path: string;
+    readonly query: string;
+}
 
 interface ImportGraphEdge {
     readonly isImport: boolean;
@@ -44,27 +52,13 @@ interface ImportGraphEdge {
 }
 
 interface ImportGraphCache {
-    // Canonical file names of files that have at least one re-export edge (export * / export {...} from)
-    readonly barrelFileNames: ReadonlySet<string>;
-    readonly componentIdByFileName: ReadonlyMap<string, number>;
-    readonly componentSizeById: ReadonlyMap<number, number>;
-    readonly dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>;
-    readonly displayFileNameByFileName: ReadonlyMap<string, string>;
-    // True for each SCC component that contains at least one ImportDeclaration edge
-    // between two files in the same component.
-    readonly sccHasImportEdgeById: ReadonlyMap<number, boolean>;
-    readonly selfCycleFileNames: ReadonlySet<string>;
+    readonly dependenciesByFileName: Map<string, readonly ImportGraphEdge[]>;
+    readonly displayFileNameByFileName: Map<string, string>;
 }
 
 interface FallbackResolutionState {
     readonly compilerHost: ts.CompilerHost;
     readonly resolutionCache: ts.ModuleResolutionCache;
-}
-
-interface TarjanNodeState {
-    index: number;
-    lowLink: number;
-    onStack: boolean;
 }
 
 interface NamespaceImportUsage {
@@ -84,6 +78,12 @@ interface DefaultImportUsage {
 interface DuplicateImportMaps {
     readonly importsByModule: Map<string, TSESTree.ImportDeclaration[]>;
     readonly namespaceImportsByModule: Map<string, TSESTree.ImportDeclaration[]>;
+}
+
+interface CycleSearchResult {
+    readonly cyclePath: readonly string[];
+    readonly hasImportEdge: boolean;
+    readonly targetFileName: string;
 }
 
 const importGraphCacheByProgram = new WeakMap<ts.Program, ImportGraphCache>();
@@ -231,10 +231,47 @@ function resolveModuleFileName(
     return resolved.resolvedFileName;
 }
 
-function getModuleSpecifierPath(moduleSpecifier: string): string {
+function splitModuleSpecifierQuery(moduleSpecifier: string): ModuleSpecifierParts {
     const queryIndex = moduleSpecifier.indexOf('?');
 
-    return queryIndex === -1 ? moduleSpecifier : moduleSpecifier.slice(0, queryIndex);
+    return queryIndex === -1
+        ? {path: moduleSpecifier, query: ''}
+        : {
+              path: moduleSpecifier.slice(0, queryIndex),
+              query: moduleSpecifier.slice(queryIndex),
+          };
+}
+
+function getModuleSpecifierPath(moduleSpecifier: string): string {
+    return splitModuleSpecifierQuery(moduleSpecifier).path;
+}
+
+function toRelativeImportPath(relativePath: string): string {
+    const stripped = relativePath.replaceAll(/\/$/g, '');
+
+    return /^\.{1,2}$|^\.{1,2}\//.test(stripped) ? stripped : `./${stripped}`;
+}
+
+function normalizeImportPath(moduleSpecifierPath: string): string {
+    return toRelativeImportPath(path.posix.normalize(moduleSpecifierPath));
+}
+
+function countRelativeParents(pathSegments: readonly string[]): number {
+    return pathSegments.filter((segment) => segment === '..').length;
+}
+
+function isIndexModulePath(moduleSpecifierPath: string): boolean {
+    return /(?:^|\/)index(?:\.[cm]?[jt]sx?)?$/.test(moduleSpecifierPath);
+}
+
+function quoteModuleSpecifier(source: StringLiteral, moduleSpecifier: string): string {
+    const quote = source.raw.startsWith('"') ? '"' : "'";
+
+    const escaped = moduleSpecifier
+        .replaceAll('\\', '\\\\')
+        .replaceAll(quote, `\\${quote}`);
+
+    return `${quote}${escaped}${quote}`;
 }
 
 function resolveModuleKey(
@@ -400,204 +437,6 @@ function getRuntimeModuleSpecifier(statement: ts.Statement): string | null {
     return null;
 }
 
-function buildDependenciesByFileName(
-    program: ts.Program,
-    canonicalFileName: (fileName: string) => string,
-): {
-    dependenciesByFileName: Map<string, ImportGraphEdge[]>;
-    displayFileNameByFileName: Map<string, string>;
-} {
-    const sourceFiles = program.getSourceFiles().filter(isProjectCodeFile);
-
-    const projectFileNames = new Set(
-        sourceFiles.map((sourceFile) => canonicalFileName(sourceFile.fileName)),
-    );
-
-    const dependenciesByFileName = new Map<string, ImportGraphEdge[]>();
-    const displayFileNameByFileName = new Map<string, string>();
-
-    for (const sourceFile of sourceFiles) {
-        const fileName = canonicalFileName(sourceFile.fileName);
-        const edges: ImportGraphEdge[] = [];
-
-        displayFileNameByFileName.set(fileName, sourceFile.fileName);
-
-        for (const statement of sourceFile.statements) {
-            const moduleSpecifier = getRuntimeModuleSpecifier(statement);
-
-            if (!moduleSpecifier) {
-                continue;
-            }
-
-            const resolvedFileName = resolveModuleFileName(
-                program,
-                sourceFile.fileName,
-                moduleSpecifier,
-            );
-
-            if (!resolvedFileName) {
-                continue;
-            }
-
-            const targetFileName = canonicalFileName(resolvedFileName);
-
-            if (!projectFileNames.has(targetFileName)) {
-                continue;
-            }
-
-            edges.push({
-                isImport: ts.isImportDeclaration(statement),
-                moduleSpecifier,
-                targetFileName,
-            });
-        }
-
-        dependenciesByFileName.set(fileName, edges);
-    }
-
-    return {dependenciesByFileName, displayFileNameByFileName};
-}
-
-function findStronglyConnectedComponents(
-    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
-): {
-    componentIdByFileName: Map<string, number>;
-    componentSizeById: Map<number, number>;
-} {
-    let nextComponentId = 0;
-    let nextIndex = 0;
-    const componentIdByFileName = new Map<string, number>();
-    const componentSizeById = new Map<number, number>();
-    const nodeStateByFileName = new Map<string, TarjanNodeState>();
-    const stack: string[] = [];
-
-    function visit(fileName: string): void {
-        const state = {
-            index: nextIndex,
-            lowLink: nextIndex,
-            onStack: true,
-        };
-
-        nextIndex += 1;
-        nodeStateByFileName.set(fileName, state);
-        stack.push(fileName);
-
-        for (const edge of dependenciesByFileName.get(fileName) ?? []) {
-            const targetState = nodeStateByFileName.get(edge.targetFileName);
-
-            if (!targetState) {
-                visit(edge.targetFileName);
-
-                const visitedTargetState = nodeStateByFileName.get(edge.targetFileName);
-
-                if (visitedTargetState) {
-                    state.lowLink = Math.min(state.lowLink, visitedTargetState.lowLink);
-                }
-
-                continue;
-            }
-
-            if (targetState.onStack) {
-                state.lowLink = Math.min(state.lowLink, targetState.index);
-            }
-        }
-
-        if (state.lowLink !== state.index) {
-            return;
-        }
-
-        const componentId = nextComponentId;
-        let componentSize = 0;
-        let shouldPop = stack.length > 0;
-
-        nextComponentId += 1;
-
-        while (shouldPop) {
-            const memberFileName = stack.pop();
-
-            if (!memberFileName) {
-                shouldPop = false;
-                continue;
-            }
-
-            const memberState = nodeStateByFileName.get(memberFileName);
-
-            if (memberState) {
-                memberState.onStack = false;
-            }
-
-            componentSize += 1;
-            componentIdByFileName.set(memberFileName, componentId);
-            shouldPop = stack.length > 0 && memberFileName !== fileName;
-        }
-
-        componentSizeById.set(componentId, componentSize);
-    }
-
-    for (const fileName of dependenciesByFileName.keys()) {
-        if (!nodeStateByFileName.has(fileName)) {
-            visit(fileName);
-        }
-    }
-
-    return {componentIdByFileName, componentSizeById};
-}
-
-function collectSelfCycles(
-    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
-): Set<string> {
-    const selfCycleFileNames = new Set<string>();
-
-    for (const [fileName, edges] of dependenciesByFileName) {
-        if (edges.some((edge) => edge.targetFileName === fileName)) {
-            selfCycleFileNames.add(fileName);
-        }
-    }
-
-    return selfCycleFileNames;
-}
-
-function buildSccHasImportEdge(
-    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
-    componentIdByFileName: ReadonlyMap<string, number>,
-): Map<number, boolean> {
-    const result = new Map<number, boolean>();
-
-    for (const [fileName, edges] of dependenciesByFileName) {
-        const sourceComponentId = componentIdByFileName.get(fileName);
-
-        if (sourceComponentId === undefined || result.get(sourceComponentId) === true) {
-            continue;
-        }
-
-        for (const edge of edges) {
-            if (
-                edge.isImport &&
-                componentIdByFileName.get(edge.targetFileName) === sourceComponentId
-            ) {
-                result.set(sourceComponentId, true);
-                break;
-            }
-        }
-    }
-
-    return result;
-}
-
-function buildBarrelFileNames(
-    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
-): ReadonlySet<string> {
-    const result = new Set<string>();
-
-    for (const [fileName, edges] of dependenciesByFileName) {
-        if (edges.some((edge) => !edge.isImport)) {
-            result.add(fileName);
-        }
-    }
-
-    return result;
-}
-
 function getImportGraph(program: ts.Program): ImportGraphCache {
     const cached = importGraphCacheByProgram.get(program);
 
@@ -605,25 +444,9 @@ function getImportGraph(program: ts.Program): ImportGraphCache {
         return cached;
     }
 
-    const canonicalFileName = createCanonicalFileName();
-
-    const {dependenciesByFileName, displayFileNameByFileName} =
-        buildDependenciesByFileName(program, canonicalFileName);
-
-    const {componentIdByFileName, componentSizeById} =
-        findStronglyConnectedComponents(dependenciesByFileName);
-
     const cache = {
-        barrelFileNames: buildBarrelFileNames(dependenciesByFileName),
-        componentIdByFileName,
-        componentSizeById,
-        dependenciesByFileName,
-        displayFileNameByFileName,
-        sccHasImportEdgeById: buildSccHasImportEdge(
-            dependenciesByFileName,
-            componentIdByFileName,
-        ),
-        selfCycleFileNames: collectSelfCycles(dependenciesByFileName),
+        dependenciesByFileName: new Map<string, readonly ImportGraphEdge[]>(),
+        displayFileNameByFileName: new Map<string, string>(),
     };
 
     importGraphCacheByProgram.set(program, cache);
@@ -765,93 +588,234 @@ function getImportOrReExportModuleSpecifier(
     return typeof node.source.value === 'string' ? node.source.value : null;
 }
 
-function findCyclicTargetFileName(
+function getProjectSourceFile(
+    program: ts.Program,
+    fileName: string,
+): ts.SourceFile | null {
+    const sourceFile = getSourceFileByFileName(program, fileName);
+
+    return sourceFile && isProjectCodeFile(sourceFile) ? sourceFile : null;
+}
+
+function getDependenciesForFile(
+    program: ts.Program,
+    graph: ImportGraphCache,
+    fileName: string,
+    canonicalFileName: (fileName: string) => string,
+): readonly ImportGraphEdge[] {
+    const cached = graph.dependenciesByFileName.get(fileName);
+
+    if (cached) {
+        return cached;
+    }
+
+    const sourceFile = getProjectSourceFile(program, fileName);
+    const edges: ImportGraphEdge[] = [];
+
+    graph.dependenciesByFileName.set(fileName, edges);
+
+    if (!sourceFile) {
+        return edges;
+    }
+
+    graph.displayFileNameByFileName.set(fileName, sourceFile.fileName);
+
+    for (const statement of sourceFile.statements) {
+        const moduleSpecifier = getRuntimeModuleSpecifier(statement);
+
+        if (!moduleSpecifier) {
+            continue;
+        }
+
+        const resolvedFileName = resolveModuleFileName(
+            program,
+            sourceFile.fileName,
+            moduleSpecifier,
+        );
+
+        if (!resolvedFileName) {
+            continue;
+        }
+
+        const targetSourceFile = getProjectSourceFile(program, resolvedFileName);
+
+        if (!targetSourceFile) {
+            continue;
+        }
+
+        const targetFileName = canonicalFileName(targetSourceFile.fileName);
+
+        graph.displayFileNameByFileName.set(targetFileName, targetSourceFile.fileName);
+        edges.push({
+            isImport: ts.isImportDeclaration(statement),
+            moduleSpecifier,
+            targetFileName,
+        });
+    }
+
+    return edges;
+}
+
+function fileHasReExportEdges(
+    program: ts.Program,
+    graph: ImportGraphCache,
+    fileName: string,
+    canonicalFileName: (fileName: string) => string,
+): boolean {
+    return getDependenciesForFile(program, graph, fileName, canonicalFileName).some(
+        (edge) => !edge.isImport,
+    );
+}
+
+function getCycleStateKey(fileName: string, hasImportEdge: boolean): string {
+    return `${hasImportEdge ? '1' : '0'}:${fileName}`;
+}
+
+function reconstructSearchPath(
+    stateKey: string,
+    previousStateKeyByStateKey: ReadonlyMap<string, string | null>,
+    fileNameByStateKey: ReadonlyMap<string, string>,
+): readonly string[] {
+    const pathSegments: string[] = [];
+    let currentStateKey: string | null = stateKey;
+
+    while (currentStateKey !== null) {
+        const fileName = fileNameByStateKey.get(currentStateKey);
+
+        if (!fileName) {
+            return [];
+        }
+
+        pathSegments.push(fileName);
+
+        const previousStateKey = previousStateKeyByStateKey.get(currentStateKey);
+
+        if (previousStateKey === undefined) {
+            return [];
+        }
+
+        currentStateKey = previousStateKey;
+    }
+
+    return pathSegments.reverse();
+}
+
+function findCyclePathFromEdge(
+    program: ts.Program,
+    graph: ImportGraphCache,
+    currentFileName: string,
+    edge: ImportGraphEdge,
+    canonicalFileName: (fileName: string) => string,
+): CycleSearchResult | null {
+    const queue = [{fileName: edge.targetFileName, hasImportEdge: edge.isImport}];
+    const startStateKey = getCycleStateKey(edge.targetFileName, edge.isImport);
+
+    const previousStateKeyByStateKey = new Map<string, string | null>([
+        [startStateKey, null],
+    ]);
+
+    const fileNameByStateKey = new Map<string, string>([
+        [startStateKey, edge.targetFileName],
+    ]);
+
+    let firstResult: CycleSearchResult | null = null;
+
+    for (const state of queue) {
+        const stateKey = getCycleStateKey(state.fileName, state.hasImportEdge);
+
+        if (state.fileName === currentFileName) {
+            const path = reconstructSearchPath(
+                stateKey,
+                previousStateKeyByStateKey,
+                fileNameByStateKey,
+            );
+
+            if (path.length === 0) {
+                continue;
+            }
+
+            const result = {
+                cyclePath: [currentFileName, ...path],
+                hasImportEdge: state.hasImportEdge,
+                targetFileName: edge.targetFileName,
+            };
+
+            if (result.hasImportEdge) {
+                return result;
+            }
+
+            firstResult ??= result;
+            continue;
+        }
+
+        for (const nextEdge of getDependenciesForFile(
+            program,
+            graph,
+            state.fileName,
+            canonicalFileName,
+        )) {
+            const nextState = {
+                fileName: nextEdge.targetFileName,
+                hasImportEdge: state.hasImportEdge || nextEdge.isImport,
+            };
+
+            const nextStateKey = getCycleStateKey(
+                nextState.fileName,
+                nextState.hasImportEdge,
+            );
+
+            if (previousStateKeyByStateKey.has(nextStateKey)) {
+                continue;
+            }
+
+            previousStateKeyByStateKey.set(nextStateKey, stateKey);
+            fileNameByStateKey.set(nextStateKey, nextState.fileName);
+            queue.push(nextState);
+        }
+    }
+
+    return firstResult;
+}
+
+function findCyclePathForSpecifier(
+    program: ts.Program,
     graph: ImportGraphCache,
     currentFileName: string,
     moduleSpecifier: string,
-): string | null {
-    const currentComponentId = graph.componentIdByFileName.get(currentFileName);
+    canonicalFileName: (fileName: string) => string,
+): CycleSearchResult | null {
+    let firstResult: CycleSearchResult | null = null;
 
-    if (currentComponentId === undefined) {
-        return null;
-    }
-
-    const currentComponentSize = graph.componentSizeById.get(currentComponentId) ?? 0;
-
-    for (const edge of graph.dependenciesByFileName.get(currentFileName) ?? []) {
+    for (const edge of getDependenciesForFile(
+        program,
+        graph,
+        currentFileName,
+        canonicalFileName,
+    )) {
         if (edge.moduleSpecifier !== moduleSpecifier) {
             continue;
         }
 
-        const isSelfCycle =
-            edge.targetFileName === currentFileName &&
-            graph.selfCycleFileNames.has(currentFileName);
+        const result = findCyclePathFromEdge(
+            program,
+            graph,
+            currentFileName,
+            edge,
+            canonicalFileName,
+        );
 
-        const isSameComponentCycle =
-            currentComponentSize > 1 &&
-            graph.componentIdByFileName.get(edge.targetFileName) === currentComponentId;
-
-        if (isSelfCycle || isSameComponentCycle) {
-            return edge.targetFileName;
-        }
-    }
-
-    return null;
-}
-
-function findPathWithinComponent(
-    graph: ImportGraphCache,
-    startFileName: string,
-    endFileName: string,
-    componentId: number,
-): string[] {
-    const queue = [startFileName];
-    const previousFileName = new Map<string, string | null>([[startFileName, null]]);
-
-    for (
-        let index = 0;
-        index < queue.length && !previousFileName.has(endFileName);
-        index += 1
-    ) {
-        const currentFileName = queue[index];
-
-        if (!currentFileName) {
+        if (!result) {
             continue;
         }
 
-        for (const edge of graph.dependenciesByFileName.get(currentFileName) ?? []) {
-            if (
-                graph.componentIdByFileName.get(edge.targetFileName) !== componentId ||
-                previousFileName.has(edge.targetFileName)
-            ) {
-                continue;
-            }
-
-            previousFileName.set(edge.targetFileName, currentFileName);
-            queue.push(edge.targetFileName);
-        }
-    }
-
-    if (!previousFileName.has(endFileName)) {
-        return [startFileName, endFileName];
-    }
-
-    const pathSegments: string[] = [];
-    let currentFileName: string | null = endFileName;
-
-    while (currentFileName !== null) {
-        pathSegments.push(currentFileName);
-
-        const nextFileName = previousFileName.get(currentFileName);
-
-        if (nextFileName === undefined) {
-            return [startFileName, endFileName];
+        if (result.hasImportEdge) {
+            return result;
         }
 
-        currentFileName = nextFileName;
+        firstResult ??= result;
     }
 
-    return pathSegments.reverse();
+    return firstResult;
 }
 
 function formatFileName(graph: ImportGraphCache, fileName: string, cwd: string): string {
@@ -863,24 +827,10 @@ function formatFileName(graph: ImportGraphCache, fileName: string, cwd: string):
 
 function formatCyclePath(
     graph: ImportGraphCache,
-    currentFileName: string,
-    targetFileName: string,
+    cyclePath: readonly string[],
     cwd: string,
 ): string {
-    const componentId = graph.componentIdByFileName.get(currentFileName);
-
-    if (componentId === undefined || currentFileName === targetFileName) {
-        return [currentFileName, targetFileName]
-            .map((fileName) => formatFileName(graph, fileName, cwd))
-            .join(' -> ');
-    }
-
-    return [
-        currentFileName,
-        ...findPathWithinComponent(graph, targetFileName, currentFileName, componentId),
-    ]
-        .map((fileName) => formatFileName(graph, fileName, cwd))
-        .join(' -> ');
+    return cyclePath.map((fileName) => formatFileName(graph, fileName, cwd)).join(' -> ');
 }
 
 function getAliasedSymbolIfNeeded(checker: ts.TypeChecker, symbol: ts.Symbol): ts.Symbol {
@@ -1107,6 +1057,9 @@ export const rule = createRule<Options, MessageId>({
         const checkNamespaceMembers = context.options[0]?.checkNamespaceMembers ?? true;
         const checkSelfImports = context.options[0]?.checkSelfImports ?? true;
 
+        const shouldCheckUselessPathSegments =
+            context.options[0]?.checkUselessPathSegments ?? true;
+
         const ignoreExternalDefaultImports =
             context.options[0]?.ignoreExternalDefaultImports ?? true;
 
@@ -1313,16 +1266,153 @@ export const rule = createRule<Options, MessageId>({
             });
         }
 
-        function checkDeclarationSelfImport(
+        function getNormalizedPathReplacement(
+            moduleSpecifierPath: string,
+            canonicalResolvedFileName: string,
+        ): string | null {
+            const normalizedPath = normalizeImportPath(moduleSpecifierPath);
+
+            if (normalizedPath === moduleSpecifierPath) {
+                return null;
+            }
+
+            const normalizedResolved = resolveModule(
+                tsProgram,
+                context.filename,
+                normalizedPath,
+            );
+
+            return normalizedResolved &&
+                canonicalFileName(normalizedResolved.resolvedFileName) ===
+                    canonicalResolvedFileName
+                ? normalizedPath
+                : null;
+        }
+
+        function getIndexPathReplacement(
+            moduleSpecifierPath: string,
+            canonicalResolvedFileName: string,
+        ): string | null {
+            if (!isIndexModulePath(moduleSpecifierPath)) {
+                return null;
+            }
+
+            const parentDirectory = path.posix.dirname(moduleSpecifierPath);
+
+            if (parentDirectory === '.' || parentDirectory === '..') {
+                return parentDirectory;
+            }
+
+            const parentResolved = resolveModule(
+                tsProgram,
+                context.filename,
+                parentDirectory,
+            );
+
+            return parentResolved &&
+                canonicalFileName(parentResolved.resolvedFileName) !==
+                    canonicalResolvedFileName
+                ? `${parentDirectory}/`
+                : parentDirectory;
+        }
+
+        function getExcessParentPathReplacement(
+            moduleSpecifierPath: string,
+            resolvedFileName: string,
+        ): string | null {
+            if (moduleSpecifierPath.startsWith('./')) {
+                return null;
+            }
+
+            const expectedPath = computeRelativeImportPath(
+                context.filename,
+                resolvedFileName,
+            );
+
+            const importSegments = moduleSpecifierPath.replace(/^\.\//, '').split('/');
+            const importParentCount = countRelativeParents(importSegments);
+            const expectedParentCount = countRelativeParents(expectedPath.split('/'));
+
+            if (
+                importParentCount <= expectedParentCount ||
+                expectedPath === moduleSpecifierPath
+            ) {
+                return null;
+            }
+
+            return expectedPath;
+        }
+
+        function getUselessPathSegmentsReplacement(
+            moduleSpecifierPath: string,
+        ): string | null {
+            const resolved = resolveModule(
+                tsProgram,
+                context.filename,
+                moduleSpecifierPath,
+            );
+
+            if (!resolved) {
+                return null;
+            }
+
+            const canonicalResolvedFileName = canonicalFileName(
+                resolved.resolvedFileName,
+            );
+
+            return (
+                getNormalizedPathReplacement(
+                    moduleSpecifierPath,
+                    canonicalResolvedFileName,
+                ) ??
+                getIndexPathReplacement(moduleSpecifierPath, canonicalResolvedFileName) ??
+                getExcessParentPathReplacement(
+                    moduleSpecifierPath,
+                    resolved.resolvedFileName,
+                )
+            );
+        }
+
+        function checkUselessPathSegments(source: StringLiteral): void {
+            if (!shouldCheckUselessPathSegments || !source.value.startsWith('.')) {
+                return;
+            }
+
+            const parts = splitModuleSpecifierQuery(source.value);
+            const proposedPath = getUselessPathSegmentsReplacement(parts.path);
+
+            if (!proposedPath) {
+                return;
+            }
+
+            const proposedModuleSpecifier = `${proposedPath}${parts.query}`;
+
+            context.report({
+                data: {
+                    moduleSpecifier: source.value,
+                    proposedPath: proposedModuleSpecifier,
+                },
+                fix: (fixer) =>
+                    fixer.replaceText(
+                        source,
+                        quoteModuleSpecifier(source, proposedModuleSpecifier),
+                    ),
+                messageId: 'uselessPathSegments',
+                node: source,
+            });
+        }
+
+        function checkDeclarationModuleSpecifier(
             node:
                 | TSESTree.ExportAllDeclaration
                 | TSESTree.ExportNamedDeclaration
                 | TSESTree.ImportDeclaration,
         ): void {
-            if (!node.source || typeof node.source.value !== 'string') {
+            if (!isStringLiteral(node.source)) {
                 return;
             }
 
+            checkUselessPathSegments(node.source);
             checkSelfImport(node.source.value, node.source);
         }
 
@@ -1347,16 +1437,14 @@ export const rule = createRule<Options, MessageId>({
             checkSelfImport(moduleSpecifier.value, moduleSpecifier);
         }
 
-        function checkDynamicSelfImport(node: TSESTree.ImportExpression): void {
+        function checkDynamicImport(node: TSESTree.ImportExpression): void {
             const {source} = node;
 
-            if (
-                source.type !== AST_NODE_TYPES.Literal ||
-                typeof source.value !== 'string'
-            ) {
+            if (!isStringLiteral(source)) {
                 return;
             }
 
+            checkUselessPathSegments(source);
             checkSelfImport(source.value, source);
         }
 
@@ -1384,22 +1472,19 @@ export const rule = createRule<Options, MessageId>({
 
             const graph = getImportGraph(tsProgram);
 
-            const targetFileName = findCyclicTargetFileName(
+            const cycle = findCyclePathForSpecifier(
+                tsProgram,
                 graph,
                 currentFileName,
                 moduleSpecifier,
+                canonicalFileName,
             );
 
-            if (!targetFileName) {
+            if (!cycle) {
                 return;
             }
 
-            const cyclePath = formatCyclePath(
-                graph,
-                currentFileName,
-                targetFileName,
-                context.cwd,
-            );
+            const cyclePath = formatCyclePath(graph, cycle.cyclePath, context.cwd);
 
             if (node.type === AST_NODE_TYPES.ImportDeclaration) {
                 // Compute the redirect replacement eagerly so we can decide whether
@@ -1425,15 +1510,10 @@ export const rule = createRule<Options, MessageId>({
                 });
             } else {
                 // For re-export nodes (export * from / export {x} from), suppress the
-                // error when the same SCC already contains an ImportDeclaration edge.
+                // error when the reachable cycle contains an ImportDeclaration edge.
                 // That ImportDeclaration will be reported (and fixed) directly, so
                 // reporting the barrel re-export would create duplicate, unfixable noise.
-                const componentId = graph.componentIdByFileName.get(currentFileName);
-
-                if (
-                    componentId !== undefined &&
-                    graph.sccHasImportEdgeById.get(componentId) === true
-                ) {
+                if (cycle.hasImportEdge) {
                     return;
                 }
 
@@ -1467,7 +1547,12 @@ export const rule = createRule<Options, MessageId>({
             // so there is no shorter direct-source path to redirect to.
             if (
                 !canonicalBarrelFileName ||
-                !getImportGraph(tsProgram).barrelFileNames.has(canonicalBarrelFileName)
+                !fileHasReExportEdges(
+                    tsProgram,
+                    getImportGraph(tsProgram),
+                    canonicalBarrelFileName,
+                    canonicalFileName,
+                )
             ) {
                 return null;
             }
@@ -1883,21 +1968,21 @@ export const rule = createRule<Options, MessageId>({
             CallExpression: checkRequireSelfImport,
             ExportAllDeclaration(node: TSESTree.ExportAllDeclaration) {
                 checkImportCycle(node);
-                checkDeclarationSelfImport(node);
+                checkDeclarationModuleSpecifier(node);
             },
             ExportNamedDeclaration(node: TSESTree.ExportNamedDeclaration) {
                 checkImportCycle(node);
-                checkDeclarationSelfImport(node);
+                checkDeclarationModuleSpecifier(node);
                 checkNamedAsDefaultExport(node);
             },
             ImportDeclaration(node: TSESTree.ImportDeclaration) {
                 checkImportCycle(node);
-                checkDeclarationSelfImport(node);
+                checkDeclarationModuleSpecifier(node);
                 collectDuplicateImport(node);
                 checkDefaultImport(node);
                 collectNamespaceImport(node);
             },
-            ImportExpression: checkDynamicSelfImport,
+            ImportExpression: checkDynamicImport,
             MemberExpression(node: TSESTree.MemberExpression) {
                 checkNamedAsDefaultMemberExpression(node);
                 checkNamespaceMember(node);
@@ -1909,7 +1994,7 @@ export const rule = createRule<Options, MessageId>({
     meta: {
         docs: {
             description:
-                'Fast replacement for import/default, import/namespace, import/no-cycle, import/no-duplicates, import/no-named-as-default, import/no-named-as-default-member, and import/no-self-import checks',
+                'Fast replacement for import/default, import/namespace, import/no-cycle, import/no-duplicates, import/no-named-as-default, import/no-named-as-default-member, import/no-self-import, and import/no-useless-path-segments checks',
         },
         fixable: 'code',
         messages: {
@@ -1923,6 +2008,8 @@ export const rule = createRule<Options, MessageId>({
             selfImport: 'Module imports itself.',
             unknownNamespaceMember:
                 'Namespace import "{{namespaceName}}" from "{{moduleSpecifier}}" has no exported member "{{memberName}}".',
+            uselessPathSegments:
+                'Useless path segments for "{{moduleSpecifier}}", should be "{{proposedPath}}".',
         },
         schema: [
             {
@@ -1961,6 +2048,11 @@ export const rule = createRule<Options, MessageId>({
                     checkSelfImports: {
                         description:
                             'Report imports, re-exports, dynamic imports, and require() calls that resolve to the current file. Defaults to true.',
+                        type: 'boolean',
+                    },
+                    checkUselessPathSegments: {
+                        description:
+                            'Report relative imports, re-exports, and dynamic imports with unnecessary path segments or /index suffixes. Defaults to true.',
                         type: 'boolean',
                     },
                     ignoreExternalDefaultImports: {

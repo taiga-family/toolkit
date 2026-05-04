@@ -185,6 +185,86 @@ ruleTester.run('import-integrity', rule, {
         },
         {
             code: /* TypeScript */ `
+                import {known} from '././namespace-module';
+
+                known();
+            `,
+            errors: [
+                {
+                    data: {
+                        moduleSpecifier: '././namespace-module',
+                        proposedPath: './namespace-module',
+                    },
+                    messageId: 'uselessPathSegments',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known} from './namespace-module';
+
+                known();
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import {indexed} from './indexed/index';
+
+                indexed;
+            `,
+            errors: [
+                {
+                    data: {
+                        moduleSpecifier: './indexed/index',
+                        proposedPath: './indexed',
+                    },
+                    messageId: 'uselessPathSegments',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {indexed} from './indexed';
+
+                indexed;
+            `,
+        },
+        {
+            code: "void import('./indexed/index?raw');",
+            errors: [
+                {
+                    data: {
+                        moduleSpecifier: './indexed/index?raw',
+                        proposedPath: './indexed?raw',
+                    },
+                    messageId: 'uselessPathSegments',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: "void import('./indexed?raw');",
+        },
+        {
+            code: /* TypeScript */ `
+                import {known} from '../import-integrity/namespace-module';
+
+                known();
+            `,
+            errors: [
+                {
+                    data: {
+                        moduleSpecifier: '../import-integrity/namespace-module',
+                        proposedPath: './namespace-module',
+                    },
+                    messageId: 'uselessPathSegments',
+                },
+            ],
+            filename: fixtureFile('excess-parent-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known} from './namespace-module';
+
+                known();
+            `,
+        },
+        {
+            code: /* TypeScript */ `
                 import {cycleB} from './cycle-b';
 
                 export const cycleA = cycleB;
@@ -372,6 +452,19 @@ ruleTester.run('import-integrity', rule, {
         {
             code: "import './self-import?raw';",
             filename: fixtureFile('self-import.ts'),
+        },
+        {
+            code: "import {indexed} from './indexed';",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "void import('./indexed?raw');",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "import {indexed} from './indexed/index';",
+            filename: fixtureFile('namespace-consumer.ts'),
+            options: [{checkUselessPathSegments: false}],
         },
         {
             code: /* TypeScript */ `
