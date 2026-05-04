@@ -165,6 +165,41 @@ ruleTester.run('no-repeated-signal-in-conditional', rule, {
             `,
         },
         {
+            // ternary in concise arrow: !!signal() double-negation is stripped when replacing
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                class Cmp {
+                    readonly pseudoInvalid = signal<string | null>(null);
+                    readonly interactive = signal(true);
+                    readonly touched = signal(false);
+                    readonly invalid = computed(() =>
+                        this.pseudoInvalid() === null
+                            ? this.interactive() && this.touched()
+                            : !!this.pseudoInvalid() && this.interactive(),
+                    );
+                }
+            `,
+            errors: [{messageId: 'noRepeatedSignalInConditional'}],
+            output: /* TypeScript */ `
+                ${PREAMBLE}
+                import {computed, signal} from '@angular/core';
+                class Cmp {
+                    readonly pseudoInvalid = signal<string | null>(null);
+                    readonly interactive = signal(true);
+                    readonly touched = signal(false);
+                    readonly invalid = computed(() => {
+                        const pseudoInvalid = this.pseudoInvalid();
+
+                        return pseudoInvalid === null
+                            ? this.interactive() && this.touched()
+                            : pseudoInvalid && this.interactive();
+                    },
+                    );
+                }
+            `,
+        },
+        {
             // if: nullable signal in test + else body
             code: /* TypeScript */ `
                 ${PREAMBLE}

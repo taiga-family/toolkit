@@ -29,19 +29,25 @@ type Options = [
 ];
 
 interface ImportGraphEdge {
+    readonly isImport: boolean;
     readonly moduleSpecifier: string;
     readonly targetFileName: string;
 }
 
 interface ImportGraphCache {
+    // Canonical file names of files that have at least one re-export edge (export * / export {...} from)
+    readonly barrelFileNames: ReadonlySet<string>;
     readonly componentIdByFileName: ReadonlyMap<string, number>;
     readonly componentSizeById: ReadonlyMap<number, number>;
     readonly dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>;
     readonly displayFileNameByFileName: ReadonlyMap<string, string>;
+    // True for each SCC component that contains at least one ImportDeclaration edge
+    // between two files in the same component.
+    readonly sccHasImportEdgeById: ReadonlyMap<number, boolean>;
     readonly selfCycleFileNames: ReadonlySet<string>;
 }
 
-interface ResolutionState {
+interface FallbackResolutionState {
     readonly compilerHost: ts.CompilerHost;
     readonly resolutionCache: ts.ModuleResolutionCache;
 }
@@ -61,8 +67,8 @@ interface NamespaceImportUsage {
 
 const importGraphCacheByProgram = new WeakMap<ts.Program, ImportGraphCache>();
 const defaultExportCacheByProgram = new WeakMap<ts.Program, Map<string, boolean>>();
+const fallbackResolutionByProgram = new WeakMap<ts.Program, FallbackResolutionState>();
 const moduleExportNamesCache = new WeakMap<ts.Symbol, ReadonlySet<string>>();
-const resolutionStateByProgram = new WeakMap<ts.Program, ResolutionState>();
 const sourceFileCacheByProgram = new WeakMap<ts.Program, Map<string, ts.SourceFile>>();
 const codeFileExtensionRegExp = /\.[cm]?[jt]sx?$/;
 
@@ -88,8 +94,52 @@ function createCanonicalFileName(): (fileName: string) => string {
     };
 }
 
-function getResolutionState(program: ts.Program): ResolutionState {
-    const cached = resolutionStateByProgram.get(program);
+function normalizeSlashes(fileName: string): string {
+    return fileName.replaceAll('\\', '/');
+}
+
+function computeRelativeImportPath(fromFile: string, toFile: string): string {
+    const relative = path.relative(path.dirname(fromFile), toFile);
+    const normalized = normalizeSlashes(relative).replace(codeFileExtensionRegExp, '');
+
+    return normalized.startsWith('.') ? normalized : `./${normalized}`;
+}
+
+function isProjectCodeFile(sourceFile: ts.SourceFile): boolean {
+    const normalizedFileName = normalizeSlashes(sourceFile.fileName);
+
+    return (
+        !sourceFile.isDeclarationFile &&
+        codeFileExtensionRegExp.test(normalizedFileName) &&
+        !normalizedFileName.includes('/node_modules/')
+    );
+}
+
+// Returns the module resolution cache that the TypeScript program itself populated during
+// compilation. Not part of the public ts.Program API but available at runtime on TS 4+.
+function getProgramResolutionCache(program: ts.Program): ts.ModuleResolutionCache | null {
+    const record = program as unknown as Record<string, unknown>;
+    const getCache = record['getModuleResolutionCache'];
+
+    if (typeof getCache !== 'function') {
+        return null;
+    }
+
+    const cache: unknown = (getCache as () => unknown).call(program);
+
+    if (
+        cache === null ||
+        typeof cache !== 'object' ||
+        !('getOrCreateCacheForDirectory' in cache)
+    ) {
+        return null;
+    }
+
+    return cache as ts.ModuleResolutionCache;
+}
+
+function getFallbackResolution(program: ts.Program): FallbackResolutionState {
+    const cached = fallbackResolutionByProgram.get(program);
 
     if (cached) {
         return cached;
@@ -106,23 +156,9 @@ function getResolutionState(program: ts.Program): ResolutionState {
         ),
     };
 
-    resolutionStateByProgram.set(program, state);
+    fallbackResolutionByProgram.set(program, state);
 
     return state;
-}
-
-function normalizeSlashes(fileName: string): string {
-    return fileName.replaceAll('\\', '/');
-}
-
-function isProjectCodeFile(sourceFile: ts.SourceFile): boolean {
-    const normalizedFileName = normalizeSlashes(sourceFile.fileName);
-
-    return (
-        !sourceFile.isDeclarationFile &&
-        codeFileExtensionRegExp.test(normalizedFileName) &&
-        !normalizedFileName.includes('/node_modules/')
-    );
 }
 
 function resolveModule(
@@ -130,19 +166,34 @@ function resolveModule(
     containingFile: string,
     moduleSpecifier: string,
 ): ts.ResolvedModuleFull | null {
-    const compilerOptions = program.getCompilerOptions();
-    const {compilerHost, resolutionCache} = getResolutionState(program);
+    // Prefer the program's own resolution cache (already populated during compilation)
+    // over running a fresh resolution, which requires file system access per unique
+    // (directory, module) pair and dominates lint time on cold starts.
+    const programCache = getProgramResolutionCache(program);
 
-    const resolved =
+    if (programCache) {
+        const fromCache = ts.resolveModuleNameFromCache(
+            moduleSpecifier,
+            containingFile,
+            programCache,
+        );
+
+        if (fromCache !== undefined) {
+            return fromCache.resolvedModule ?? null;
+        }
+    }
+
+    const {compilerHost, resolutionCache} = getFallbackResolution(program);
+
+    return (
         ts.resolveModuleName(
             moduleSpecifier,
             containingFile,
-            compilerOptions,
+            program.getCompilerOptions(),
             compilerHost,
             resolutionCache,
-        ).resolvedModule ?? null;
-
-    return resolved;
+        ).resolvedModule ?? null
+    );
 }
 
 function resolveModuleFileName(
@@ -285,7 +336,11 @@ function buildDependenciesByFileName(
                 continue;
             }
 
-            edges.push({moduleSpecifier, targetFileName});
+            edges.push({
+                isImport: ts.isImportDeclaration(statement),
+                moduleSpecifier,
+                targetFileName,
+            });
         }
 
         dependenciesByFileName.set(fileName, edges);
@@ -393,6 +448,47 @@ function collectSelfCycles(
     return selfCycleFileNames;
 }
 
+function buildSccHasImportEdge(
+    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
+    componentIdByFileName: ReadonlyMap<string, number>,
+): Map<number, boolean> {
+    const result = new Map<number, boolean>();
+
+    for (const [fileName, edges] of dependenciesByFileName) {
+        const sourceComponentId = componentIdByFileName.get(fileName);
+
+        if (sourceComponentId === undefined || result.get(sourceComponentId) === true) {
+            continue;
+        }
+
+        for (const edge of edges) {
+            if (
+                edge.isImport &&
+                componentIdByFileName.get(edge.targetFileName) === sourceComponentId
+            ) {
+                result.set(sourceComponentId, true);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+function buildBarrelFileNames(
+    dependenciesByFileName: ReadonlyMap<string, readonly ImportGraphEdge[]>,
+): ReadonlySet<string> {
+    const result = new Set<string>();
+
+    for (const [fileName, edges] of dependenciesByFileName) {
+        if (edges.some((edge) => !edge.isImport)) {
+            result.add(fileName);
+        }
+    }
+
+    return result;
+}
+
 function getImportGraph(program: ts.Program): ImportGraphCache {
     const cached = importGraphCacheByProgram.get(program);
 
@@ -409,10 +505,15 @@ function getImportGraph(program: ts.Program): ImportGraphCache {
         findStronglyConnectedComponents(dependenciesByFileName);
 
     const cache = {
+        barrelFileNames: buildBarrelFileNames(dependenciesByFileName),
         componentIdByFileName,
         componentSizeById,
         dependenciesByFileName,
         displayFileNameByFileName,
+        sccHasImportEdgeById: buildSccHasImportEdge(
+            dependenciesByFileName,
+            componentIdByFileName,
+        ),
         selfCycleFileNames: collectSelfCycles(dependenciesByFileName),
     };
 
@@ -765,6 +866,44 @@ function hasNamedValueExport(
     return exportedName !== 'default' && (exportNames?.has(exportedName) ?? false);
 }
 
+// Angular resolves the reference lazily (at instantiation, not at module load time)
+// in all of these contexts, so a cycle through them is safe at the ES module level.
+function isInAngularSafeContext(
+    identifier: TSESTree.Identifier | TSESTree.JSXIdentifier,
+): boolean {
+    // TSESTree types parent as Node (non-optional), but the root node's parent is
+    // null at runtime. Widening to include null/undefined lets while(current) serve
+    // as the exit condition when traversal reaches the top of the tree.
+    let current: TSESTree.Node | null | undefined = identifier.parent;
+
+    while (current) {
+        // Lazy evaluation: body runs only when the function/arrow is called.
+        if (
+            current.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+            current.type === AST_NODE_TYPES.FunctionExpression ||
+            current.type === AST_NODE_TYPES.FunctionDeclaration
+        ) {
+            return true;
+        }
+
+        // Angular decorator metadata (@Component, @Directive, etc.) is processed
+        // after all modules in the cycle have finished loading.
+        if (current.type === AST_NODE_TYPES.Decorator) {
+            return true;
+        }
+
+        // Non-static class field initializers run at instantiation time, not at
+        // module load time, so they do not create a load-time cycle edge.
+        if (current.type === AST_NODE_TYPES.PropertyDefinition && !current.static) {
+            return true;
+        }
+
+        current = current.parent;
+    }
+
+    return false;
+}
+
 function isImportUsedOnlyAsAngularDiFirstArg(
     node: TSESTree.ImportDeclaration,
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -784,6 +923,11 @@ function isImportUsedOnlyAsAngularDiFirstArg(
         return false;
     }
 
+    // True if at least one reference is a genuine DI call or lives in a lazy/decorator
+    // context. Pure type-only references don't count: an import used only as a type
+    // should use `import type` and is not considered safe from a cycle perspective.
+    let hasSafeRuntimeUsage = false;
+
     for (const specifier of valueSpecifiers) {
         const [variable] = sourceCode.getDeclaredVariables(specifier);
 
@@ -794,6 +938,19 @@ function isImportUsedOnlyAsAngularDiFirstArg(
         for (const ref of variable.references) {
             const {identifier} = ref;
             const parent = identifier.parent;
+
+            // Type-only references (e.g., param: Type<T>) don't create runtime
+            // dependencies. Skip without marking hasSafeRuntimeUsage — an import
+            // that is exclusively used as a type should use `import type` instead.
+            if (parent.type === AST_NODE_TYPES.TSTypeReference) {
+                continue;
+            }
+
+            // References inside lazy/decorator contexts don't create load-time edges.
+            if (isInAngularSafeContext(identifier)) {
+                hasSafeRuntimeUsage = true;
+                continue;
+            }
 
             const callee =
                 parent.type === AST_NODE_TYPES.CallExpression ? parent.callee : null;
@@ -817,10 +974,12 @@ function isImportUsedOnlyAsAngularDiFirstArg(
             ) {
                 return false;
             }
+
+            hasSafeRuntimeUsage = true;
         }
     }
 
-    return true;
+    return hasSafeRuntimeUsage;
 }
 
 export const rule = createRule<Options, MessageId>({
@@ -870,26 +1029,166 @@ export const rule = createRule<Options, MessageId>({
                 moduleSpecifier,
             );
 
-            if (
-                !targetFileName ||
-                (node.type === AST_NODE_TYPES.ImportDeclaration &&
-                    isImportUsedOnlyAsAngularDiFirstArg(node, sourceCode))
-            ) {
+            if (!targetFileName) {
                 return;
             }
 
-            context.report({
-                data: {
-                    cyclePath: formatCyclePath(
-                        graph,
-                        currentFileName,
-                        targetFileName,
-                        context.cwd,
-                    ),
-                },
-                messageId: 'importCycle',
-                node: sourceNode,
-            });
+            const cyclePath = formatCyclePath(
+                graph,
+                currentFileName,
+                targetFileName,
+                context.cwd,
+            );
+
+            if (node.type === AST_NODE_TYPES.ImportDeclaration) {
+                // Compute the redirect replacement eagerly so we can decide whether
+                // to suppress. If a redirect to the direct source file is possible,
+                // always report (the fix breaks the cycle). Otherwise, suppress when
+                // all usages are Angular-DI-safe (inject, class fields, etc.).
+                const replacement = computeCycleBreakingReplacement(node);
+
+                if (
+                    !replacement &&
+                    isImportUsedOnlyAsAngularDiFirstArg(node, sourceCode)
+                ) {
+                    return;
+                }
+
+                context.report({
+                    data: {cyclePath},
+                    fix: replacement
+                        ? (fixer) => [fixer.replaceText(node, replacement)]
+                        : undefined,
+                    messageId: 'importCycle',
+                    node: sourceNode,
+                });
+            } else {
+                // For re-export nodes (export * from / export {x} from), suppress the
+                // error when the same SCC already contains an ImportDeclaration edge.
+                // That ImportDeclaration will be reported (and fixed) directly, so
+                // reporting the barrel re-export would create duplicate, unfixable noise.
+                const componentId = graph.componentIdByFileName.get(currentFileName);
+
+                if (
+                    componentId !== undefined &&
+                    graph.sccHasImportEdgeById.get(componentId) === true
+                ) {
+                    return;
+                }
+
+                context.report({
+                    data: {cyclePath},
+                    messageId: 'importCycle',
+                    node: sourceNode,
+                });
+            }
+        }
+
+        function computeCycleBreakingReplacement(
+            node: TSESTree.ImportDeclaration,
+        ): string | null {
+            // Only named imports can be safely redirected to their source file
+            if (node.specifiers.some((s) => s.type !== AST_NODE_TYPES.ImportSpecifier)) {
+                return null;
+            }
+
+            const barrelFileName = resolveModuleFileName(
+                tsProgram,
+                context.filename,
+                node.source.value,
+            );
+
+            const canonicalBarrelFileName = barrelFileName
+                ? canonicalFileName(barrelFileName)
+                : null;
+
+            // Not a barrel (has no re-export edges) — symbols are defined locally,
+            // so there is no shorter direct-source path to redirect to.
+            if (
+                !canonicalBarrelFileName ||
+                !getImportGraph(tsProgram).barrelFileNames.has(canonicalBarrelFileName)
+            ) {
+                return null;
+            }
+
+            const specifiersBySourceFile = new Map<string, string[]>();
+
+            for (const specifier of node.specifiers) {
+                if (specifier.type !== AST_NODE_TYPES.ImportSpecifier) {
+                    return null;
+                }
+
+                const tsSpecifier = esTreeNodeToTSNodeMap.get(specifier);
+
+                if (!ts.isImportSpecifier(tsSpecifier)) {
+                    return null;
+                }
+
+                const localSymbol = checker.getSymbolAtLocation(tsSpecifier.name);
+
+                if (!localSymbol) {
+                    return null;
+                }
+
+                const originalSymbol = getAliasedSymbolIfNeeded(checker, localSymbol);
+                const {declarations} = originalSymbol;
+                const firstDeclaration = declarations?.[0];
+
+                if (!firstDeclaration) {
+                    return null;
+                }
+
+                const sourceFile = firstDeclaration.getSourceFile();
+
+                if (!isProjectCodeFile(sourceFile)) {
+                    return null;
+                }
+
+                const sourceFilePath = sourceFile.fileName;
+
+                // Symbol is defined directly in the barrel — no shorter path exists
+                if (canonicalBarrelFileName === canonicalFileName(sourceFilePath)) {
+                    return null;
+                }
+
+                const importedName =
+                    tsSpecifier.propertyName?.text ?? tsSpecifier.name.text;
+
+                const localName = tsSpecifier.name.text;
+                const typePrefix = specifier.importKind === 'type' ? 'type ' : '';
+
+                const specText =
+                    importedName === localName
+                        ? `${typePrefix}${importedName}`
+                        : `${typePrefix}${importedName} as ${localName}`;
+
+                const group = specifiersBySourceFile.get(sourceFilePath) ?? [];
+
+                group.push(specText);
+                specifiersBySourceFile.set(sourceFilePath, group);
+            }
+
+            if (specifiersBySourceFile.size === 0) {
+                return null;
+            }
+
+            const semi = sourceCode.getText(node).endsWith(';') ? ';' : '';
+            const quote = node.source.raw[0] ?? "'";
+            const importPrefix = node.importKind === 'type' ? 'import type' : 'import';
+            const newImports: string[] = [];
+
+            for (const [sourceFilePath, names] of specifiersBySourceFile) {
+                const relPath = computeRelativeImportPath(
+                    context.filename,
+                    sourceFilePath,
+                );
+
+                newImports.push(
+                    `${importPrefix} {${names.join(', ')}} from ${quote}${relPath}${quote}${semi}`,
+                );
+            }
+
+            return newImports.join('\n');
         }
 
         function checkDefaultImport(node: TSESTree.ImportDeclaration): void {
