@@ -42,6 +42,13 @@ users.missingExport();
 ```
 
 ```ts
+// ✅ after autofix
+import {missingExport} from './users';
+
+missingExport();
+```
+
+```ts
 // ✅ ok
 import * as users from './users';
 

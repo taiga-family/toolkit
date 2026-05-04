@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
+import {type RuleFixer} from '@typescript-eslint/utils/ts-eslint';
 import ts from 'typescript';
 
 import {getMemberExpressionPropertyName} from '../utils/ast/property-names';
@@ -972,6 +973,59 @@ export const rule = createRule<Options, MessageId>({
             });
         }
 
+        function buildNamespaceToNamedFix(
+            fixer: RuleFixer,
+            usage: NamespaceImportUsage,
+        ): readonly TSESLint.RuleFix[] | null {
+            const importDecl = usage.node.parent;
+
+            if (importDecl.specifiers.length !== 1) {
+                return null;
+            }
+
+            const memberNames = new Set<string>();
+            const memberNodes: TSESTree.MemberExpression[] = [];
+
+            for (const ref of usage.variable.references) {
+                const parent = ref.identifier.parent;
+
+                if (
+                    parent.type !== AST_NODE_TYPES.MemberExpression ||
+                    parent.object !== ref.identifier ||
+                    parent.computed
+                ) {
+                    return null;
+                }
+
+                const memberName = getMemberExpressionPropertyName(parent);
+
+                if (!memberName || memberName === 'default') {
+                    return null;
+                }
+
+                memberNames.add(memberName);
+                memberNodes.push(parent);
+            }
+
+            if (memberNames.size === 0) {
+                return null;
+            }
+
+            const sourceText = sourceCode.getText(importDecl.source);
+            const hasSemi = sourceCode.getText(importDecl).endsWith(';');
+            const sortedMembers = [...memberNames].sort();
+            const newImportText = `import {${sortedMembers.join(', ')}} from ${sourceText}${hasSemi ? ';' : ''}`;
+
+            return [
+                fixer.replaceText(importDecl, newImportText),
+                ...memberNodes.flatMap((memberNode) => {
+                    const name = getMemberExpressionPropertyName(memberNode);
+
+                    return name ? [fixer.replaceText(memberNode, name)] : [];
+                }),
+            ];
+        }
+
         function checkNamespaceMember(node: TSESTree.MemberExpression): void {
             if (
                 !checkNamespaceMembers ||
@@ -998,6 +1052,7 @@ export const rule = createRule<Options, MessageId>({
                     moduleSpecifier: usage.moduleSpecifier,
                     namespaceName: usage.node.local.name,
                 },
+                fix: (fixer) => buildNamespaceToNamedFix(fixer, usage),
                 messageId: 'unknownNamespaceMember',
                 node: node.property,
             });
@@ -1022,6 +1077,7 @@ export const rule = createRule<Options, MessageId>({
             description:
                 'Fast replacement for import/default, import/namespace, import/no-cycle, and import/no-named-as-default checks',
         },
+        fixable: 'code',
         messages: {
             importCycle: 'Import cycle detected: {{cyclePath}}.',
             missingDefaultExport: 'No default export found in "{{moduleSpecifier}}".',
