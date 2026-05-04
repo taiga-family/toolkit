@@ -174,6 +174,42 @@ ruleTester.run('import-integrity', rule, {
             ],
             filename: fixtureFile('default-consumer.ts'),
         },
+        {
+            code: /* TypeScript */ `
+                import foo from './named-as-default-module';
+
+                foo.bar;
+            `,
+            errors: [
+                {
+                    data: {
+                        defaultName: 'foo',
+                        memberName: 'bar',
+                        moduleSpecifier: './named-as-default-module',
+                    },
+                    messageId: 'namedAsDefaultMember',
+                },
+            ],
+            filename: fixtureFile('default-consumer.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import foo from './named-as-default-module';
+
+                const {bar} = foo;
+            `,
+            errors: [
+                {
+                    data: {
+                        defaultName: 'foo',
+                        memberName: 'bar',
+                        moduleSpecifier: './named-as-default-module',
+                    },
+                    messageId: 'namedAsDefaultMember',
+                },
+            ],
+            filename: fixtureFile('default-consumer.ts'),
+        },
     ],
     valid: [
         {
@@ -188,6 +224,34 @@ ruleTester.run('import-integrity', rule, {
             code: "import bar from './named-as-default-module';",
             filename: fixtureFile('default-consumer.ts'),
             options: [{checkNamedAsDefault: false}],
+        },
+        {
+            code: /* TypeScript */ `
+                import foo from './named-as-default-module';
+
+                foo.default;
+                foo.baz;
+            `,
+            filename: fixtureFile('default-consumer.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import foo from './named-as-default-module';
+
+                foo.bar;
+            `,
+            filename: fixtureFile('default-consumer.ts'),
+            options: [{checkNamedAsDefaultMembers: false}],
+        },
+        {
+            code: /* TypeScript */ `
+                import foo from './named-as-default-module';
+
+                function run(foo: {readonly bar: string}): string {
+                    return foo.bar;
+                }
+            `,
+            filename: fixtureFile('default-consumer.ts'),
         },
         {
             code: "import foo from './default-foo';",
