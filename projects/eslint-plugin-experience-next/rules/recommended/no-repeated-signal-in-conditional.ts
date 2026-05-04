@@ -57,6 +57,10 @@ function getCalleeName(node: TSESTree.CallExpression): string {
 
 function findParentStatement(node: TSESTree.Node): TSESTree.Statement | null {
     for (let current = node; current.parent; current = current.parent) {
+        if (isFunctionLike(current)) {
+            return null;
+        }
+
         if (
             current.parent.type === AST_NODE_TYPES.BlockStatement ||
             current.parent.type === AST_NODE_TYPES.Program
@@ -66,6 +70,39 @@ function findParentStatement(node: TSESTree.Node): TSESTree.Statement | null {
     }
 
     return null;
+}
+
+function findConciseArrowAncestor(
+    node: TSESTree.Node,
+): TSESTree.ArrowFunctionExpression | null {
+    for (let current = node; current.parent; current = current.parent) {
+        const {parent} = current;
+
+        if (
+            parent.type === AST_NODE_TYPES.ArrowFunctionExpression &&
+            parent.body.type !== AST_NODE_TYPES.BlockStatement
+        ) {
+            return parent;
+        }
+
+        if (isFunctionLike(parent)) {
+            return null;
+        }
+    }
+
+    return null;
+}
+
+function getArrowBodyIndent(
+    arrowFn: TSESTree.ArrowFunctionExpression,
+    sourceText: string,
+): {innerIndent: string; outerIndent: string} {
+    const arrowStart = arrowFn.range[0];
+    const lineStart = sourceText.lastIndexOf('\n', arrowStart - 1) + 1;
+    const textBeforeArrow = sourceText.slice(lineStart, arrowStart);
+    const outerIndent = /^(\s*)/.exec(textBeforeArrow)?.[1] ?? '';
+
+    return {innerIndent: `${outerIndent}    `, outerIndent};
 }
 
 function getStatementIndent(statement: TSESTree.Statement, sourceText: string): string {
@@ -130,38 +167,78 @@ export const rule = createRule<Options, MessageId>({
                 context.report({
                     data: {call: callText},
                     fix(fixer): TSESLint.RuleFix[] | null {
+                        const varName = getCalleeName(firstCall);
                         const parentStatement = findParentStatement(node);
 
-                        if (!parentStatement) {
+                        if (parentStatement) {
+                            const indent = getStatementIndent(
+                                parentStatement,
+                                sourceCode.text,
+                            );
+
+                            const fixes = [
+                                fixer.insertTextBefore(
+                                    parentStatement,
+                                    `const ${varName} = ${callText};\n\n${indent}`,
+                                ),
+                            ];
+
+                            for (const call of calls) {
+                                const {parent} = call;
+
+                                const target =
+                                    parent.type === AST_NODE_TYPES.TSAsExpression
+                                        ? parent
+                                        : call;
+
+                                fixes.push(fixer.replaceText(target, varName));
+                            }
+
+                            return fixes;
+                        }
+
+                        const arrowFn = findConciseArrowAncestor(node);
+
+                        if (!arrowFn) {
                             return null;
                         }
 
-                        const varName = getCalleeName(firstCall);
+                        const arrowBody = arrowFn.body as TSESTree.Expression;
 
-                        const indent = getStatementIndent(
-                            parentStatement,
+                        const {innerIndent, outerIndent} = getArrowBodyIndent(
+                            arrowFn,
                             sourceCode.text,
                         );
 
-                        const fixes = [
-                            fixer.insertTextBefore(
-                                parentStatement,
-                                `const ${varName} = ${callText};\n\n${indent}`,
-                            ),
-                        ];
+                        const bodyText = sourceCode.getText(arrowBody);
+                        const bodyStart = arrowBody.range[0];
 
-                        for (const call of calls) {
-                            const {parent} = call;
+                        const targets = calls
+                            .map((call) => {
+                                const {parent} = call;
 
-                            const target =
-                                parent.type === AST_NODE_TYPES.TSAsExpression
+                                return parent.type === AST_NODE_TYPES.TSAsExpression
                                     ? parent
                                     : call;
+                            })
+                            .sort((a, b) => a.range[0] - b.range[0]);
 
-                            fixes.push(fixer.replaceText(target, varName));
+                        let replacedBody = '';
+                        let lastIndex = 0;
+
+                        for (const target of targets) {
+                            const start = target.range[0] - bodyStart;
+                            const end = target.range[1] - bodyStart;
+
+                            replacedBody += `${bodyText.slice(lastIndex, start)}${varName}`;
+                            lastIndex = end;
                         }
 
-                        return fixes;
+                        replacedBody += bodyText.slice(lastIndex);
+
+                        const newBody = `{\n${innerIndent}const ${varName} = ${callText};\n\n${innerIndent}return ${replacedBody};\n${outerIndent}}`;
+
+                        return [fixer.replaceText(arrowBody, newBody)];
                     },
                     messageId: 'noRepeatedSignalInConditional',
                     node: firstCall,
