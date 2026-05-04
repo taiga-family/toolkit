@@ -1,3 +1,16 @@
+### [0.502.0](https://github.com/taiga-family/toolkit/compare/v0.501.0...v0.502.0) (2026-05-04)
+
+### 🚀 Features
+
+- **release-it-config**: wrong changelog generated ([#1821](https://github.com/taiga-family/toolkit/pull/1821))
+  [(291c3e6)](https://github.com/taiga-family/toolkit/commit/291c3e646bbe0ab2c209b588b5e62e9496e9e079)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression import-integrity
+  ([#1820](https://github.com/taiga-family/toolkit/pull/1820))
+  [(bafc971)](https://github.com/taiga-family/toolkit/commit/bafc971b3967eec380212f84653aba5cf0219e03)
+
 ### [0.501.0](https://github.com/taiga-family/toolkit/compare/v0.500.0...v0.501.0) (2026-05-04)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.

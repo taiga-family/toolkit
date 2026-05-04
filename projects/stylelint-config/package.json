@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/stylelint-config",
-    "version": "0.501.0",
+    "version": "0.502.0",
     "description": "Taiga UI stylelint config",
     "keywords": [
         "stylelint",
@@ -33,7 +33,7 @@
     "peerDependencies": {
         "@stylistic/stylelint-config": "^5.0.0",
         "@stylistic/stylelint-plugin": "^5.1.0",
-        "@taiga-ui/browserslist-config": "0.501.0",
+        "@taiga-ui/browserslist-config": "0.502.0",
         "postcss": "^8.5.10",
         "postcss-less": "^6.0.0",
         "stylelint": "^17.8.0",
