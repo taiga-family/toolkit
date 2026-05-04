@@ -66,6 +66,16 @@ const resolutionStateByProgram = new WeakMap<ts.Program, ResolutionState>();
 const sourceFileCacheByProgram = new WeakMap<ts.Program, Map<string, ts.SourceFile>>();
 const codeFileExtensionRegExp = /\.[cm]?[jt]sx?$/;
 
+// Angular DI functions resolve tokens at instantiation time, not at module load time,
+// so cycles where all usages are DI-only are safe and should not be reported.
+const ANGULAR_DI_FIRST_ARG_FUNCTIONS = new Set([
+    'contentChild',
+    'contentChildren',
+    'inject',
+    'viewChild',
+    'viewChildren',
+]);
+
 function createCanonicalFileName(): (fileName: string) => string {
     const useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
 
@@ -755,6 +765,64 @@ function hasNamedValueExport(
     return exportedName !== 'default' && (exportNames?.has(exportedName) ?? false);
 }
 
+function isImportUsedOnlyAsAngularDiFirstArg(
+    node: TSESTree.ImportDeclaration,
+    sourceCode: Readonly<TSESLint.SourceCode>,
+): boolean {
+    const valueSpecifiers = node.specifiers.filter((specifier) => {
+        if (
+            specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
+            specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+        ) {
+            return true;
+        }
+
+        return specifier.importKind !== 'type';
+    });
+
+    if (valueSpecifiers.length === 0) {
+        return false;
+    }
+
+    for (const specifier of valueSpecifiers) {
+        const [variable] = sourceCode.getDeclaredVariables(specifier);
+
+        if (!variable || variable.references.length === 0) {
+            return false;
+        }
+
+        for (const ref of variable.references) {
+            const {identifier} = ref;
+            const parent = identifier.parent;
+
+            const callee =
+                parent.type === AST_NODE_TYPES.CallExpression ? parent.callee : null;
+
+            const isDirectCall =
+                callee?.type === AST_NODE_TYPES.Identifier &&
+                ANGULAR_DI_FIRST_ARG_FUNCTIONS.has(callee.name);
+
+            const isRequiredCall =
+                callee?.type === AST_NODE_TYPES.MemberExpression &&
+                !callee.computed &&
+                callee.object.type === AST_NODE_TYPES.Identifier &&
+                ANGULAR_DI_FIRST_ARG_FUNCTIONS.has(callee.object.name) &&
+                callee.property.type === AST_NODE_TYPES.Identifier &&
+                callee.property.name === 'required';
+
+            if (
+                parent.type !== AST_NODE_TYPES.CallExpression ||
+                (!isDirectCall && !isRequiredCall) ||
+                parent.arguments[0] !== identifier
+            ) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, sourceCode, tsProgram} =
@@ -802,7 +870,11 @@ export const rule = createRule<Options, MessageId>({
                 moduleSpecifier,
             );
 
-            if (!targetFileName) {
+            if (
+                !targetFileName ||
+                (node.type === AST_NODE_TYPES.ImportDeclaration &&
+                    isImportUsedOnlyAsAngularDiFirstArg(node, sourceCode))
+            ) {
                 return;
             }
 
