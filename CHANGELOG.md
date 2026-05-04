@@ -1,3 +1,13 @@
+### [0.503.0](https://github.com/taiga-family/toolkit/compare/v0.502.0...v0.503.0) (2026-05-04)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add no-duplicates ([#1823](https://github.com/taiga-family/toolkit/pull/1823))
+  [(c33aebc)](https://github.com/taiga-family/toolkit/commit/c33aebc636f0d7f6ace75db5dda235512929a6cf)
+- **eslint-plugin-experience-next**: add no-named-as-default-member
+  ([#1822](https://github.com/taiga-family/toolkit/pull/1822))
+  [(019887a)](https://github.com/taiga-family/toolkit/commit/019887a5c8a7926fbc66b1f4a8724715b4b97400)
+
 ### [0.502.0](https://github.com/taiga-family/toolkit/compare/v0.501.0...v0.502.0) (2026-05-04)
 
 ### 🚀 Features
