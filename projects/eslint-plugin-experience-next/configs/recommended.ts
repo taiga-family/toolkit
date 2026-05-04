@@ -404,6 +404,7 @@ export default defineConfig([
             'import/no-extraneous-dependencies': 'off',
             'import/no-mutable-exports': 'error',
             'import/no-named-as-default': 'off',
+            'import/no-named-as-default-member': 'off',
             'import/no-self-import': 'error',
             'import/no-unresolved': 'off',
             'import/no-useless-path-segments': ['error', {noUselessIndex: true}],

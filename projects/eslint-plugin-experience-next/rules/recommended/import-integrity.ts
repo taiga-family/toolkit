@@ -4,7 +4,10 @@ import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/u
 import {type RuleFixer} from '@typescript-eslint/utils/ts-eslint';
 import ts from 'typescript';
 
-import {getMemberExpressionPropertyName} from '../utils/ast/property-names';
+import {
+    getMemberExpressionPropertyName,
+    getObjectPropertyName,
+} from '../utils/ast/property-names';
 import {createRule} from '../utils/create-rule';
 import {getResolvedVariable} from '../utils/eslint/scope';
 import {
@@ -16,6 +19,7 @@ type MessageId =
     | 'importCycle'
     | 'missingDefaultExport'
     | 'namedAsDefault'
+    | 'namedAsDefaultMember'
     | 'unknownNamespaceMember';
 
 type Options = [
@@ -23,6 +27,7 @@ type Options = [
         checkCycles?: boolean;
         checkDefaultImports?: boolean;
         checkNamedAsDefault?: boolean;
+        checkNamedAsDefaultMembers?: boolean;
         checkNamespaceMembers?: boolean;
         ignoreExternalDefaultImports?: boolean;
     }?,
@@ -62,6 +67,13 @@ interface NamespaceImportUsage {
     readonly exportNames: ReadonlySet<string>;
     readonly moduleSpecifier: string;
     readonly node: TSESTree.ImportNamespaceSpecifier;
+    readonly variable: TSESLint.Scope.Variable;
+}
+
+interface DefaultImportUsage {
+    readonly exportNames: ReadonlySet<string>;
+    readonly moduleSpecifier: string;
+    readonly node: TSESTree.ImportDefaultSpecifier;
     readonly variable: TSESLint.Scope.Variable;
 }
 
@@ -990,6 +1002,10 @@ export const rule = createRule<Options, MessageId>({
         const checkCycles = context.options[0]?.checkCycles ?? true;
         const checkDefaultImports = context.options[0]?.checkDefaultImports ?? true;
         const checkNamedAsDefault = context.options[0]?.checkNamedAsDefault ?? true;
+
+        const checkNamedAsDefaultMembers =
+            context.options[0]?.checkNamedAsDefaultMembers ?? true;
+
         const checkNamespaceMembers = context.options[0]?.checkNamespaceMembers ?? true;
 
         const ignoreExternalDefaultImports =
@@ -997,6 +1013,7 @@ export const rule = createRule<Options, MessageId>({
 
         const canonicalFileName = createCanonicalFileName();
         const currentFileName = canonicalFileName(context.filename);
+        const defaultImports = new Map<string, DefaultImportUsage>();
         const namespaceImports = new Map<string, NamespaceImportUsage>();
 
         function checkImportCycle(
@@ -1193,7 +1210,9 @@ export const rule = createRule<Options, MessageId>({
 
         function checkDefaultImport(node: TSESTree.ImportDeclaration): void {
             if (
-                (!checkDefaultImports && !checkNamedAsDefault) ||
+                (!checkDefaultImports &&
+                    !checkNamedAsDefault &&
+                    !checkNamedAsDefaultMembers) ||
                 node.importKind === 'type'
             ) {
                 return;
@@ -1243,6 +1262,19 @@ export const rule = createRule<Options, MessageId>({
                 node,
             );
 
+            if (checkNamedAsDefaultMembers && exportNames) {
+                const [variable] = sourceCode.getDeclaredVariables(defaultImport);
+
+                if (variable) {
+                    defaultImports.set(defaultImport.local.name, {
+                        exportNames,
+                        moduleSpecifier,
+                        node: defaultImport,
+                        variable,
+                    });
+                }
+            }
+
             if (
                 !checkNamedAsDefault ||
                 !hasNamedValueExport(exportNames, defaultImport.local.name)
@@ -1255,6 +1287,80 @@ export const rule = createRule<Options, MessageId>({
                 messageId: 'namedAsDefault',
                 node: defaultImport,
             });
+        }
+
+        function reportNamedAsDefaultMember(
+            defaultImportIdentifier: TSESTree.Identifier,
+            memberName: string | null,
+            reportNode: TSESTree.Node,
+        ): void {
+            if (!checkNamedAsDefaultMembers || !memberName || memberName === 'default') {
+                return;
+            }
+
+            const usage = defaultImports.get(defaultImportIdentifier.name);
+
+            if (
+                !usage ||
+                !hasNamedValueExport(usage.exportNames, memberName) ||
+                getResolvedVariable(sourceCode, defaultImportIdentifier) !==
+                    usage.variable
+            ) {
+                return;
+            }
+
+            context.report({
+                data: {
+                    defaultName: usage.node.local.name,
+                    memberName,
+                    moduleSpecifier: usage.moduleSpecifier,
+                },
+                messageId: 'namedAsDefaultMember',
+                node: reportNode,
+            });
+        }
+
+        function checkNamedAsDefaultMemberExpression(
+            node: TSESTree.MemberExpression,
+        ): void {
+            if (
+                !checkNamedAsDefaultMembers ||
+                defaultImports.size === 0 ||
+                node.object.type !== AST_NODE_TYPES.Identifier
+            ) {
+                return;
+            }
+
+            reportNamedAsDefaultMember(
+                node.object,
+                getMemberExpressionPropertyName(node),
+                node.property,
+            );
+        }
+
+        function checkNamedAsDefaultMemberDestructuring(
+            node: TSESTree.VariableDeclarator,
+        ): void {
+            if (
+                !checkNamedAsDefaultMembers ||
+                defaultImports.size === 0 ||
+                node.id.type !== AST_NODE_TYPES.ObjectPattern ||
+                node.init?.type !== AST_NODE_TYPES.Identifier
+            ) {
+                return;
+            }
+
+            for (const property of node.id.properties) {
+                if (property.type !== AST_NODE_TYPES.Property) {
+                    continue;
+                }
+
+                reportNamedAsDefaultMember(
+                    node.init,
+                    getObjectPropertyName(property),
+                    property.key,
+                );
+            }
         }
 
         function checkNamedAsDefaultExport(node: TSESTree.ExportNamedDeclaration): void {
@@ -1440,13 +1546,17 @@ export const rule = createRule<Options, MessageId>({
                 checkDefaultImport(node);
                 collectNamespaceImport(node);
             },
-            MemberExpression: checkNamespaceMember,
+            MemberExpression(node: TSESTree.MemberExpression) {
+                checkNamedAsDefaultMemberExpression(node);
+                checkNamespaceMember(node);
+            },
+            VariableDeclarator: checkNamedAsDefaultMemberDestructuring,
         };
     },
     meta: {
         docs: {
             description:
-                'Fast replacement for import/default, import/namespace, import/no-cycle, and import/no-named-as-default checks',
+                'Fast replacement for import/default, import/namespace, import/no-cycle, import/no-named-as-default, and import/no-named-as-default-member checks',
         },
         fixable: 'code',
         messages: {
@@ -1454,6 +1564,8 @@ export const rule = createRule<Options, MessageId>({
             missingDefaultExport: 'No default export found in "{{moduleSpecifier}}".',
             namedAsDefault:
                 'Using exported name "{{name}}" as identifier for default export.',
+            namedAsDefaultMember:
+                'Default import "{{defaultName}}" from "{{moduleSpecifier}}" also has a named export "{{memberName}}". Use a named import instead.',
             unknownNamespaceMember:
                 'Namespace import "{{namespaceName}}" from "{{moduleSpecifier}}" has no exported member "{{memberName}}".',
         },
@@ -1474,6 +1586,11 @@ export const rule = createRule<Options, MessageId>({
                     checkNamedAsDefault: {
                         description:
                             'Report default imports and default re-exports named after a named export from the same module. Defaults to true.',
+                        type: 'boolean',
+                    },
+                    checkNamedAsDefaultMembers: {
+                        description:
+                            'Report property access or destructuring of default imports when the property name is a named export from the same module. Defaults to true.',
                         type: 'boolean',
                     },
                     checkNamespaceMembers: {
