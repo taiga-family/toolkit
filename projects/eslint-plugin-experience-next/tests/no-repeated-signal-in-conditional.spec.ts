@@ -141,6 +141,30 @@ ruleTester.run('no-repeated-signal-in-conditional', rule, {
             `,
         },
         {
+            // ternary in concise arrow function body — expands arrow to block body
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal} from '@angular/core';
+                declare function tuiIsString(v: unknown): v is string;
+                declare function process(fn: () => string): string;
+                const value = signal<string | null>(null);
+                const result = process(() => tuiIsString(value()) ? value() : '');
+            `,
+            errors: [{messageId: 'noRepeatedSignalInConditional'}],
+            output: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal} from '@angular/core';
+                declare function tuiIsString(v: unknown): v is string;
+                declare function process(fn: () => string): string;
+                const value = signal<string | null>(null);
+                const result = process(() => {
+                    const valueVal = value();
+
+                    return tuiIsString(valueVal) ? valueVal : '';
+                });
+            `,
+        },
+        {
             // if: nullable signal in test + else body
             code: /* TypeScript */ `
                 ${PREAMBLE}
