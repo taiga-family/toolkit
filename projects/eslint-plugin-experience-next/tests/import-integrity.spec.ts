@@ -100,7 +100,8 @@ ruleTester.run('import-integrity', rule, {
                 export class DiCycleAClass {
                     // @ts-ignore
                     readonly b = inject(DiCycleBClass);
-                    readonly exported = DiCycleBClass;
+
+                    static readonly exported = DiCycleBClass;
                 }
             `,
             errors: [{messageId: 'importCycle'}],
@@ -110,6 +111,28 @@ ruleTester.run('import-integrity', rule, {
             code: "export {reexportB} from './reexport-b';",
             errors: [{messageId: 'importCycle'}],
             filename: fixtureFile('reexport-a.ts'),
+        },
+        {
+            // barrel-a re-exports barrel-b and barrel-c; barrel-c imports barrel-consumer,
+            // which imports back through barrel-a — a barrel-mediated cycle.
+            // The fix redirects to the direct source file (barrel-b) to break the cycle.
+            code: "import {bValue} from './barrel-a';\nexport const barrelConsumerValue = bValue;",
+            errors: [{messageId: 'importCycle'}],
+            filename: fixtureFile('barrel-consumer.ts'),
+            output: "import {bValue} from './barrel-b';\nexport const barrelConsumerValue = bValue;",
+        },
+        {
+            code: /* TypeScript */ `
+                import {cycleB} from './cycle-b';
+
+                export class CycleA {
+                    // Static fields are evaluated at class definition time (module load),
+                    // so they ARE a runtime cycle edge.
+                    static readonly field = cycleB;
+                }
+            `,
+            errors: [{messageId: 'importCycle'}],
+            filename: fixtureFile('cycle-a.ts'),
         },
         {
             code: "import bar from './default-bar';",
@@ -270,6 +293,72 @@ ruleTester.run('import-integrity', rule, {
                 }
             `,
             filename: fixtureFile('di-inject-cycle-b.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleAClass} from './di-inject-cycle-a';
+
+                export class DiCycleBClass {
+                    // @ts-ignore
+                    readonly children = contentChildren(DiCycleAClass);
+
+                    method(_item: DiCycleAClass): void {}
+                }
+            `,
+            filename: fixtureFile('di-inject-cycle-b.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleBClass} from './di-inject-cycle-b';
+
+                export class DiCycleAClass {
+                    // @ts-ignore
+                    readonly b = inject(DiCycleBClass);
+
+                    method(_item: DiCycleBClass): void {}
+                }
+            `,
+            filename: fixtureFile('di-inject-cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {cycleB} from './cycle-b';
+
+                export const TOKEN = {factory: () => cycleB};
+            `,
+            filename: fixtureFile('cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {cycleB} from './cycle-b';
+
+                // @ts-ignore
+                @SomeDecorator({providers: [cycleB]})
+                export class CycleA {}
+            `,
+            filename: fixtureFile('cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {cycleB} from './cycle-b';
+
+                export class CycleA {
+                    readonly field = cycleB;
+                }
+            `,
+            filename: fixtureFile('cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {cycleB} from './cycle-b';
+
+                export class CycleA {
+                    method() {
+                        return cycleB;
+                    }
+                }
+            `,
+            filename: fixtureFile('cycle-a.ts'),
         },
     ],
 });

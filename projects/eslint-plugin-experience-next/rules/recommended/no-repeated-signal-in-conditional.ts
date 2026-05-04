@@ -36,6 +36,25 @@ function isNullableCallType(
     }
 }
 
+function getTargetNode(call: TSESTree.CallExpression): TSESTree.Node {
+    const {parent} = call;
+
+    if (parent.type === AST_NODE_TYPES.TSAsExpression) {
+        return parent;
+    }
+
+    if (
+        parent.type === AST_NODE_TYPES.UnaryExpression &&
+        parent.operator === '!' &&
+        parent.parent.type === AST_NODE_TYPES.UnaryExpression &&
+        parent.parent.operator === '!'
+    ) {
+        return parent.parent;
+    }
+
+    return call;
+}
+
 function getCalleeName(node: TSESTree.CallExpression): string {
     const {callee} = node;
 
@@ -184,14 +203,9 @@ export const rule = createRule<Options, MessageId>({
                             ];
 
                             for (const call of calls) {
-                                const {parent} = call;
-
-                                const target =
-                                    parent.type === AST_NODE_TYPES.TSAsExpression
-                                        ? parent
-                                        : call;
-
-                                fixes.push(fixer.replaceText(target, varName));
+                                fixes.push(
+                                    fixer.replaceText(getTargetNode(call), varName),
+                                );
                             }
 
                             return fixes;
@@ -214,13 +228,7 @@ export const rule = createRule<Options, MessageId>({
                         const bodyStart = arrowBody.range[0];
 
                         const targets = calls
-                            .map((call) => {
-                                const {parent} = call;
-
-                                return parent.type === AST_NODE_TYPES.TSAsExpression
-                                    ? parent
-                                    : call;
-                            })
+                            .map(getTargetNode)
                             .sort((a, b) => a.range[0] - b.range[0]);
 
                         let replacedBody = '';
@@ -237,8 +245,20 @@ export const rule = createRule<Options, MessageId>({
                         replacedBody += bodyText.slice(lastIndex);
 
                         const newBody = `{\n${innerIndent}const ${varName} = ${callText};\n\n${innerIndent}return ${replacedBody};\n${outerIndent}}`;
+                        const bodyRangeStart = arrowBody.range[0];
+                        const textBeforeBody = sourceCode.text.slice(0, bodyRangeStart);
 
-                        return [fixer.replaceText(arrowBody, newBody)];
+                        const whitespaceBeforeBody =
+                            /\s*$/.exec(textBeforeBody)?.[0] ?? '';
+
+                        const replaceFrom = bodyRangeStart - whitespaceBeforeBody.length;
+
+                        return [
+                            fixer.replaceTextRange(
+                                [replaceFrom, arrowBody.range[1]],
+                                ` ${newBody}`,
+                            ),
+                        ];
                     },
                     messageId: 'noRepeatedSignalInConditional',
                     node: firstCall,
