@@ -45,6 +45,12 @@ ruleTester.run('import-integrity', rule, {
                 },
             ],
             filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {known, missing} from './namespace-module';
+
+                known();
+                missing();
+            `,
         },
         {
             code: /* TypeScript */ `
@@ -63,6 +69,11 @@ ruleTester.run('import-integrity', rule, {
                 },
             ],
             filename: fixtureFile('namespace-consumer.ts'),
+            output: /* TypeScript */ `
+                import {OnlyType} from './namespace-module';
+
+                OnlyType;
+            `,
         },
         {
             code: /* TypeScript */ `
