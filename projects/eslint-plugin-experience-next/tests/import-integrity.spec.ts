@@ -85,6 +85,28 @@ ruleTester.run('import-integrity', rule, {
             filename: fixtureFile('cycle-a.ts'),
         },
         {
+            code: /* TypeScript */ `
+                import {DiCycleBClass} from './di-inject-cycle-b';
+
+                export const token = DiCycleBClass;
+            `,
+            errors: [{messageId: 'importCycle'}],
+            filename: fixtureFile('di-inject-cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleBClass} from './di-inject-cycle-b';
+
+                export class DiCycleAClass {
+                    // @ts-ignore
+                    readonly b = inject(DiCycleBClass);
+                    readonly exported = DiCycleBClass;
+                }
+            `,
+            errors: [{messageId: 'importCycle'}],
+            filename: fixtureFile('di-inject-cycle-a.ts'),
+        },
+        {
             code: "export {reexportB} from './reexport-b';",
             errors: [{messageId: 'importCycle'}],
             filename: fixtureFile('reexport-a.ts'),
@@ -215,6 +237,39 @@ ruleTester.run('import-integrity', rule, {
             `,
             filename: fixtureFile('cycle-a.ts'),
             options: [{checkCycles: false}],
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleBClass} from './di-inject-cycle-b';
+
+                export class DiCycleAClass {
+                    // @ts-ignore
+                    readonly b = inject(DiCycleBClass);
+                }
+            `,
+            filename: fixtureFile('di-inject-cycle-a.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleAClass} from './di-inject-cycle-a';
+
+                export class DiCycleBClass {
+                    // @ts-ignore
+                    readonly children = contentChildren(DiCycleAClass);
+                }
+            `,
+            filename: fixtureFile('di-inject-cycle-b.ts'),
+        },
+        {
+            code: /* TypeScript */ `
+                import {DiCycleAClass} from './di-inject-cycle-a';
+
+                export class DiCycleBClass {
+                    // @ts-ignore
+                    readonly child = viewChild.required(DiCycleAClass);
+                }
+            `,
+            filename: fixtureFile('di-inject-cycle-b.ts'),
         },
     ],
 });

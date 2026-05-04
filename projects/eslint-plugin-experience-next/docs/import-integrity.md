@@ -73,6 +73,31 @@ import './b';
 export const value = 1;
 ```
 
+Cycles formed exclusively through Angular DI token references (`inject`, `contentChildren`, `contentChild`,
+`viewChildren`, `viewChild`) are not reported. These calls resolve tokens at instantiation time, not at module load
+time, so the cycle cannot cause an uninitialized-value problem.
+
+```ts
+// ✅ ok — both sides use Angular DI only, safe cycle
+// anchor.directive.ts
+import {ContainerDirective} from './container.directive';
+class AnchorDirective {
+  private readonly container = inject(ContainerDirective);
+}
+
+// container.directive.ts
+import {AnchorDirective} from './anchor.directive';
+class ContainerDirective {
+  protected readonly anchors = contentChildren(AnchorDirective);
+}
+```
+
+```ts
+// ❌ error — symbol used outside Angular DI at module level
+import {ContainerDirective} from './container.directive';
+export const TOKEN = ContainerDirective;
+```
+
 | Option                         | Type      | Default | Description                                                        |
 | ------------------------------ | --------- | ------- | ------------------------------------------------------------------ |
 | `checkCycles`                  | `boolean` | `true`  | Report static project-local import and re-export cycles.           |
