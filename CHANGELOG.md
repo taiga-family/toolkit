@@ -1,3 +1,11 @@
+### [0.507.0](https://github.com/taiga-family/toolkit/compare/v0.506.0...v0.507.0) (2026-05-05)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;prefer-conditional-return&#x60;
+  ([#1827](https://github.com/taiga-family/toolkit/pull/1827))
+  [(5e2736d)](https://github.com/taiga-family/toolkit/commit/5e2736d5fca889b40b4b6936664adb64b8d2ad14)
+
 ### [0.506.0](https://github.com/taiga-family/toolkit/compare/v0.505.0...v0.506.0) (2026-05-05)
 
 ### 🚀 Features
