@@ -1,18 +1,11 @@
-import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
 
-import {isArray} from '../ast/is-array';
+import {isImportsArrayProperty} from './is-imports-array-property';
 
 export function getImportsArray(
     meta: TSESTree.ObjectExpression,
 ): TSESTree.ArrayExpression | null {
-    const property = meta.properties.find(
-        (literal): literal is TSESTree.Property =>
-            literal.type === AST_NODE_TYPES.Property &&
-            literal.key.type === AST_NODE_TYPES.Identifier &&
-            literal.key.name === 'imports' &&
-            isArray(literal.value),
-    );
+    const property = meta.properties.find(isImportsArrayProperty);
 
-    return property ? (property.value as TSESTree.ArrayExpression) : null;
+    return property?.value ?? null;
 }

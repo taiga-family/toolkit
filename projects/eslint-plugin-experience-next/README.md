@@ -88,6 +88,7 @@ from third-party plugins. The exact severities and file globs live in
 | [no-duplicate-attrs](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-duplicate-attrs.md)                                                           | Disallow duplicate attributes on the same HTML element                                              | ✅  |     |     |
 | [no-duplicate-id](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-duplicate-id.md)                                                                 | Disallow duplicate static `id` values in HTML templates                                             | ✅  |     |     |
 | [no-duplicate-in-head](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-duplicate-in-head.md)                                                       | Disallow duplicate `title`, `base`, and key metadata tags inside `<head>`                           | ✅  |     |     |
+| [no-empty-style-metadata](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-empty-style-metadata.md)                                                 | Remove empty Angular component style metadata                                                       | ✅  | 🔧  |     |
 | [no-fully-untracked-effect](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-fully-untracked-effect.md)                                             | Disallow reactive callbacks where all signal reads are hidden inside `untracked()`                  | ✅  |     |     |
 | [no-href-with-router-link](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-href-with-router-link.md)                                               | Do not use href and routerLink attributes together on the same element                              | ✅  | 🔧  |     |
 | [no-import-assertions](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-import-assertions.md)                                                       | Replace legacy `assert { ... }` import assertions with `with { ... }`                               | ✅  | 🔧  |     |
@@ -126,6 +127,28 @@ from third-party plugins. The exact severities and file globs live in
 | [single-line-variable-spacing](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/single-line-variable-spacing.md)                                       | Group consecutive single-line variables and separate multiline ones with a blank line               | ✅  | 🔧  |     |
 | [standalone-imports-sort](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/standalone-imports-sort.md)                                                 | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
 | [strict-tui-doc-example](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/strict-tui-doc-example.md)                                                   | If you use the addon-doc, there will be a hint that you are importing something incorrectly         |     | 🔧  |     |
+
+## no-empty-style-metadata
+
+Disallows empty Angular component style metadata. The rule reports empty string and empty template literal values for
+`styles` and `styleUrl`, plus `styleUrls: []`, because they do not add component styles and can be safely removed.
+
+```ts
+// ❌ error
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styles: ``,
+  styleUrl: '',
+  styleUrls: [],
+})
+
+// ✅ after autofix
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+})
+```
 
 ## prefer-conditional-return
 

@@ -3,6 +3,12 @@ import {type TSESTree} from '@typescript-eslint/utils';
 
 import {isObject} from '../ast/is-object';
 
+export interface DecoratorMetadataWithName {
+    readonly expression: TSESTree.CallExpression;
+    readonly metadata: TSESTree.ObjectExpression;
+    readonly name: string;
+}
+
 /**
  * Extracts the metadata object from a class decorator such as
  * `@Component()`, `@Directive()`, `@NgModule()`, or `@Pipe()`.
@@ -19,7 +25,7 @@ import {isObject} from '../ast/is-object';
  * class MyCmp {}
  *
  * // In the AST for @Component(...)
- * getDecoratorMetadata(decorator, allowed) →
+ * getDecoratorMetadata(decorator, allowed) returns
  *    ObjectExpression({ selector: ..., imports: ... })
  *
  * @param decorator - The decorator node attached to a class declaration.
@@ -31,8 +37,15 @@ import {isObject} from '../ast/is-object';
  */
 export function getDecoratorMetadata(
     decorator: TSESTree.Decorator,
-    allowedNames: Set<string>,
+    allowedNames: ReadonlySet<string>,
 ): TSESTree.ObjectExpression | null {
+    return getDecoratorMetadataWithName(decorator, allowedNames)?.metadata ?? null;
+}
+
+export function getDecoratorMetadataWithName(
+    decorator: TSESTree.Decorator,
+    allowedNames: ReadonlySet<string>,
+): DecoratorMetadataWithName | null {
     const expr = decorator.expression;
 
     if (expr.type !== AST_NODE_TYPES.CallExpression) {
@@ -47,5 +60,5 @@ export function getDecoratorMetadata(
 
     const arg = expr.arguments[0];
 
-    return isObject(arg) ? arg : null;
+    return isObject(arg) ? {expression: expr, metadata: arg, name: callee.name} : null;
 }
