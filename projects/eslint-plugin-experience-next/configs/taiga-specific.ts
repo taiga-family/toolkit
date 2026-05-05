@@ -37,6 +37,7 @@ export default defineConfig([
     {
         files: pattern('**/*.html'),
         ignores: [
+            '**/proprietary/**',
             // Angular ESLint virtual files for inline templates in spec/cy files
             '**/*.spec.ts/**/*.html',
             '**/*.cy.ts/**/*.html',
