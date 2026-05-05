@@ -1,3 +1,11 @@
+### [0.506.0](https://github.com/taiga-family/toolkit/compare/v0.505.0...v0.506.0) (2026-05-05)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;prefer-loose-null-check&#x60;
+  ([#1765](https://github.com/taiga-family/toolkit/pull/1765))
+  [(e97d1c4)](https://github.com/taiga-family/toolkit/commit/e97d1c43ef513c9d22c75ff48b1a47111e716f2b)
+
 ### [0.505.0](https://github.com/taiga-family/toolkit/compare/v0.504.0...v0.505.0) (2026-05-05)
 
 ### 🐞 Bug Fixes
