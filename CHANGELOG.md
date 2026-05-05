@@ -1,3 +1,13 @@
+### [0.505.0](https://github.com/taiga-family/toolkit/compare/v0.504.0...v0.505.0) (2026-05-05)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression for no-restricted-attr-values
+  ([#1826](https://github.com/taiga-family/toolkit/pull/1826))
+  [(46757b2)](https://github.com/taiga-family/toolkit/commit/46757b2ad4c6d973ee9ec020ff2322fa94f590d0)
+- **eslint-plugin-experience-next**: regression ([#1825](https://github.com/taiga-family/toolkit/pull/1825))
+  [(16dee9f)](https://github.com/taiga-family/toolkit/commit/16dee9fe0b79963d5a1c9969165824963b25cc21)
+
 ### [0.504.0](https://github.com/taiga-family/toolkit/compare/v0.503.0...v0.504.0) (2026-05-05)
 
 ### 🚀 Features
