@@ -56,6 +56,28 @@ ruleTester.run('decorator-key-sort', rule, {
                 class TestClass {}
             `,
         },
+        {
+            code: `
+                @Component({
+                    template: 'test',
+                    styles: '',
+                    styleUrls: [],
+                    selector: 'app-test'
+                })
+                class TestClass {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Incorrect order keys in @Component decorator, please sort by [selector -> template -> styleUrls -> styles]',
+                },
+            ],
+            options: [{Component: ['selector', 'template', 'styleUrls', 'styles']}],
+            output: `
+                @Component({selector: 'app-test',template: 'test',styleUrls: [],styles: ''})
+                class TestClass {}
+            `,
+        },
     ],
     valid: [
         {
@@ -93,6 +115,18 @@ ruleTester.run('decorator-key-sort', rule, {
                 class TestClass {}
             `,
             options: [{Component: ['selector', 'template', 'styleUrls']}],
+        },
+        {
+            code: `
+                @Component({
+                    selector: 'app-test',
+                    template: 'test',
+                    styles: 'test',
+                    styleUrls: ['test.css']
+                })
+                class TestClass {}
+            `,
+            options: [{Component: ['selector', 'template', 'styles', 'styleUrls']}],
         },
     ],
 });

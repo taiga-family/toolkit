@@ -17,6 +17,7 @@ import noDeepImportsToIndexedPackages from './rules/recommended/no-deep-imports-
 import noDuplicateAttrs from './rules/recommended/no-duplicate-attrs';
 import noDuplicateId from './rules/recommended/no-duplicate-id';
 import noDuplicateInHead from './rules/recommended/no-duplicate-in-head';
+import noEmptyStyleMetadata from './rules/recommended/no-empty-style-metadata';
 import noFullyUntrackedEffect from './rules/recommended/no-fully-untracked-effect';
 import noHrefWithRouterLink from './rules/recommended/no-href-with-router-link';
 import noImplicitPublic from './rules/recommended/no-implicit-public';
@@ -87,6 +88,7 @@ const plugin = {
         'no-duplicate-attrs': noDuplicateAttrs,
         'no-duplicate-id': noDuplicateId,
         'no-duplicate-in-head': noDuplicateInHead,
+        'no-empty-style-metadata': noEmptyStyleMetadata,
         'no-fully-untracked-effect': noFullyUntrackedEffect,
         'no-href-with-router-link': noHrefWithRouterLink,
         'no-implicit-public': noImplicitPublic,

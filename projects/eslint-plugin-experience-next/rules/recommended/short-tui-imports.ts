@@ -1,6 +1,7 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
-import {isImportsArrayProperty} from '../utils/angular/is-imports-array-property';
+import {getDecoratorMetadata} from '../utils/angular/get-decorator-metadata';
+import {getImportsArray} from '../utils/angular/get-imports-array';
 import {createRule} from '../utils/create-rule';
 import {getImportedName} from '../utils/imports/get-imported-name';
 
@@ -36,45 +37,28 @@ export const rule = createRule<Options, MessageIds>({
         [{decorators = DEFAULT_DECORATORS, exceptions = DEFAULT_EXCEPTIONS}],
     ) {
         const sourceCode = context.getSourceCode();
+        const allowedDecorators = new Set(decorators);
 
         const importedFromTaiga: Record<
             string,
             {module: string; importedAs: string; isType: boolean}
         > = {};
 
-        const decoratorSelector = `Decorator[expression.callee.name=/^(${decorators.join('|')})$/]`;
-
         return {
-            [decoratorSelector](decorator: TSESTree.Decorator) {
-                const expression = decorator.expression;
+            Decorator(decorator: TSESTree.Decorator) {
+                const metadata = getDecoratorMetadata(decorator, allowedDecorators);
 
-                const isInvalidExpression =
-                    expression.type !== AST_NODE_TYPES.CallExpression ||
-                    expression.arguments.length === 0;
-
-                if (isInvalidExpression) {
+                if (!metadata) {
                     return;
                 }
 
-                const [arg] = expression.arguments;
-                const isNotObject = arg?.type !== AST_NODE_TYPES.ObjectExpression;
+                const importsArray = getImportsArray(metadata);
 
-                if (isNotObject) {
+                if (!importsArray) {
                     return;
                 }
 
-                const importsProperty = arg.properties
-                    .filter(
-                        (literal): literal is TSESTree.Property =>
-                            literal.type === AST_NODE_TYPES.Property,
-                    )
-                    .find((literal) => isImportsArrayProperty(literal));
-
-                if (!importsProperty) {
-                    return;
-                }
-
-                const imports = importsProperty.value.elements.filter(
+                const imports = importsArray.elements.filter(
                     (el): el is TSESTree.Identifier => {
                         const isIdentifier = el?.type === AST_NODE_TYPES.Identifier;
 

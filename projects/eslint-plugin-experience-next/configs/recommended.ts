@@ -731,6 +731,7 @@ export default defineConfig([
                 },
             ],
             '@taiga-ui/experience-next/no-deep-imports-to-indexed-packages': 'error',
+            '@taiga-ui/experience-next/no-empty-style-metadata': 'error',
             '@taiga-ui/experience-next/no-fully-untracked-effect': 'error',
             '@taiga-ui/experience-next/no-implicit-public': 'error',
             '@taiga-ui/experience-next/no-import-assertions': 'error',
