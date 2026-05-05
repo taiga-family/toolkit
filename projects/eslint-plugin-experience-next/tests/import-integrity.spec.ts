@@ -228,20 +228,6 @@ ruleTester.run('import-integrity', rule, {
             `,
         },
         {
-            code: "void import('./indexed/index?raw');",
-            errors: [
-                {
-                    data: {
-                        moduleSpecifier: './indexed/index?raw',
-                        proposedPath: './indexed?raw',
-                    },
-                    messageId: 'uselessPathSegments',
-                },
-            ],
-            filename: fixtureFile('namespace-consumer.ts'),
-            output: "void import('./indexed?raw');",
-        },
-        {
             code: /* TypeScript */ `
                 import {known} from '../import-integrity/namespace-module';
 
@@ -459,6 +445,18 @@ ruleTester.run('import-integrity', rule, {
         },
         {
             code: "void import('./indexed?raw');",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "void import('./indexed/index?raw');",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "import './indexed/index?raw';",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "void import('./indexed/index.ts?raw');",
             filename: fixtureFile('namespace-consumer.ts'),
         },
         {

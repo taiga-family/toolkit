@@ -1374,29 +1374,27 @@ export const rule = createRule<Options, MessageId>({
         }
 
         function checkUselessPathSegments(source: StringLiteral): void {
-            if (!shouldCheckUselessPathSegments || !source.value.startsWith('.')) {
+            if (
+                !shouldCheckUselessPathSegments ||
+                !source.value.startsWith('.') ||
+                splitModuleSpecifierQuery(source.value).query
+            ) {
                 return;
             }
 
-            const parts = splitModuleSpecifierQuery(source.value);
-            const proposedPath = getUselessPathSegmentsReplacement(parts.path);
+            const proposedPath = getUselessPathSegmentsReplacement(source.value);
 
             if (!proposedPath) {
                 return;
             }
 
-            const proposedModuleSpecifier = `${proposedPath}${parts.query}`;
-
             context.report({
                 data: {
                     moduleSpecifier: source.value,
-                    proposedPath: proposedModuleSpecifier,
+                    proposedPath,
                 },
                 fix: (fixer) =>
-                    fixer.replaceText(
-                        source,
-                        quoteModuleSpecifier(source, proposedModuleSpecifier),
-                    ),
+                    fixer.replaceText(source, quoteModuleSpecifier(source, proposedPath)),
                 messageId: 'uselessPathSegments',
                 node: source,
             });
