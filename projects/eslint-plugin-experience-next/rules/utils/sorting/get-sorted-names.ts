@@ -3,11 +3,13 @@ import {type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 import {isSpread} from '../ast/is-spread';
 import {nameOf} from '../ast/name-of';
 
+const IMPORT_NAME_COLLATOR = new Intl.Collator('en', {numeric: true});
+
 /**
- * Sorts Angular standalone import elements into a deterministic, alphabetical order.
+ * Sorts Angular standalone import elements into a deterministic, natural order.
  *
  * The sorting rules:
- * 1. Regular elements (Identifiers, MemberExpressions, etc.) are sorted alphabetically.
+ * 1. Regular elements (Identifiers, MemberExpressions, etc.) are sorted naturally.
  * 2. Spread elements (e.g. `...A`) are sorted separately and placed after regular ones.
  * 3. Sorting is based on the string value returned by `nameOf()`.
  *
@@ -31,12 +33,16 @@ export function getSortedNames(
     const spreads = elements.filter((e) => isSpread(e));
 
     const sortedRegular = [...regular].sort((a, b) =>
-        nameOf(a, source).localeCompare(nameOf(b, source)),
+        compareImportNames(nameOf(a, source), nameOf(b, source)),
     );
 
     const sortedSpreads = [...spreads].sort((a, b) =>
-        nameOf(a.argument, source).localeCompare(nameOf(b.argument, source)),
+        compareImportNames(nameOf(a.argument, source), nameOf(b.argument, source)),
     );
 
     return [...sortedRegular, ...sortedSpreads].map((n) => nameOf(n, source));
+}
+
+function compareImportNames(x: string, y: string): number {
+    return IMPORT_NAME_COLLATOR.compare(x, y);
 }

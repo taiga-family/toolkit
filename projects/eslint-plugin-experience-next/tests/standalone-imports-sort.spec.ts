@@ -144,6 +144,32 @@ ruleTester.run('standalone-imports-sort', rule, {
                 class Test {}
             `,
         },
+        {
+            code: `
+                @Component({
+                    imports: [
+                        MaskitoDirective,
+                        NumberMaskDocExample1,
+                        NumberMaskDocExample10,
+                        NumberMaskDocExample2,
+                        NumberMaskDocExample3,
+                    ]
+                })
+                class Test {}
+            `,
+            errors: [
+                {
+                    message:
+                        'Order in imports should be [MaskitoDirective, NumberMaskDocExample1, NumberMaskDocExample2, NumberMaskDocExample3, NumberMaskDocExample10]',
+                },
+            ],
+            output: `
+                @Component({
+                    imports: [MaskitoDirective, NumberMaskDocExample1, NumberMaskDocExample2, NumberMaskDocExample3, NumberMaskDocExample10]
+                })
+                class Test {}
+            `,
+        },
     ],
     valid: [
         {
@@ -215,6 +241,20 @@ ruleTester.run('standalone-imports-sort', rule, {
                     styleUrl: './index.less',
                     encapsulation,
                     changeDetection,
+                })
+                class TestComponent {}
+            `,
+        },
+        {
+            code: `
+                @Component({
+                    imports: [
+                        MaskitoDirective,
+                        NumberMaskDocExample1,
+                        NumberMaskDocExample2,
+                        NumberMaskDocExample3,
+                        NumberMaskDocExample10,
+                    ]
                 })
                 class TestComponent {}
             `,
