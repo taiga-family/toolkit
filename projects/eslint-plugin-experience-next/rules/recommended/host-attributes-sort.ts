@@ -327,11 +327,9 @@ function getGroup(
         ];
     }
 
-    if (Array.isArray(preset)) {
-        return preset.flatMap((item) => getGroup(item, ignoreCase));
-    }
-
-    return [{query, regexp: preset, values: []}];
+    return Array.isArray(preset)
+        ? preset.flatMap((item) => getGroup(item, ignoreCase))
+        : [{query, regexp: preset, values: []}];
 }
 
 function ensureDefaultGroup(
@@ -381,16 +379,14 @@ function getFixText(
         comments,
     );
 
-    if (!attachedComments) {
-        return null;
-    }
-
-    return renderFixWithComments(
-        hostObject,
-        sortedProperties,
-        sourceCode,
-        attachedComments,
-    );
+    return attachedComments
+        ? renderFixWithComments(
+              hostObject,
+              sortedProperties,
+              sourceCode,
+              attachedComments,
+          )
+        : null;
 }
 
 function getAttachedComments(

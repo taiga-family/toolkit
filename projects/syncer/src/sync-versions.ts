@@ -116,11 +116,9 @@ interface MatchedOptions {
 export function tuiIsMatchedPackageName(options: MatchedOptions): boolean {
     const {ignorePackageNames, matchPackageNames, name} = options;
 
-    if (name && ignorePackageNames.includes(name)) {
-        return false;
-    }
-
-    return !!matchPackageNames.find((match) => !!name?.match(new RegExp(match)));
+    return name && ignorePackageNames.includes(name)
+        ? false
+        : !!matchPackageNames.find((match) => !!name?.match(new RegExp(match)));
 }
 
 interface UpdatePackageJsonOptions {

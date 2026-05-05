@@ -43,11 +43,7 @@ function getNodeLabel(node: ChildNode | TmplAstElement): string {
         return `<${node.name}>`;
     }
 
-    if (node instanceof TmplAstBoundText) {
-        return 'binding';
-    }
-
-    return 'text';
+    return node instanceof TmplAstBoundText ? 'binding' : 'text';
 }
 
 export const rule = createRule({

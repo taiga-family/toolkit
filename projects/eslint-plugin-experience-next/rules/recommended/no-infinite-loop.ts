@@ -8,11 +8,9 @@ type MessageId = 'doWhileLoop' | 'forLoop' | 'whileLoop';
 function isInfiniteLoopLiteral(node: TSESTree.Node): boolean {
     const unwrapped = unwrapParenthesized(node);
 
-    if (unwrapped.type !== AST_NODE_TYPES.Literal) {
-        return false;
-    }
-
-    return unwrapped.value === true || unwrapped.value === 1;
+    return unwrapped.type === AST_NODE_TYPES.Literal
+        ? unwrapped.value === true || unwrapped.value === 1
+        : false;
 }
 
 function isInfiniteLoopTest(test: TSESTree.Expression | null): boolean {

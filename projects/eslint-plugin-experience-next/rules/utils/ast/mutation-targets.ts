@@ -35,13 +35,11 @@ export function collectMutationTargets(node: TSESTree.Node): MutationTarget[] {
             return [current];
 
         case AST_NODE_TYPES.ObjectPattern:
-            return current.properties.flatMap((property) => {
-                if (property.type === AST_NODE_TYPES.RestElement) {
-                    return collectMutationTargets(property.argument);
-                }
-
-                return collectMutationTargets(property.value);
-            });
+            return current.properties.flatMap((property) =>
+                property.type === AST_NODE_TYPES.RestElement
+                    ? collectMutationTargets(property.argument)
+                    : collectMutationTargets(property.value),
+            );
 
         case AST_NODE_TYPES.RestElement:
             return collectMutationTargets(current.argument);

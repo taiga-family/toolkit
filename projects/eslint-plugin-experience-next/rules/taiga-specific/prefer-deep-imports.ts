@@ -288,11 +288,7 @@ function getRootPackageName(importPath: string): string | null {
     if (importPath.startsWith('@')) {
         const segments = importPath.split('/');
 
-        if (segments.length < 2) {
-            return null;
-        }
-
-        return `${segments[0]}/${segments[1]}`;
+        return segments.length < 2 ? null : `${segments[0]}/${segments[1]}`;
     }
 
     const parts = importPath.split('/');
@@ -399,18 +395,14 @@ function selectCandidateEntryPointsForMode(
     allNestedRelativePaths: string[],
     strict: boolean,
 ): string[] {
-    if (!strict) {
-        return allNestedRelativePaths.filter(
-            (relativePath) => !relativePath.includes('/'),
-        );
-    }
+    return strict
+        ? [...allNestedRelativePaths].sort((a, b) => {
+              const depthA = a.split('/').filter(Boolean).length;
+              const depthB = b.split('/').filter(Boolean).length;
 
-    return [...allNestedRelativePaths].sort((a, b) => {
-        const depthA = a.split('/').filter(Boolean).length;
-        const depthB = b.split('/').filter(Boolean).length;
-
-        return depthB - depthA;
-    });
+              return depthB - depthA;
+          })
+        : allNestedRelativePaths.filter((relativePath) => !relativePath.includes('/'));
 }
 
 function mapSymbolsToEntryPointsUsingTypeChecker({
@@ -663,9 +655,7 @@ function buildImportStatement({
         );
     }
 
-    if (clauses.length === 0) {
-        return null;
-    }
-
-    return `${importKeyword} ${clauses.join(', ')} from '${importPath}';`;
+    return clauses.length === 0
+        ? null
+        : `${importKeyword} ${clauses.join(', ')} from '${importPath}';`;
 }

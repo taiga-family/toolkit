@@ -33,11 +33,9 @@ export function getStaticStringValue(
         return node.value;
     }
 
-    if (!isStaticTemplateLiteral(node)) {
-        return null;
-    }
-
-    return node.quasis[0]?.value.cooked ?? node.quasis[0]?.value.raw ?? '';
+    return isStaticTemplateLiteral(node)
+        ? (node.quasis[0]?.value.cooked ?? node.quasis[0]?.value.raw ?? '')
+        : null;
 }
 
 export function isEmptyStaticString(node: TSESTree.Node | null | undefined): boolean {

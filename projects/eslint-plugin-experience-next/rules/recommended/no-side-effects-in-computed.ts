@@ -44,18 +44,16 @@ function isLocalIdentifier(
 ): boolean {
     const symbol = getSymbolAtNode(node, context.checker, context.esTreeNodeToTSNodeMap);
 
-    if (!symbol) {
-        return false;
-    }
+    return symbol
+        ? (symbol.declarations ?? []).some((declaration) => {
+              const estreeDeclaration = context.tsNodeToESTreeNodeMap.get(declaration);
 
-    return (symbol.declarations ?? []).some((declaration) => {
-        const estreeDeclaration = context.tsNodeToESTreeNodeMap.get(declaration);
-
-        return (
-            !!estreeDeclaration &&
-            isDeclaredInsideLocalScope(estreeDeclaration, localScopes)
-        );
-    });
+              return (
+                  !!estreeDeclaration &&
+                  isDeclaredInsideLocalScope(estreeDeclaration, localScopes)
+              );
+          })
+        : false;
 }
 
 function isDeclaredInsideLocalScope(
@@ -113,13 +111,11 @@ function hasObservableMutationTarget(
     context: AnalysisContext,
     localScopes: readonly FunctionLikeScope[],
 ): boolean {
-    return collectMutationTargets(node).some((target) => {
-        if (target.type === AST_NODE_TYPES.Identifier) {
-            return !isLocalIdentifier(target, context, localScopes);
-        }
-
-        return !isLocallyCreatedExpression(target.object, context, localScopes);
-    });
+    return collectMutationTargets(node).some((target) =>
+        target.type === AST_NODE_TYPES.Identifier
+            ? !isLocalIdentifier(target, context, localScopes)
+            : !isLocallyCreatedExpression(target.object, context, localScopes),
+    );
 }
 
 function reportSideEffect(
@@ -242,11 +238,9 @@ function resolveFunctionLikeFromIdentifier(
     return (symbol.declarations ?? []).flatMap((declaration) => {
         const estreeDeclaration = context.tsNodeToESTreeNodeMap.get(declaration);
 
-        if (!estreeDeclaration || !isInspectableFunctionContainer(estreeDeclaration)) {
-            return [];
-        }
-
-        return resolveFunctionLikeFromContainer(estreeDeclaration, context, seenSymbols);
+        return !estreeDeclaration || !isInspectableFunctionContainer(estreeDeclaration)
+            ? []
+            : resolveFunctionLikeFromContainer(estreeDeclaration, context, seenSymbols);
     });
 }
 

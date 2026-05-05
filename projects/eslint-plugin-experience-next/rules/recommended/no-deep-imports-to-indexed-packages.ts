@@ -280,11 +280,9 @@ export const rule = createRule({
 export default rule;
 
 function isExternalModuleSpecifier(moduleSpecifier: string): boolean {
-    if (!moduleSpecifier || moduleSpecifier.startsWith('.')) {
-        return false;
-    }
-
-    return !path.isAbsolute(moduleSpecifier);
+    return !moduleSpecifier || moduleSpecifier.startsWith('.')
+        ? false
+        : !path.isAbsolute(moduleSpecifier);
 }
 
 function isScopedPackage(importSpecifier: string): boolean {
@@ -295,11 +293,9 @@ function getPackageRootSpecifier(importSpecifier: string): string {
     const pathParts = importSpecifier.split('/');
 
     if (isScopedPackage(importSpecifier)) {
-        if (pathParts.length >= 2) {
-            return `${pathParts[0]}/${pathParts[1]}`;
-        }
-
-        return importSpecifier;
+        return pathParts.length >= 2
+            ? `${pathParts[0]}/${pathParts[1]}`
+            : importSpecifier;
     }
 
     return pathParts[0] ?? importSpecifier;
@@ -309,14 +305,10 @@ function getSubpath(
     importSpecifier: string,
     packageRootSpecifier: string,
 ): string | null {
-    if (
-        importSpecifier === packageRootSpecifier ||
+    return importSpecifier === packageRootSpecifier ||
         !importSpecifier.startsWith(`${packageRootSpecifier}/`)
-    ) {
-        return null;
-    }
-
-    return importSpecifier.slice(packageRootSpecifier.length + 1);
+        ? null
+        : importSpecifier.slice(packageRootSpecifier.length + 1);
 }
 
 function normalizeModuleSpecifier(moduleSpecifier: string): string {

@@ -10,9 +10,5 @@ export function isExternalPureTuple(typeChecker: TypeChecker, type: Type): boole
     const typeRef = type as TypeReference;
     const typeArgs = typeChecker.getTypeArguments(typeRef);
 
-    if (typeArgs.length === 0) {
-        return false;
-    }
-
-    return typeArgs.every((item) => isClassType(item));
+    return typeArgs.length === 0 ? false : typeArgs.every((item) => isClassType(item));
 }

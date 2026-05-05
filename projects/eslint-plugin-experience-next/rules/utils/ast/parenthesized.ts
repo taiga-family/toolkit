@@ -6,11 +6,9 @@ export function getParenthesizedInner(node: TSESTree.Node): TSESTree.Node | null
         type?: string;
     };
 
-    if (maybeNode.type === 'ParenthesizedExpression') {
-        return maybeNode.expression ?? null;
-    }
-
-    return null;
+    return maybeNode.type === 'ParenthesizedExpression'
+        ? (maybeNode.expression ?? null)
+        : null;
 }
 
 export function unwrapParenthesized(node: TSESTree.Node): TSESTree.Node {

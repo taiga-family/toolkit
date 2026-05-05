@@ -13,9 +13,7 @@ export function getReturnedExpression(
 
     const statement = node.body.body[0];
 
-    if (statement?.type !== AST_NODE_TYPES.ReturnStatement || !statement.argument) {
-        return null;
-    }
-
-    return statement.argument;
+    return statement?.type !== AST_NODE_TYPES.ReturnStatement || !statement.argument
+        ? null
+        : statement.argument;
 }

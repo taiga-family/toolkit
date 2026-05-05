@@ -16,11 +16,9 @@ function getModuleKeywordToken(
         return null;
     }
 
-    if (firstToken.value === 'declare') {
-        return sourceCode.getTokenAfter(firstToken) ?? null;
-    }
-
-    return firstToken;
+    return firstToken.value === 'declare'
+        ? (sourceCode.getTokenAfter(firstToken) ?? null)
+        : firstToken;
 }
 
 export const rule = createRule<Options, MessageId>({

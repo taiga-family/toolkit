@@ -92,14 +92,10 @@ function isAllowedDeferredCallbackContext(
 
     const fn = getEnclosingFunction(node);
 
-    if (!fn) {
-        return false;
-    }
-
-    return (
-        isDirectCallOrNewArgument(fn) ||
-        isStoredFunctionUsedAsCallOrNewArgument(fn, checker, esTreeNodeToTSNodeMap)
-    );
+    return fn
+        ? isDirectCallOrNewArgument(fn) ||
+              isStoredFunctionUsedAsCallOrNewArgument(fn, checker, esTreeNodeToTSNodeMap)
+        : false;
 }
 
 function isAllowedLazyAngularFactoryContext(
@@ -108,14 +104,10 @@ function isAllowedLazyAngularFactoryContext(
 ): boolean {
     const fn = getEnclosingFunction(node);
 
-    if (!fn || !getReturnedReactiveOwnerCall(node, program)) {
-        return false;
-    }
-
-    return (
-        isAngularInjectionTokenFactoryFunction(fn, program) ||
-        isAngularUseFactoryFunction(fn)
-    );
+    return !fn || !getReturnedReactiveOwnerCall(node, program)
+        ? false
+        : isAngularInjectionTokenFactoryFunction(fn, program) ||
+              isAngularUseFactoryFunction(fn);
 }
 
 function buildReactiveCallReplacement(
@@ -125,17 +117,13 @@ function buildReactiveCallReplacement(
 ): string {
     const text = sourceCode.getText(reactiveCall);
 
-    if (
-        reactiveCall.parent.type !== AST_NODE_TYPES.ExpressionStatement ||
+    return reactiveCall.parent.type !== AST_NODE_TYPES.ExpressionStatement ||
         outerUntrackedCall.parent.type !== AST_NODE_TYPES.ExpressionStatement
-    ) {
-        return text;
-    }
-
-    return dedent(
-        text,
-        reactiveCall.loc.start.column - outerUntrackedCall.parent.loc.start.column,
-    );
+        ? text
+        : dedent(
+              text,
+              reactiveCall.loc.start.column - outerUntrackedCall.parent.loc.start.column,
+          );
 }
 
 export const rule = createUntrackedRule<[], MessageId>({
