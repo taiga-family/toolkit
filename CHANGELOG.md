@@ -1,3 +1,17 @@
+### [0.508.0](https://github.com/taiga-family/toolkit/compare/v0.507.0...v0.508.0) (2026-05-05)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;no-empty-style-metadata&#x60;
+  ([#1829](https://github.com/taiga-family/toolkit/pull/1829))
+  [(24da56d)](https://github.com/taiga-family/toolkit/commit/24da56dc04b2cde5df01c92bb4d75454882006b1)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: use &#x60;localeCompare&#x60; in standalone-imports-sort
+  ([#1828](https://github.com/taiga-family/toolkit/pull/1828))
+  [(08a1419)](https://github.com/taiga-family/toolkit/commit/08a141987404158f5218c7ebf52c95b4b70bf585)
+
 ### [0.507.0](https://github.com/taiga-family/toolkit/compare/v0.506.0...v0.507.0) (2026-05-05)
 
 ### 🚀 Features
