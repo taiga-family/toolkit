@@ -16,7 +16,7 @@ function isInfiniteLoopLiteral(node: TSESTree.Node): boolean {
 }
 
 function isInfiniteLoopTest(test: TSESTree.Expression | null): boolean {
-    return test === null || isInfiniteLoopLiteral(test);
+    return test == null || isInfiniteLoopLiteral(test);
 }
 
 export const rule = createRule<[], MessageId>({

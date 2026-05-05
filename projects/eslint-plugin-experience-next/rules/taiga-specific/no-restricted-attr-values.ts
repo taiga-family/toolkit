@@ -98,7 +98,7 @@ const config: Rule.RuleModule = {
                 for (const attr of node.inputs) {
                     const attrValue = getLiteralStringValue(attr);
 
-                    if (attrValue !== null) {
+                    if (attrValue != null) {
                         checkAttribute(context, attr, attrValue, checkers);
                     }
                 }

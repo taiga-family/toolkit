@@ -422,7 +422,7 @@ export const rule = createUntrackedRule<[], MessageId>({
             read: TSESTree.CallExpression,
         ): (fixer: RuleFixer) => Array<ReturnType<RuleFixer['replaceText']>> {
             const untrackedAlias = findUntrackedAlias(program);
-            const alreadyHasUntracked = untrackedAlias !== null;
+            const alreadyHasUntracked = untrackedAlias != null;
 
             const wrapped = buildUntrackedWrap(
                 read,

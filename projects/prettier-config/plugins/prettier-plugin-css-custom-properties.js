@@ -10,7 +10,7 @@ const originalPostcssPrinter = postcss.printers.postcss;
 function isCustomPropertyDeclaration(node) {
     return (
         typeof node === 'object' &&
-        node !== null &&
+        node != null &&
         'type' in node &&
         'prop' in node &&
         node.type === 'css-decl' &&
