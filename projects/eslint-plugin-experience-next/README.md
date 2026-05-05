@@ -108,6 +108,7 @@ from third-party plugins. The exact severities and file globs live in
 | [no-useless-untracked](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/no-useless-untracked.md)                                                       | Disallow provably useless `untracked()` wrappers in reactive callbacks                              | ✅  | 🔧  |     |
 | [object-single-line](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/object-single-line.md)                                                           | Enforce single-line formatting for single-property objects when it fits `printWidth`                | ✅  | 🔧  |     |
 | [prefer-combined-if-control-flow](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/prefer-combined-if-control-flow.md)                                 | Combine consecutive `if` statements that use the same `return`, `break`, `continue`, or `throw`     | ✅  | 🔧  |     |
+| [prefer-conditional-return](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/prefer-conditional-return.md)                                             | Prefer a conditional return over an adjacent `if` branch and fallback `return`                      | ✅  | 🔧  |     |
 | [prefer-deep-imports](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/prefer-deep-imports.md)                                                         | Allow deep imports of Taiga UI packages                                                             |     | 🔧  |     |
 | [prefer-loose-null-check](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/prefer-loose-null-check.md)                                                 | Prefer loose null checks over paired strict comparisons against `null` and `undefined`              | ✅  | 🔧  |     |
 | [prefer-multi-arg-push](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/prefer-multi-arg-push.md)                                                     | Combine consecutive `.push()` calls on the same array into a single multi-argument call             | ✅  | 🔧  |     |
@@ -125,3 +126,39 @@ from third-party plugins. The exact severities and file globs live in
 | [single-line-variable-spacing](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/single-line-variable-spacing.md)                                       | Group consecutive single-line variables and separate multiline ones with a blank line               | ✅  | 🔧  |     |
 | [standalone-imports-sort](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/standalone-imports-sort.md)                                                 | Auto sort names inside Angular decorators                                                           | ✅  | 🔧  |     |
 | [strict-tui-doc-example](https://github.com/taiga-family/toolkit/tree/main/projects/eslint-plugin-experience-next/docs/strict-tui-doc-example.md)                                                   | If you use the addon-doc, there will be a hint that you are importing something incorrectly         |     | 🔧  |     |
+
+## prefer-conditional-return
+
+Prefer a single conditional return when an `if` statement returns one expression and the immediately following statement
+returns the fallback expression. The rule skips branches with comments, `else`, empty returns, intervening statements,
+or a return expression that is already a conditional expression.
+
+```ts
+// ❌ error
+if (index < count) {
+  return {value: index++, done: false};
+}
+
+return {value: undefined, done: true};
+
+// ✅ after autofix
+return index < count ? {value: index++, done: false} : {value: undefined, done: true};
+```
+
+```ts
+// not changed: if branch return is already conditional
+if (condition) {
+  return first ? second : third;
+}
+
+return fallback;
+```
+
+```ts
+// not changed: fallback return is already conditional
+if (condition) {
+  return value;
+}
+
+return first ? second : third;
+```

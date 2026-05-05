@@ -148,15 +148,11 @@ function getProgramResolutionCache(program: ts.Program): ts.ModuleResolutionCach
 
     const cache: unknown = (getCache as () => unknown).call(program);
 
-    if (
-        cache === null ||
+    return cache === null ||
         typeof cache !== 'object' ||
         !('getOrCreateCacheForDirectory' in cache)
-    ) {
-        return null;
-    }
-
-    return cache as ts.ModuleResolutionCache;
+        ? null
+        : (cache as ts.ModuleResolutionCache);
 }
 
 function getFallbackResolution(program: ts.Program): FallbackResolutionState {
@@ -224,11 +220,9 @@ function resolveModuleFileName(
 ): string | null {
     const resolved = resolveModule(program, containingFile, moduleSpecifier);
 
-    if (!resolved || resolved.isExternalLibraryImport) {
-        return null;
-    }
-
-    return resolved.resolvedFileName;
+    return !resolved || resolved.isExternalLibraryImport
+        ? null
+        : resolved.resolvedFileName;
 }
 
 function splitModuleSpecifierQuery(moduleSpecifier: string): ModuleSpecifierParts {
@@ -377,14 +371,10 @@ function importDeclarationHasRuntimeEdge(node: ts.ImportDeclaration): boolean {
         return false;
     }
 
-    if (ts.isNamespaceImport(namedBindings)) {
-        return true;
-    }
-
-    return (
-        namedBindings.elements.length === 0 ||
-        namedBindings.elements.some((specifier) => !specifier.isTypeOnly)
-    );
+    return ts.isNamespaceImport(namedBindings)
+        ? true
+        : namedBindings.elements.length === 0 ||
+              namedBindings.elements.some((specifier) => !specifier.isTypeOnly);
 }
 
 function exportDeclarationHasRuntimeEdge(node: ts.ExportDeclaration): boolean {
@@ -394,14 +384,10 @@ function exportDeclarationHasRuntimeEdge(node: ts.ExportDeclaration): boolean {
 
     const exportClause = node.exportClause;
 
-    if (!exportClause || ts.isNamespaceExport(exportClause)) {
-        return true;
-    }
-
-    return (
-        exportClause.elements.length === 0 ||
-        exportClause.elements.some((specifier) => !specifier.isTypeOnly)
-    );
+    return !exportClause || ts.isNamespaceExport(exportClause)
+        ? true
+        : exportClause.elements.length === 0 ||
+              exportClause.elements.some((specifier) => !specifier.isTypeOnly);
 }
 
 function getRuntimeModuleSpecifier(statement: ts.Statement): string | null {
@@ -494,13 +480,11 @@ function hasRuntimeDefaultModifier(statement: ts.Statement): boolean {
 }
 
 function exportsDefaultSpecifier(node: ts.ExportDeclaration): boolean {
-    if (node.isTypeOnly || !node.exportClause || !ts.isNamedExports(node.exportClause)) {
-        return false;
-    }
-
-    return node.exportClause.elements.some(
-        (specifier) => !specifier.isTypeOnly && specifier.name.text === 'default',
-    );
+    return node.isTypeOnly || !node.exportClause || !ts.isNamedExports(node.exportClause)
+        ? false
+        : node.exportClause.elements.some(
+              (specifier) => !specifier.isTypeOnly && specifier.name.text === 'default',
+          );
 }
 
 function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
@@ -541,17 +525,13 @@ function hasRuntimeEstreeImport(node: TSESTree.ImportDeclaration): boolean {
         return false;
     }
 
-    if (node.specifiers.length === 0) {
-        return true;
-    }
-
-    return node.specifiers.some((specifier) => {
-        if (specifier.type !== AST_NODE_TYPES.ImportSpecifier) {
-            return true;
-        }
-
-        return specifier.importKind !== 'type';
-    });
+    return node.specifiers.length === 0
+        ? true
+        : node.specifiers.some((specifier) =>
+              specifier.type === AST_NODE_TYPES.ImportSpecifier
+                  ? specifier.importKind !== 'type'
+                  : true,
+          );
 }
 
 function hasRuntimeEstreeReExport(
@@ -561,14 +541,10 @@ function hasRuntimeEstreeReExport(
         return false;
     }
 
-    if (node.type === AST_NODE_TYPES.ExportAllDeclaration) {
-        return true;
-    }
-
-    return (
-        node.specifiers.length === 0 ||
-        node.specifiers.some((specifier) => specifier.exportKind !== 'type')
-    );
+    return node.type === AST_NODE_TYPES.ExportAllDeclaration
+        ? true
+        : node.specifiers.length === 0 ||
+              node.specifiers.some((specifier) => specifier.exportKind !== 'type');
 }
 
 function getImportOrReExportModuleSpecifier(
@@ -967,16 +943,12 @@ function isImportUsedOnlyAsAngularDiFirstArg(
     node: TSESTree.ImportDeclaration,
     sourceCode: Readonly<TSESLint.SourceCode>,
 ): boolean {
-    const valueSpecifiers = node.specifiers.filter((specifier) => {
-        if (
-            specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
-            specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
-        ) {
-            return true;
-        }
-
-        return specifier.importKind !== 'type';
-    });
+    const valueSpecifiers = node.specifiers.filter((specifier) =>
+        specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
+        specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+            ? true
+            : specifier.importKind !== 'type',
+    );
 
     if (valueSpecifiers.length === 0) {
         return false;
@@ -1333,14 +1305,10 @@ export const rule = createRule<Options, MessageId>({
             const importParentCount = countRelativeParents(importSegments);
             const expectedParentCount = countRelativeParents(expectedPath.split('/'));
 
-            if (
-                importParentCount <= expectedParentCount ||
+            return importParentCount <= expectedParentCount ||
                 expectedPath === moduleSpecifierPath
-            ) {
-                return null;
-            }
-
-            return expectedPath;
+                ? null
+                : expectedPath;
         }
 
         function getUselessPathSegmentsReplacement(

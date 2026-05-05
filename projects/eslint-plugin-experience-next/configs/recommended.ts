@@ -744,6 +744,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-useless-untracked': 'error',
             '@taiga-ui/experience-next/object-single-line': ['error', {printWidth: 90}],
             '@taiga-ui/experience-next/prefer-combined-if-control-flow': 'error',
+            '@taiga-ui/experience-next/prefer-conditional-return': 'error',
             '@taiga-ui/experience-next/prefer-loose-null-check': 'error',
             '@taiga-ui/experience-next/prefer-multi-arg-push': 'error',
             '@taiga-ui/experience-next/prefer-namespace-keyword': 'error',

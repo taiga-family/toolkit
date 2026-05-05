@@ -25,16 +25,14 @@ export function buildUntrackedImportFixes(
     if (!coreImport) {
         const firstStatement = program.body[0];
 
-        if (!firstStatement) {
-            return [];
-        }
-
-        return [
-            fixer.insertTextBefore(
-                firstStatement,
-                "import { untracked } from '@angular/core';\n",
-            ),
-        ];
+        return firstStatement
+            ? [
+                  fixer.insertTextBefore(
+                      firstStatement,
+                      "import { untracked } from '@angular/core';\n",
+                  ),
+              ]
+            : [];
     }
 
     const namedSpecifiers = coreImport.specifiers.filter(
@@ -45,24 +43,23 @@ export function buildUntrackedImportFixes(
     if (namedSpecifiers.length > 0) {
         const lastNamedSpecifier = namedSpecifiers[namedSpecifiers.length - 1];
 
-        if (!lastNamedSpecifier) {
-            return [];
-        }
-
-        return [fixer.insertTextAfter(lastNamedSpecifier, ', untracked')];
+        return lastNamedSpecifier
+            ? [fixer.insertTextAfter(lastNamedSpecifier, ', untracked')]
+            : [];
     }
 
     const defaultImport = coreImport.specifiers.find(
         (specifier) => specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier,
     );
 
-    if (defaultImport) {
-        return [fixer.insertTextAfter(defaultImport, ', { untracked }')];
-    }
-
-    return [
-        fixer.insertTextAfter(coreImport, "\nimport { untracked } from '@angular/core';"),
-    ];
+    return defaultImport
+        ? [fixer.insertTextAfter(defaultImport, ', { untracked }')]
+        : [
+              fixer.insertTextAfter(
+                  coreImport,
+                  "\nimport { untracked } from '@angular/core';",
+              ),
+          ];
 }
 
 /**
@@ -81,10 +78,6 @@ export function buildImportRemovalFixes(
     }
 
     const {importDecl, specifier: untrackedSpec} = match;
-
-    const namedSpecifiers = importDecl.specifiers.filter(
-        (s): s is TSESTree.ImportSpecifier => s.type === AST_NODE_TYPES.ImportSpecifier,
-    );
 
     if (importDecl.specifiers.length === 1) {
         return [fixer.remove(importDecl)];
@@ -108,13 +101,7 @@ export function buildImportRemovalFixes(
     const textBefore = importText.slice(0, specStart - importStart);
     const leadingCommaIdx = textBefore.lastIndexOf(',');
 
-    if (leadingCommaIdx !== -1) {
-        return [fixer.removeRange([importStart + leadingCommaIdx, specEnd])];
-    }
-
-    if (namedSpecifiers.length === 1) {
-        return [fixer.remove(untrackedSpec)];
-    }
-
-    return [fixer.remove(untrackedSpec)];
+    return leadingCommaIdx === -1
+        ? [fixer.remove(untrackedSpec)]
+        : [fixer.removeRange([importStart + leadingCommaIdx, specEnd])];
 }

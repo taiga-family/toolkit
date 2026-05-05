@@ -17,11 +17,9 @@ export const rule = createRule<Options, MessageIds>({
             const newLineIndex = text.indexOf('\n', lineStartIndex);
             const rawEndIndex = newLineIndex === -1 ? text.length : newLineIndex;
 
-            if (rawEndIndex > lineStartIndex && text[rawEndIndex - 1] === '\r') {
-                return rawEndIndex - 1;
-            }
-
-            return rawEndIndex;
+            return rawEndIndex > lineStartIndex && text[rawEndIndex - 1] === '\r'
+                ? rawEndIndex - 1
+                : rawEndIndex;
         };
 
         const hasAnyCommentsInside = (node: TSESTree.Node): boolean =>
@@ -128,11 +126,9 @@ export const rule = createRule<Options, MessageIds>({
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             const valueText = renderExpressionOneLine(valueExpression);
 
-            if (property.computed) {
-                return `[${keyText}]: ${valueText}`;
-            }
-
-            return `${keyText}: ${valueText}`;
+            return property.computed
+                ? `[${keyText}]: ${valueText}`
+                : `${keyText}: ${valueText}`;
         };
 
         const renderObjectExpressionOneLine = (
@@ -140,11 +136,7 @@ export const rule = createRule<Options, MessageIds>({
         ): string => {
             const [onlyProperty] = node.properties;
 
-            if (!onlyProperty) {
-                return '{}';
-            }
-
-            return `{${renderPropertyOneLine(onlyProperty)}}`;
+            return onlyProperty ? `{${renderPropertyOneLine(onlyProperty)}}` : '{}';
         };
 
         const renderExpressionOneLine = (expression: TSESTree.Expression): string => {
@@ -153,26 +145,18 @@ export const rule = createRule<Options, MessageIds>({
             if (innerParen) {
                 const inner = unwrapExpression(innerParen);
 
-                if (
-                    inner.type === AST_NODE_TYPES.ObjectExpression &&
+                return inner.type === AST_NODE_TYPES.ObjectExpression &&
                     canInlineObjectExpression(inner)
-                ) {
-                    return `(${renderObjectExpressionOneLine(inner)})`;
-                }
-
-                return sourceCode.getText(expression);
+                    ? `(${renderObjectExpressionOneLine(inner)})`
+                    : sourceCode.getText(expression);
             }
 
             const unwrapped = unwrapExpression(expression);
 
-            if (
-                unwrapped.type === AST_NODE_TYPES.ObjectExpression &&
+            return unwrapped.type === AST_NODE_TYPES.ObjectExpression &&
                 canInlineObjectExpression(unwrapped)
-            ) {
-                return renderObjectExpressionOneLine(unwrapped);
-            }
-
-            return sourceCode.getText(expression);
+                ? renderObjectExpressionOneLine(unwrapped)
+                : sourceCode.getText(expression);
         };
 
         const hasPendingInnerInlineCandidate = (

@@ -9,18 +9,12 @@ import {getSymbolAtNode} from './symbols';
 export function isDirectCallOrNewArgument(node: TSESTree.FunctionLike): boolean {
     const parent = node.parent;
 
-    if (
-        node.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
+    return node.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
         node.type !== AST_NODE_TYPES.FunctionExpression
-    ) {
-        return false;
-    }
-
-    return (
-        (parent.type === AST_NODE_TYPES.CallExpression ||
-            parent.type === AST_NODE_TYPES.NewExpression) &&
-        parent.arguments.includes(node)
-    );
+        ? false
+        : (parent.type === AST_NODE_TYPES.CallExpression ||
+              parent.type === AST_NODE_TYPES.NewExpression) &&
+              parent.arguments.includes(node);
 }
 
 export function isStoredFunctionUsedAsCallOrNewArgument(

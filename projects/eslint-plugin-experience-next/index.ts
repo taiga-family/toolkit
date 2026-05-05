@@ -36,6 +36,7 @@ import noUntrackedOutsideReactiveContext from './rules/recommended/no-untracked-
 import noUselessUntracked from './rules/recommended/no-useless-untracked';
 import objectSingleLine from './rules/recommended/object-single-line';
 import preferCombinedIfControlFlow from './rules/recommended/prefer-combined-if-control-flow';
+import preferConditionalReturn from './rules/recommended/prefer-conditional-return';
 import preferLooseNullCheck from './rules/recommended/prefer-loose-null-check';
 import preferMultiArgPush from './rules/recommended/prefer-multi-arg-push';
 import preferNamespaceKeyword from './rules/recommended/prefer-namespace-keyword';
@@ -107,6 +108,7 @@ const plugin = {
         'no-useless-untracked': noUselessUntracked,
         'object-single-line': objectSingleLine,
         'prefer-combined-if-control-flow': preferCombinedIfControlFlow,
+        'prefer-conditional-return': preferConditionalReturn,
         'prefer-deep-imports': preferDeepImports,
         'prefer-loose-null-check': preferLooseNullCheck,
         'prefer-multi-arg-push': preferMultiArgPush,

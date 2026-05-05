@@ -31,15 +31,11 @@ function getTrackingKey(node: TmplAstElement): string | null {
         }
     }
 
-    if (
-        node.name === 'link' &&
+    return node.name === 'link' &&
         findAttr(node, 'rel')?.value === 'canonical' &&
         findAttr(node, 'href')
-    ) {
-        return 'link[rel=canonical]';
-    }
-
-    return null;
+        ? 'link[rel=canonical]'
+        : null;
 }
 
 export const rule = createRule({

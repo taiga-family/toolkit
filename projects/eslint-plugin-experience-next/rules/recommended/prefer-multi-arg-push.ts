@@ -23,11 +23,9 @@ function getPushCall(node: TSESTree.ExpressionStatement): PushCallExpression | n
 
     const {property} = call.callee;
 
-    if (property.type !== AST_NODE_TYPES.Identifier || property.name !== 'push') {
-        return null;
-    }
-
-    return call as PushCallExpression;
+    return property.type !== AST_NODE_TYPES.Identifier || property.name !== 'push'
+        ? null
+        : (call as PushCallExpression);
 }
 
 export const rule = createRule<Options, MessageId>({
@@ -98,14 +96,15 @@ export const rule = createRule<Options, MessageId>({
 
                                           const lastStmt = group[group.length - 1];
 
-                                          if (!lastStmt) {
-                                              return null;
-                                          }
-
-                                          return fixer.replaceTextRange(
-                                              [groupStmt.range[0], lastStmt.range[1]],
-                                              `${arrayText}.push(${allArgs});`,
-                                          );
+                                          return lastStmt
+                                              ? fixer.replaceTextRange(
+                                                    [
+                                                        groupStmt.range[0],
+                                                        lastStmt.range[1],
+                                                    ],
+                                                    `${arrayText}.push(${allArgs});`,
+                                                )
+                                              : null;
                                       },
                                   }
                                 : {}),

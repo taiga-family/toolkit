@@ -34,11 +34,7 @@ function isStringLike(node: TSESTree.Expression): node is StringLikeNode {
 }
 
 function getStringValue(node: StringLikeNode): string {
-    if (isStringLiteral(node)) {
-        return node.value;
-    }
-
-    return node.quasis[0]?.value.raw || '';
+    return isStringLiteral(node) ? node.value : node.quasis[0]?.value.raw || '';
 }
 
 function isEmptyString(node: StringLikeNode): boolean {
@@ -70,11 +66,7 @@ function getDescriptionValue(node: TSESTree.Expression): string | undefined {
         return getStringValue(node);
     }
 
-    if (isNgDevModeConditional(node)) {
-        return getStringValue(node.consequent);
-    }
-
-    return undefined;
+    return isNgDevModeConditional(node) ? getStringValue(node.consequent) : undefined;
 }
 
 function getDescriptionNode(node: TSESTree.Expression): StringLikeNode | undefined {
@@ -117,14 +109,9 @@ function getNgDevModeDeclarationFix(
 
     const [firstStatement] = program.body;
 
-    if (firstStatement) {
-        return fixer.insertTextBefore(
-            firstStatement,
-            'declare const ngDevMode: boolean;\n\n',
-        );
-    }
-
-    return fixer.insertTextBeforeRange([0, 0], 'declare const ngDevMode: boolean;\n');
+    return firstStatement
+        ? fixer.insertTextBefore(firstStatement, 'declare const ngDevMode: boolean;\n\n')
+        : fixer.insertTextBeforeRange([0, 0], 'declare const ngDevMode: boolean;\n');
 }
 
 export const rule = createRule({

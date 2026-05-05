@@ -24,13 +24,11 @@ function isNullableCallType(
 
         const type = checker.getTypeAtLocation(tsNode);
 
-        if (!(type.flags & ts.TypeFlags.Union)) {
-            return false;
-        }
-
-        return (type as ts.UnionType).types.some(
-            (t) => !!(t.flags & (ts.TypeFlags.Null | ts.TypeFlags.Undefined)),
-        );
+        return type.flags & ts.TypeFlags.Union
+            ? (type as ts.UnionType).types.some(
+                  (t) => !!(t.flags & (ts.TypeFlags.Null | ts.TypeFlags.Undefined)),
+              )
+            : false;
     } catch {
         return false;
     }
@@ -43,16 +41,12 @@ function getTargetNode(call: TSESTree.CallExpression): TSESTree.Node {
         return parent;
     }
 
-    if (
-        parent.type === AST_NODE_TYPES.UnaryExpression &&
+    return parent.type === AST_NODE_TYPES.UnaryExpression &&
         parent.operator === '!' &&
         parent.parent.type === AST_NODE_TYPES.UnaryExpression &&
         parent.parent.operator === '!'
-    ) {
-        return parent.parent;
-    }
-
-    return call;
+        ? parent.parent
+        : call;
 }
 
 function getCalleeName(node: TSESTree.CallExpression): string {
@@ -67,11 +61,7 @@ function getCalleeName(node: TSESTree.CallExpression): string {
     }
 
     // Append 'Val' to avoid shadowing the signal variable itself (e.g. const xVal = x())
-    if (callee.type === AST_NODE_TYPES.Identifier) {
-        return `${callee.name}Val`;
-    }
-
-    return 'value';
+    return callee.type === AST_NODE_TYPES.Identifier ? `${callee.name}Val` : 'value';
 }
 
 function findParentStatement(node: TSESTree.Node): TSESTree.Statement | null {

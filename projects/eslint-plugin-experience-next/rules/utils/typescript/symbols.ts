@@ -10,9 +10,5 @@ export function getSymbolAtNode(
 ): ts.Symbol | null {
     const tsNode = esTreeNodeToTSNodeMap.get(node);
 
-    if (!tsNode) {
-        return null;
-    }
-
-    return checker.getSymbolAtLocation(tsNode) ?? null;
+    return tsNode ? (checker.getSymbolAtLocation(tsNode) ?? null) : null;
 }

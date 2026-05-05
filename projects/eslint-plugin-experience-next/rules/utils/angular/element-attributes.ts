@@ -16,11 +16,7 @@ export type ElementAttributeLike =
 export function getAttributeValueSpan(
     attr: ElementAttributeLike,
 ): ParseSourceSpan | undefined {
-    if (attr instanceof TmplAstBoundEvent) {
-        return attr.handlerSpan;
-    }
-
-    return attr.valueSpan;
+    return attr instanceof TmplAstBoundEvent ? attr.handlerSpan : attr.valueSpan;
 }
 
 export function getElementAttributeLikes(

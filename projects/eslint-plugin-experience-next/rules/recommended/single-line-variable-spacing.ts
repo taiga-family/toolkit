@@ -28,14 +28,10 @@ function getVariableSpacingStatement(
         return {declaration: node, exported: false, node};
     }
 
-    if (
-        node.type !== AST_NODE_TYPES.ExportNamedDeclaration ||
+    return node.type !== AST_NODE_TYPES.ExportNamedDeclaration ||
         node.declaration?.type !== AST_NODE_TYPES.VariableDeclaration
-    ) {
-        return null;
-    }
-
-    return {declaration: node.declaration, exported: true, node};
+        ? null
+        : {declaration: node.declaration, exported: true, node};
 }
 
 function isRequireCall(node: TSESTree.Node): boolean {
@@ -68,11 +64,9 @@ function isImportLikeInitializer(node: TSESTree.Node): boolean {
         return isImportLikeInitializer(initializer.object);
     }
 
-    if (initializer.type === AST_NODE_TYPES.CallExpression) {
-        return isImportLikeInitializer(initializer.callee);
-    }
-
-    return false;
+    return initializer.type === AST_NODE_TYPES.CallExpression
+        ? isImportLikeInitializer(initializer.callee)
+        : false;
 }
 
 function isImportLikeVariableDeclaration(
@@ -85,11 +79,7 @@ function isImportLikeVariableDeclaration(
     const [declarator] = declaration.declarations;
     const init = declarator.init;
 
-    if (!init) {
-        return false;
-    }
-
-    return isImportLikeInitializer(init);
+    return init ? isImportLikeInitializer(init) : false;
 }
 
 export const rule = createRule<[], MessageIds>({

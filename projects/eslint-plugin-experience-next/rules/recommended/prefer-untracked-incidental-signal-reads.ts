@@ -112,27 +112,19 @@ function unwrapUsageExpression(node: TSESTree.Node): TSESTree.Node {
 function isStatementPositionCall(node: TSESTree.CallExpression): boolean {
     const usage = unwrapUsageExpression(node);
 
-    if (usage.parent?.type === AST_NODE_TYPES.ExpressionStatement) {
-        return true;
-    }
-
-    return (
-        usage.parent?.type === AST_NODE_TYPES.AwaitExpression &&
-        usage.parent.parent.type === AST_NODE_TYPES.ExpressionStatement
-    );
+    return usage.parent?.type === AST_NODE_TYPES.ExpressionStatement
+        ? true
+        : usage.parent?.type === AST_NODE_TYPES.AwaitExpression &&
+              usage.parent.parent.type === AST_NODE_TYPES.ExpressionStatement;
 }
 
 function isConsoleMethodCall(node: TSESTree.CallExpression): boolean {
-    if (
-        node.callee.type !== AST_NODE_TYPES.MemberExpression ||
+    return node.callee.type !== AST_NODE_TYPES.MemberExpression ||
         node.callee.object.type !== AST_NODE_TYPES.Identifier ||
         node.callee.object.name !== 'console' ||
         node.callee.property.type !== AST_NODE_TYPES.Identifier
-    ) {
-        return false;
-    }
-
-    return CONSOLE_METHODS.has(node.callee.property.name);
+        ? false
+        : CONSOLE_METHODS.has(node.callee.property.name);
 }
 
 function isDomImperativeCall(
@@ -175,17 +167,13 @@ function isSuspiciousDomCallArgumentConsumer(
     esTreeNodeToTSNodeMap: NodeMap,
     program: TSESTree.Program,
 ): boolean {
-    if (
-        isAngularUntrackedCall(node, program) ||
+    return isAngularUntrackedCall(node, program) ||
         isSignalReadCall(node, checker, esTreeNodeToTSNodeMap) ||
         isWritableSignalWrite(node, checker, esTreeNodeToTSNodeMap) ||
         !isStatementPositionCall(node) ||
         isConsoleMethodCall(node)
-    ) {
-        return false;
-    }
-
-    return isDomImperativeCall(node, checker, esTreeNodeToTSNodeMap);
+        ? false
+        : isDomImperativeCall(node, checker, esTreeNodeToTSNodeMap);
 }
 
 function isAliasDeclarationIdentifier(node: TSESTree.Node): boolean {
@@ -430,14 +418,12 @@ export const rule = createUntrackedRule<[], MessageId>({
                 untrackedAlias ?? 'untracked',
             );
 
-            if (alreadyHasUntracked) {
-                return (fixer) => [fixer.replaceText(read, wrapped)];
-            }
-
-            return (fixer) => [
-                fixer.replaceText(read, wrapped),
-                ...buildUntrackedImportFixes(program, fixer),
-            ];
+            return alreadyHasUntracked
+                ? (fixer) => [fixer.replaceText(read, wrapped)]
+                : (fixer) => [
+                      fixer.replaceText(read, wrapped),
+                      ...buildUntrackedImportFixes(program, fixer),
+                  ];
         }
 
         return {

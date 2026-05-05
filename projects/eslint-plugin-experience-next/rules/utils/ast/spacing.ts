@@ -37,11 +37,7 @@ export function getLineBreak(text: string): string {
         return '\r\n';
     }
 
-    if (text.includes('\r')) {
-        return '\r';
-    }
-
-    return '\n';
+    return text.includes('\r') ? '\r' : '\n';
 }
 
 export function getLeadingIndentation(text: string): string {

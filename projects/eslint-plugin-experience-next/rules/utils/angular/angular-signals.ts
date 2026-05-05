@@ -77,15 +77,11 @@ function isAngularCoreCall(
 ): boolean {
     const localName = getLocalNameForImport(program, ANGULAR_CORE, exportedName);
 
-    if (!localName) {
-        return false;
-    }
-
-    return (
-        node.callee.type === AST_NODE_TYPES.Identifier &&
-        node.callee.name === localName &&
-        node.arguments.length >= 1
-    );
+    return localName
+        ? node.callee.type === AST_NODE_TYPES.Identifier &&
+              node.callee.name === localName &&
+              node.arguments.length >= 1
+        : false;
 }
 
 function appendFirstArgReactiveScope(
@@ -317,16 +313,12 @@ export function isSignalType(
         const typeSymbol = type.getSymbol();
         const aliasSymbol = (type as {aliasSymbol?: ts.Symbol}).aliasSymbol;
 
-        if (
-            typeSymbol?.getName().includes('Signal') ||
+        return typeSymbol?.getName().includes('Signal') ||
             aliasSymbol?.getName().includes('Signal')
-        ) {
-            return true;
-        }
-
-        return type
-            .getProperties()
-            .some((p) => p.name.startsWith('ɵ') || p.name === '__SIGNAL');
+            ? true
+            : type
+                  .getProperties()
+                  .some((p) => p.name.startsWith('ɵ') || p.name === '__SIGNAL');
     } catch {
         return false;
     }
@@ -339,14 +331,10 @@ export function isSignalReadCall(
 ): boolean {
     const {callee} = node;
 
-    if (
-        callee.type !== AST_NODE_TYPES.Identifier &&
+    return callee.type !== AST_NODE_TYPES.Identifier &&
         callee.type !== AST_NODE_TYPES.MemberExpression
-    ) {
-        return false;
-    }
-
-    return isSignalType(callee, checker, esTreeNodeToTSNodeMap);
+        ? false
+        : isSignalType(callee, checker, esTreeNodeToTSNodeMap);
 }
 
 export function isWritableSignalWrite(
@@ -360,14 +348,10 @@ export function isWritableSignalWrite(
 
     const {object, property} = node.callee;
 
-    if (
-        property.type !== AST_NODE_TYPES.Identifier ||
+    return property.type !== AST_NODE_TYPES.Identifier ||
         !SIGNAL_WRITE_METHODS.has(property.name)
-    ) {
-        return false;
-    }
-
-    return isSignalType(object, checker, esTreeNodeToTSNodeMap);
+        ? false
+        : isSignalType(object, checker, esTreeNodeToTSNodeMap);
 }
 
 /**
@@ -389,11 +373,7 @@ export function isGetterMemberAccess(
 
         const symbol = checker.getSymbolAtLocation(tsNode);
 
-        if (!symbol) {
-            return false;
-        }
-
-        return !!(symbol.flags & ts.SymbolFlags.GetAccessor);
+        return symbol ? !!(symbol.flags & ts.SymbolFlags.GetAccessor) : false;
     } catch {
         return false;
     }
@@ -528,13 +508,9 @@ export function getReturnedReactiveOwnerCall(
         return statement.argument;
     }
 
-    if (
-        node.parent.type === AST_NODE_TYPES.ExpressionStatement &&
+    return node.parent.type === AST_NODE_TYPES.ExpressionStatement &&
         statement?.type === AST_NODE_TYPES.ExpressionStatement &&
         isReactiveOwnerCall(statement.expression, program)
-    ) {
-        return statement.expression;
-    }
-
-    return null;
+        ? statement.expression
+        : null;
 }

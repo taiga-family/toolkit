@@ -10,11 +10,9 @@ type Options = [];
 type MessageId = 'flattenTemplate' | 'mergeLiterals' | 'useTemplate';
 
 function collectParts(node: TSESTree.Node): TSESTree.Node[] {
-    if (node.type === AST_NODE_TYPES.BinaryExpression && node.operator === '+') {
-        return [...collectParts(node.left), ...collectParts(node.right)];
-    }
-
-    return [node];
+    return node.type === AST_NODE_TYPES.BinaryExpression && node.operator === '+'
+        ? [...collectParts(node.left), ...collectParts(node.right)]
+        : [node];
 }
 
 function isRootConcat(node: TSESTree.BinaryExpression): boolean {
@@ -24,11 +22,9 @@ function isRootConcat(node: TSESTree.BinaryExpression): boolean {
 }
 
 function isStringType(type: ts.Type, checker: ts.TypeChecker): boolean {
-    if (type.isUnion()) {
-        return type.types.every((t) => isStringType(t, checker));
-    }
-
-    return type.isStringLiteral() || checker.typeToString(type) === 'string';
+    return type.isUnion()
+        ? type.types.every((t) => isStringType(t, checker))
+        : type.isStringLiteral() || checker.typeToString(type) === 'string';
 }
 
 function buildMergedString(parts: TSESTree.StringLiteral[]): string {

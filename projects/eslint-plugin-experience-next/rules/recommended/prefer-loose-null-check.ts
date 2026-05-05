@@ -48,11 +48,9 @@ function parseStrictNullCheck(
         return {comparedWith: 'null', operand: getText(right), strictOp: operator};
     }
 
-    if (left.type === AST_NODE_TYPES.Identifier && left.name === 'undefined') {
-        return {comparedWith: 'undefined', operand: getText(right), strictOp: operator};
-    }
-
-    return null;
+    return left.type === AST_NODE_TYPES.Identifier && left.name === 'undefined'
+        ? {comparedWith: 'undefined', operand: getText(right), strictOp: operator}
+        : null;
 }
 
 function isParsedNullCheck(value: ParsedNullCheck | null): value is ParsedNullCheck {
@@ -63,25 +61,19 @@ function getLooseNullCheck(
     left: ParsedNullCheck | null,
     right: ParsedNullCheck | null,
 ): string | null {
-    if (
-        !isParsedNullCheck(left) ||
+    return !isParsedNullCheck(left) ||
         !isParsedNullCheck(right) ||
         left.strictOp !== right.strictOp ||
         left.operand !== right.operand ||
         left.comparedWith === right.comparedWith
-    ) {
-        return null;
-    }
-
-    return `${left.operand} ${left.strictOp === '!==' ? '!=' : '=='} null`;
+        ? null
+        : `${left.operand} ${left.strictOp === '!==' ? '!=' : '=='} null`;
 }
 
 function collectAndLeaves(node: TSESTree.Node): TSESTree.Node[] {
-    if (node.type === AST_NODE_TYPES.LogicalExpression && node.operator === '&&') {
-        return [...collectAndLeaves(node.left), ...collectAndLeaves(node.right)];
-    }
-
-    return [node];
+    return node.type === AST_NODE_TYPES.LogicalExpression && node.operator === '&&'
+        ? [...collectAndLeaves(node.left), ...collectAndLeaves(node.right)]
+        : [node];
 }
 
 function isAndChainRoot(node: TSESTree.LogicalExpression): boolean {

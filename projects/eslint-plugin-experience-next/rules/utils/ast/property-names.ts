@@ -7,22 +7,14 @@ export function getStaticPropertyName(key: TSESTree.PropertyName): string | null
         return key.name;
     }
 
-    if (
-        key.type === AST_NODE_TYPES.Literal &&
+    return key.type === AST_NODE_TYPES.Literal &&
         (typeof key.value === 'string' || typeof key.value === 'number')
-    ) {
-        return String(key.value);
-    }
-
-    return getStaticStringValue(key);
+        ? String(key.value)
+        : getStaticStringValue(key);
 }
 
 export function getObjectPropertyName(node: TSESTree.Property): string | null {
-    if (node.computed) {
-        return null;
-    }
-
-    return getStaticPropertyName(node.key);
+    return node.computed ? null : getStaticPropertyName(node.key);
 }
 
 export function getMemberExpressionPropertyName(
