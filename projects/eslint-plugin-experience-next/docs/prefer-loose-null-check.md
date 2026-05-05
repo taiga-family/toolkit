@@ -4,8 +4,8 @@
 
 Prefer loose null checks over paired strict comparisons against `null` and `undefined`.
 
-The rule reports paired checks in the same `&&` chain, regardless of whether
-`null` or `undefined` comes first and regardless of operand order.
+The rule reports paired checks in the same `&&` chain, regardless of whether `null` or `undefined` comes first and
+regardless of operand order.
 
 ## `!==` to `!= null`
 
