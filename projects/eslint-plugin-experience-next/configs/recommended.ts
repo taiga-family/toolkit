@@ -407,7 +407,7 @@ export default defineConfig([
             'import/no-named-as-default-member': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/no-self-import': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/no-unresolved': 'off',
-            'import/no-useless-path-segments': ['error', {noUselessIndex: true}],
+            'import/no-useless-path-segments': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/no-webpack-loader-syntax': 'error',
             'lines-around-comment': [
                 'error',
