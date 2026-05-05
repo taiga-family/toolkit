@@ -1,3 +1,10 @@
+### [0.504.0](https://github.com/taiga-family/toolkit/compare/v0.503.0...v0.504.0) (2026-05-05)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: optimize imports ([#1824](https://github.com/taiga-family/toolkit/pull/1824))
+  [(e707843)](https://github.com/taiga-family/toolkit/commit/e707843ff8580f5bc253165e21aab75504d17574)
+
 ### [0.503.0](https://github.com/taiga-family/toolkit/compare/v0.502.0...v0.503.0) (2026-05-04)
 
 ### 🚀 Features
