@@ -456,6 +456,14 @@ ruleTester.run('import-integrity', rule, {
             filename: fixtureFile('namespace-consumer.ts'),
         },
         {
+            code: "import {indexed} from './indexed/index.js';",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
+            code: "import {indexed} from './indexed/index.ts';",
+            filename: fixtureFile('namespace-consumer.ts'),
+        },
+        {
             code: "void import('./indexed/index.ts?raw');",
             filename: fixtureFile('namespace-consumer.ts'),
         },
@@ -498,6 +506,14 @@ ruleTester.run('import-integrity', rule, {
         },
         {
             code: "import foo from './default-reexport';",
+            filename: fixtureFile('default-consumer.ts'),
+        },
+        {
+            code: "import packageJson from './package.json' with {type: 'json'};\npackageJson.name;",
+            filename: fixtureFile('default-consumer.ts'),
+        },
+        {
+            code: "import * as packageJson from './package.json' with {type: 'json'};\npackageJson.name;",
             filename: fixtureFile('default-consumer.ts'),
         },
         {

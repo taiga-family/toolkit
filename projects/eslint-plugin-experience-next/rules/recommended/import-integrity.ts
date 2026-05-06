@@ -496,6 +496,10 @@ function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
     );
 }
 
+function isJsonModuleFileName(fileName: string): boolean {
+    return path.extname(fileName).toLowerCase() === '.json';
+}
+
 function hasDefaultExport(program: ts.Program, fileName: string): boolean {
     const canonicalFileName = createCanonicalFileName();
     const normalizedFileName = canonicalFileName(fileName);
@@ -1265,7 +1269,10 @@ export const rule = createRule<Options, MessageId>({
             moduleSpecifierPath: string,
             canonicalResolvedFileName: string,
         ): string | null {
-            if (!isIndexModulePath(moduleSpecifierPath)) {
+            if (
+                codeFileExtensionRegExp.test(moduleSpecifierPath) ||
+                !isIndexModulePath(moduleSpecifierPath)
+            ) {
                 return null;
             }
 
@@ -1627,7 +1634,8 @@ export const rule = createRule<Options, MessageId>({
 
             if (
                 !resolved ||
-                (resolved.isExternalLibraryImport && ignoreExternalDefaultImports)
+                (resolved.isExternalLibraryImport && ignoreExternalDefaultImports) ||
+                isJsonModuleFileName(resolved.resolvedFileName)
             ) {
                 return;
             }
@@ -1774,6 +1782,7 @@ export const rule = createRule<Options, MessageId>({
             if (
                 !resolved ||
                 (resolved.isExternalLibraryImport && ignoreExternalDefaultImports) ||
+                isJsonModuleFileName(resolved.resolvedFileName) ||
                 !hasDefaultExport(tsProgram, resolved.resolvedFileName)
             ) {
                 return;
@@ -1817,7 +1826,17 @@ export const rule = createRule<Options, MessageId>({
                     specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
             );
 
-            if (!namespaceImport) {
+            if (!namespaceImport || typeof node.source.value !== 'string') {
+                return;
+            }
+
+            const resolved = resolveModule(
+                tsProgram,
+                context.filename,
+                node.source.value,
+            );
+
+            if (resolved && isJsonModuleFileName(resolved.resolvedFileName)) {
                 return;
             }
 
