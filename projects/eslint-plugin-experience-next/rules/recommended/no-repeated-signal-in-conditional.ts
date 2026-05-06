@@ -122,6 +122,48 @@ function getStatementIndent(statement: TSESTree.Statement, sourceText: string): 
     return /^\s*$/.test(before) ? before : '';
 }
 
+function isAstNode(value: unknown): value is TSESTree.Node {
+    if (!value || typeof value !== 'object' || !('type' in value)) {
+        return false;
+    }
+
+    const {type} = value as Record<'type', unknown>;
+
+    return typeof type === 'string';
+}
+
+function getParent(node: TSESTree.Node): TSESTree.Node | null {
+    const maybeNode: unknown = node;
+
+    if (!maybeNode || typeof maybeNode !== 'object' || !('parent' in maybeNode)) {
+        return null;
+    }
+
+    const {parent} = maybeNode as Record<'parent', unknown>;
+
+    return isAstNode(parent) ? parent : null;
+}
+
+function isOptionalMemberReceiver(call: TSESTree.CallExpression): boolean {
+    let current: TSESTree.Node = call;
+    let parent = getParent(current);
+
+    while (
+        parent?.type === AST_NODE_TYPES.TSAsExpression ||
+        parent?.type === AST_NODE_TYPES.TSNonNullExpression ||
+        parent?.type === AST_NODE_TYPES.TSTypeAssertion
+    ) {
+        current = parent;
+        parent = getParent(current);
+    }
+
+    return (
+        parent?.type === AST_NODE_TYPES.MemberExpression &&
+        parent.object === current &&
+        parent.optional
+    );
+}
+
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, sourceCode} =
@@ -149,6 +191,7 @@ export const rule = createRule<Options, MessageId>({
 
                 if (
                     child.type === AST_NODE_TYPES.CallExpression &&
+                    !isOptionalMemberReceiver(child) &&
                     isSignalReadCall(child, checker, signalNodeMap) &&
                     isNullableCallType(child, checker, signalNodeMap)
                 ) {

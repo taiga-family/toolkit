@@ -98,9 +98,9 @@ ruleTester.run('<rule-name>', rule, {
 
 Include `PREAMBLE` type declarations (see existing spec files) when the rule relies on type information.
 
-### 5. Document in `README.md`
+### 5. Document the rule
 
-Add a row to the summary table (alphabetical order):
+Add a row to the `README.md` summary table (alphabetical order):
 
 ```markdown
 | <rule-name> | Short description | ✅ | 🔧 | 💡 |
@@ -109,7 +109,10 @@ Add a row to the summary table (alphabetical order):
 - ✅ = included in `recommended`
 - 🔧 = has autofix (`fixable: 'code'`)
 
-Then add a `## <rule-name>` section below the table with:
+Do not add full rule documentation or a `## <rule-name>` section to `README.md`. Keep `README.md` as the package
+overview and rule index only.
+
+Create or update `docs/<rule-name>.md` with:
 
 - One-paragraph description of what the rule checks.
 - `❌ error` / `✅ after autofix` code examples.

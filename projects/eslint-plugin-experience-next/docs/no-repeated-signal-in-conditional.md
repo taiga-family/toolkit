@@ -1,4 +1,4 @@
-# no-repeated-signal-in-ternary
+# no-repeated-signal-in-conditional
 
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
@@ -11,6 +11,10 @@ casts — with the variable.
 
 Non-nullable signals (`Signal<T>` where `T` excludes `null` and `undefined`) are intentionally ignored: repeating them
 in a conditional is always safe and does not involve type-narrowing.
+
+Optional method or property access on an object signal is also ignored. In cases like `this.editor()?.isActive()`, the
+conditional is guarded by optional chaining and the repeated reads are method receivers rather than repeated nullable
+value usage that benefits from narrowing.
 
 ```ts
 // ❌ error — height is Signal<number | null>
@@ -55,4 +59,13 @@ if (flag()) {
 ```ts
 // ✅ not changed — each nullable signal call appears only once
 return this.width() ? this.height() : this.depth();
+```
+
+```ts
+// ✅ not changed — repeated optional method calls on an object signal
+if (this.editor()?.isActive('group')) {
+  this.editor()?.setGroupHilite(color);
+} else if (this.editor()?.isActive('table')) {
+  this.editor()?.setCellColor(color);
+}
 ```
