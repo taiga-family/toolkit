@@ -1,0 +1,11 @@
+{
+    "name": "import-integrity-fixture",
+    "version": "0.0.0",
+    "description": "Fixture package for import-integrity JSON module checks.",
+    "license": "Apache-2.0",
+    "author": "Taiga UI",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/taiga-family/toolkit.git"
+    }
+}
