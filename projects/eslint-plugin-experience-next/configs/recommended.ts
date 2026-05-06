@@ -48,6 +48,7 @@ export default defineConfig([
     progress.configs['recommended-ci'],
     {
         ignores: [
+            '**/tests-results/**',
             '**/tests-report/**',
             '**/snapshots/**',
             '**/test-results/**',
