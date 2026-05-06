@@ -298,6 +298,28 @@ ruleTester.run('no-repeated-signal-in-conditional', rule, {
             `,
         },
         {
+            // optional method calls on a nullable object signal are ignored
+            code: /* TypeScript */ `
+                ${PREAMBLE}
+                import {signal} from '@angular/core';
+                interface Editor {
+                    isActive(value: string): boolean;
+                    setCellColor(color: string): void;
+                    setGroupHilite(color: string): void;
+                }
+                class Cmp {
+                    readonly editor = signal<Editor | null>(null);
+                    protected setCellColor(color: string): void {
+                        if (this.editor()?.isActive('group')) {
+                            this.editor()?.setGroupHilite(color);
+                        } else if (this.editor()?.isActive('table')) {
+                            this.editor()?.setCellColor(color);
+                        }
+                    }
+                }
+            `,
+        },
+        {
             // regular (non-signal) function returning nullable — not reported
             code: /* TypeScript */ `
                 declare function getValue(): number | null;
