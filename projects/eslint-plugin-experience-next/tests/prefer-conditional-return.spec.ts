@@ -3,7 +3,10 @@ import {rule} from '../rules/recommended/prefer-conditional-return';
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
 const ruleTester = new RuleTester({
-    languageOptions: {parser: require('@typescript-eslint/parser')},
+    languageOptions: {
+        parser: require('@typescript-eslint/parser'),
+        parserOptions: {projectService: {allowDefaultProject: ['*.ts*']}},
+    },
 });
 
 ruleTester.run('prefer-conditional-return', rule, {
@@ -134,6 +137,178 @@ ruleTester.run('prefer-conditional-return', rule, {
                 return isReady ? value : fallback;
             `,
         },
+        {
+            code: /* TypeScript */ `
+                function isVisible() {
+                    if (count > 0) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible() {
+                    return count > 0;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function hasRegression() {
+                    if (
+                        netPctAbs >= changeThreshold ||
+                        (netMs > 0 &&
+                            netPct >= componentMinNetPct &&
+                            netMsAbs >= NET_ABS_MS_THRESHOLD)
+                    ) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function hasRegression() {
+                    return (
+                        netPctAbs >= changeThreshold ||
+                        (netMs > 0 &&
+                            netPct >= componentMinNetPct &&
+                            netMsAbs >= NET_ABS_MS_THRESHOLD)
+                    );
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function isVisible(hidden: string | object | null) {
+                    if (hidden) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible(hidden: string | object | null) {
+                    return !hidden;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function isVisible() {
+                    if (count > 0) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible() {
+                    return !(count > 0);
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function isVisible(hidden: string | object | null) {
+                    if (hidden) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible(hidden: string | object | null) {
+                    return !!hidden;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function isVisible(hidden: boolean) {
+                    if (hidden) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible(hidden: boolean) {
+                    return hidden;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                declare const serviceName: string;
+                declare const args: readonly [unknown?];
+
+                interface Identifier {
+                    getText(): string;
+                }
+
+                declare const Node: {
+                    isIdentifier(value: unknown): value is Identifier;
+                };
+
+                function matchesServiceName() {
+                    const first: unknown = args[0];
+
+                    if (Node.isIdentifier(first) && first.getText() === serviceName) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                declare const serviceName: string;
+                declare const args: readonly [unknown?];
+
+                interface Identifier {
+                    getText(): string;
+                }
+
+                declare const Node: {
+                    isIdentifier(value: unknown): value is Identifier;
+                };
+
+                function matchesServiceName() {
+                    const first: unknown = args[0];
+
+                    return Node.isIdentifier(first) && first.getText() === serviceName;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function isVisible() {
+                    if (hidden && visible) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `,
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: /* TypeScript */ `
+                function isVisible() {
+                    return !!(hidden && visible);
+                }
+            `,
+        },
     ],
     valid: [
         {
@@ -177,6 +352,22 @@ ruleTester.run('prefer-conditional-return', rule, {
                     }
 
                     return fallback;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                function shouldIncludeComponent() {
+                    if (
+                        (headerData.deprecated &&
+                            excludeSections.includes('deprecated')) ||
+                        ((headerData.package ?? '').toUpperCase() === 'LEGACY' &&
+                            excludeSections.includes('legacy'))
+                    ) {
+                        return false;
+                    }
+
+                    return true;
                 }
             `,
         },

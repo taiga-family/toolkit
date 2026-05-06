@@ -717,6 +717,7 @@
         "bordercolor",
         "bgcolor",
         "sameline",
-        "Tarjan"
+        "Tarjan",
+        "Unrenderable"
     ]
 }
