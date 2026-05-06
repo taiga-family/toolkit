@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/release-it-config",
-    "version": "0.508.0",
+    "version": "0.509.0",
     "description": "Taiga UI release-it config",
     "keywords": [
         "release-it"
@@ -31,7 +31,7 @@
     "main": ".release-it.js",
     "peerDependencies": {
         "@release-it/conventional-changelog": "^11.0.0",
-        "@taiga-ui/auto-changelog-config": "^0.508.0",
+        "@taiga-ui/auto-changelog-config": "^0.509.0",
         "release-it": "^20.0.1"
     },
     "publishConfig": {

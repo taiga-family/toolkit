@@ -1,3 +1,15 @@
+### [0.509.0](https://github.com/taiga-family/toolkit/compare/v0.508.0...v0.509.0) (2026-05-06)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression &#x60;import-integrity&#x60;
+  ([#1833](https://github.com/taiga-family/toolkit/pull/1833))
+  [(ec22558)](https://github.com/taiga-family/toolkit/commit/ec22558923f3fb826b7be7686a452606c62c3628)
+- **eslint-plugin-experience-next**: regression ([#1832](https://github.com/taiga-family/toolkit/pull/1832))
+  [(ec2bc49)](https://github.com/taiga-family/toolkit/commit/ec2bc49e10814e2f43ac3501fb71a22eb3f07104)
+- **eslint-plugin-experience-next**: regression ([#1831](https://github.com/taiga-family/toolkit/pull/1831))
+  [(a770f4d)](https://github.com/taiga-family/toolkit/commit/a770f4d91ab75ed65c62a876df9dbd146c33932c)
+
 ### [0.508.0](https://github.com/taiga-family/toolkit/compare/v0.507.0...v0.508.0) (2026-05-05)
 
 ### 🚀 Features

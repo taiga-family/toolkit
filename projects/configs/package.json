@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/configs",
-    "version": "0.508.0",
+    "version": "0.509.0",
     "description": "Taiga UI configs",
     "repository": {
         "type": "git",
@@ -26,17 +26,17 @@
         }
     ],
     "peerDependencies": {
-        "@taiga-ui/auto-changelog-config": "^0.508.0",
-        "@taiga-ui/browserslist-config": "^0.508.0",
-        "@taiga-ui/commitlint-config": "^0.508.0",
-        "@taiga-ui/cspell-config": "^0.508.0",
-        "@taiga-ui/eslint-plugin-experience-next": "^0.508.0",
-        "@taiga-ui/jest-config": "^0.508.0",
-        "@taiga-ui/prettier-config": "^0.508.0",
-        "@taiga-ui/release-it-config": "^0.508.0",
-        "@taiga-ui/stylelint-config": "^0.508.0",
-        "@taiga-ui/syncer": "^0.508.0",
-        "@taiga-ui/tsconfig": "^0.508.0"
+        "@taiga-ui/auto-changelog-config": "^0.509.0",
+        "@taiga-ui/browserslist-config": "^0.509.0",
+        "@taiga-ui/commitlint-config": "^0.509.0",
+        "@taiga-ui/cspell-config": "^0.509.0",
+        "@taiga-ui/eslint-plugin-experience-next": "^0.509.0",
+        "@taiga-ui/jest-config": "^0.509.0",
+        "@taiga-ui/prettier-config": "^0.509.0",
+        "@taiga-ui/release-it-config": "^0.509.0",
+        "@taiga-ui/stylelint-config": "^0.509.0",
+        "@taiga-ui/syncer": "^0.509.0",
+        "@taiga-ui/tsconfig": "^0.509.0"
     },
     "publishConfig": {
         "access": "public"
