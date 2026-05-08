@@ -1,3 +1,11 @@
+### [0.512.0](https://github.com/taiga-family/toolkit/compare/v0.511.0...v0.512.0) (2026-05-08)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: allow &#x60;Infinity|NaN|Number|Math&#x60; for class properties
+  ([#1839](https://github.com/taiga-family/toolkit/pull/1839))
+  [(51262f0)](https://github.com/taiga-family/toolkit/commit/51262f033e3baa96cd4734258b9349f18591b2ca)
+
 ### [0.511.0](https://github.com/taiga-family/toolkit/compare/v0.510.0...v0.511.0) (2026-05-08)
 
 ### 🚀 Features
