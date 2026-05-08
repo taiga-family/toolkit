@@ -8,6 +8,7 @@ module.exports = {
         '**/.github/CODEOWNERS',
         '**/CHANGELOG.md',
         '**/.cspell.json',
+        '**/.gitignore/**',
         '**/.git/**',
         '**/dist/**',
         '**/cspell/**',
@@ -15,6 +16,8 @@ module.exports = {
         '**/.vscode/**',
         '**/node_modules/**',
         '**/*.{log,svg,snap,png,ogv,yml,less,hbs}',
+        '**/tsconfig*.json',
+        '**/package.json',
     ],
     ignoreRegExpList: [
         String.raw`\(https?://.*?\)`,

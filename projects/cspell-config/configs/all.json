@@ -718,6 +718,8 @@
         "bgcolor",
         "sameline",
         "Tarjan",
-        "Unrenderable"
+        "Unrenderable",
+        "pincode",
+        "modelcontextprotocol"
     ]
 }
