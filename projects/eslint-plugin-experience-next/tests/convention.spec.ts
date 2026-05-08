@@ -38,6 +38,11 @@ ruleTester.run('Recommended naming convention', rule, {
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
         },
+        {
+            code: /* TypeScript */ 'export class Test { static readonly OtherGlobal = 1; }',
+            errors: [{messageId: 'doesNotMatchFormat'}],
+            options: recommended,
+        },
     ],
     valid: [
         {
@@ -70,6 +75,17 @@ ruleTester.run('Recommended naming convention', rule, {
         },
         {
             code: /* TypeScript */ 'export enum TestEnum { Value }',
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ `
+                export class TestGlobals {
+                    static readonly Infinity = Infinity;
+                    static readonly Math = Math;
+                    static readonly NaN = NaN;
+                    static readonly Number = Number;
+                }
+            `,
             options: recommended,
         },
     ],
