@@ -1,3 +1,16 @@
+### [0.511.0](https://github.com/taiga-family/toolkit/compare/v0.510.0...v0.511.0) (2026-05-08)
+
+### 🚀 Features
+
+- **cspell-config**: add new word ([#1837](https://github.com/taiga-family/toolkit/pull/1837))
+  [(0f89198)](https://github.com/taiga-family/toolkit/commit/0f891982916ba29f47c4f86d710bf93c575f7beb)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: add &#x60;no-signal-outside-class&#x60;
+  ([#1838](https://github.com/taiga-family/toolkit/pull/1838))
+  [(6497455)](https://github.com/taiga-family/toolkit/commit/649745521d95893bb358ef1b473d96d36b4d7c22)
+
 ### [0.510.0](https://github.com/taiga-family/toolkit/compare/v0.509.0...v0.510.0) (2026-05-08)
 
 ### 🚀 Features
