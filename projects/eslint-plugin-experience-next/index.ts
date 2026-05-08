@@ -31,6 +31,7 @@ import noProjectAsInNgTemplate from './rules/recommended/no-project-as-in-ng-tem
 import noRedundantTypeAnnotation from './rules/recommended/no-redundant-type-annotation';
 import noRepeatedSignalInConditional from './rules/recommended/no-repeated-signal-in-conditional';
 import noSideEffectsInComputed from './rules/recommended/no-side-effects-in-computed';
+import noSignalOutsideClass from './rules/recommended/no-signal-outside-class';
 import noSignalReadsAfterAwaitInReactiveContext from './rules/recommended/no-signal-reads-after-await-in-reactive-context';
 import noStringLiteralConcat from './rules/recommended/no-string-literal-concat';
 import noUntrackedOutsideReactiveContext from './rules/recommended/no-untracked-outside-reactive-context';
@@ -103,6 +104,7 @@ const plugin = {
         'no-repeated-signal-in-conditional': noRepeatedSignalInConditional,
         'no-restricted-attr-values': noRestrictedAttrValues,
         'no-side-effects-in-computed': noSideEffectsInComputed,
+        'no-signal-outside-class': noSignalOutsideClass,
         'no-signal-reads-after-await-in-reactive-context':
             noSignalReadsAfterAwaitInReactiveContext,
         'no-string-literal-concat': noStringLiteralConcat,

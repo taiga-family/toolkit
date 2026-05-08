@@ -740,6 +740,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-redundant-type-annotation': 'error',
             '@taiga-ui/experience-next/no-repeated-signal-in-conditional': 'error',
             '@taiga-ui/experience-next/no-side-effects-in-computed': 'error',
+            '@taiga-ui/experience-next/no-signal-outside-class': 'error',
             '@taiga-ui/experience-next/no-signal-reads-after-await-in-reactive-context':
                 'error',
             '@taiga-ui/experience-next/no-untracked-outside-reactive-context': 'error',
