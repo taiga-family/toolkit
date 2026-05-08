@@ -1,3 +1,15 @@
+### [0.510.0](https://github.com/taiga-family/toolkit/compare/v0.509.0...v0.510.0) (2026-05-08)
+
+### 🚀 Features
+
+- **cspell-config**: add new words ([#1836](https://github.com/taiga-family/toolkit/pull/1836))
+  [(bda74b4)](https://github.com/taiga-family/toolkit/commit/bda74b4ce8ec6a7c009d71af60eea93d8efb9c43)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^17.9.0 ([#1834](https://github.com/taiga-family/toolkit/pull/1834))
+  [(4dc8127)](https://github.com/taiga-family/toolkit/commit/4dc8127f0af51306471ffdb58d6ea20a3c3ef9f2)
+
 ### [0.509.0](https://github.com/taiga-family/toolkit/compare/v0.508.0...v0.509.0) (2026-05-06)
 
 ### 🐞 Bug Fixes
