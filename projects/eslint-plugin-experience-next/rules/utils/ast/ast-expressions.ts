@@ -1,9 +1,10 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 /**
- * Strips TypeScript-only wrapper nodes that have no runtime meaning:
- * `as` casts, non-null assertions (`!`), type assertions (`<T>expr`), and
- * optional-chain wrappers. Iterates until no more wrappers are found.
+ * Strips expression wrapper nodes that do not affect the underlying expression:
+ * parentheses, `as` casts, `satisfies`, non-null assertions (`!`), type
+ * assertions (`<T>expr`), and optional-chain wrappers. Iterates until no more
+ * wrappers are found.
  */
 export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expression {
     let current = expression;
@@ -11,6 +12,14 @@ export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expr
 
     while (didUnwrap) {
         didUnwrap = false;
+
+        const parenthesized = getParenthesizedExpression(current);
+
+        if (parenthesized) {
+            current = parenthesized;
+            didUnwrap = true;
+            continue;
+        }
 
         switch (current.type) {
             case AST_NODE_TYPES.ChainExpression:
@@ -28,6 +37,11 @@ export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expr
                 didUnwrap = true;
                 break;
 
+            case AST_NODE_TYPES.TSSatisfiesExpression:
+                current = current.expression;
+                didUnwrap = true;
+                break;
+
             case AST_NODE_TYPES.TSTypeAssertion:
                 current = current.expression;
                 didUnwrap = true;
@@ -39,4 +53,25 @@ export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expr
     }
 
     return current;
+}
+
+function isExpressionLike(value: unknown): value is TSESTree.Expression {
+    return (
+        typeof value === 'object' &&
+        value !== null &&
+        'type' in value &&
+        typeof value.type === 'string'
+    );
+}
+
+function getParenthesizedExpression(
+    expression: TSESTree.Expression,
+): TSESTree.Expression | null {
+    const maybeExpression: {readonly expression?: unknown; readonly type?: string} =
+        expression;
+
+    return maybeExpression.type === 'ParenthesizedExpression' &&
+        isExpressionLike(maybeExpression.expression)
+        ? maybeExpression.expression
+        : null;
 }
