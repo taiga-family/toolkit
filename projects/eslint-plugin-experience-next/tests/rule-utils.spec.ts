@@ -1,6 +1,16 @@
+import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 import {getReactiveCallbackArgument} from '../rules/utils/angular/angular-signals';
+import {
+    getStaticAttribute,
+    getStaticAttributeValue,
+    hasAttributeBinding,
+    hasElementAttribute,
+    hasInputBinding,
+    hasOutputBinding,
+} from '../rules/utils/angular/element-attributes';
+import {isInteractiveElement} from '../rules/utils/angular/interactive-elements';
 import {isPipeTransformMember} from '../rules/utils/angular/pipes';
 import {
     isAngularInjectionTokenFactoryFunction,
@@ -108,6 +118,36 @@ function getFirstClassDeclaration(code: string): TSESTree.ClassDeclaration {
     return statement;
 }
 
+interface TestTextAttribute {
+    readonly name: string;
+    readonly value: string;
+}
+
+interface TestInputAttribute {
+    readonly keySpan: {
+        readonly details?: string;
+    };
+    readonly name: string;
+}
+
+interface TestOutputAttribute {
+    readonly name: string;
+}
+
+function createTemplateElement({
+    attributes = [],
+    inputs = [],
+    name = 'div',
+    outputs = [],
+}: {
+    readonly attributes?: readonly TestTextAttribute[];
+    readonly inputs?: readonly TestInputAttribute[];
+    readonly name?: string;
+    readonly outputs?: readonly TestOutputAttribute[];
+}): TmplAstElement {
+    return {attributes, inputs, name, outputs} as unknown as TmplAstElement;
+}
+
 describe('rule utils', () => {
     it('dents replacement text without touching shorter lines', () => {
         expect(dedent('        foo();\n        bar();\n    baz();', 8)).toBe(
@@ -194,6 +234,58 @@ describe('rule utils', () => {
         expect(getClassMemberName(transformMethod)).toBe('transform');
         expect(getClassMemberName(writeValueMethod)).toBe('writeValue');
         expect(getClassMemberName(privateField)).toBeNull();
+    });
+
+    it('reads Angular template attributes through shared helpers', () => {
+        const element = createTemplateElement({
+            attributes: [{name: 'HREF', value: '/home'}],
+            inputs: [
+                {keySpan: {}, name: 'routerLink'},
+                {keySpan: {details: 'attr.alt'}, name: 'alt'},
+            ],
+            outputs: [{name: 'click'}],
+        });
+
+        expect(getStaticAttribute(element, 'href')?.value).toBe('/home');
+        expect(getStaticAttributeValue(element, 'href')).toBe('/home');
+        expect(hasInputBinding(element, 'routerlink')).toBe(true);
+        expect(hasAttributeBinding(element, 'alt')).toBe(true);
+        expect(hasElementAttribute(element, ['title', 'href'])).toBe(true);
+        expect(hasElementAttribute(element, ['href', 'routerLink'])).toBe(true);
+        expect(hasElementAttribute(element, 'href')).toBe(true);
+        expect(hasElementAttribute(element, 'alt')).toBe(true);
+        expect(hasElementAttribute(element, 'title')).toBe(false);
+        expect(hasOutputBinding(element)).toBe(true);
+        expect(hasOutputBinding(element, 'click')).toBe(true);
+        expect(hasOutputBinding(element, 'focus')).toBe(false);
+    });
+
+    it('recognizes interactive Angular template elements', () => {
+        expect(
+            isInteractiveElement(
+                createTemplateElement({
+                    attributes: [{name: 'href', value: '/home'}],
+                    name: 'area',
+                }),
+            ),
+        ).toBe(true);
+        expect(isInteractiveElement(createTemplateElement({name: 'details'}))).toBe(true);
+        expect(
+            isInteractiveElement(
+                createTemplateElement({
+                    attributes: [{name: 'type', value: 'hidden'}],
+                    name: 'input',
+                }),
+            ),
+        ).toBe(false);
+        expect(
+            isInteractiveElement(
+                createTemplateElement({
+                    name: 'div',
+                    outputs: [{name: 'click'}],
+                }),
+            ),
+        ).toBe(true);
     });
 
     it('extracts reactive callbacks from call expressions only when present', () => {

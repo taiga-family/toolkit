@@ -836,6 +836,7 @@ export default defineConfig([
             '@taiga-ui/experience-next/no-duplicate-id': 'error',
             '@taiga-ui/experience-next/no-duplicate-in-head': 'error',
             '@taiga-ui/experience-next/no-href-with-router-link': 'error',
+            '@taiga-ui/experience-next/no-nested-interactive': 'error',
             '@taiga-ui/experience-next/no-obsolete-attrs': 'error',
             '@taiga-ui/experience-next/no-obsolete-tags': 'error',
             '@taiga-ui/experience-next/no-project-as-in-ng-template': 'error',

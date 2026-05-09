@@ -140,6 +140,11 @@ Create or update `docs/<rule-name>.md` with:
   `collections`, etc.) and reuse existing code when it already fits.
 - If the same or very similar pattern appears in two or more rules, extract it into the appropriate domain folder under
   `projects/eslint-plugin-experience-next/rules/utils` in the same change instead of duplicating it locally.
+- Do the small shared-helper refactor before finishing the first implementation when the duplication is already visible
+  in the touched rule family. Keep it scoped to the affected domain instead of waiting for review to point it out.
+- Put obviously general domain predicates and query helpers in `projects/eslint-plugin-experience-next/rules/utils`
+  before first use, even if there is only one initial consumer, when the name already describes reusable behavior (for
+  example `isInteractiveElement`).
 - After extracting a shared util, update every affected rule in that change to consume the util immediately so the
   abstraction stays real, not speculative.
 - Add or expand tests so new shared util behavior is covered directly, while the affected rules keep validating the

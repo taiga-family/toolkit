@@ -1,20 +1,11 @@
-import {
-    type TmplAstElement,
-    type TmplAstTextAttribute,
-} from '@angular-eslint/bundled-angular-compiler';
+import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {getStaticAttribute} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'duplicateTag';
-
-function findAttr(
-    node: TmplAstElement,
-    attrName: string,
-): TmplAstTextAttribute | undefined {
-    return node.attributes.find((attr) => attr.name === attrName);
-}
 
 function getTrackingKey(node: TmplAstElement): string | null {
     if (node.name === 'title' || node.name === 'base') {
@@ -22,18 +13,18 @@ function getTrackingKey(node: TmplAstElement): string | null {
     }
 
     if (node.name === 'meta') {
-        if (findAttr(node, 'charset')) {
+        if (getStaticAttribute(node, 'charset')) {
             return 'meta[charset]';
         }
 
-        if (findAttr(node, 'name')?.value === 'viewport') {
+        if (getStaticAttribute(node, 'name')?.value === 'viewport') {
             return 'meta[name=viewport]';
         }
     }
 
     return node.name === 'link' &&
-        findAttr(node, 'rel')?.value === 'canonical' &&
-        findAttr(node, 'href')
+        getStaticAttribute(node, 'rel')?.value === 'canonical' &&
+        getStaticAttribute(node, 'href')
         ? 'link[rel=canonical]'
         : null;
 }

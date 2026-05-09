@@ -1,6 +1,10 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {
+    getStaticAttribute,
+    hasElementAttribute,
+} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
 import {createRule} from '../utils/create-rule';
 
@@ -21,15 +25,7 @@ export const rule = createRule({
                         return;
                     }
 
-                    const langAttr = node.attributes.find((attr) => attr.name === 'lang');
-
-                    const hasBoundLang = node.inputs.some(
-                        (input) =>
-                            input.name === 'lang' ||
-                            input.keySpan.details === 'attr.lang',
-                    );
-
-                    if (!langAttr && !hasBoundLang) {
+                    if (!hasElementAttribute(node, 'lang')) {
                         context.report({
                             loc: sourceSpanToLoc(node.startSourceSpan),
                             messageId: MESSAGE_IDS.MISSING,
@@ -37,6 +33,8 @@ export const rule = createRule({
 
                         return;
                     }
+
+                    const langAttr = getStaticAttribute(node, 'lang');
 
                     if (langAttr?.value.trim().length === 0) {
                         context.report({

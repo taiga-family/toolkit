@@ -1,19 +1,11 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {hasElementAttribute} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'missingAlt';
-
-function hasAlt(node: TmplAstElement): boolean {
-    return (
-        node.attributes.some((attr) => attr.name === 'alt') ||
-        node.inputs.some(
-            (input) => input.name === 'alt' || input.keySpan.details === 'attr.alt',
-        )
-    );
-}
 
 export const rule = createRule({
     name: 'require-img-alt',
@@ -23,7 +15,7 @@ export const rule = createRule({
                 Element(rawNode: unknown) {
                     const node = rawNode as TmplAstElement;
 
-                    if (node.name !== 'img' || hasAlt(node)) {
+                    if (node.name !== 'img' || hasElementAttribute(node, 'alt')) {
                         return;
                     }
 
