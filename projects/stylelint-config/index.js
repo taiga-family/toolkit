@@ -5,7 +5,8 @@ module.exports = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
     plugins: [
-        './relative-less-import-extension.js',
+        './rules/no-webkit-box-orient-block-axis.js',
+        './rules/relative-less-import-extension.js',
         'stylelint-order',
         'stylelint-rem-over-px',
         'stylelint-use-logical',
@@ -42,6 +43,7 @@ module.exports = {
         '@stylistic/selector-pseudo-class-parentheses-space-inside': null,
         '@stylistic/string-quotes': 'single',
         '@stylistic/value-list-comma-newline-after': null,
+        '@taiga-ui/no-webkit-box-orient-block-axis': true,
         '@taiga-ui/relative-less-import-extension': true,
         'alpha-value-notation': 'number',
         'annotation-no-unknown': true,
@@ -163,7 +165,13 @@ module.exports = {
         'logical-css/require-logical-keywords': [
             true,
             {
-                ignore: ['clear', 'float', 'resize', 'caption-side'],
+                ignore: [
+                    'clear',
+                    'float',
+                    'resize',
+                    'caption-side',
+                    'box-orient', // Legacy line clamping depends on vertical orientation, issue: https://github.com/taiga-family/toolkit/issues/1651
+                ],
             },
         ],
         'logical-css/require-logical-properties': [
