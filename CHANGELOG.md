@@ -1,3 +1,11 @@
+### [0.513.0](https://github.com/taiga-family/toolkit/compare/v0.512.0...v0.513.0) (2026-05-09)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: allow &#x60;-webkit-box-orient: vertical&#x60;
+  ([#1842](https://github.com/taiga-family/toolkit/pull/1842))
+  [(3e82dc2)](https://github.com/taiga-family/toolkit/commit/3e82dc2fc58ef0fefe7d1394f86ed5d3d30eb36c)
+
 ### [0.512.0](https://github.com/taiga-family/toolkit/compare/v0.511.0...v0.512.0) (2026-05-08)
 
 ### 🚀 Features
