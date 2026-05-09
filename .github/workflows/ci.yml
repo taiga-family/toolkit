@@ -15,6 +15,7 @@ jobs:
       - uses: taiga-family/ci/actions/setup/variables@a581d05631ddf95b3aa5d391c3e472c538641620 # v1.211.0
       - uses: taiga-family/ci/actions/setup/node@a581d05631ddf95b3aa5d391c3e472c538641620 # v1.211.0
         with:
+          node-version: 22.x
           audit: true
 
       - run: npm run cspell -- --no-progress
@@ -47,6 +48,8 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: taiga-family/ci/actions/setup/variables@a581d05631ddf95b3aa5d391c3e472c538641620 # v1.211.0
       - uses: taiga-family/ci/actions/setup/node@a581d05631ddf95b3aa5d391c3e472c538641620 # v1.211.0
+        with:
+          node-version: 22.x
       - run: npm test
 
   release-it-check:
@@ -57,6 +60,8 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - uses: taiga-family/ci/actions/setup/node@a581d05631ddf95b3aa5d391c3e472c538641620 # v1.211.0
+        with:
+          node-version: 22.x
       - run: |
           # prevent fatal: ref HEAD is not a symbolic ref
           git checkout -f main > /dev/null
