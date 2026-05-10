@@ -1,3 +1,15 @@
+### [0.516.0](https://github.com/taiga-family/toolkit/compare/v0.515.0...v0.516.0) (2026-05-10)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: false positive for &#x60;no-nested-interactive&#x60;
+  ([#1848](https://github.com/taiga-family/toolkit/pull/1848))
+  [(042fc79)](https://github.com/taiga-family/toolkit/commit/042fc79dcb9b24698c9b9781af30ab093a845ebe)
+- update dependency postcss to ^8.5.12 ([#1847](https://github.com/taiga-family/toolkit/pull/1847))
+  [(780a351)](https://github.com/taiga-family/toolkit/commit/780a35184ae5b407402d847bdee7d9d392b27b30)
+- update dependency postcss to ^8.5.11 ([#1846](https://github.com/taiga-family/toolkit/pull/1846))
+  [(dae1b84)](https://github.com/taiga-family/toolkit/commit/dae1b84982036db4c8b78f0e5c37977442a0ecc5)
+
 ### [0.515.0](https://github.com/taiga-family/toolkit/compare/v0.514.0...v0.515.0) (2026-05-10)
 
 ### 🚀 Features
