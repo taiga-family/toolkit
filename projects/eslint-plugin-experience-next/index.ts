@@ -25,6 +25,7 @@ import noImportAssertions from './rules/recommended/no-import-assertions';
 import noInfiniteLoop from './rules/recommended/no-infinite-loop';
 import noLegacyPeerDeps from './rules/recommended/no-legacy-peer-deps';
 import noNestedInteractive from './rules/recommended/no-nested-interactive';
+import noNestedTernaryInTemplate from './rules/recommended/no-nested-ternary-in-template';
 import noObsoleteAttrs from './rules/recommended/no-obsolete-attrs';
 import noObsoleteTags from './rules/recommended/no-obsolete-tags';
 import noPlaywrightEmptyFill from './rules/recommended/no-playwright-empty-fill';
@@ -98,6 +99,7 @@ const plugin = {
         'no-infinite-loop': noInfiniteLoop,
         'no-legacy-peer-deps': noLegacyPeerDeps,
         'no-nested-interactive': noNestedInteractive,
+        'no-nested-ternary-in-template': noNestedTernaryInTemplate,
         'no-obsolete-attrs': noObsoleteAttrs,
         'no-obsolete-tags': noObsoleteTags,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
