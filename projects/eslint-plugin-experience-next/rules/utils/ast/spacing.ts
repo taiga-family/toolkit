@@ -50,6 +50,13 @@ export function getLeadingIndentation(text: string): string {
     return text.slice(0, index);
 }
 
+export function getIndentAtOffset(text: string, offset: number): string {
+    const lineStart = text.lastIndexOf('\n', offset - 1) + 1;
+    const indent = text.slice(lineStart, offset);
+
+    return indent.trim() === '' ? indent : '';
+}
+
 export function getSpacingReplacement(
     sourceCode: Readonly<TSESLint.SourceCode>,
     betweenText: string,
