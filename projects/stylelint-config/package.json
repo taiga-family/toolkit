@@ -6,6 +6,10 @@
         "stylelint",
         "prettier"
     ],
+    "homepage": "https://github.com/taiga-family/toolkit#readme",
+    "bugs": {
+        "url": "https://github.com/taiga-family/toolkit/issues"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/taiga-family/toolkit.git"

@@ -1,6 +1,7 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
+import {getStaticAttribute, hasInputBinding} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
 import {createRule} from '../utils/create-rule';
 
@@ -19,15 +20,11 @@ const config: Rule.RuleModule = {
                     return;
                 }
 
-                const hrefAttr = node.attributes.find((attr) => attr.name === 'href');
+                const hrefAttr = getStaticAttribute(node, 'href');
 
                 const hasRouterLink =
-                    node.attributes.some(
-                        (attr) => attr.name.toLowerCase() === 'routerlink',
-                    ) ||
-                    node.inputs.some(
-                        (input) => input.name.toLowerCase() === 'routerlink',
-                    );
+                    Boolean(getStaticAttribute(node, 'routerlink')) ||
+                    hasInputBinding(node, 'routerlink');
 
                 if (!hrefAttr || !hasRouterLink) {
                     return;

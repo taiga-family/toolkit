@@ -1,3 +1,16 @@
 # @taiga-ui/configs
 
-Entry point for all Taiga UI configurations. It just peers dependencies all configs from other packages.
+Meta-package for installing Taiga UI development configurations.
+
+It includes peer dependencies for:
+
+- ESLint config and plugin
+- Prettier config
+- Stylelint config
+- Jest config
+- Commitlint config
+- Release-it config
+- TypeScript config
+- Browserslist config
+- CSpell config
+- Sync tooling
