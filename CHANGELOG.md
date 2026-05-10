@@ -1,3 +1,11 @@
+### [0.517.0](https://github.com/taiga-family/toolkit/compare/v0.516.0...v0.517.0) (2026-05-10)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: cannot find package &#x60;eslint-plugin-xxx&#x60;
+  ([#1849](https://github.com/taiga-family/toolkit/pull/1849))
+  [(1c80d30)](https://github.com/taiga-family/toolkit/commit/1c80d3006b950c7fa4515a54a86e191cfcc476d9)
+
 ### [0.516.0](https://github.com/taiga-family/toolkit/compare/v0.515.0...v0.516.0) (2026-05-10)
 
 ### 🐞 Bug Fixes
