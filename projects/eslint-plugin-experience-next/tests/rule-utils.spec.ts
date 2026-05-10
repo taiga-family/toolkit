@@ -28,7 +28,6 @@ import {
     isFieldLikeMember,
     isRelevantSpacingClassMember,
 } from '../rules/utils/ast/class-members';
-import {getAvailableIdentifier, isIdentifier} from '../rules/utils/ast/identifiers';
 import {collectMutationTargets} from '../rules/utils/ast/mutation-targets';
 import {
     getParenthesizedInner,
@@ -176,30 +175,6 @@ describe('rule utils', () => {
         expect(isEmptyStaticString(getFirstExpression("''"))).toBe(true);
         expect(isEmptyStaticString(getFirstExpression('``'))).toBe(true);
         expect(isEmptyStaticString(getFirstExpression('`filled`'))).toBe(false);
-    });
-
-    it('recognizes safe identifiers for generated code', () => {
-        expect(isIdentifier('appearance')).toBe(true);
-        expect(isIdentifier('$implicit')).toBe(true);
-        expect(isIdentifier('_value2')).toBe(true);
-        expect(isIdentifier('2value')).toBe(false);
-        expect(isIdentifier('tui-avatar')).toBe(false);
-        expect(isIdentifier('class')).toBe(false);
-        expect(isIdentifier('await')).toBe(false);
-        expect(isIdentifier('undefined')).toBe(false);
-    });
-
-    it('generates available identifier names', () => {
-        expect(getAvailableIdentifier('appearance', new Set())).toBe('appearance');
-        expect(getAvailableIdentifier('appearance', new Set(['appearance']))).toBe(
-            'appearance2',
-        );
-        expect(
-            getAvailableIdentifier('appearance', new Set(['appearance', 'appearance2'])),
-        ).toBe('appearance3');
-        expect(() => getAvailableIdentifier('tui-avatar', new Set())).toThrow(
-            'Expected a valid identifier',
-        );
     });
 
     it('extracts static property and member names', () => {

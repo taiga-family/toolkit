@@ -19,6 +19,5 @@ export const modernAngularRules = {
     modernStyles: 17,
     preferControlFlow: 17,
     preferSignals: 17,
-    templateLet: 19,
     templateLiteral: 19,
 } as const;
