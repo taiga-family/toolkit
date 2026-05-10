@@ -1,3 +1,11 @@
+### [0.514.0](https://github.com/taiga-family/toolkit/compare/v0.513.0...v0.514.0) (2026-05-10)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;no-nested-interactive&#x60;
+  ([#1844](https://github.com/taiga-family/toolkit/pull/1844))
+  [(69a39c0)](https://github.com/taiga-family/toolkit/commit/69a39c0b4da7d2fb9fcf2e5b8a6204cb832542bb)
+
 ### [0.513.0](https://github.com/taiga-family/toolkit/compare/v0.512.0...v0.513.0) (2026-05-09)
 
 ### 🐞 Bug Fixes
