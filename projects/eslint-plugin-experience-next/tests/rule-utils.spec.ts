@@ -335,7 +335,7 @@ describe('rule utils', () => {
                     outputs: [{name: 'click'}],
                 }),
             ),
-        ).toBe(true);
+        ).toBe(false);
     });
 
     it('collects Angular template identifiers', () => {

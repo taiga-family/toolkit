@@ -37,10 +37,6 @@ ruleTester.run('no-nested-interactive', rule, {
             errors: [{data: {tag: 'button'}, messageId: 'noNestedInteractive'}],
         },
         {
-            code: /* HTML */ '<button type="button"><div (click)="onClick()">Foo</div></button>',
-            errors: [{data: {tag: 'button'}, messageId: 'noNestedInteractive'}],
-        },
-        {
             code: /* HTML */ '<button type="button">@if (shown) {<input type="text" />}</button>',
             errors: [{data: {tag: 'button'}, messageId: 'noNestedInteractive'}],
         },
@@ -63,6 +59,52 @@ ruleTester.run('no-nested-interactive', rule, {
         {code: /* HTML */ '<a><button type="button">Click me</button></a>'},
         {code: /* HTML */ '<div><button type="button">Click me</button></div>'},
         {code: /* HTML */ '<div (click)="onClick()">Click me</div>'},
+        {
+            code: /* HTML */ '<button type="button"><div (click)="onClick()">Foo</div></button>',
+        },
+        {
+            code: /* HTML */ `
+                <input
+                    #input
+                    (click)="onClick()"
+                />
+                @if (open) {
+                <div
+                    class="dropdown"
+                    (mouseleave)="input.focus()"
+                >
+                    @for (item of items(); track item) {
+                    <div
+                        #option
+                        tabindex="-1"
+                        (click)="onSelect(item)"
+                        (keydown.arrowDown.zoneless.prevent)="onArrowDown($index, $count)"
+                        (mousemove.zoneless)="onMouseMove(option)"
+                    >
+                        {{ item }}
+                    </div>
+                    }
+                </div>
+                }
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <div (click)="onWrapper($any($event))">
+                    <div (click.stop)="onStoppedClick()"></div>
+                    <div (click.prevent)="onPreventedClick()"></div>
+                    <div (click.zoneless)="onFilteredClicks($event.bubbles)"></div>
+                </div>
+                <div (click.capture.stop)="(0)">
+                    <div (click)="onCaptured()"></div>
+                </div>
+                <div (click.self)="onBubbled()">
+                    <div (click)="(0)"></div>
+                </div>
+                <div (click.debounce~300ms)="onDebounceClicks($event)"></div>
+                <div (click.throttle~300ms)="onThrottleClicks($event)"></div>
+            `,
+        },
         {code: /* HTML */ '<div tabindex="0">Focusable</div>'},
         {code: /* HTML */ '<details>More</details>'},
         {code: /* HTML */ '<area href="/foo" />'},

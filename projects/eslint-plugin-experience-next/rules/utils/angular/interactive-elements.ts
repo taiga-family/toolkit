@@ -1,15 +1,11 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 
-import {
-    getStaticAttributeValue,
-    hasElementAttribute,
-    hasOutputBinding,
-} from './element-attributes';
+import {getStaticAttributeValue, hasElementAttribute} from './element-attributes';
 
 export function isInteractiveElement(node: TmplAstElement): boolean {
     const tagName = node.name.toLowerCase();
 
-    if (hasElementAttribute(node, 'tabindex') || hasOutputBinding(node)) {
+    if (hasElementAttribute(node, 'tabindex')) {
         return true;
     }
 
