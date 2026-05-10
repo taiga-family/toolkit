@@ -17,6 +17,24 @@ import {
     isAngularUseFactoryFunction,
 } from '../rules/utils/angular/providers';
 import {
+    containsAbsoluteSourceSpan,
+    getAbsoluteSourceSpanText,
+} from '../rules/utils/angular/source-span';
+import {
+    getBoundAttributes,
+    getContainingBoundAttribute,
+    type TemplateAttributeContainer,
+} from '../rules/utils/angular/template-attributes';
+import {
+    isAstWithSource,
+    isConditional,
+    unwrapAstWithSource,
+} from '../rules/utils/angular/template-expressions';
+import {
+    collectTemplateIdentifiers,
+    getTemplateNodes,
+} from '../rules/utils/angular/template-identifiers';
+import {
     getEnclosingClass,
     getEnclosingClassMember,
     getEnclosingFunction,
@@ -28,6 +46,7 @@ import {
     isFieldLikeMember,
     isRelevantSpacingClassMember,
 } from '../rules/utils/ast/class-members';
+import {getAvailableIdentifier, isIdentifier} from '../rules/utils/ast/identifiers';
 import {collectMutationTargets} from '../rules/utils/ast/mutation-targets';
 import {
     getParenthesizedInner,
@@ -41,6 +60,7 @@ import {
 } from '../rules/utils/ast/property-names';
 import {getReturnedExpression} from '../rules/utils/ast/returned-expression';
 import {
+    getIndentAtOffset,
     getLeadingIndentation,
     getLineBreak,
     hasBlankLine,
@@ -96,6 +116,12 @@ function parseProgram(code: string): TSESTree.Program {
     attachParents(ast);
 
     return ast;
+}
+
+function parseTemplate(code: string): unknown {
+    return require('@angular-eslint/template-parser').parseForESLint(code, {
+        filePath: 'test.html',
+    }).ast;
 }
 
 function getFirstExpression(code: string): TSESTree.Expression {
@@ -175,6 +201,30 @@ describe('rule utils', () => {
         expect(isEmptyStaticString(getFirstExpression("''"))).toBe(true);
         expect(isEmptyStaticString(getFirstExpression('``'))).toBe(true);
         expect(isEmptyStaticString(getFirstExpression('`filled`'))).toBe(false);
+    });
+
+    it('recognizes safe identifiers for generated code', () => {
+        expect(isIdentifier('appearance')).toBe(true);
+        expect(isIdentifier('$implicit')).toBe(true);
+        expect(isIdentifier('_value2')).toBe(true);
+        expect(isIdentifier('2value')).toBe(false);
+        expect(isIdentifier('tui-avatar')).toBe(false);
+        expect(isIdentifier('class')).toBe(false);
+        expect(isIdentifier('await')).toBe(false);
+        expect(isIdentifier('undefined')).toBe(false);
+    });
+
+    it('generates available identifier names', () => {
+        expect(getAvailableIdentifier('appearance', new Set())).toBe('appearance');
+        expect(getAvailableIdentifier('appearance', new Set(['appearance']))).toBe(
+            'appearance2',
+        );
+        expect(
+            getAvailableIdentifier('appearance', new Set(['appearance', 'appearance2'])),
+        ).toBe('appearance3');
+        expect(() => getAvailableIdentifier('tui-avatar', new Set())).toThrow(
+            'Expected a valid identifier',
+        );
     });
 
     it('extracts static property and member names', () => {
@@ -286,6 +336,68 @@ describe('rule utils', () => {
                 }),
             ),
         ).toBe(true);
+    });
+
+    it('collects Angular template identifiers', () => {
+        const names = collectTemplateIdentifiers(
+            parseTemplate(`
+                @let status = statusText();
+
+                <input #search />
+
+                <ng-template let-item>
+                    {{ item }}
+                </ng-template>
+            `),
+        );
+
+        expect([...names].sort()).toEqual(['item', 'search', 'status']);
+    });
+
+    it('finds Angular template bound attributes for expression AST nodes', () => {
+        const template = '<div [title]="active ? \'yes\' : fallback"></div>';
+        const [node] = getTemplateNodes(parseTemplate(template));
+
+        if (!node || !('inputs' in node)) {
+            throw new Error('Expected a template node with inputs');
+        }
+
+        const container = node as TemplateAttributeContainer;
+        const [attribute] = getBoundAttributes(container);
+
+        if (!attribute) {
+            throw new Error('Expected a bound attribute');
+        }
+
+        expect(isAstWithSource(attribute.value)).toBe(true);
+
+        const expression = unwrapAstWithSource(attribute.value);
+
+        if (!isConditional(expression)) {
+            throw new Error('Expected a conditional expression');
+        }
+
+        expect(getContainingBoundAttribute(container, expression)).toBe(attribute);
+        expect(
+            containsAbsoluteSourceSpan(attribute.value.sourceSpan, expression.sourceSpan),
+        ).toBe(true);
+        expect(getAbsoluteSourceSpanText(template, expression.sourceSpan)).toBe(
+            "active ? 'yes' : fallback",
+        );
+
+        // noinspection AngularMissingRequiredDirectiveInputBinding
+        const structuralTemplate = '<div *ngIf="visible"></div>';
+        const [templateNode] = getTemplateNodes(parseTemplate(structuralTemplate));
+
+        if (!templateNode || !('templateAttrs' in templateNode)) {
+            throw new Error('Expected a structural template node');
+        }
+
+        expect(
+            getBoundAttributes(templateNode as TemplateAttributeContainer).map(
+                ({name}) => name,
+            ),
+        ).toContain('ngIf');
     });
 
     it('extracts reactive callbacks from call expressions only when present', () => {
@@ -424,6 +536,8 @@ describe('rule utils', () => {
         expect(getLeadingIndentation('    value')).toBe('    ');
         expect(getLeadingIndentation('\t\tvalue')).toBe('\t\t');
         expect(getLeadingIndentation('value')).toBe('');
+        expect(getIndentAtOffset('<div>\n    <span></span>', 10)).toBe('    ');
+        expect(getIndentAtOffset('<div>\ntext<span></span>', 10)).toBe('');
     });
 
     it('collects calls and mutation targets from generic AST helpers', () => {

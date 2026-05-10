@@ -158,3 +158,5 @@ Create or update `docs/<rule-name>.md` with:
 - Never use `any`. This applies even when duck-typing AST nodes or working around `instanceof` failures caused by
   bundled module copies. Use `unknown` and narrow with `'key' in child` guards, then cast to `Record<'key', unknown>` to
   access the property safely.
+- Do not create one-line proxy helpers that only forward to another function or method. Inline the call unless the
+  helper adds a real invariant, narrowing, naming value, reuse, or meaningful abstraction.
