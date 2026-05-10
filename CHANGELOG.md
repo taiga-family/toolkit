@@ -1,3 +1,11 @@
+### [0.515.0](https://github.com/taiga-family/toolkit/compare/v0.514.0...v0.515.0) (2026-05-10)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;no-nested-ternary-in-template&#x60;
+  ([#1845](https://github.com/taiga-family/toolkit/pull/1845))
+  [(be2bf7a)](https://github.com/taiga-family/toolkit/commit/be2bf7a05d5dd09f3bcb5d3a5884e247d66bc531)
+
 ### [0.514.0](https://github.com/taiga-family/toolkit/compare/v0.513.0...v0.514.0) (2026-05-10)
 
 ### 🚀 Features
