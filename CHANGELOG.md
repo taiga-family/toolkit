@@ -1,3 +1,10 @@
+### [0.518.0](https://github.com/taiga-family/toolkit/compare/v0.517.0...v0.518.0) (2026-05-11)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-promise to v7.3.0 ([#1850](https://github.com/taiga-family/toolkit/pull/1850))
+  [(a4a4799)](https://github.com/taiga-family/toolkit/commit/a4a4799c5db5f670bd4bc2189f5119fc44ee9ce7)
+
 ### [0.517.0](https://github.com/taiga-family/toolkit/compare/v0.516.0...v0.517.0) (2026-05-10)
 
 ### 🐞 Bug Fixes
