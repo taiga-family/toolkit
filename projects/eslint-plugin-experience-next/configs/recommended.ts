@@ -848,6 +848,8 @@ export default defineConfig([
             '@taiga-ui/experience-next/require-lang': 'error',
             '@taiga-ui/experience-next/require-li-container': 'error',
             '@taiga-ui/experience-next/require-title': 'error',
+            '@taiga-ui/experience-next/single-line-let-spacing':
+                angularVersion >= modernAngularRules.templateLet ? 'error' : 'off',
         },
     },
     {
