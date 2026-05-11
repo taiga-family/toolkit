@@ -1,4 +1,8 @@
-import {type AST, type Conditional} from '@angular-eslint/bundled-angular-compiler';
+import {
+    type AST,
+    type Conditional,
+    type TmplAstBoundText,
+} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
 import {getAbsoluteSourceSpanText} from '../utils/angular/source-span';
@@ -67,6 +71,7 @@ export const rule = createRule({
     rule: {
         create(context: Rule.RuleContext) {
             const {sourceCode} = context;
+            const boundTextStack: TmplAstBoundText[] = [];
             const conditionalStack: Conditional[] = [];
             const containerStack: TemplateAttributeContainer[] = [];
             const letNames = collectTemplateIdentifiers(sourceCode.ast);
@@ -79,28 +84,33 @@ export const rule = createRule({
             ): void {
                 const container = containerStack[containerStack.length - 1];
                 const attribute = getContainingBoundAttribute(container, node);
+                const boundText = boundTextStack[boundTextStack.length - 1];
                 const baseName = attribute?.name;
 
                 const fixable =
                     options.allowFix &&
                     boundEventDepth === 0 &&
                     letDeclarationDepth === 0 &&
-                    baseName &&
-                    isIdentifier(baseName);
+                    ((baseName !== undefined && isIdentifier(baseName)) ||
+                        boundText !== undefined);
 
                 context.report({
                     ...(fixable
                         ? {
                               fix(fixer) {
+                                  const effectiveName = baseName ?? 'text';
+
                                   const result = createLetFixes(
                                       node,
-                                      baseName,
+                                      effectiveName,
                                       letNames,
                                       sourceCode.text,
                                   );
 
                                   const insertOffset =
-                                      container?.startSourceSpan.start.offset;
+                                      baseName === undefined
+                                          ? boundText?.sourceSpan.start.offset
+                                          : container?.startSourceSpan.start.offset;
 
                                   if (insertOffset === undefined) {
                                       return null;
@@ -145,6 +155,14 @@ export const rule = createRule({
                 },
                 'BoundEvent:exit'() {
                     boundEventDepth--;
+                },
+                BoundText(rawNode: unknown) {
+                    boundTextStack.push(rawNode as TmplAstBoundText);
+                },
+                'BoundText:exit'(rawNode: unknown) {
+                    if (boundTextStack[boundTextStack.length - 1] === rawNode) {
+                        boundTextStack.pop();
+                    }
                 },
                 Conditional(rawNode: unknown) {
                     const node = rawNode as Conditional;

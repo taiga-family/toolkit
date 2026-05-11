@@ -6,6 +6,7 @@ const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},
 });
 
+// noinspection AngularMissingRequiredDirectiveInputBinding
 ruleTester.run('no-nested-ternary-in-template', rule, {
     invalid: [
         {
@@ -124,6 +125,115 @@ ruleTester.run('no-nested-ternary-in-template', rule, {
         {
             code: /* HTML */ "<div>{{ active ? 'active' : state === 'error' ? 'error' : 'idle' }}</div>",
             errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: /* HTML */ "<div>@let text = state === 'error' ? 'error' : 'idle';\n{{ active ? 'active' : text }}</div>",
+        },
+        {
+            code: `
+                <div>
+                    {{ active ? 'active' : state === 'error' ? 'error' : 'idle' }}
+                </div>
+            `,
+            errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: `
+                <div>
+                    @let text = state === 'error' ? 'error' : 'idle';
+                    {{ active ? 'active' : text }}
+                </div>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <ng-template
+                    #content
+                    let-value
+                >
+                    {{ value === 's' ? 'Small' : value === 'm' ? 'Medium' : 'Large' }}
+                </ng-template>
+            `,
+            errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: `
+                <ng-template
+                    #content
+                    let-value
+                >
+                    @let text = value === 'm' ? 'Medium' : 'Large';
+                    {{ value === 's' ? 'Small' : text }}
+                </ng-template>
+            `,
+        },
+        {
+            code: `
+                <h2
+                    automation-id="tui-mobile-calendar__label"
+                    class="t-label"
+                >
+                    {{ single() ? texts[0] : multi() ? texts[2] : texts[1] }}
+                </h2>
+            `,
+            errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: `
+                <h2
+                    automation-id="tui-mobile-calendar__label"
+                    class="t-label"
+                >
+                    @let text = multi() ? texts[2] : texts[1];
+                    {{ single() ? texts[0] : text }}
+                </h2>
+            `,
+        },
+        {
+            code: `
+                <div>
+                    {{ a ? 1 : b ? 2 : c ? 3 : 4 }}
+                </div>
+            `,
+            errors: [
+                {messageId: 'noNestedTernaryInTemplate'},
+                {messageId: 'noNestedTernaryInTemplate'},
+            ],
+            output: `
+                <div>
+                    @let text2 = c ? 3 : 4;
+                    @let text = b ? 2 : text2;
+                    {{ a ? 1 : text }}
+                </div>
+            `,
+        },
+        {
+            code: `
+                <div>
+                    {{ a ? 1 : b ? 2 : c ? 3 : d ? 4 : 5 }}
+                </div>
+            `,
+            errors: [
+                {messageId: 'noNestedTernaryInTemplate'},
+                {messageId: 'noNestedTernaryInTemplate'},
+                {messageId: 'noNestedTernaryInTemplate'},
+            ],
+            output: `
+                <div>
+                    @let text3 = d ? 4 : 5;
+                    @let text2 = c ? 3 : text3;
+                    @let text = b ? 2 : text2;
+                    {{ a ? 1 : text }}
+                </div>
+            `,
+        },
+        {
+            code: `
+                <div>
+                    @let text = someValue();
+                    {{ a ? b : c ? d : e }}
+                </div>
+            `,
+            errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: `
+                <div>
+                    @let text = someValue();
+                    @let text2 = c ? d : e;
+                    {{ a ? b : text2 }}
+                </div>
+            `,
         },
         {
             code: /* HTML */ '<button (click)="active ? save() : dirty ? confirm() : close()"></button>',
@@ -147,6 +257,25 @@ ruleTester.run('no-nested-ternary-in-template', rule, {
         },
         {
             code: /* HTML */ '<div [appearance]="appearance"></div>',
+        },
+        {
+            code: `
+                <div>
+                    @let text = state === 'error' ? 'error' : 'idle';
+                    {{ active ? 'active' : text }}
+                </div>
+            `,
+        },
+        {
+            code: `
+                <h2
+                    automation-id="tui-mobile-calendar__label"
+                    class="t-label"
+                >
+                    @let text = multi() ? texts[2] : texts[1];
+                    {{ single() ? texts[0] : text }}
+                </h2>
+            `,
         },
     ],
 });
