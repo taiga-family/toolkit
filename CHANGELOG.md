@@ -1,3 +1,18 @@
+### [0.519.0](https://github.com/taiga-family/toolkit/compare/v0.518.0...v0.519.0) (2026-05-11)
+
+### 🐞 Bug Fixes
+
+- update dependency stylelint to ^17.9.1 ([#1855](https://github.com/taiga-family/toolkit/pull/1855))
+  [(b0026ef)](https://github.com/taiga-family/toolkit/commit/b0026ef3e0b10ffcfdf999551cdd6d783d08a3ac)
+- **eslint-plugin-experience-next**: regression for &#x60;no-nested-interactive&#x60;
+  ([#1854](https://github.com/taiga-family/toolkit/pull/1854))
+  [(449b205)](https://github.com/taiga-family/toolkit/commit/449b205b460e6ecfcbffafbbd7f4a3dfce985207)
+- **eslint-plugin-experience-next**: regression for &#x60;no-nested-ternary-in-template&#x60;
+  ([#1852](https://github.com/taiga-family/toolkit/pull/1852))
+  [(6fe79e7)](https://github.com/taiga-family/toolkit/commit/6fe79e753895cef00294c157c36f353570e84533)
+- update dependency @commitlint/cli to ^20.5.2 ([#1851](https://github.com/taiga-family/toolkit/pull/1851))
+  [(8bac485)](https://github.com/taiga-family/toolkit/commit/8bac485194fedadf3c5ed20c9b41985240c4010c)
+
 ### [0.518.0](https://github.com/taiga-family/toolkit/compare/v0.517.0...v0.518.0) (2026-05-11)
 
 ### 🐞 Bug Fixes
