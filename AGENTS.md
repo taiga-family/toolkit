@@ -160,3 +160,7 @@ Create or update `docs/<rule-name>.md` with:
   access the property safely.
 - Do not create one-line proxy helpers that only forward to another function or method. Inline the call unless the
   helper adds a real invariant, narrowing, naming value, reuse, or meaningful abstraction.
+- Extract complex boolean conditions out of `if` expressions into named `const` variables. The name must describe
+  **why** the condition is true in domain terms, not **what** it computes. `condition`, `isValid`, `check` are not
+  acceptable — prefer names like `isPortalBoundary`, `hasRequiredFields`, `isNgTemplate`. Inline boolean expressions
+  only when the condition is a single, self-explanatory comparison.

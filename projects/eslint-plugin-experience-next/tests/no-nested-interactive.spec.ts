@@ -110,5 +110,134 @@ ruleTester.run('no-nested-interactive', rule, {
         {code: /* HTML */ '<area href="/foo" />'},
         {code: /* HTML */ '<video controls></video>'},
         {code: /* HTML */ '<img usemap="#map" alt="Map" />'},
+        {
+            code: /* HTML */ `
+                <button type="button">
+                    <ng-template #dropdownContent>
+                        <tui-data-list>
+                            <button type="button">Option</button>
+                        </tui-data-list>
+                    </ng-template>
+                </button>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <button
+                    type="button"
+                    [tuiDropdown]="dropdown"
+                >
+                    Hover
+                    <ng-template #dropdown>
+                        <div>
+                            <input type="text" />
+                            <button type="button">Nested</button>
+                        </div>
+                    </ng-template>
+                </button>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <button type="button">
+                    <tui-data-list>
+                        <button
+                            tuiOption
+                            type="button"
+                        >
+                            Option 1
+                        </button>
+                        <button
+                            tuiOption
+                            type="button"
+                        >
+                            Option 2
+                        </button>
+                    </tui-data-list>
+                </button>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <label>
+                    <tui-data-list>
+                        <button
+                            tuiOption
+                            type="button"
+                        >
+                            Option 1
+                        </button>
+                        <button
+                            tuiOption
+                            type="button"
+                        >
+                            Option 2
+                        </button>
+                    </tui-data-list>
+                </label>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <button
+                    tuiIconButton
+                    tuiDropdown
+                    type="button"
+                >
+                    Volume
+                    <input
+                        *tuiDropdown
+                        tuiSlider
+                        type="range"
+                    />
+                </button>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <label tuiLabel>
+                    <tui-textfield>
+                        <input
+                            tuiInputChip
+                            type="text"
+                        />
+                    </tui-textfield>
+                </label>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <label tuiLabel>
+                    <tui-textfield>
+                        <label tuiLabel>Nested label</label>
+                        <input
+                            tuiInputChip
+                            type="text"
+                        />
+                    </tui-textfield>
+                </label>
+            `,
+        },
+        {
+            code: /* HTML */ `
+                <label tuiLabel>
+                    <tui-textfield
+                        multi
+                        tuiChevron
+                    >
+                        <label tuiLabel>Multi Select</label>
+                        <input
+                            tuiInputChip
+                            tuiSelectLike
+                            type="text"
+                        />
+                        <tui-data-list-wrapper
+                            *tuiDropdown
+                            [items]="items"
+                        />
+                    </tui-textfield>
+                </label>
+            `,
+        },
     ],
 });
