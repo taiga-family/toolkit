@@ -31,10 +31,7 @@ ruleTester.run('no-signal-outside-class', rule, {
                     readonly doubled = doubled;
                 }
             `,
-            errors: [
-                {messageId: 'noSignalOutsideClass'},
-                {messageId: 'noSignalOutsideClass'},
-            ],
+            errors: [{messageId: 'noSignalOutsideClass'}],
         },
         {
             code: /* TypeScript */ `
@@ -151,6 +148,44 @@ ruleTester.run('no-signal-outside-class', rule, {
                 import {signal} from 'some-other-lib';
                 const count = signal(0);
                 class Foo {
+                    readonly count = count;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import {computed, signal} from '@angular/core';
+
+                const showLabels = signal(true);
+                const texts = computed(() =>
+                    showLabels() ? {cardNumberText: 'Card number'} : {cardNumberText: ''},
+                );
+
+                class CardComponent {
+                    protected readonly showLabels = showLabels;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import {signal} from '@angular/core';
+                const count = signal(0);
+                function helper() {
+                    return count();
+                }
+                class Foo {
+                    readonly count = count;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                import {signal} from '@angular/core';
+                const count = signal(0);
+                class A {
+                    readonly count = count;
+                }
+                class B {
                     readonly count = count;
                 }
             `,

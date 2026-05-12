@@ -1,8 +1,10 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 import {getLocalNameForImport} from '../utils/angular/angular-imports';
+import {getEnclosingClass} from '../utils/ast/ancestors';
 import {unwrapExpression} from '../utils/ast/ast-expressions';
 import {createRule} from '../utils/create-rule';
+import {getResolvedVariable} from '../utils/eslint/scope';
 
 type MessageId = 'noSignalOutsideClass';
 
@@ -97,6 +99,24 @@ export const rule = createRule<[], MessageId>({
                           value?.type !== AST_NODE_TYPES.Identifier ||
                           !moduleScopeSignals.has(value.name)
                       ) {
+                          return;
+                      }
+
+                      const variable = getResolvedVariable(context.sourceCode, value);
+
+                      if (!variable) {
+                          return;
+                      }
+
+                      const enclosingClass = getEnclosingClass(node);
+
+                      const isUsedElsewhere = variable.references.some(
+                          (ref) =>
+                              ref.isRead() &&
+                              getEnclosingClass(ref.identifier) !== enclosingClass,
+                      );
+
+                      if (isUsedElsewhere) {
                           return;
                       }
 
