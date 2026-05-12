@@ -1,3 +1,19 @@
+### [0.520.0](https://github.com/taiga-family/toolkit/compare/v0.519.0...v0.520.0) (2026-05-12)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add &#x60;single-line-let-spacing&#x60;
+  ([#1856](https://github.com/taiga-family/toolkit/pull/1856))
+  [(3add80d)](https://github.com/taiga-family/toolkit/commit/3add80d17e34a8b147ce0a9806610d312bcabc60)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: regression &#x60;no-signal-outside-class&#x60;
+  ([#1859](https://github.com/taiga-family/toolkit/pull/1859))
+  [(b889485)](https://github.com/taiga-family/toolkit/commit/b8894852660d2df712f5c4801dcb8fa090a9eb7a)
+- update dependency eslint-plugin-package-json to v0.91.2 ([#1858](https://github.com/taiga-family/toolkit/pull/1858))
+  [(0943cba)](https://github.com/taiga-family/toolkit/commit/0943cbac15bb8597579bda27d8393bb8e746bdef)
+
 ### [0.519.0](https://github.com/taiga-family/toolkit/compare/v0.518.0...v0.519.0) (2026-05-11)
 
 ### 🐞 Bug Fixes
