@@ -29,6 +29,7 @@
     --tui-viewport-svh: 0;
     --tui-viewport-height: 0;
     --tui-viewport-y: 0;
+    --t-image-size: 0;
     --t-svh: calc(100 * var(--tui-viewport-svh));
 }
 
@@ -52,4 +53,23 @@ caption {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+}
+
+.block {
+    mask-image: none;
+}
+
+.block-2 {
+    mask-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6 13L1 8.19231L2.4 6.84615L6 10.3077L13.6 3L15 4.34615L6 13Z" fill="black"/></svg>');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 1rem;
+}
+
+.block-3 {
+    mask-image: linear-gradient(
+        to top,
+        black calc(50% - var(--t-image-size) / 2),
+        transparent calc(50% - var(--t-image-size) / 2)
+    );
 }

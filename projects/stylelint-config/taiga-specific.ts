@@ -1,4 +1,10 @@
-module.exports = {
+import {type Config} from 'stylelint';
+
+type StylelintConfig = Config & {
+    readonly $schema: string;
+};
+
+const config: StylelintConfig = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
     rules: {
@@ -11,3 +17,5 @@ module.exports = {
         ],
     },
 };
+
+export = config;

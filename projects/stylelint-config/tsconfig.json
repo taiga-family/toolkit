@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "rootDir": ".",
+        "outDir": "../../dist/stylelint-config",
+        "allowImportingTsExtensions": false,
+        "declaration": true,
+        "importHelpers": false,
+        "incremental": null,
+        "module": "Node16",
+        "moduleResolution": "node16",
+        "noEmitHelpers": false
+    },
+    "include": ["./*.ts", "rules/**/*.ts"],
+    "exclude": ["tests/**/*.spec.ts"]
+}

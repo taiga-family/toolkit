@@ -34,6 +34,7 @@
         }
     ],
     "main": "index.js",
+    "types": "index.d.ts",
     "dependencies": {
         "@stylistic/stylelint-config": "5.0.0",
         "@stylistic/stylelint-plugin": "5.1.0",

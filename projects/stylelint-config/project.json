@@ -5,10 +5,29 @@
     "projectType": "library",
     "sourceRoot": "projects/stylelint-config",
     "targets": {
-        "publish": {
+        "build": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm publish ./projects/{projectName} --access=public --ignore-scripts"
+                "commands": [
+                    "tsc -p {projectRoot}/tsconfig.json",
+                    "cp {projectRoot}/README.md ./dist/{projectName}",
+                    "cp {projectRoot}/package.json ./dist/{projectName}"
+                ],
+                "parallel": false
+            },
+            "outputs": ["{workspaceRoot}/dist/{projectName}"]
+        },
+        "publish": {
+            "dependsOn": [
+                {
+                    "dependencies": false,
+                    "params": "ignore",
+                    "target": "build"
+                }
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "npm publish ./dist/{projectName} --access=public --ignore-scripts"
             }
         }
     }

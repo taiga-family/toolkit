@@ -1,7 +1,13 @@
-const {defaults: browserslist} = require('@taiga-ui/browserslist-config');
+import browserslistConfig from '@taiga-ui/browserslist-config';
+import {type Config} from 'stylelint';
 
-/** @type {import('stylelint').Config} */
-module.exports = {
+type StylelintConfig = Config & {
+    readonly $schema: string;
+};
+
+const {defaults: browserslist} = browserslistConfig;
+
+const config: StylelintConfig = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
     plugins: [
@@ -68,20 +74,10 @@ module.exports = {
         'at-rule-no-unknown': true,
         'at-rule-no-vendor-prefix': true,
         'block-no-empty': true,
-        'color-function-notation': [
-            'legacy',
-            {
-                ignore: ['with-var-inside'],
-            },
-        ],
+        'color-function-notation': ['legacy', {ignore: ['with-var-inside']}],
         'color-hex-alpha': 'never',
         'color-hex-length': 'short',
-        'color-named': [
-            'never',
-            {
-                ignoreProperties: ['mask', 'mask-image'],
-            },
-        ],
+        'color-named': ['never', {ignoreProperties: ['mask', 'mask-image']}],
         'color-no-invalid-hex': true,
         'comment-no-empty': true,
         'comment-whitespace-inside': 'always',
@@ -108,9 +104,7 @@ module.exports = {
         'declaration-block-no-duplicate-custom-properties': true,
         'declaration-block-no-duplicate-properties': [
             true,
-            {
-                ignore: ['consecutive-duplicates'],
-            },
+            {ignore: ['consecutive-duplicates']},
         ],
         'declaration-block-no-redundant-longhand-properties': [
             true,
@@ -148,22 +142,12 @@ module.exports = {
         'function-calc-no-unspaced-operator': true,
         'function-linear-gradient-no-nonstandard-direction': true,
         'function-name-case': 'lower',
-        'function-no-unknown': [
-            true,
-            {
-                ignoreFunctions: ['fade', 'lighten', 'darken'],
-            },
-        ],
+        'function-no-unknown': [true, {ignoreFunctions: ['fade', 'lighten', 'darken']}],
         'function-url-no-scheme-relative': true,
         'function-url-quotes': 'always',
         'keyframe-block-no-duplicate-selectors': true,
         'keyframe-declaration-no-important': true,
-        'length-zero-no-unit': [
-            true,
-            {
-                ignore: ['custom-properties'],
-            },
-        ],
+        'length-zero-no-unit': [true, {ignore: ['custom-properties']}],
         'lightness-notation': 'percentage',
         'logical-css/require-logical-keywords': [
             true,
@@ -229,9 +213,7 @@ module.exports = {
                 'z-index',
                 'display',
             ],
-            {
-                unspecified: 'bottom',
-            },
+            {unspecified: 'bottom'},
         ],
         'plugin/no-unsupported-browser-features': [
             true,
@@ -327,12 +309,7 @@ module.exports = {
         'property-disallowed-list': [
             '/^word-wrap$/', // The word-wrap property was renamed to overflow-wrap in CSS3
         ],
-        'property-no-unknown': [
-            true,
-            {
-                ignoreProperties: ['interpolate-size'],
-            },
-        ],
+        'property-no-unknown': [true, {ignoreProperties: ['interpolate-size']}],
         'property-no-vendor-prefix': null,
         'rem-over-px/rem-over-px': [
             true,
@@ -374,12 +351,7 @@ module.exports = {
         'selector-no-vendor-prefix': true,
         'selector-pseudo-class-no-unknown': true,
         'selector-pseudo-element-colon-notation': 'double',
-        'selector-pseudo-element-no-unknown': [
-            true,
-            {
-                ignorePseudoElements: ['ng-deep'],
-            },
-        ],
+        'selector-pseudo-element-no-unknown': [true, {ignorePseudoElements: ['ng-deep']}],
         'selector-type-case': 'lower',
         'selector-type-no-unknown': [
             true,
@@ -426,3 +398,5 @@ module.exports = {
         'value-no-vendor-prefix': true,
     },
 };
+
+export = config;
