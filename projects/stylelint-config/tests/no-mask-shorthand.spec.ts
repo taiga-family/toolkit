@@ -1,73 +1,32 @@
-import {execFileSync} from 'node:child_process';
-import {resolve} from 'node:path';
-
 import {describe, expect, it} from '@jest/globals';
 
-interface LintOutput {
-    readonly code?: string;
-    readonly warnings: ReadonlyArray<{
-        readonly rule?: string;
-        readonly text: string;
-    }>;
-}
+import {
+    type LintOutput,
+    lintWithStylelint,
+    loadStylelintFixture,
+} from './stylelint-test-utils';
+
+const maskShorthandRule = loadStylelintFixture('../rules/no-mask-shorthand.ts');
+const ruleName = '@taiga-ui/no-mask-shorthand';
 
 function cssRule(declarations: readonly string[]): string {
     return `.icon { ${declarations.join('; ')}; }`;
 }
 
-const lintScript = `
-    const input = JSON.parse(require('node:fs').readFileSync(0, 'utf-8'));
-    require('ts-node').register({
-        compilerOptions: {
-            module: 'Node16',
-            moduleResolution: 'node16',
+async function lint(code: string, fix = false): Promise<LintOutput> {
+    return lintWithStylelint({
+        code,
+        config: {
+            plugins: [maskShorthandRule],
+            rules: {[ruleName]: true},
         },
-        project: input.tsConfigPath,
-        transpileOnly: true,
+        fix,
     });
-    const stylelint = require('stylelint');
-    const rule = require(input.rulePath);
-
-    stylelint
-        .lint({
-            code: input.code,
-            config: {
-                plugins: [rule],
-                rules: {'@taiga-ui/no-mask-shorthand': true},
-            },
-            fix: input.fix,
-        })
-        .then((result) => {
-            const warnings = result.results[0].warnings.map(({rule, text}) => ({
-                rule,
-                text,
-            }));
-
-            process.stdout.write(JSON.stringify({code: result.code, warnings}));
-        })
-        .catch((error) => {
-            console.error(error);
-            process.exit(1);
-        });
-`;
-
-function lint(code: string, fix = false): LintOutput {
-    const output = execFileSync(process.execPath, ['-e', lintScript], {
-        encoding: 'utf-8',
-        input: JSON.stringify({
-            code,
-            fix,
-            rulePath: resolve(__dirname, '../rules/no-mask-shorthand.ts'),
-            tsConfigPath: resolve(__dirname, '../tsconfig.json'),
-        }),
-    });
-
-    return JSON.parse(output) as LintOutput;
 }
 
 describe('@taiga-ui/no-mask-shorthand', () => {
-    it('allows mask longhands', () => {
-        const result = lint(`
+    it('allows mask longhands', async () => {
+        const result = await lint(`
             .icon {
                 mask-image: var(--icon);
                 mask-repeat: no-repeat;
@@ -79,8 +38,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         expect(result.warnings).toEqual([]);
     });
 
-    it('expands a single mask layer', () => {
-        const result = lint(
+    it('expands a single mask layer', async () => {
+        const result = await lint(
             ".icon { mask: url('icon.svg') no-repeat center / 1rem; }",
             true,
         );
@@ -95,8 +54,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('moves a single mask image into mask-image', () => {
-        const result = lint(
+    it('moves a single mask image into mask-image', async () => {
+        const result = await lint(
             '.icon { mask: linear-gradient(to right, transparent 0, black 3rem, black calc(100% - 3rem), transparent 100%); }',
             true,
         );
@@ -108,29 +67,29 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('moves none into mask-image', () => {
-        const result = lint('.icon { mask: none; }', true);
+    it('moves none into mask-image', async () => {
+        const result = await lint('.icon { mask: none; }', true);
 
         expect(result.code).toBe(cssRule(['mask-image: none']));
     });
 
-    it('treats preprocessor variables as mask images', () => {
-        const result = lint('.icon { mask: @icon no-repeat; }', true);
+    it('treats preprocessor variables as mask images', async () => {
+        const result = await lint('.icon { mask: @icon no-repeat; }', true);
 
         expect(result.code).toBe(
             cssRule(['mask-image: @icon', 'mask-repeat: no-repeat']),
         );
     });
 
-    it('reports but does not fix css variables because they can contain shorthand values', () => {
-        const result = lint('.icon { mask: var(--mask); }', true);
+    it('reports but does not fix css variables because they can contain shorthand values', async () => {
+        const result = await lint('.icon { mask: var(--mask); }', true);
 
         expect(result.warnings).toHaveLength(1);
         expect(result.code).toBe('.icon { mask: var(--mask); }');
     });
 
-    it('expands repeated values in multiple mask layers once', () => {
-        const result = lint(
+    it('expands repeated values in multiple mask layers once', async () => {
+        const result = await lint(
             ".icon { mask: url('a.svg') no-repeat center / 1rem, linear-gradient(#000, #000) no-repeat center / 1rem; }",
             true,
         );
@@ -145,8 +104,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('fills omitted layer values when another layer declares the longhand', () => {
-        const result = lint(
+    it('fills omitted layer values when another layer declares the longhand', async () => {
+        const result = await lint(
             ".icon { mask: url('a.svg') no-repeat, url('b.svg') center / 1rem; }",
             true,
         );
@@ -161,8 +120,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('expands geometry boxes, mask mode, and compositing operator', () => {
-        const result = lint(
+    it('expands geometry boxes, mask mode, and compositing operator', async () => {
+        const result = await lint(
             ".icon { mask: url('a.svg') padding-box no-clip subtract alpha; }",
             true,
         );
@@ -178,15 +137,15 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('reports but does not fix css-wide keywords', () => {
-        const result = lint('.icon { mask: inherit !important; }', true);
+    it('reports but does not fix css-wide keywords', async () => {
+        const result = await lint('.icon { mask: inherit !important; }', true);
 
         expect(result.warnings).toHaveLength(1);
         expect(result.code).toBe('.icon { mask: inherit !important; }');
     });
 
-    it('keeps existing longhands while replacing shorthand with mask-image', () => {
-        const result = lint(
+    it('keeps existing longhands while replacing shorthand with mask-image', async () => {
+        const result = await lint(
             ".icon { mask-repeat: no-repeat; mask: url('a.svg'); }",
             true,
         );
@@ -196,8 +155,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('does not add mask-border reset longhands', () => {
-        const result = lint(
+    it('does not add mask-border reset longhands', async () => {
+        const result = await lint(
             ".icon { mask-border-source: url('border.svg'); mask: url('a.svg'); }",
             true,
         );
@@ -210,30 +169,30 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         );
     });
 
-    it('reports but does not fix unknown shorthand values', () => {
-        const result = lint('.icon { mask: unknown-token; }', true);
+    it('reports but does not fix unknown shorthand values', async () => {
+        const result = await lint('.icon { mask: unknown-token; }', true);
 
         expect(result.warnings).toHaveLength(1);
         expect(result.code).toBe('.icon { mask: unknown-token; }');
     });
 
-    it('reports but does not fix mask-size keywords before slash', () => {
-        const result = lint(".icon { mask: url('a.svg') cover; }", true);
+    it('reports but does not fix mask-size keywords before slash', async () => {
+        const result = await lint(".icon { mask: url('a.svg') cover; }", true);
 
         expect(result.warnings).toHaveLength(1);
         expect(result.code).toBe(".icon { mask: url('a.svg') cover; }");
     });
 
-    it('expands logical repeat keywords', () => {
-        const result = lint(".icon { mask: url('a.svg') repeat-block; }", true);
+    it('expands logical repeat keywords', async () => {
+        const result = await lint(".icon { mask: url('a.svg') repeat-block; }", true);
 
         expect(result.code).toBe(
             cssRule(["mask-image: url('a.svg')", 'mask-repeat: repeat-block']),
         );
     });
 
-    it('expands mask-size keywords after slash', () => {
-        const result = lint(".icon { mask: url('a.svg') center / cover; }", true);
+    it('expands mask-size keywords after slash', async () => {
+        const result = await lint(".icon { mask: url('a.svg') center / cover; }", true);
 
         expect(result.code).toBe(
             cssRule([

@@ -4,14 +4,14 @@
         "baseUrl": ".",
         "rootDir": ".",
         "allowImportingTsExtensions": false,
-        "declaration": true,
-        "importHelpers": false,
-        "incremental": null,
-        "module": "Node16",
-        "moduleResolution": "node16",
-        "noEmitHelpers": false,
-        "outDir": "../../dist/stylelint-config"
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "bundler"
     },
-    "include": ["./*.ts", "rules/**/*.ts"],
-    "exclude": ["tests/**/*.spec.ts"]
+    "include": [
+        "./*.ts",
+        "configs/**/*.ts",
+        "rules/**/*.ts"
+    ],
+    "exclude": ["**/*.spec.ts"]
 }

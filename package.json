@@ -33,7 +33,7 @@
     "prettier": "@taiga-ui/prettier-config",
     "stylelint": {
         "extends": [
-            "./dist/stylelint-config/index.js"
+            "./dist/stylelint-config/index.esm.js"
         ],
         "ignoreFiles": [
             "**/demo/**",

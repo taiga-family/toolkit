@@ -9,6 +9,7 @@
         "incremental": true,
         "module": "ESNext",
         "moduleResolution": "node",
+        "tsBuildInfoFile": "/dev/null",
         "typeRoots": ["node_modules/@types"],
         "types": ["jest", "node"]
     },

@@ -136,4 +136,4 @@ const plugin = Object.assign(createPlugin(ruleName, ruleFunction), {
     ruleName,
 });
 
-export = plugin;
+export default plugin;
