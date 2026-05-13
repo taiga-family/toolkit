@@ -1,3 +1,20 @@
+### [0.521.0](https://github.com/taiga-family/toolkit/compare/v0.520.0...v0.521.0) (2026-05-13)
+
+### 🚀 Features
+
+- **stylelint-config**: add typescript ([#1865](https://github.com/taiga-family/toolkit/pull/1865))
+  [(ad53844)](https://github.com/taiga-family/toolkit/commit/ad538448f92d22cdf0dee9f1d62e5e2016b0463e)
+- **stylelint-config**: add rule &#x60;no-mask-shorthand&#x60;
+  ([#1863](https://github.com/taiga-family/toolkit/pull/1863))
+  [(a9baadf)](https://github.com/taiga-family/toolkit/commit/a9baadf0d34b7db2b56f0dff86ff23475be0f113)
+
+### 🐞 Bug Fixes
+
+- pin dependencies ([#1864](https://github.com/taiga-family/toolkit/pull/1864))
+  [(bcf9389)](https://github.com/taiga-family/toolkit/commit/bcf9389be9cf47a4afbcad5f71906cc538d4f8cf)
+- update dependency eslint-plugin-cypress to v6.4.0 ([#1861](https://github.com/taiga-family/toolkit/pull/1861))
+  [(52e0882)](https://github.com/taiga-family/toolkit/commit/52e08824cec4a1846cd401101533f3744c0a0099)
+
 ### [0.520.0](https://github.com/taiga-family/toolkit/compare/v0.519.0...v0.520.0) (2026-05-12)
 
 ### 🚀 Features
