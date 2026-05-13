@@ -720,6 +720,8 @@
         "Tarjan",
         "Unrenderable",
         "pincode",
-        "modelcontextprotocol"
+        "modelcontextprotocol",
+        "Unparseable",
+        "Longhands"
     ]
 }
