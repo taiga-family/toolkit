@@ -5,6 +5,7 @@ module.exports = {
     $schema:
         'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/stylelintrc.json',
     plugins: [
+        './rules/no-mask-shorthand.js',
         './rules/no-webkit-box-orient-block-axis.js',
         './rules/relative-less-import-extension.js',
         'stylelint-order',
@@ -43,6 +44,7 @@ module.exports = {
         '@stylistic/selector-pseudo-class-parentheses-space-inside': null,
         '@stylistic/string-quotes': 'single',
         '@stylistic/value-list-comma-newline-after': null,
+        '@taiga-ui/no-mask-shorthand': true,
         '@taiga-ui/no-webkit-box-orient-block-axis': true,
         '@taiga-ui/relative-less-import-extension': true,
         'alpha-value-notation': 'number',
@@ -115,6 +117,7 @@ module.exports = {
             {
                 ignoreShorthands: [
                     'inset',
+                    'mask',
                     'overflow',
                     'margin-inline',
                     'margin-block',
