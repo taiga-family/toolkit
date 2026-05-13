@@ -12,7 +12,7 @@
         "lint": "eslint .",
         "prettier": "prettier !package-lock.json . --ignore-path .gitignore",
         "release": "npx nx run-many --target publish --all",
-        "stylelint": "stylelint '**/*.{less,css}' --allow-empty-input --config package.json",
+        "stylelint": "nx run stylelint-config:build && stylelint '**/*.{less,css}' --allow-empty-input --config package.json",
         "test": "jest ."
     },
     "commitlint": {
@@ -33,7 +33,7 @@
     "prettier": "@taiga-ui/prettier-config",
     "stylelint": {
         "extends": [
-            "@taiga-ui/stylelint-config"
+            "./dist/stylelint-config/index.js"
         ],
         "ignoreFiles": [
             "**/demo/**",

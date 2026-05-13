@@ -11,31 +11,20 @@ interface LintOutput {
     }>;
 }
 
-const maskBorderResets = [
-    'mask-border-source: none',
-    'mask-border-mode: alpha',
-    'mask-border-outset: 0',
-    'mask-border-repeat: stretch',
-    'mask-border-slice: 0',
-    'mask-border-width: auto',
-];
-
-const defaultMaskLonghands = [
-    'mask-repeat: repeat',
-    'mask-position: 0% 0%',
-    'mask-size: auto',
-    'mask-origin: border-box',
-    'mask-clip: border-box',
-    'mask-mode: match-source',
-    'mask-composite: add',
-];
-
 function cssRule(declarations: readonly string[]): string {
     return `.icon { ${declarations.join('; ')}; }`;
 }
 
 const lintScript = `
     const input = JSON.parse(require('node:fs').readFileSync(0, 'utf-8'));
+    require('ts-node').register({
+        compilerOptions: {
+            module: 'Node16',
+            moduleResolution: 'node16',
+        },
+        project: input.tsConfigPath,
+        transpileOnly: true,
+    });
     const stylelint = require('stylelint');
     const rule = require(input.rulePath);
 
@@ -68,7 +57,8 @@ function lint(code: string, fix = false): LintOutput {
         input: JSON.stringify({
             code,
             fix,
-            rulePath: resolve(__dirname, '../rules/no-mask-shorthand.js'),
+            rulePath: resolve(__dirname, '../rules/no-mask-shorthand.ts'),
+            tsConfigPath: resolve(__dirname, '../tsconfig.json'),
         }),
     });
 
@@ -101,25 +91,34 @@ describe('@taiga-ui/no-mask-shorthand', () => {
                 'mask-repeat: no-repeat',
                 'mask-position: center',
                 'mask-size: 1rem',
-                'mask-origin: border-box',
-                'mask-clip: border-box',
-                'mask-mode: match-source',
-                'mask-composite: add',
-                ...maskBorderResets,
             ]),
         );
+    });
+
+    it('moves a single mask image into mask-image', () => {
+        const result = lint(
+            '.icon { mask: linear-gradient(to right, transparent 0, black 3rem, black calc(100% - 3rem), transparent 100%); }',
+            true,
+        );
+
+        expect(result.code).toBe(
+            cssRule([
+                'mask-image: linear-gradient(to right, transparent 0, black 3rem, black calc(100% - 3rem), transparent 100%)',
+            ]),
+        );
+    });
+
+    it('moves none into mask-image', () => {
+        const result = lint('.icon { mask: none; }', true);
+
+        expect(result.code).toBe(cssRule(['mask-image: none']));
     });
 
     it('treats preprocessor variables as mask images', () => {
         const result = lint('.icon { mask: @icon no-repeat; }', true);
 
         expect(result.code).toBe(
-            cssRule([
-                'mask-image: @icon',
-                'mask-repeat: no-repeat',
-                ...defaultMaskLonghands.slice(1),
-                ...maskBorderResets,
-            ]),
+            cssRule(['mask-image: @icon', 'mask-repeat: no-repeat']),
         );
     });
 
@@ -142,11 +141,6 @@ describe('@taiga-ui/no-mask-shorthand', () => {
                 'mask-repeat: no-repeat',
                 'mask-position: center',
                 'mask-size: 1rem',
-                'mask-origin: border-box',
-                'mask-clip: border-box',
-                'mask-mode: match-source',
-                'mask-composite: add',
-                ...maskBorderResets,
             ]),
         );
     });
@@ -163,11 +157,6 @@ describe('@taiga-ui/no-mask-shorthand', () => {
                 'mask-repeat: no-repeat, repeat',
                 'mask-position: 0% 0%, center',
                 'mask-size: auto, 1rem',
-                'mask-origin: border-box',
-                'mask-clip: border-box',
-                'mask-mode: match-source',
-                'mask-composite: add',
-                ...maskBorderResets,
             ]),
         );
     });
@@ -181,57 +170,44 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         expect(result.code).toBe(
             cssRule([
                 "mask-image: url('a.svg')",
-                ...defaultMaskLonghands.slice(0, 3),
                 'mask-origin: padding-box',
                 'mask-clip: no-clip',
                 'mask-mode: alpha',
                 'mask-composite: subtract',
-                ...maskBorderResets,
             ]),
         );
     });
 
-    it('expands css-wide keywords to every longhand', () => {
+    it('reports but does not fix css-wide keywords', () => {
         const result = lint('.icon { mask: inherit !important; }', true);
 
-        expect(result.code).toBe(
-            cssRule([
-                'mask-image: inherit !important',
-                'mask-repeat: inherit !important',
-                'mask-position: inherit !important',
-                'mask-size: inherit !important',
-                'mask-origin: inherit !important',
-                'mask-clip: inherit !important',
-                'mask-mode: inherit !important',
-                'mask-composite: inherit !important',
-                ...maskBorderResets.map((declaration) => `${declaration} !important`),
-            ]),
-        );
+        expect(result.warnings).toHaveLength(1);
+        expect(result.code).toBe('.icon { mask: inherit !important; }');
     });
 
-    it('preserves shorthand reset semantics for omitted longhands', () => {
+    it('keeps existing longhands while replacing shorthand with mask-image', () => {
         const result = lint(
             ".icon { mask-repeat: no-repeat; mask: url('a.svg'); }",
             true,
         );
 
         expect(result.code).toBe(
-            cssRule([
-                'mask-repeat: no-repeat',
-                "mask-image: url('a.svg')",
-                ...defaultMaskLonghands,
-                ...maskBorderResets,
-            ]),
+            cssRule(['mask-repeat: no-repeat', "mask-image: url('a.svg')"]),
         );
     });
 
-    it('preserves mask-border reset semantics', () => {
+    it('does not add mask-border reset longhands', () => {
         const result = lint(
             ".icon { mask-border-source: url('border.svg'); mask: url('a.svg'); }",
             true,
         );
 
-        expect(result.code).toContain('mask-border-source: none');
+        expect(result.code).toBe(
+            cssRule([
+                "mask-border-source: url('border.svg')",
+                "mask-image: url('a.svg')",
+            ]),
+        );
     });
 
     it('reports but does not fix unknown shorthand values', () => {
@@ -252,12 +228,7 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         const result = lint(".icon { mask: url('a.svg') repeat-block; }", true);
 
         expect(result.code).toBe(
-            cssRule([
-                "mask-image: url('a.svg')",
-                'mask-repeat: repeat-block',
-                ...defaultMaskLonghands.slice(1),
-                ...maskBorderResets,
-            ]),
+            cssRule(["mask-image: url('a.svg')", 'mask-repeat: repeat-block']),
         );
     });
 
@@ -267,11 +238,8 @@ describe('@taiga-ui/no-mask-shorthand', () => {
         expect(result.code).toBe(
             cssRule([
                 "mask-image: url('a.svg')",
-                'mask-repeat: repeat',
                 'mask-position: center',
                 'mask-size: cover',
-                ...defaultMaskLonghands.slice(3),
-                ...maskBorderResets,
             ]),
         );
     });
