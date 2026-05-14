@@ -136,9 +136,10 @@ const config: StylelintConfig = {
         ],
         'declaration-no-important': null,
         'declaration-property-value-disallowed-list': {
-            '/^(?:min|max)-(?:block-size|height)$/': [
-                /\bfit-content\b/i, // Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1672559
-            ],
+            // TODO: enable after https://github.com/taiga-family/taiga-ui/pull/14106
+            // '/^(?:min|max)-(?:block-size|height)$/': [
+            //     /\bfit-content\b/i, // Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1672559
+            // ],
             'inline-size': ['stretch'],
             width: ['stretch'],
         },
