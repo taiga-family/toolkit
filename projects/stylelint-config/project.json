@@ -6,14 +6,18 @@
     "sourceRoot": "projects/stylelint-config",
     "targets": {
         "build": {
-            "executor": "nx:run-commands",
+            "executor": "@nx/rollup:rollup",
             "options": {
-                "commands": [
-                    "tsc -p {projectRoot}/tsconfig.json",
-                    "cp {projectRoot}/README.md ./dist/{projectName}",
-                    "cp {projectRoot}/package.json ./dist/{projectName}"
-                ],
-                "parallel": false
+                "additionalEntryPoints": ["projects/{projectName}/taiga-specific.ts"],
+                "assets": ["projects/{projectName}/README.md", "projects/{projectName}/docs"],
+                "compiler": "tsc",
+                "external": "all",
+                "format": ["esm"],
+                "generateExportsField": true,
+                "main": "projects/{projectName}/index.ts",
+                "outputPath": "{workspaceRoot}/dist/{projectName}",
+                "sourceMap": true,
+                "tsConfig": "projects/{projectName}/tsconfig.json"
             },
             "outputs": ["{workspaceRoot}/dist/{projectName}"]
         },

@@ -73,3 +73,9 @@ caption {
         transparent calc(50% - var(--t-image-size) / 2)
     );
 }
+
+.block-4 {
+    text-underline-offset: 0.2em;
+    text-decoration: none dashed currentColor 1px;
+    text-decoration-color: color-mix(in lch, currentColor, transparent);
+}
