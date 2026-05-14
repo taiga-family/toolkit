@@ -1,3 +1,16 @@
+### [0.522.0](https://github.com/taiga-family/toolkit/compare/v0.521.0...v0.522.0) (2026-05-14)
+
+### 🚀 Features
+
+- **stylelint-config**: restrict fit-content in min-height and some refactoring
+  ([#1869](https://github.com/taiga-family/toolkit/pull/1869))
+  [(9bf50ac)](https://github.com/taiga-family/toolkit/commit/9bf50acc70b5a691999d00bbc0561c63540c483e)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-compat to v7.0.2 ([#1870](https://github.com/taiga-family/toolkit/pull/1870))
+  [(e8b129f)](https://github.com/taiga-family/toolkit/commit/e8b129fcda2b928b1c93c240b34d1e81c0cfc553)
+
 ### [0.521.0](https://github.com/taiga-family/toolkit/compare/v0.520.0...v0.521.0) (2026-05-13)
 
 ### 🚀 Features
