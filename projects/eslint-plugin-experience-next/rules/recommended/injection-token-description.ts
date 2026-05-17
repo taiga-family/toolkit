@@ -1,10 +1,6 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
-import {
-    type RuleFix,
-    type RuleFixer,
-    type SourceCode,
-} from '@typescript-eslint/utils/ts-eslint';
+import {type RuleFix, type RuleFixer} from '@typescript-eslint/utils/ts-eslint';
 
 import {
     isEmptyStaticString,
@@ -12,6 +8,7 @@ import {
     type StringLiteral,
 } from '../utils/ast/string-literals';
 import {createRule} from '../utils/create-rule';
+import {hasVariableInScope} from '../utils/eslint/scope';
 
 const MESSAGE_ID = 'invalid-injection-token-description' as const;
 const ERROR_MESSAGE = "InjectionToken's description should contain token's name";
@@ -81,20 +78,6 @@ function prependTokenName(text: string, name: string): string {
     return `${text.slice(0, 1)}[${name}]: ${text.slice(1)}`;
 }
 
-function isNgDevModeVisible(sourceCode: SourceCode, node: TSESTree.Node): boolean {
-    for (
-        let scope: ReturnType<SourceCode['getScope']> | null = sourceCode.getScope(node);
-        scope != null;
-        scope = scope.upper
-    ) {
-        if (scope.variables.some((variable) => variable.name === NG_DEV_MODE)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 function getNgDevModeDeclarationFix(
     program: TSESTree.Program,
     fixer: RuleFixer,
@@ -154,7 +137,7 @@ export const rule = createRule({
                             if (
                                 !isNgDevModeGuarded &&
                                 shouldAddNgDevModeDeclaration &&
-                                !isNgDevModeVisible(sourceCode, description)
+                                !hasVariableInScope(sourceCode, description, NG_DEV_MODE)
                             ) {
                                 shouldAddNgDevModeDeclaration = false;
                                 fixes.unshift(getNgDevModeDeclarationFix(program, fixer));

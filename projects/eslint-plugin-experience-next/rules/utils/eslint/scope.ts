@@ -9,3 +9,21 @@ export function getResolvedVariable(
 
     return reference?.resolved ?? null;
 }
+
+export function hasVariableInScope(
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    node: TSESTree.Node,
+    name: string,
+): boolean {
+    let scope: ReturnType<typeof sourceCode.getScope> | null = sourceCode.getScope(node);
+
+    while (scope) {
+        if (scope.variables.some((variable) => variable.name === name)) {
+            return true;
+        }
+
+        scope = scope.upper;
+    }
+
+    return false;
+}

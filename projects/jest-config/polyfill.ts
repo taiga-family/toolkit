@@ -1,4 +1,3 @@
-/* eslint-disable compat/compat */
 /// <reference types="@types/jest" />
 import {TextDecoder as TextDecoderMock, TextEncoder as TextEncoderMock} from 'node:util';
 

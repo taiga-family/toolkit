@@ -4,6 +4,7 @@ import {type ConfigArray} from 'typescript-eslint';
 
 import recommended, {ALL_TS_JS_FILES} from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
+import atCompat from './rules/recommended/at-compat';
 import attrsNewline from './rules/recommended/attrs-newline';
 import decoratorKeySort from './rules/recommended/decorator-key-sort';
 import elementNewline from './rules/recommended/element-newline';
@@ -77,6 +78,7 @@ const plugin = {
     },
     rules: {
         'array-as-const': arrayAsConst,
+        'at-compat': atCompat,
         'attrs-newline': attrsNewline,
         'class-property-naming': classPropertyNaming,
         'decorator-key-sort': decoratorKeySort,
