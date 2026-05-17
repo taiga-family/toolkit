@@ -1,3 +1,17 @@
+### [0.523.0](https://github.com/taiga-family/toolkit/compare/v0.522.0...v0.523.0) (2026-05-17)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: add &#x60;at-compat&#x60;
+  ([#1874](https://github.com/taiga-family/toolkit/pull/1874))
+  [(e4e89aa)](https://github.com/taiga-family/toolkit/commit/e4e89aa9ae7decb63a391d14926f1c80d2aab7a5)
+- update dependency stylelint to ^17.10.0 ([#1875](https://github.com/taiga-family/toolkit/pull/1875))
+  [(0af34c2)](https://github.com/taiga-family/toolkit/commit/0af34c2f894991151272ebbf40309bd36942cacc)
+- update dependency globals to v17.6.0 ([#1873](https://github.com/taiga-family/toolkit/pull/1873))
+  [(d3724b9)](https://github.com/taiga-family/toolkit/commit/d3724b9388917533bc5d9dc0d60d79c8caea55c5)
+- update commitlint to ^20.5.3 ([#1871](https://github.com/taiga-family/toolkit/pull/1871))
+  [(519d859)](https://github.com/taiga-family/toolkit/commit/519d859abe3d893b29d7135815c1cdefeaa1b708)
+
 ### [0.522.0](https://github.com/taiga-family/toolkit/compare/v0.521.0...v0.522.0) (2026-05-14)
 
 ### 🚀 Features
