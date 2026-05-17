@@ -277,7 +277,7 @@ ruleTester.run('at-compat', rule, {
                         second: ['two'],
                     };
 
-                    private readonly dValues = Object.values(this.d);
+                    protected readonly dValues = Object.values(this.d);
 
                     protected value = this.dValues[this.dValues.length - 1] ?? null;
                 }
@@ -302,7 +302,7 @@ ruleTester.run('at-compat', rule, {
                         second: ['two'],
                     };
 
-                    private readonly dValues = Object.values(this.d);
+                    protected readonly dValues = Object.values(this.d);
 
                     protected value = this.dValues[this.dValues.length - 1] ?? null;
                 }
@@ -327,9 +327,34 @@ ruleTester.run('at-compat', rule, {
                         second: ['two'],
                     };
 
-                    private static readonly dValues = Object.values(this.d);
+                    protected static readonly dValues = Object.values(this.d);
 
                     protected static v = this.dValues[this.dValues.length - 1] ?? null;
+                }
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                class Example {
+                    #d = {
+                        first: ['one'],
+                        second: ['two'],
+                    };
+
+                    #value = Object.values(this.#d).at(-1) ?? null;
+                }
+            `,
+            errors: [{messageId: 'atCompatAvoidAt'}],
+            output: /* TypeScript */ `
+                class Example {
+                    #d = {
+                        first: ['one'],
+                        second: ['two'],
+                    };
+
+                    #values = Object.values(this.#d);
+
+                    #value = this.#values[this.#values.length - 1] ?? null;
                 }
             `,
         },
@@ -371,7 +396,7 @@ ruleTester.run('at-compat', rule, {
                         second: ['two'],
                     };
 
-                    private readonly dValues2 = Object.values(this.d);
+                    protected readonly dValues2 = Object.values(this.d);
 
                     protected value = this.dValues2[this.dValues2.length - 1] ?? null;
                 }

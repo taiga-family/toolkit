@@ -48,3 +48,34 @@ export function collectMutationTargets(node: TSESTree.Node): MutationTarget[] {
             return [];
     }
 }
+
+export function getMutationExpressionTarget(node: TSESTree.Node): TSESTree.Node | null {
+    if (
+        node.type === AST_NODE_TYPES.AssignmentExpression ||
+        node.type === AST_NODE_TYPES.UpdateExpression
+    ) {
+        return node.type === AST_NODE_TYPES.AssignmentExpression
+            ? node.left
+            : node.argument;
+    }
+
+    return node.type === AST_NODE_TYPES.UnaryExpression && node.operator === 'delete'
+        ? node.argument
+        : null;
+}
+
+export function isMutationTarget(node: TSESTree.Node): boolean {
+    const {parent} = node;
+
+    if (!parent) {
+        return false;
+    }
+
+    const isForLoopTarget =
+        parent.type === AST_NODE_TYPES.ForInStatement ||
+        parent.type === AST_NODE_TYPES.ForOfStatement;
+
+    return isForLoopTarget
+        ? parent.left === node
+        : getMutationExpressionTarget(parent) === node;
+}

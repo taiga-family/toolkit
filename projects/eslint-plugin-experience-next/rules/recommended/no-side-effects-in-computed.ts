@@ -13,7 +13,10 @@ import {
 } from '../utils/angular/angular-signals';
 import {unwrapExpression} from '../utils/ast/ast-expressions';
 import {isFunctionLike} from '../utils/ast/ast-walk';
-import {collectMutationTargets} from '../utils/ast/mutation-targets';
+import {
+    collectMutationTargets,
+    getMutationExpressionTarget,
+} from '../utils/ast/mutation-targets';
 import {createRule} from '../utils/create-rule';
 import {type NodeMap, type TsNodeToESTreeNodeMap} from '../utils/typescript/node-map';
 import {getSymbolAtNode} from '../utils/typescript/symbols';
@@ -370,28 +373,11 @@ function functionHasObservableSideEffects(
             }
         }
 
-        if (
-            node.type === AST_NODE_TYPES.AssignmentExpression &&
-            hasObservableMutationTarget(node.left, context, localScopes)
-        ) {
-            hasSideEffect = true;
-
-            return false;
-        }
+        const mutationTarget = getMutationExpressionTarget(node);
 
         if (
-            node.type === AST_NODE_TYPES.UpdateExpression &&
-            hasObservableMutationTarget(node.argument, context, localScopes)
-        ) {
-            hasSideEffect = true;
-
-            return false;
-        }
-
-        if (
-            node.type === AST_NODE_TYPES.UnaryExpression &&
-            node.operator === 'delete' &&
-            hasObservableMutationTarget(node.argument, context, localScopes)
+            mutationTarget &&
+            hasObservableMutationTarget(mutationTarget, context, localScopes)
         ) {
             hasSideEffect = true;
 
@@ -475,26 +461,13 @@ function inspectComputedBody(
             }
         }
 
-        if (
-            node.type === AST_NODE_TYPES.AssignmentExpression &&
-            hasObservableMutationTarget(node.left, context, localScopes)
-        ) {
-            reportSideEffect(node.left, context, report);
-        }
+        const mutationTarget = getMutationExpressionTarget(node);
 
         if (
-            node.type === AST_NODE_TYPES.UpdateExpression &&
-            hasObservableMutationTarget(node.argument, context, localScopes)
+            mutationTarget &&
+            hasObservableMutationTarget(mutationTarget, context, localScopes)
         ) {
-            reportSideEffect(node.argument, context, report);
-        }
-
-        if (
-            node.type === AST_NODE_TYPES.UnaryExpression &&
-            node.operator === 'delete' &&
-            hasObservableMutationTarget(node.argument, context, localScopes)
-        ) {
-            reportSideEffect(node.argument, context, report);
+            reportSideEffect(mutationTarget, context, report);
         }
 
         return;

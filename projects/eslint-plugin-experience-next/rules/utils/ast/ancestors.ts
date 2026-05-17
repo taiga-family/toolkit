@@ -5,6 +5,28 @@ import {isFunctionLike} from './ast-walk';
 export type ClassLike = TSESTree.ClassDeclaration | TSESTree.ClassExpression;
 export type ClassMember = TSESTree.MethodDefinition | TSESTree.PropertyDefinition;
 
+export function isAstNode(value: unknown): value is TSESTree.Node {
+    if (!value || typeof value !== 'object' || !('type' in value)) {
+        return false;
+    }
+
+    const {type} = value as Record<'type', unknown>;
+
+    return typeof type === 'string';
+}
+
+export function getParentNode(node: TSESTree.Node): TSESTree.Node | null {
+    const maybeNode: unknown = node;
+
+    if (!maybeNode || typeof maybeNode !== 'object' || !('parent' in maybeNode)) {
+        return null;
+    }
+
+    const {parent} = maybeNode as Record<'parent', unknown>;
+
+    return isAstNode(parent) ? parent : null;
+}
+
 export function findAncestor<T extends TSESTree.Node>(
     node: TSESTree.Node | null | undefined,
     predicate: (ancestor: TSESTree.Node) => ancestor is T,

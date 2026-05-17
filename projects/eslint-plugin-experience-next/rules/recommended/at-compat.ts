@@ -1,22 +1,29 @@
 import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
-import {
-    type InterfaceType,
-    ScriptTarget,
-    type Type,
-    type TypeChecker,
-    TypeFlags,
-} from 'typescript';
 
-import {walkAst} from '../utils/ast/ast-walk';
-import {getParenthesizedInner} from '../utils/ast/parenthesized';
+import {hasNonNullAssertionParent} from '../utils/ast/ast-expressions';
+import {isFunctionExpressionLike, walkAst} from '../utils/ast/ast-walk';
+import {
+    isConditionTestExpression,
+    isEqualityComparisonOperand,
+    isLogicalFallbackLeftOperand,
+} from '../utils/ast/condition-expressions';
+import {isIndexedAccessGuardingSameIndexAssignment} from '../utils/ast/indexed-access-narrowing';
+import {
+    getMemberAccessStart,
+    getSafeBracketIndexText,
+} from '../utils/ast/member-expressions';
+import {isMutationTarget} from '../utils/ast/mutation-targets';
 import {
     getMemberExpressionPropertyName,
     getStaticPropertyName,
 } from '../utils/ast/property-names';
-import {getLineBreak} from '../utils/ast/spacing';
+import {getIndentAtOffset, getLineBreak, getLineStartOffset} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 import {hasVariableInScope} from '../utils/eslint/scope';
+import {hasBuiltInAtReceiverType} from '../utils/typescript/built-in-at';
+import {supportsBuiltInAt} from '../utils/typescript/compiler-options';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
+import {hasNullishType, isKnownTupleType} from '../utils/typescript/types';
 
 type Options = [];
 
@@ -48,97 +55,12 @@ type SupportedStatement = Extract<
     }
 >;
 
-const BUILT_IN_AT_RECEIVER_NAMES = new Set([
-    'Array',
-    'BigInt64Array',
-    'BigUint64Array',
-    'Float32Array',
-    'Float64Array',
-    'Int16Array',
-    'Int32Array',
-    'Int8Array',
-    'ReadonlyArray',
-    'String',
-    'Uint16Array',
-    'Uint32Array',
-    'Uint8Array',
-    'Uint8ClampedArray',
-]);
-
 const SUPPORTED_STATEMENT_TYPES = new Set<AST_NODE_TYPES>([
     AST_NODE_TYPES.ExpressionStatement,
     AST_NODE_TYPES.ReturnStatement,
     AST_NODE_TYPES.ThrowStatement,
     AST_NODE_TYPES.VariableDeclaration,
 ]);
-
-const NULLISH_TYPE_FLAGS = TypeFlags.Null | TypeFlags.Undefined | TypeFlags.Void;
-const FALLBACK_SCRIPT_TARGET = ScriptTarget.ES2021;
-
-function supportsAt(target: ScriptTarget): boolean {
-    return target >= ScriptTarget.ES2022;
-}
-
-function isInterfaceType(type: Type): type is InterfaceType {
-    return 'getBaseTypes' in type && typeof type.getBaseTypes === 'function';
-}
-
-function isNullishType(type: Type): boolean {
-    return (type.flags & NULLISH_TYPE_FLAGS) !== 0;
-}
-
-function hasKnownBuiltInAtReceiver(
-    typeChecker: TypeChecker,
-    type: Type,
-    visitedTypes = new Set<Type>(),
-): boolean {
-    const hasNoReliableType = (type.flags & (TypeFlags.Any | TypeFlags.Unknown)) !== 0;
-    const shouldSkipReceiverType = hasNoReliableType || visitedTypes.has(type);
-
-    if (shouldSkipReceiverType) {
-        return false;
-    }
-
-    visitedTypes.add(type);
-
-    if (type.isUnion()) {
-        const definedTypes = type.types.filter((item) => !isNullishType(item));
-
-        return (
-            definedTypes.length > 0 &&
-            definedTypes.every((item) =>
-                hasKnownBuiltInAtReceiver(typeChecker, item, visitedTypes),
-            )
-        );
-    }
-
-    if (type.isIntersection()) {
-        return type.types.some((item) =>
-            hasKnownBuiltInAtReceiver(typeChecker, item, visitedTypes),
-        );
-    }
-
-    const apparentType = typeChecker.getApparentType(type);
-
-    if (typeChecker.isArrayType(apparentType) || typeChecker.isTupleType(apparentType)) {
-        return true;
-    }
-
-    const symbolName = apparentType.getSymbol()?.getName();
-
-    const hasBuiltInAtReceiverSymbol =
-        symbolName !== undefined && BUILT_IN_AT_RECEIVER_NAMES.has(symbolName);
-
-    if (hasBuiltInAtReceiverSymbol) {
-        return true;
-    }
-
-    return isInterfaceType(apparentType)
-        ? (apparentType.getBaseTypes() ?? []).some((baseType) =>
-              hasKnownBuiltInAtReceiver(typeChecker, baseType, visitedTypes),
-          )
-        : false;
-}
 
 function getAtCall(node: TSESTree.MemberExpression): AtCallExpression | null {
     const {parent} = node;
@@ -191,152 +113,23 @@ function getAtIndex(
         : null;
 }
 
-function getSafeBracketIndexText(
-    sourceCode: Readonly<TSESLint.SourceCode>,
+function appendAtFallback(
     node: TSESTree.MemberExpression,
-): string | null {
-    if (!node.computed || node.property.type !== AST_NODE_TYPES.Literal) {
-        return null;
+    atCallText: string,
+    indexedAccessTypeAlreadyIncludesUndefined: boolean,
+): string {
+    if (indexedAccessTypeAlreadyIncludesUndefined) {
+        return atCallText;
     }
 
-    const {value} = node.property;
-
-    if (typeof value !== 'number') {
-        return null;
-    }
-
-    const hasSameAtIndexSemantics = Number.isInteger(value) && value >= 0;
-
-    return hasSameAtIndexSemantics ? sourceCode.getText(node.property) : null;
-}
-
-function getNodeParent(node: TSESTree.Node): TSESTree.Node | null {
-    const nodeWithParent = node as {readonly parent?: TSESTree.Node};
-
-    return nodeWithParent.parent ?? null;
-}
-
-function getReplacementExpression(node: TSESTree.MemberExpression): TSESTree.Node {
-    const parent = getNodeParent(node);
-
-    return parent?.type === AST_NODE_TYPES.ChainExpression ? parent : node;
-}
-
-function isLogicalFallbackOperand(node: TSESTree.MemberExpression): boolean {
-    const expression = getReplacementExpression(node);
-    const parent = getNodeParent(expression);
-
-    return (
-        parent?.type === AST_NODE_TYPES.LogicalExpression &&
-        (parent.operator === '??' || parent.operator === '||') &&
-        parent.left === expression
-    );
-}
-
-function isConditionExpression(node: TSESTree.MemberExpression): boolean {
-    let current = getReplacementExpression(node);
-    let parent = getNodeParent(current);
-
-    if (!parent) {
-        return false;
-    }
-
-    while (parent?.type === AST_NODE_TYPES.LogicalExpression) {
-        current = parent;
-        parent = getNodeParent(parent);
-    }
-
-    if (!parent) {
-        return false;
-    }
-
-    if (parent.type === AST_NODE_TYPES.UnaryExpression && parent.operator === '!') {
-        current = parent;
-        parent = getNodeParent(parent);
-    }
-
-    return parent
-        ? (parent.type === AST_NODE_TYPES.IfStatement && parent.test === current) ||
-              (parent.type === AST_NODE_TYPES.ConditionalExpression &&
-                  parent.test === current) ||
-              (parent.type === AST_NODE_TYPES.WhileStatement &&
-                  parent.test === current) ||
-              (parent.type === AST_NODE_TYPES.DoWhileStatement &&
-                  parent.test === current) ||
-              (parent.type === AST_NODE_TYPES.ForStatement && parent.test === current)
-        : false;
-}
-
-function appendAtFallback(node: TSESTree.MemberExpression, atCallText: string): string {
     const canUseSurroundingFallback =
-        isLogicalFallbackOperand(node) || isConditionExpression(node);
+        isLogicalFallbackLeftOperand(node) ||
+        isConditionTestExpression(node) ||
+        isEqualityComparisonOperand(node);
 
     return node.optional || canUseSurroundingFallback || hasNonNullAssertionParent(node)
         ? atCallText
         : `${atCallText}!`;
-}
-
-function hasNonNullAssertionParent(node: TSESTree.Node): boolean {
-    let current = node;
-    let parent = getNodeParent(current);
-
-    while (parent) {
-        if (
-            parent.type === AST_NODE_TYPES.TSNonNullExpression &&
-            parent.expression === current
-        ) {
-            return true;
-        }
-
-        if (getParenthesizedInner(parent) !== current) {
-            return false;
-        }
-
-        current = parent;
-        parent = getNodeParent(current);
-    }
-
-    return false;
-}
-
-function isAssignmentTarget(node: TSESTree.MemberExpression): boolean {
-    const {parent} = node;
-
-    return (
-        (parent.type === AST_NODE_TYPES.AssignmentExpression && parent.left === node) ||
-        (parent.type === AST_NODE_TYPES.UpdateExpression && parent.argument === node) ||
-        (parent.type === AST_NODE_TYPES.UnaryExpression &&
-            parent.operator === 'delete' &&
-            parent.argument === node) ||
-        (parent.type === AST_NODE_TYPES.ForInStatement && parent.left === node) ||
-        (parent.type === AST_NODE_TYPES.ForOfStatement && parent.left === node)
-    );
-}
-
-function getMemberAccessStart(
-    sourceCode: Readonly<TSESLint.SourceCode>,
-    node: TSESTree.MemberExpression,
-): number | null {
-    const tokenBeforeProperty = sourceCode.getTokenBefore(node.property);
-
-    if (!tokenBeforeProperty) {
-        return null;
-    }
-
-    if (!node.computed) {
-        return tokenBeforeProperty.range[0];
-    }
-
-    if (tokenBeforeProperty.value !== '[') {
-        return null;
-    }
-
-    const tokenBeforeBracket = sourceCode.getTokenBefore(tokenBeforeProperty);
-    const hasOptionalBracketAccess = node.optional && tokenBeforeBracket?.value === '?.';
-
-    return hasOptionalBracketAccess
-        ? tokenBeforeBracket.range[0]
-        : tokenBeforeProperty.range[0];
 }
 
 function getAtCallText(
@@ -369,18 +162,6 @@ function isRepeatableReceiver(node: TSESTree.Expression): boolean {
         default:
             return false;
     }
-}
-
-function getLineIndent(text: string, start: number): string {
-    const lineStart = getLineStart(text, start);
-    const linePrefix = text.slice(lineStart, start);
-    const indent = /^\s*/.exec(linePrefix);
-
-    return indent?.[0] ?? '';
-}
-
-function getLineStart(text: string, start: number): number {
-    return text.lastIndexOf('\n', start - 1) + 1;
 }
 
 function capitalize(value: string): string {
@@ -507,7 +288,7 @@ function getSupportedStatement(node: TSESTree.Node): TSESTree.Statement | null {
     let current = node.parent;
 
     while (current) {
-        if (isFunctionExpressionBoundary(current)) {
+        if (isFunctionExpressionLike(current)) {
             return null;
         }
 
@@ -561,7 +342,7 @@ function hasMultipleNonRepeatableLastAtCalls(
     let count = 0;
 
     walkAst(root, (node) => {
-        if (node !== root && isFunctionExpressionBoundary(node)) {
+        if (node !== root && isFunctionExpressionLike(node)) {
             return false;
         }
 
@@ -575,13 +356,6 @@ function hasMultipleNonRepeatableLastAtCalls(
     return count > 1;
 }
 
-function isFunctionExpressionBoundary(node: TSESTree.Node): boolean {
-    return (
-        node.type === AST_NODE_TYPES.ArrowFunctionExpression ||
-        node.type === AST_NODE_TYPES.FunctionExpression
-    );
-}
-
 function getClassPropertyWithoutFunctionBoundary(
     node: TSESTree.Node,
 ): TSESTree.PropertyDefinition | null {
@@ -592,7 +366,7 @@ function getClassPropertyWithoutFunctionBoundary(
             return current;
         }
 
-        if (isFunctionExpressionBoundary(current)) {
+        if (isFunctionExpressionLike(current)) {
             return null;
         }
 
@@ -603,11 +377,33 @@ function getClassPropertyWithoutFunctionBoundary(
 }
 
 function getClassPropertyPrefix(property: TSESTree.PropertyDefinition): string {
-    const modifiers = ['private', property.static ? 'static' : null, 'readonly'].filter(
-        (modifier): modifier is string => Boolean(modifier),
-    );
+    if (property.key.type === AST_NODE_TYPES.PrivateIdentifier) {
+        return property.static ? 'static ' : '';
+    }
+
+    const modifiers = [
+        property.accessibility,
+        property.static ? 'static' : null,
+        'readonly',
+    ].filter((modifier): modifier is string => Boolean(modifier));
 
     return `${modifiers.join(' ')} `;
+}
+
+function getClassPropertyDeclarationName(
+    property: TSESTree.PropertyDefinition,
+    name: string,
+): string {
+    return property.key.type === AST_NODE_TYPES.PrivateIdentifier ? `#${name}` : name;
+}
+
+function getClassPropertyReceiver(
+    property: TSESTree.PropertyDefinition,
+    name: string,
+): string {
+    return property.key.type === AST_NODE_TYPES.PrivateIdentifier
+        ? `this.#${name}`
+        : `this.${name}`;
 }
 
 function getLastIndexFix(
@@ -641,8 +437,8 @@ function getLastIndexFix(
             null,
         );
 
-        const indent = getLineIndent(sourceCode.text, statement.range[0]);
-        const lineStart = getLineStart(sourceCode.text, statement.range[0]);
+        const indent = getIndentAtOffset(sourceCode.text, statement.range[0]);
+        const lineStart = getLineStartOffset(sourceCode.text, statement.range[0]);
         const lineBreak = getLineBreak(sourceCode.text);
 
         return [
@@ -671,15 +467,16 @@ function getLastIndexFix(
             classBody,
         );
 
-        const receiverText = `this.${propertyName}`;
-        const indent = getLineIndent(sourceCode.text, property.range[0]);
-        const lineStart = getLineStart(sourceCode.text, property.range[0]);
+        const declarationName = getClassPropertyDeclarationName(property, propertyName);
+        const receiverText = getClassPropertyReceiver(property, propertyName);
+        const indent = getIndentAtOffset(sourceCode.text, property.range[0]);
+        const lineStart = getLineStartOffset(sourceCode.text, property.range[0]);
         const lineBreak = getLineBreak(sourceCode.text);
 
         return [
             fixer.insertTextBeforeRange(
                 [lineStart, lineStart],
-                `${indent}${getClassPropertyPrefix(property)}${propertyName} = ${objectText};${lineBreak}${lineBreak}`,
+                `${indent}${getClassPropertyPrefix(property)}${declarationName} = ${objectText};${lineBreak}${lineBreak}`,
             ),
             fixer.replaceText(call, `${receiverText}[${receiverText}.length - 1]`),
         ];
@@ -691,12 +488,8 @@ function getLastIndexFix(
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const typeAwareContext = getTypeAwareRuleContext(context);
-
-        const scriptTarget =
-            typeAwareContext.tsProgram.getCompilerOptions().target ??
-            FALLBACK_SCRIPT_TARGET;
-
-        const canUseAt = supportsAt(scriptTarget);
+        const compilerOptions = typeAwareContext.tsProgram.getCompilerOptions();
+        const canUseAt = supportsBuiltInAt(compilerOptions);
         const {checker: typeChecker, esTreeNodeToTSNodeMap} = typeAwareContext;
         const {sourceCode} = context;
 
@@ -705,14 +498,31 @@ export const rule = createRule<Options, MessageId>({
                 if (canUseAt) {
                     const indexText = getSafeBracketIndexText(sourceCode, node);
 
-                    if (indexText === null || isAssignmentTarget(node)) {
+                    if (indexText === null || isMutationTarget(node)) {
                         return;
                     }
 
                     const tsObjectNode = esTreeNodeToTSNodeMap.get(node.object);
+                    const tsIndexedAccessNode = esTreeNodeToTSNodeMap.get(node);
                     const objectType = typeChecker.getTypeAtLocation(tsObjectNode);
 
-                    if (!hasKnownBuiltInAtReceiver(typeChecker, objectType)) {
+                    const indexedAccessType =
+                        typeChecker.getTypeAtLocation(tsIndexedAccessNode);
+
+                    const indexedAccessTypeAlreadyIncludesUndefined =
+                        compilerOptions.noUncheckedIndexedAccess === true &&
+                        hasNullishType(indexedAccessType);
+
+                    const shouldPreserveIndexedAccessNarrowing =
+                        indexedAccessTypeAlreadyIncludesUndefined &&
+                        isIndexedAccessGuardingSameIndexAssignment(sourceCode, node);
+
+                    const shouldSkipPreferAt =
+                        !hasBuiltInAtReceiverType(typeChecker, objectType) ||
+                        isKnownTupleType(typeChecker, objectType) ||
+                        shouldPreserveIndexedAccessNarrowing;
+
+                    if (shouldSkipPreferAt) {
                         return;
                     }
 
@@ -731,7 +541,11 @@ export const rule = createRule<Options, MessageId>({
                                 ? null
                                 : fixer.replaceText(
                                       node,
-                                      appendAtFallback(node, atCallText),
+                                      appendAtFallback(
+                                          node,
+                                          atCallText,
+                                          indexedAccessTypeAlreadyIncludesUndefined,
+                                      ),
                                   );
                         },
                         messageId: 'atCompatPreferAt',
@@ -748,7 +562,7 @@ export const rule = createRule<Options, MessageId>({
                 const tsObjectNode = esTreeNodeToTSNodeMap.get(node.object);
                 const objectType = typeChecker.getTypeAtLocation(tsObjectNode);
 
-                if (!hasKnownBuiltInAtReceiver(typeChecker, objectType)) {
+                if (!hasBuiltInAtReceiverType(typeChecker, objectType)) {
                     return;
                 }
 

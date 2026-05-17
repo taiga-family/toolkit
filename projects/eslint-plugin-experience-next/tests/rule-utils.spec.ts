@@ -1,5 +1,6 @@
 import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
-import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
+import {ScriptTarget} from 'typescript';
 
 import {getReactiveCallbackArgument} from '../rules/utils/angular/angular-signals';
 import {
@@ -38,16 +39,34 @@ import {
     getEnclosingClass,
     getEnclosingClassMember,
     getEnclosingFunction,
+    getParentNode,
     isNodeInside,
 } from '../rules/utils/ast/ancestors';
+import {hasNonNullAssertionParent} from '../rules/utils/ast/ast-expressions';
+import {isFunctionExpressionLike} from '../rules/utils/ast/ast-walk';
 import {collectCallExpressions} from '../rules/utils/ast/call-expressions';
 import {
     isAccessorMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
 } from '../rules/utils/ast/class-members';
+import {
+    getContainingIfStatementForTestExpression,
+    isConditionTestExpression,
+    isEqualityComparisonOperand,
+    isLogicalFallbackLeftOperand,
+} from '../rules/utils/ast/condition-expressions';
 import {getAvailableIdentifier, isIdentifier} from '../rules/utils/ast/identifiers';
-import {collectMutationTargets} from '../rules/utils/ast/mutation-targets';
+import {isIndexedAccessGuardingSameIndexAssignment} from '../rules/utils/ast/indexed-access-narrowing';
+import {
+    getSafeBracketIndexText,
+    isSameIndexedAccess,
+} from '../rules/utils/ast/member-expressions';
+import {
+    collectMutationTargets,
+    getMutationExpressionTarget,
+    isMutationTarget,
+} from '../rules/utils/ast/mutation-targets';
 import {
     getParenthesizedInner,
     unwrapParenthesized,
@@ -63,6 +82,7 @@ import {
     getIndentAtOffset,
     getLeadingIndentation,
     getLineBreak,
+    getLineStartOffset,
     hasBlankLine,
     hasCommentLikeText,
     isSingleLineNode,
@@ -74,6 +94,7 @@ import {
     isStringLiteral,
 } from '../rules/utils/ast/string-literals';
 import {dedent} from '../rules/utils/text/dedent';
+import {supportsBuiltInAt} from '../rules/utils/typescript/compiler-options';
 import {hasNamedDecorator} from '../rules/utils/typescript/decorators';
 
 function attachParents(node: TSESTree.Node, parent?: TSESTree.Node): void {
@@ -116,6 +137,15 @@ function parseProgram(code: string): TSESTree.Program {
     attachParents(ast);
 
     return ast;
+}
+
+function createSourceCodeText(code: string): Readonly<TSESLint.SourceCode> {
+    return {
+        getText(node: TSESTree.Node): string {
+            return code.slice(node.range[0], node.range[1]);
+        },
+        text: code,
+    } as unknown as Readonly<TSESLint.SourceCode>;
 }
 
 function parseTemplate(code: string): unknown {
@@ -536,6 +566,7 @@ describe('rule utils', () => {
         expect(getLeadingIndentation('    value')).toBe('    ');
         expect(getLeadingIndentation('\t\tvalue')).toBe('\t\t');
         expect(getLeadingIndentation('value')).toBe('');
+        expect(getLineStartOffset('<div>\n    <span></span>', 10)).toBe(6);
         expect(getIndentAtOffset('<div>\n    <span></span>', 10)).toBe('    ');
         expect(getIndentAtOffset('<div>\ntext<span></span>', 10)).toBe('');
     });
@@ -558,6 +589,84 @@ describe('rule utils', () => {
             type: AST_NODE_TYPES.Identifier,
         });
         expect(targets[1]?.type).toBe(AST_NODE_TYPES.MemberExpression);
+    });
+
+    it('recognizes indexed access guards that protect same-index mutations', () => {
+        const code = 'if (event.data[0]) { event.data[0] += 16; }';
+        const sourceCode = createSourceCodeText(code);
+        const [statement] = parseProgram(code).body;
+
+        if (
+            statement?.type !== AST_NODE_TYPES.IfStatement ||
+            statement.test.type !== AST_NODE_TYPES.MemberExpression ||
+            statement.consequent.type !== AST_NODE_TYPES.BlockStatement
+        ) {
+            throw new Error('Expected an indexed access if statement');
+        }
+
+        const [bodyStatement] = statement.consequent.body;
+
+        if (
+            bodyStatement?.type !== AST_NODE_TYPES.ExpressionStatement ||
+            bodyStatement.expression.type !== AST_NODE_TYPES.AssignmentExpression ||
+            bodyStatement.expression.left.type !== AST_NODE_TYPES.MemberExpression
+        ) {
+            throw new Error('Expected an indexed access mutation');
+        }
+
+        const testAccess = statement.test;
+        const assignment = bodyStatement.expression;
+        const assignmentAccess = assignment.left;
+
+        expect(getParentNode(testAccess)).toBe(statement);
+        expect(getSafeBracketIndexText(sourceCode, testAccess)).toBe('0');
+        expect(getContainingIfStatementForTestExpression(testAccess)).toBe(statement);
+        expect(isConditionTestExpression(testAccess)).toBe(true);
+        expect(isIndexedAccessGuardingSameIndexAssignment(sourceCode, testAccess)).toBe(
+            true,
+        );
+        expect(getMutationExpressionTarget(assignment)).toBe(assignmentAccess);
+        expect(isMutationTarget(assignmentAccess)).toBe(true);
+        expect(isSameIndexedAccess(sourceCode, testAccess, assignmentAccess)).toBe(true);
+    });
+
+    it('recognizes reusable expression context helpers', () => {
+        const fallback = getFirstExpression('values[0] ?? fallback');
+        const equality = getFirstExpression('color[3] === opacity');
+        const asserted = getFirstExpression('(values[0])!');
+
+        if (
+            fallback.type !== AST_NODE_TYPES.LogicalExpression ||
+            fallback.left.type !== AST_NODE_TYPES.MemberExpression ||
+            equality.type !== AST_NODE_TYPES.BinaryExpression ||
+            equality.left.type !== AST_NODE_TYPES.MemberExpression ||
+            asserted.type !== AST_NODE_TYPES.TSNonNullExpression ||
+            asserted.expression.type !== AST_NODE_TYPES.MemberExpression
+        ) {
+            throw new Error('Expected logical and equality expressions');
+        }
+
+        expect(isLogicalFallbackLeftOperand(fallback.left)).toBe(true);
+        expect(isEqualityComparisonOperand(equality.left)).toBe(true);
+        expect(hasNonNullAssertionParent(asserted.expression)).toBe(true);
+    });
+
+    it('detects function expression boundaries and built-in at support', () => {
+        const arrow = getFirstExpression('() => value');
+
+        expect(isFunctionExpressionLike(arrow)).toBe(true);
+        expect(
+            supportsBuiltInAt({
+                lib: ['es2021', 'dom'],
+                target: ScriptTarget.ES2022,
+            }),
+        ).toBe(false);
+        expect(
+            supportsBuiltInAt({
+                lib: ['es2022', 'dom'],
+                target: ScriptTarget.ES2022,
+            }),
+        ).toBe(true);
     });
 
     it('recognizes Angular provider factory callbacks in reusable utilities', () => {
