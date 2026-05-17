@@ -110,8 +110,9 @@ export default defineConfig([
         },
         settings: {
             browserslistOpts: {env: 'modern'},
-            ignoreConditionalChecks: true,
+            ignoreConditionalChecks: false,
             lintAllEsApis: true,
+            polyfills: ['Array.prototype.at', 'String.prototype.at'],
             regexp: {allowedCharacterRanges: ['all']},
         },
         rules: {
@@ -668,6 +669,7 @@ export default defineConfig([
             '@angular-eslint/sort-lifecycle-methods': 'error',
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
+            '@taiga-ui/experience-next/at-compat': 'error',
             '@taiga-ui/experience-next/decorator-key-sort': [
                 'error',
                 {
@@ -857,7 +859,6 @@ export default defineConfig([
         extends: [playwright.configs['flat/recommended']],
         rules: {
             '@taiga-ui/experience-next/no-playwright-empty-fill': 'error',
-            'compat/compat': 'off',
             'jest/prefer-importing-jest-globals': 'off',
             'playwright/consistent-spacing-between-blocks': 'error',
             'playwright/expect-expect': [
@@ -896,7 +897,6 @@ export default defineConfig([
         extends: [jest.configs['flat/recommended']],
         rules: {
             '@typescript-eslint/no-extraneous-class': 'off',
-            'compat/compat': 'off',
             'jest/expect-expect': 'off',
             'jest/max-expects': 'off',
             'jest/max-nested-describe': 'off',
@@ -984,7 +984,6 @@ export default defineConfig([
         files: ['**/*.cy.ts'],
         plugins: {cypress},
         rules: {
-            'compat/compat': 'off',
             'cypress/no-unnecessary-waiting': 'off',
             'cypress/unsafe-to-chain-command': 'off',
             'max-nested-callbacks': 'off',
@@ -1021,6 +1020,15 @@ export default defineConfig([
     },
     {
         files: ['**/*.md', '**/*.html', '**/*.cy.ts', '**/*.spec.ts'],
+        settings: {
+            polyfills: [
+                'Array.prototype.at',
+                'String.prototype.at',
+                'Touch',
+                'TouchEvent',
+                'document.fullscreenElement',
+            ],
+        },
         rules: {'no-irregular-whitespace': 'off'},
     },
     {
