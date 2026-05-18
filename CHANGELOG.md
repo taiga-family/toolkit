@@ -1,3 +1,10 @@
+### [0.525.0](https://github.com/taiga-family/toolkit/compare/v0.524.0...v0.525.0) (2026-05-18)
+
+### 🐞 Bug Fixes
+
+- **auto-changelog-config**: regression ([#1878](https://github.com/taiga-family/toolkit/pull/1878))
+  [(9fc7f3d)](https://github.com/taiga-family/toolkit/commit/9fc7f3d3b1b3ccbbddb13a326f22c0e5b2bb6efc)
+
 ### [0.524.0](https://github.com/taiga-family/toolkit/compare/v0.523.0...v0.524.0) (2026-05-18)
 
 ### 🐞 Bug Fixes
