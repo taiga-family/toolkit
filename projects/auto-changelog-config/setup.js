@@ -5,7 +5,7 @@ module.exports = function (Handlebars) {
 
     const toArray = (value) => (Array.isArray(value) ? value : []);
 
-    const escape = (value) => Handlebars.escapeExpression(String(value ?? ''));
+    const escape = (value) => String(value ?? '').trim();
 
     const commitPattern =
         /^(?:build|chore|ci|docs|feat|fix|refactor|revert|style|test)\s?(?:\((?<scope>[^)]*)\))?!?: (?<title>.*)$/;
