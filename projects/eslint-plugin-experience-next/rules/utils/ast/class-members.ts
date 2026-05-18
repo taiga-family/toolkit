@@ -3,6 +3,7 @@ import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 export {
     getLeadingIndentation,
     getLineBreak,
+    getLineStartOffset,
     hasBlankLine,
     hasCommentLikeText,
     isSingleLineNode,

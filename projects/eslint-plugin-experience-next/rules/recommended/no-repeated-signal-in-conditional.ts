@@ -1,10 +1,13 @@
 import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
-import ts from 'typescript';
+import type ts from 'typescript';
 
 import {isSignalReadCall, type NodeMap} from '../utils/angular/angular-signals';
+import {getParentNode} from '../utils/ast/ancestors';
 import {isFunctionLike, walkAst} from '../utils/ast/ast-walk';
+import {getIndentAtOffset, getLineStartOffset} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
+import {hasNullishType} from '../utils/typescript/types';
 
 type Options = [];
 
@@ -18,17 +21,7 @@ function isNullableCallType(
     try {
         const tsNode = nodeMap.get(call);
 
-        if (!tsNode) {
-            return false;
-        }
-
-        const type = checker.getTypeAtLocation(tsNode);
-
-        return type.flags & ts.TypeFlags.Union
-            ? (type as ts.UnionType).types.some(
-                  (t) => !!(t.flags & (ts.TypeFlags.Null | ts.TypeFlags.Undefined)),
-              )
-            : false;
+        return tsNode ? hasNullishType(checker.getTypeAtLocation(tsNode)) : false;
     } catch {
         return false;
     }
@@ -107,7 +100,7 @@ function getArrowBodyIndent(
     sourceText: string,
 ): {innerIndent: string; outerIndent: string} {
     const arrowStart = arrowFn.range[0];
-    const lineStart = sourceText.lastIndexOf('\n', arrowStart - 1) + 1;
+    const lineStart = getLineStartOffset(sourceText, arrowStart);
     const textBeforeArrow = sourceText.slice(lineStart, arrowStart);
     const outerIndent = /^(\s*)/.exec(textBeforeArrow)?.[1] ?? '';
 
@@ -115,38 +108,12 @@ function getArrowBodyIndent(
 }
 
 function getStatementIndent(statement: TSESTree.Statement, sourceText: string): string {
-    const start = statement.range[0];
-    const lineStart = sourceText.lastIndexOf('\n', start - 1) + 1;
-    const before = sourceText.slice(lineStart, start);
-
-    return /^\s*$/.test(before) ? before : '';
-}
-
-function isAstNode(value: unknown): value is TSESTree.Node {
-    if (!value || typeof value !== 'object' || !('type' in value)) {
-        return false;
-    }
-
-    const {type} = value as Record<'type', unknown>;
-
-    return typeof type === 'string';
-}
-
-function getParent(node: TSESTree.Node): TSESTree.Node | null {
-    const maybeNode: unknown = node;
-
-    if (!maybeNode || typeof maybeNode !== 'object' || !('parent' in maybeNode)) {
-        return null;
-    }
-
-    const {parent} = maybeNode as Record<'parent', unknown>;
-
-    return isAstNode(parent) ? parent : null;
+    return getIndentAtOffset(sourceText, statement.range[0]);
 }
 
 function isOptionalMemberReceiver(call: TSESTree.CallExpression): boolean {
     let current: TSESTree.Node = call;
-    let parent = getParent(current);
+    let parent = getParentNode(current);
 
     while (
         parent?.type === AST_NODE_TYPES.TSAsExpression ||
@@ -154,7 +121,7 @@ function isOptionalMemberReceiver(call: TSESTree.CallExpression): boolean {
         parent?.type === AST_NODE_TYPES.TSTypeAssertion
     ) {
         current = parent;
-        parent = getParent(current);
+        parent = getParentNode(current);
     }
 
     return (

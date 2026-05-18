@@ -34,6 +34,20 @@ ruleTester.run('at-compat with ES2022 target', rule, {
         },
         {
             code: /* TypeScript */ `
+                const rows: number[] = [1, 2, 3];
+
+                const firstRow = rows[0];
+            `,
+            errors: [{messageId: 'atCompatPreferAt'}],
+            filename,
+            output: /* TypeScript */ `
+                const rows: number[] = [1, 2, 3];
+
+                const firstRow = rows.at(0)!;
+            `,
+        },
+        {
+            code: /* TypeScript */ `
                 const values: string[] | null = [];
 
                 const value = values?.[0];
@@ -58,6 +72,26 @@ ruleTester.run('at-compat with ES2022 target', rule, {
                 const values = [4, 5, 6];
 
                 const value = values.at(0) ?? 0;
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                declare const color: readonly number[];
+                declare const opacity: number;
+
+                if (color[3] === opacity) {
+                    noop();
+                }
+            `,
+            errors: [{messageId: 'atCompatPreferAt'}],
+            filename,
+            output: /* TypeScript */ `
+                declare const color: readonly number[];
+                declare const opacity: number;
+
+                if (color.at(3) === opacity) {
+                    noop();
+                }
             `,
         },
         {
@@ -281,6 +315,22 @@ ruleTester.run('at-compat with ES2022 target', rule, {
                 const values = [4, 5, 6];
 
                 values[0] = 10;
+            `,
+            filename,
+        },
+        {
+            code: /* TypeScript */ `
+                const values = [4, 5, 6] as const;
+
+                const value = values[0];
+            `,
+            filename,
+        },
+        {
+            code: /* TypeScript */ `
+                const point: [number, number] = [0, 1];
+
+                const x = point[0];
             `,
             filename,
         },

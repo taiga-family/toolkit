@@ -1,8 +1,10 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import {isCallExpression} from 'typescript';
 
+import {isFunctionExpressionLike} from '../utils/ast/ast-walk';
 import {createRule} from '../utils/create-rule';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
+import {isKnownTupleType} from '../utils/typescript/types';
 
 type Options = [
     {
@@ -86,11 +88,7 @@ export const rule = createRule<Options, MessageId>({
             // only explicit return type declaration (satisfying
             // @typescript-eslint/explicit-function-return-type via
             // allowTypedFunctionExpressions). Removing it would break that rule.
-            if (
-                (value.type === AST_NODE_TYPES.ArrowFunctionExpression ||
-                    value.type === AST_NODE_TYPES.FunctionExpression) &&
-                !value.returnType
-            ) {
+            if (isFunctionExpressionLike(value) && !value.returnType) {
                 return;
             }
 
@@ -105,7 +103,8 @@ export const rule = createRule<Options, MessageId>({
                     const tsArrayNode = esTreeNodeToTSNodeMap.get(arrayExpression);
 
                     if (
-                        typeChecker.isTupleType(
+                        isKnownTupleType(
+                            typeChecker,
                             typeChecker.getTypeAtLocation(tsArrayNode),
                         )
                     ) {

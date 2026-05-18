@@ -1,5 +1,8 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
+import {getParentNode} from './ancestors';
+import {getParenthesizedInner} from './parenthesized';
+
 /**
  * Strips expression wrapper nodes that do not affect the underlying expression:
  * parentheses, `as` casts, `satisfies`, non-null assertions (`!`), type
@@ -53,6 +56,29 @@ export function unwrapExpression(expression: TSESTree.Expression): TSESTree.Expr
     }
 
     return current;
+}
+
+export function hasNonNullAssertionParent(node: TSESTree.Node): boolean {
+    let current = node;
+    let parent = getParentNode(current);
+
+    while (parent) {
+        if (
+            parent.type === AST_NODE_TYPES.TSNonNullExpression &&
+            parent.expression === current
+        ) {
+            return true;
+        }
+
+        if (getParenthesizedInner(parent) !== current) {
+            return false;
+        }
+
+        current = parent;
+        parent = getParentNode(current);
+    }
+
+    return false;
 }
 
 function isExpressionLike(value: unknown): value is TSESTree.Expression {

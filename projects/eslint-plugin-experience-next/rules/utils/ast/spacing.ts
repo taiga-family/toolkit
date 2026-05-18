@@ -50,8 +50,12 @@ export function getLeadingIndentation(text: string): string {
     return text.slice(0, index);
 }
 
+export function getLineStartOffset(text: string, offset: number): number {
+    return text.lastIndexOf('\n', offset - 1) + 1;
+}
+
 export function getIndentAtOffset(text: string, offset: number): string {
-    const lineStart = text.lastIndexOf('\n', offset - 1) + 1;
+    const lineStart = getLineStartOffset(text, offset);
     const indent = text.slice(lineStart, offset);
 
     return indent.trim() === '' ? indent : '';

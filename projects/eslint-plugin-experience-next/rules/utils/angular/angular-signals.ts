@@ -1,7 +1,11 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import ts from 'typescript';
 
-import {walkAfterAsyncBoundaryAst, walkSynchronousAst} from '../ast/ast-walk';
+import {
+    isFunctionExpressionLike,
+    walkAfterAsyncBoundaryAst,
+    walkSynchronousAst,
+} from '../ast/ast-walk';
 import {type NodeMap} from '../typescript/node-map';
 import {getLocalNameForImport} from './angular-imports';
 
@@ -44,10 +48,7 @@ export interface SignalUsage {
 export function isReactiveCallback(
     node: TSESTree.Node | null | undefined,
 ): node is ReactiveCallback {
-    return (
-        node?.type === AST_NODE_TYPES.ArrowFunctionExpression ||
-        node?.type === AST_NODE_TYPES.FunctionExpression
-    );
+    return isFunctionExpressionLike(node);
 }
 
 export function getReactiveCallbackArgument(
