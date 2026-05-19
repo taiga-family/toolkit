@@ -670,6 +670,7 @@ export default defineConfig([
             '@angular-eslint/use-lifecycle-interface': 'error',
             '@angular-eslint/use-pipe-transform-interface': 'error',
             '@taiga-ui/experience-next/at-compat': 'error',
+            '@taiga-ui/experience-next/class-accessibility-spacing': 'error',
             '@taiga-ui/experience-next/decorator-key-sort': [
                 'error',
                 {

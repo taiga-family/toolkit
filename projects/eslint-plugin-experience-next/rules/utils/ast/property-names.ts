@@ -1,5 +1,6 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
+import {isEcmascriptPrivateClassMember} from './class-members';
 import {getStaticStringValue} from './string-literals';
 
 export function getStaticPropertyName(key: TSESTree.PropertyName): string | null {
@@ -30,7 +31,7 @@ export function getMemberExpressionPropertyName(
 export function getClassMemberName(
     member: TSESTree.MethodDefinition | TSESTree.PropertyDefinition,
 ): string | null {
-    return member.key.type === AST_NODE_TYPES.PrivateIdentifier
+    return isEcmascriptPrivateClassMember(member)
         ? null
         : getStaticPropertyName(member.key);
 }

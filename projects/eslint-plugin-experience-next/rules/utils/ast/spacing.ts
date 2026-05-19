@@ -36,6 +36,13 @@ export function hasBlankLine(text: string): boolean {
     return false;
 }
 
+export function hasBlankLineBetweenNodes(text: string): boolean {
+    const lines = splitLines(text);
+    const linesBetweenNodes = lines.slice(1, -1);
+
+    return linesBetweenNodes.some((line) => line.trim() === '');
+}
+
 export function getLineBreak(text: string): string {
     if (text.includes('\r\n')) {
         return '\r\n';

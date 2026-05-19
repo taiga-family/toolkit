@@ -23,7 +23,7 @@ ruleTester.run('no-implicit-public', rule, {
             errors: [{message: 'method method should be marked as public'}],
             output: `
                 class TestClass {
-                     public method() {}
+                    public method() {}
                 }
             `,
         },
@@ -36,7 +36,7 @@ ruleTester.run('no-implicit-public', rule, {
             errors: [{message: 'property field should be marked as public'}],
             output: `
                 class TestClass {
-                     public field = 'value';
+                    public field = 'value';
                 }
             `,
         },
@@ -49,7 +49,7 @@ ruleTester.run('no-implicit-public', rule, {
             errors: [{message: 'get value should be marked as public'}],
             output: `
                 class TestClass {
-                     public get value() { return 'test'; }
+                    public get value() { return 'test'; }
                 }
             `,
         },
@@ -62,7 +62,7 @@ ruleTester.run('no-implicit-public', rule, {
             errors: [{message: 'set value should be marked as public'}],
             output: `
                 class TestClass {
-                     public set value(val: string) {}
+                    public set value(val: string) {}
                 }
             `,
         },
@@ -75,7 +75,82 @@ ruleTester.run('no-implicit-public', rule, {
             errors: [{message: 'property field should be marked as public'}],
             output: `
                 class TestClass {
-                    @Input()  public field = 'value';
+                    @Input() public field = 'value';
+                }
+            `,
+        },
+        {
+            code: `
+                class TestClass {
+                    @Input()field = 'value';
+                }
+            `,
+            errors: [{message: 'property field should be marked as public'}],
+            output: `
+                class TestClass {
+                    @Input() public field = 'value';
+                }
+            `,
+        },
+        {
+            code: `
+                class TestClass {
+                    readonly field = 'value';
+                    static method(): void {}
+                    async load(): Promise<void> {}
+                }
+            `,
+            errors: [
+                {message: 'property field should be marked as public'},
+                {message: 'method method should be marked as public'},
+                {message: 'method load should be marked as public'},
+            ],
+            output: `
+                class TestClass {
+                    public readonly field = 'value';
+                    public static method(): void {}
+                    public async load(): Promise<void> {}
+                }
+            `,
+        },
+        {
+            code: `
+                class TestClass {
+                    @Input() readonly field = 'value';
+                }
+            `,
+            errors: [{message: 'property field should be marked as public'}],
+            output: `
+                class TestClass {
+                    @Input() public readonly field = 'value';
+                }
+            `,
+        },
+        {
+            code: `
+                class TestClass {
+                    @Input()
+                    readonly field = 'value';
+                }
+            `,
+            errors: [{message: 'property field should be marked as public'}],
+            output: `
+                class TestClass {
+                    @Input()
+                    public readonly field = 'value';
+                }
+            `,
+        },
+        {
+            code: `
+                class TestClass {
+                    constructor(readonly value: string) {}
+                }
+            `,
+            errors: [{message: 'property value should be marked as public'}],
+            output: `
+                class TestClass {
+                    constructor(public readonly value: string) {}
                 }
             `,
         },

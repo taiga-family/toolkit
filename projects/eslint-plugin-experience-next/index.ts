@@ -6,6 +6,7 @@ import recommended, {ALL_TS_JS_FILES} from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import atCompat from './rules/recommended/at-compat';
 import attrsNewline from './rules/recommended/attrs-newline';
+import classAccessibilitySpacing from './rules/recommended/class-accessibility-spacing';
 import decoratorKeySort from './rules/recommended/decorator-key-sort';
 import elementNewline from './rules/recommended/element-newline';
 import hostAttributesSort from './rules/recommended/host-attributes-sort';
@@ -80,6 +81,7 @@ const plugin = {
         'array-as-const': arrayAsConst,
         'at-compat': atCompat,
         'attrs-newline': attrsNewline,
+        'class-accessibility-spacing': classAccessibilitySpacing,
         'class-property-naming': classPropertyNaming,
         'decorator-key-sort': decoratorKeySort,
         'element-newline': elementNewline,
