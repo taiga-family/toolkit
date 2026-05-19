@@ -1,3 +1,11 @@
+### [0.528.0](https://github.com/taiga-family/toolkit/compare/v0.527.0...v0.528.0) (2026-05-19)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add `class-accessibility-spacing`
+  ([#1884](https://github.com/taiga-family/toolkit/pull/1884))
+  [(73cae80)](https://github.com/taiga-family/toolkit/commit/73cae8093819bdb87d264d7c19185e03d4a3e01e)
+
 ### [0.527.0](https://github.com/taiga-family/toolkit/compare/v0.526.0...v0.527.0) (2026-05-19)
 
 ### 🚀 Features
