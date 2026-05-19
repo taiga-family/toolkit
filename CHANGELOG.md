@@ -1,3 +1,15 @@
+### [0.527.0](https://github.com/taiga-family/toolkit/compare/v0.526.0...v0.527.0) (2026-05-19)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: support CRLF ([#1883](https://github.com/taiga-family/toolkit/pull/1883))
+  [(7c8e612)](https://github.com/taiga-family/toolkit/commit/7c8e61229019e5af85381f799b650dc88217fed6)
+
+### 🐞 Bug Fixes
+
+- update @typescript-eslint/\* to v8.59.2 ([#1882](https://github.com/taiga-family/toolkit/pull/1882))
+  [(182b097)](https://github.com/taiga-family/toolkit/commit/182b097f8679e6a8acf90d0bc52aa4f5ddf757be)
+
 ### [0.526.0](https://github.com/taiga-family/toolkit/compare/v0.525.0...v0.526.0) (2026-05-18)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
