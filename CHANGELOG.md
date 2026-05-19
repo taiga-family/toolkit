@@ -1,3 +1,7 @@
+### [0.529.0](https://github.com/taiga-family/toolkit/compare/v0.528.0...v0.529.0) (2026-05-19)
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
 ### [0.528.0](https://github.com/taiga-family/toolkit/compare/v0.527.0...v0.528.0) (2026-05-19)
 
 ### 🚀 Features
