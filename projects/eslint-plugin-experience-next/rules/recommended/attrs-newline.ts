@@ -3,6 +3,7 @@ import {type Rule} from 'eslint';
 
 import {getElementAttributeLikes} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {getLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_IDS = {
@@ -38,6 +39,8 @@ function buildMultilineStartTag(node: TmplAstElement, sourceText: string): strin
         )
         .trimStart();
 
+    const lineBreak = getLineBreak(sourceText);
+
     return [
         tagStart.trimEnd(),
         ...attrs.map((attr) =>
@@ -46,7 +49,7 @@ function buildMultilineStartTag(node: TmplAstElement, sourceText: string): strin
                 .trim(),
         ),
         closing,
-    ].join('\n');
+    ].join(lineBreak);
 }
 
 export const rule = createRule({

@@ -1,6 +1,7 @@
 import {RuleTester} from 'eslint';
 
 import {rule} from '../rules/recommended/no-nested-ternary-in-template';
+import {withCrLf} from './utils/line-endings';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},
@@ -29,6 +30,15 @@ ruleTester.run('no-nested-ternary-in-template', rule, {
             code: /* HTML */ '<button [disabled]="loading() ? invalid() ? true : false : false"></button>',
             errors: [{messageId: 'noNestedTernaryInTemplate'}],
             output: /* HTML */ '@let disabled = invalid() ? true : false;\n<button [disabled]="loading() ? disabled : false"></button>',
+        },
+        {
+            code: withCrLf(
+                /* HTML */ '<button>\n{{ active ? label : fallback ? empty : title }}\n</button>',
+            ),
+            errors: [{messageId: 'noNestedTernaryInTemplate'}],
+            output: withCrLf(
+                /* HTML */ '<button>\n@let text = fallback ? empty : title;\n{{ active ? label : text }}\n</button>',
+            ),
         },
         {
             code: /* HTML */ `

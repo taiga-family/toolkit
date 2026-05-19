@@ -133,6 +133,15 @@ Create or update `docs/<rule-name>.md` with:
 - Cache reusable derived data inside the rule when the same computation can be hit multiple times per file.
 - Keep autofix construction lazy and local to reported nodes; do not precompute large fix payloads.
 
+## Line Endings in Rules
+
+- When writing ESLint rules and autofixers, do not hardcode `\n` or use LF-only string operations.
+- Use shared spacing helpers from `projects/eslint-plugin-experience-next/rules/utils/ast/spacing.ts` such as
+  `getLineBreak`, `hasLineBreak`, `splitLines`, `getLineStartOffset`, `getLineEndOffset`, and `getNextLineStartOffset`
+  so rules correctly handle and preserve CRLF.
+- When a fixer inserts, removes, or moves line breaks, add or update a CRLF test case with the shared `withCrLf(...)`
+  helper from `projects/eslint-plugin-experience-next/tests/utils/line-endings.ts` when practical.
+
 ## Utility Reuse
 
 - Before creating a new shared helper for `eslint-plugin-experience-next`, first check

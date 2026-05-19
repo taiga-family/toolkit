@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/no-useless-untracked';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -244,6 +245,31 @@ ruleTester.run('no-useless-untracked', rule, {
                 });
                 console.log(derived);
             `,
+        },
+        {
+            code: withCrLf(/* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, effect, untracked} from '@angular/core';
+                const a = signal(0);
+                const b = signal('');
+                effect(() => {
+                    untracked(() => {
+                        a.set(1);
+                        b.set('hello');
+                    });
+                });
+            `),
+            errors: [{messageId: 'uselessUntracked'}],
+            output: withCrLf(/* TypeScript */ `
+                ${PREAMBLE}
+                import {signal, effect} from '@angular/core';
+                const a = signal(0);
+                const b = signal('');
+                effect(() => {
+                    a.set(1);
+                    b.set('hello');
+                });
+            `),
         },
         // Class-based useless wrapper should also be removed
         {

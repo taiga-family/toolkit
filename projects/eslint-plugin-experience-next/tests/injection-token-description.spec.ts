@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/injection-token-description';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -30,6 +31,15 @@ const SERVICE_TOKEN = new InjectionToken(ngDevMode ? \`[SERVICE_TOKEN]: some \${
             code: /* TypeScript */ "import {InjectionToken} from '@angular/core';\n\nexport const TUI_ICON_START = new InjectionToken('Token', {\n    factory: () => '',\n});",
             errors: [{messageId: 'invalid-injection-token-description'}],
             output: /* TypeScript */ "import {InjectionToken} from '@angular/core';\n\ndeclare const ngDevMode: boolean;\n\nexport const TUI_ICON_START = new InjectionToken(ngDevMode ? '[TUI_ICON_START]: Token' : '', {\n    factory: () => '',\n});",
+        },
+        {
+            code: withCrLf(
+                /* TypeScript */ "import {InjectionToken} from '@angular/core';\n\nexport const TUI_ICON_START = new InjectionToken('Token');",
+            ),
+            errors: [{messageId: 'invalid-injection-token-description'}],
+            output: withCrLf(
+                /* TypeScript */ "import {InjectionToken} from '@angular/core';\n\ndeclare const ngDevMode: boolean;\n\nexport const TUI_ICON_START = new InjectionToken(ngDevMode ? '[TUI_ICON_START]: Token' : '');",
+            ),
         },
         {
             code: /* TypeScript */ "declare const ngDevMode: boolean;\n\nconst TUI_ICON_START = new InjectionToken(ngDevMode ? 'Token' : '', {\n    factory: () => '',\n});",

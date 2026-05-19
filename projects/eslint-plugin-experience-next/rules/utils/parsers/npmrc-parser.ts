@@ -1,3 +1,5 @@
+import {splitLines} from '../ast/spacing';
+
 interface NpmrcAST {
     type: 'Program';
     body: never[];
@@ -11,7 +13,7 @@ interface NpmrcAST {
 }
 
 function buildAST(text: string): NpmrcAST {
-    const lines = text.split('\n');
+    const lines = splitLines(text);
     const lastLine = lines[lines.length - 1] ?? '';
 
     return {

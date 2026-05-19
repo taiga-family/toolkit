@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/no-empty-style-metadata';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -61,6 +62,24 @@ ruleTester.run('no-empty-style-metadata', rule, {
                 })
                 class TestClass {}
             `,
+        },
+        {
+            code: withCrLf(`
+                @Component({
+                    selector: 'app-test',
+                    styles: '',
+                    template: 'test',
+                })
+                class TestClass {}
+            `),
+            errors: [{messageId: 'noEmptyStyleMetadata'}],
+            output: withCrLf(`
+                @Component({
+                    selector: 'app-test',
+                    template: 'test',
+                })
+                class TestClass {}
+            `),
         },
         {
             code: `

@@ -1,7 +1,8 @@
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
-import {type TSESTree} from '@typescript-eslint/utils';
+import {type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 import {type RuleFix, type RuleFixer} from '@typescript-eslint/utils/ts-eslint';
 
+import {getLineBreak} from '../utils/ast/spacing';
 import {
     isEmptyStaticString,
     isStringLiteral,
@@ -81,20 +82,32 @@ function prependTokenName(text: string, name: string): string {
 function getNgDevModeDeclarationFix(
     program: TSESTree.Program,
     fixer: RuleFixer,
+    sourceCode: Readonly<TSESLint.SourceCode>,
 ): RuleFix {
     const lastImport = [...program.body]
         .reverse()
         .find((statement) => statement.type === AST_NODE_TYPES.ImportDeclaration);
 
+    const lineBreak = getLineBreak(sourceCode.text);
+
     if (lastImport) {
-        return fixer.insertTextAfter(lastImport, '\n\ndeclare const ngDevMode: boolean;');
+        return fixer.insertTextAfter(
+            lastImport,
+            `${lineBreak}${lineBreak}declare const ngDevMode: boolean;`,
+        );
     }
 
     const [firstStatement] = program.body;
 
     return firstStatement
-        ? fixer.insertTextBefore(firstStatement, 'declare const ngDevMode: boolean;\n\n')
-        : fixer.insertTextBeforeRange([0, 0], 'declare const ngDevMode: boolean;\n');
+        ? fixer.insertTextBefore(
+              firstStatement,
+              `declare const ngDevMode: boolean;${lineBreak}${lineBreak}`,
+          )
+        : fixer.insertTextBeforeRange(
+              [0, 0],
+              `declare const ngDevMode: boolean;${lineBreak}`,
+          );
 }
 
 export const rule = createRule({
@@ -140,7 +153,13 @@ export const rule = createRule({
                                 !hasVariableInScope(sourceCode, description, NG_DEV_MODE)
                             ) {
                                 shouldAddNgDevModeDeclaration = false;
-                                fixes.unshift(getNgDevModeDeclarationFix(program, fixer));
+                                fixes.unshift(
+                                    getNgDevModeDeclarationFix(
+                                        program,
+                                        fixer,
+                                        sourceCode,
+                                    ),
+                                );
                             }
 
                             return fixes;

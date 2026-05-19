@@ -8,6 +8,12 @@ import {
     getMemberExpressionPropertyName,
     getObjectPropertyName,
 } from '../utils/ast/property-names';
+import {
+    getLineBreak,
+    getLineEndOffset,
+    getLineStartOffset,
+    getNextLineStartOffset,
+} from '../utils/ast/spacing';
 import {isStringLiteral, type StringLiteral} from '../utils/ast/string-literals';
 import {createRule} from '../utils/create-rule';
 import {getResolvedVariable} from '../utils/eslint/scope';
@@ -1082,13 +1088,20 @@ export const rule = createRule<Options, MessageId>({
             node: TSESTree.ImportDeclaration,
         ): TSESLint.RuleFix[] {
             const [start, end] = node.range;
-            const lineStart = sourceCode.text.lastIndexOf('\n', start - 1) + 1;
+            const lineStart = getLineStartOffset(sourceCode.text, start);
 
             const removeStart = /^\s*$/.test(sourceCode.text.slice(lineStart, start))
                 ? lineStart
                 : start;
 
-            const removeEnd = sourceCode.text[end] === '\n' ? end + 1 : end;
+            const lineEnd = getLineEndOffset(sourceCode.text, end);
+
+            const isImportLastStatementOnLine =
+                sourceCode.text.slice(end, lineEnd).trim() === '';
+
+            const removeEnd = isImportLastStatementOnLine
+                ? getNextLineStartOffset(sourceCode.text, end)
+                : end;
 
             return [fixer.removeRange([removeStart, removeEnd])];
         }
@@ -1607,7 +1620,7 @@ export const rule = createRule<Options, MessageId>({
                 );
             }
 
-            return newImports.join('\n');
+            return newImports.join(getLineBreak(sourceCode.text));
         }
 
         function checkDefaultImport(node: TSESTree.ImportDeclaration): void {

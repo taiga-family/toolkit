@@ -422,7 +422,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                 ? (fixer) => [fixer.replaceText(read, wrapped)]
                 : (fixer) => [
                       fixer.replaceText(read, wrapped),
-                      ...buildUntrackedImportFixes(program, fixer),
+                      ...buildUntrackedImportFixes(program, fixer, sourceCode),
                   ];
         }
 

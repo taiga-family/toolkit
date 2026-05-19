@@ -20,6 +20,7 @@ import {
     createUntrackedRule,
 } from '../utils/angular/untracked-docs';
 import {collectCallExpressions} from '../utils/ast/call-expressions';
+import {getLineBreak} from '../utils/ast/spacing';
 import {dedent} from '../utils/text/dedent';
 import {type NodeMap} from '../utils/typescript/node-map';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
@@ -61,8 +62,9 @@ function buildReplacement(
         const firstStmtColumn = firstStmt.loc.start.column;
         const extra = firstStmtColumn - parentColumn;
         const indented = stmts.map((s) => dedent(sourceCode.getText(s), extra));
+        const lineBreak = getLineBreak(sourceCode.text);
 
-        return indented.join(`\n${''.padStart(parentColumn)}`);
+        return indented.join(`${lineBreak}${''.padStart(parentColumn)}`);
     }
 
     // Expression body: arrow `() => expr` — just emit `expr;`

@@ -7,6 +7,7 @@ import {
 import ts from 'typescript';
 
 import {getParenthesizedInner, unwrapParenthesized} from '../utils/ast/parenthesized';
+import {getLineBreak, hasLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 type Options = [];
@@ -288,8 +289,9 @@ function renderConditionalReturn(
     }
 
     const branchIndent = `${indent}    `;
+    const lineBreak = getLineBreak(sourceCode.text);
 
-    return `return ${test}\n${branchIndent}? ${consequent}\n${branchIndent}: ${alternate};`;
+    return `return ${test}${lineBreak}${branchIndent}? ${consequent}${lineBreak}${branchIndent}: ${alternate};`;
 }
 
 function renderBooleanTestReturn(
@@ -298,9 +300,10 @@ function renderBooleanTestReturn(
     strategy: Exclude<BooleanTestReturnStrategy, 'skip'>,
 ): string {
     const test = sourceCode.getText(ifStatement.test);
+    const lineBreak = getLineBreak(sourceCode.text);
 
     if (strategy === 'negate') {
-        if (!test.includes('\n')) {
+        if (!hasLineBreak(test)) {
             const renderedTest = needsParenthesesInBooleanCoercion(ifStatement.test)
                 ? `(${test})`
                 : test;
@@ -310,11 +313,11 @@ function renderBooleanTestReturn(
 
         const indent = getStatementIndent(ifStatement, sourceCode);
 
-        return `return !(\n${indent}    ${test}\n${indent});`;
+        return `return !(${lineBreak}${indent}    ${test}${lineBreak}${indent});`;
     }
 
     if (strategy === 'coerce') {
-        if (!test.includes('\n')) {
+        if (!hasLineBreak(test)) {
             const renderedTest = needsParenthesesInBooleanCoercion(ifStatement.test)
                 ? `(${test})`
                 : test;
@@ -324,16 +327,16 @@ function renderBooleanTestReturn(
 
         const indent = getStatementIndent(ifStatement, sourceCode);
 
-        return `return !!(\n${indent}    ${test}\n${indent});`;
+        return `return !!(${lineBreak}${indent}    ${test}${lineBreak}${indent});`;
     }
 
-    if (!test.includes('\n')) {
+    if (!hasLineBreak(test)) {
         return `return ${test};`;
     }
 
     const indent = getStatementIndent(ifStatement, sourceCode);
 
-    return `return (\n${indent}    ${test}\n${indent});`;
+    return `return (${lineBreak}${indent}    ${test}${lineBreak}${indent});`;
 }
 
 export const rule = createRule<Options, MessageId>({

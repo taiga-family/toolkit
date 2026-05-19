@@ -4,7 +4,7 @@ import type ts from 'typescript';
 import {isSignalReadCall, type NodeMap} from '../utils/angular/angular-signals';
 import {getParentNode} from '../utils/ast/ancestors';
 import {isFunctionLike, walkAst} from '../utils/ast/ast-walk';
-import {getIndentAtOffset, getLineStartOffset} from '../utils/ast/spacing';
+import {getIndentAtOffset, getLineBreak, getLineStartOffset} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
 import {hasNullishType} from '../utils/typescript/types';
@@ -188,6 +188,7 @@ export const rule = createRule<Options, MessageId>({
                     fix(fixer): TSESLint.RuleFix[] | null {
                         const varName = getCalleeName(firstCall);
                         const parentStatement = findParentStatement(node);
+                        const lineBreak = getLineBreak(sourceCode.text);
 
                         if (parentStatement) {
                             const indent = getStatementIndent(
@@ -198,7 +199,7 @@ export const rule = createRule<Options, MessageId>({
                             const fixes = [
                                 fixer.insertTextBefore(
                                     parentStatement,
-                                    `const ${varName} = ${callText};\n\n${indent}`,
+                                    `const ${varName} = ${callText};${lineBreak}${lineBreak}${indent}`,
                                 ),
                             ];
 
@@ -244,7 +245,7 @@ export const rule = createRule<Options, MessageId>({
 
                         replacedBody += bodyText.slice(lastIndex);
 
-                        const newBody = `{\n${innerIndent}const ${varName} = ${callText};\n\n${innerIndent}return ${replacedBody};\n${outerIndent}}`;
+                        const newBody = `{${lineBreak}${innerIndent}const ${varName} = ${callText};${lineBreak}${lineBreak}${innerIndent}return ${replacedBody};${lineBreak}${outerIndent}}`;
                         const bodyRangeStart = arrowBody.range[0];
                         const textBeforeBody = sourceCode.text.slice(0, bodyRangeStart);
 

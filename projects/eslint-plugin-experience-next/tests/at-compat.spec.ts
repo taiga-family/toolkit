@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/at-compat';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -8,10 +9,6 @@ const ruleTester = new RuleTester({
         parserOptions: {projectService: {allowDefaultProject: ['*.ts*']}},
     },
 });
-
-function withCrLf(value: string): string {
-    return value.replaceAll('\n', '\r\n');
-}
 
 ruleTester.run('at-compat', rule, {
     invalid: [

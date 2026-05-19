@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/host-attributes-sort';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -239,6 +240,33 @@ ruleTester.run('host-attributes-sort', rule, {
                 })
                 class TestComponent {}
             `,
+        },
+        {
+            code: withCrLf(`
+                @Component({
+                    host: {
+                        '(click)': 'handleClick()',
+                        // Stable test selector
+                        id: 'submit',
+                        class: 'primary',
+                    },
+                })
+                class TestComponent {}
+            `),
+            errors: [
+                {message: 'Host attributes should be sorted as [id, class, (click)]'},
+            ],
+            output: withCrLf(`
+                @Component({
+                    host: {
+                        // Stable test selector
+                        id: 'submit',
+                        class: 'primary',
+                        '(click)': 'handleClick()'
+                    },
+                })
+                class TestComponent {}
+            `),
         },
     ],
     valid: [

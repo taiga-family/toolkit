@@ -82,10 +82,15 @@ import {
     getIndentAtOffset,
     getLeadingIndentation,
     getLineBreak,
+    getLineEndOffset,
     getLineStartOffset,
+    getNextLineStartOffset,
     hasBlankLine,
     hasCommentLikeText,
+    hasLineBreak,
+    isLineBreakCharacter,
     isSingleLineNode,
+    splitLines,
 } from '../rules/utils/ast/spacing';
 import {
     getStaticStringValue,
@@ -563,11 +568,31 @@ describe('rule utils', () => {
         expect(getLineBreak('\r\n    next')).toBe('\r\n');
         expect(getLineBreak('\r    next')).toBe('\r');
         expect(getLineBreak('\n    next')).toBe('\n');
+        expect(hasLineBreak('same line')).toBe(false);
+        expect(hasLineBreak('first\r\nsecond')).toBe(true);
+        expect(isLineBreakCharacter('\r')).toBe(true);
+        expect(isLineBreakCharacter(' ')).toBe(false);
+        expect(splitLines('first\r\nsecond\nthird\rfourth')).toEqual([
+            'first',
+            'second',
+            'third',
+            'fourth',
+        ]);
         expect(getLeadingIndentation('    value')).toBe('    ');
         expect(getLeadingIndentation('\t\tvalue')).toBe('\t\t');
         expect(getLeadingIndentation('value')).toBe('');
+        expect(getLineEndOffset('<div>\r\n    <span></span>', 0)).toBe(5);
+        expect(getNextLineStartOffset('<div>\r\n    <span></span>', 0)).toBe(7);
+        expect(getNextLineStartOffset('first\r\nsecond', 5)).toBe(7);
+        expect(getNextLineStartOffset('first\rsecond', 5)).toBe(6);
+        expect(getNextLineStartOffset('first\nsecond', 5)).toBe(6);
+        expect(getNextLineStartOffset('first', 0)).toBe(0);
         expect(getLineStartOffset('<div>\n    <span></span>', 10)).toBe(6);
+        expect(getLineStartOffset('<div>\r\n    <span></span>', 11)).toBe(7);
+        expect(getLineStartOffset('first\r\nsecond', 7)).toBe(7);
+        expect(getLineEndOffset('first\r\nsecond', 7)).toBe(13);
         expect(getIndentAtOffset('<div>\n    <span></span>', 10)).toBe('    ');
+        expect(getIndentAtOffset('<div>\r\n    <span></span>', 11)).toBe('    ');
         expect(getIndentAtOffset('<div>\ntext<span></span>', 10)).toBe('');
     });
 

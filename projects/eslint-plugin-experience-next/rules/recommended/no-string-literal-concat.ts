@@ -9,6 +9,11 @@ type Options = [];
 
 type MessageId = 'flattenTemplate' | 'mergeLiterals' | 'useTemplate';
 
+const CARRIAGE_RETURN = String.fromCharCode(13);
+const LINE_FEED = String.fromCharCode(10);
+const ESCAPED_CARRIAGE_RETURN = String.fromCharCode(92, 114);
+const ESCAPED_LINE_FEED = String.fromCharCode(92, 110);
+
 function collectParts(node: TSESTree.Node): TSESTree.Node[] {
     return node.type === AST_NODE_TYPES.BinaryExpression && node.operator === '+'
         ? [...collectParts(node.left), ...collectParts(node.right)]
@@ -33,8 +38,8 @@ function buildMergedString(parts: TSESTree.StringLiteral[]): string {
 
     const escaped = combined
         .replaceAll('\\', '\\\\')
-        .replaceAll('\r', String.raw`\r`)
-        .replaceAll('\n', String.raw`\n`)
+        .replaceAll(CARRIAGE_RETURN, ESCAPED_CARRIAGE_RETURN)
+        .replaceAll(LINE_FEED, ESCAPED_LINE_FEED)
         .replaceAll('\t', String.raw`\t`)
         .replaceAll(new RegExp(quote, 'g'), `\\${quote}`);
 
