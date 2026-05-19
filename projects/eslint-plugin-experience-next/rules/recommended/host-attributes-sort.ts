@@ -3,6 +3,7 @@ import {type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 
 import {getDecoratorMetadata} from '../utils/angular/get-decorator-metadata';
 import {getStaticPropertyName} from '../utils/ast/property-names';
+import {getLineBreak, isLineBreakCharacter} from '../utils/ast/spacing';
 import {sameOrder} from '../utils/collections/same-order';
 import {createRule} from '../utils/create-rule';
 
@@ -432,6 +433,7 @@ function renderFixWithComments(
     sourceCode: Readonly<TSESLint.SourceCode>,
     attachedComments: Map<TSESTree.Property, AttachedComments>,
 ): string {
+    const lineBreak = getLineBreak(sourceCode.text);
     const objectIndentation = getLineIndentation(sourceCode.text, hostObject.range[0]);
 
     const propertyIndentation = getPropertyIndentation(
@@ -441,7 +443,7 @@ function renderFixWithComments(
         attachedComments,
     );
 
-    return `{\n${sortedProperties
+    return `{${lineBreak}${sortedProperties
         .map(({node}, index) =>
             renderPropertyWithComments(
                 node,
@@ -451,7 +453,7 @@ function renderFixWithComments(
                 index === sortedProperties.length - 1,
             ),
         )
-        .join('\n')}\n${objectIndentation}}`;
+        .join(lineBreak)}${lineBreak}${objectIndentation}}`;
 }
 
 function renderPropertyWithComments(
@@ -461,6 +463,8 @@ function renderPropertyWithComments(
     propertyIndentation: string,
     isLast: boolean,
 ): string {
+    const lineBreak = getLineBreak(sourceCode.text);
+
     const lines =
         attachedComments?.leading.map(
             (comment) =>
@@ -475,7 +479,7 @@ function renderPropertyWithComments(
         `${propertyIndentation}${sourceCode.getText(property)}${isLast ? '' : ','}${trailingComment}`,
     );
 
-    return lines.join('\n');
+    return lines.join(lineBreak);
 }
 
 function getPropertyIndentation(
@@ -501,11 +505,7 @@ function getPropertyIndentation(
 function getLineIndentation(sourceText: string, offset: number): string {
     let lineStart = offset;
 
-    while (
-        lineStart > 0 &&
-        sourceText[lineStart - 1] !== '\n' &&
-        sourceText[lineStart - 1] !== '\r'
-    ) {
+    while (lineStart > 0 && !isLineBreakCharacter(sourceText[lineStart - 1])) {
         lineStart--;
     }
 

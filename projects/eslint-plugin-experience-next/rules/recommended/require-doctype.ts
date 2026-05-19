@@ -2,6 +2,7 @@ import {type TmplAstElement} from '@angular-eslint/bundled-angular-compiler';
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {getLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'missing';
@@ -12,6 +13,7 @@ export const rule = createRule({
     rule: {
         create(context: Rule.RuleContext) {
             const sourceText = context.sourceCode.getText();
+            const lineBreak = getLineBreak(sourceText);
             let reported = false;
 
             return {
@@ -30,7 +32,10 @@ export const rule = createRule({
 
                     context.report({
                         fix: (fixer) =>
-                            fixer.insertTextBeforeRange([0, 0], '<!DOCTYPE html>\n'),
+                            fixer.insertTextBeforeRange(
+                                [0, 0],
+                                `<!DOCTYPE html>${lineBreak}`,
+                            ),
                         loc: sourceSpanToLoc(node.startSourceSpan),
                         messageId: MESSAGE_ID,
                     });

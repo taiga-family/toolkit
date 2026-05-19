@@ -1,3 +1,4 @@
+import {splitLines} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 type MessageId = 'noLegacyPeerDeps';
@@ -9,7 +10,7 @@ export const rule = createRule<[], MessageId>({
         return {
             Program(node) {
                 const text = context.sourceCode.getText(node);
-                const lines = text.split('\n');
+                const lines = splitLines(text);
 
                 for (const [index, line] of lines.entries()) {
                     const trimmed = line.trim();

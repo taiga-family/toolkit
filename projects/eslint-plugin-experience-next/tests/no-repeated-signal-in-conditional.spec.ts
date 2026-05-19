@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/no-repeated-signal-in-conditional';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -163,6 +164,27 @@ ruleTester.run('no-repeated-signal-in-conditional', rule, {
                     return tuiIsString(valueVal) ? valueVal : '';
                 });
             `,
+        },
+        {
+            code: withCrLf(/* TypeScript */ `
+                ${PREAMBLE}
+                import {signal} from '@angular/core';
+                declare function process(fn: () => string): string;
+                const value = signal<string | null>(null);
+                const result = process(() => value() ? value() : '');
+            `),
+            errors: [{messageId: 'noRepeatedSignalInConditional'}],
+            output: withCrLf(/* TypeScript */ `
+                ${PREAMBLE}
+                import {signal} from '@angular/core';
+                declare function process(fn: () => string): string;
+                const value = signal<string | null>(null);
+                const result = process(() => {
+                    const valueVal = value();
+
+                    return valueVal ? valueVal : '';
+                });
+            `),
         },
         {
             // ternary in concise arrow: !!signal() double-negation is stripped when replacing

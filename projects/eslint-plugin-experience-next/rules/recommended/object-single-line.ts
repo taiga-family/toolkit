@@ -2,6 +2,7 @@ import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {type TSESTree} from '@typescript-eslint/utils';
 
 import {unwrapExpression} from '../utils/ast/ast-expressions';
+import {getLineEndOffset, hasLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 type Options = [{printWidth: number}];
@@ -12,15 +13,8 @@ export const rule = createRule<Options, MessageIds>({
     create(context, [{printWidth}]) {
         const sourceCode = context.sourceCode;
 
-        const getLineEndIndex = (lineStartIndex: number): number => {
-            const text = sourceCode.text;
-            const newLineIndex = text.indexOf('\n', lineStartIndex);
-            const rawEndIndex = newLineIndex === -1 ? text.length : newLineIndex;
-
-            return rawEndIndex > lineStartIndex && text[rawEndIndex - 1] === '\r'
-                ? rawEndIndex - 1
-                : rawEndIndex;
-        };
+        const getLineEndIndex = (lineStartIndex: number): number =>
+            getLineEndOffset(sourceCode.text, lineStartIndex);
 
         const hasAnyCommentsInside = (node: TSESTree.Node): boolean =>
             sourceCode.getCommentsInside(node).length > 0;
@@ -189,7 +183,7 @@ export const rule = createRule<Options, MessageIds>({
                 ) {
                     const innerText = sourceCode.getText(inner);
 
-                    return innerText.includes('\n');
+                    return hasLineBreak(innerText);
                 }
             }
 
@@ -210,7 +204,7 @@ export const rule = createRule<Options, MessageIds>({
                         ) {
                             const innerText = sourceCode.getText(inner);
 
-                            return innerText.includes('\n');
+                            return hasLineBreak(innerText);
                         }
                     }
                 } else if (bodyAny && typeof bodyAny === 'object' && 'type' in bodyAny) {
@@ -222,7 +216,7 @@ export const rule = createRule<Options, MessageIds>({
                     ) {
                         const innerText = sourceCode.getText(bodyExpr);
 
-                        return innerText.includes('\n');
+                        return hasLineBreak(innerText);
                     }
                 }
             }
@@ -320,7 +314,7 @@ export const rule = createRule<Options, MessageIds>({
 
                 if (
                     !canInlineObjectExpression(node) ||
-                    !originalText.includes('\n') ||
+                    !hasLineBreak(originalText) ||
                     hasPendingInnerInlineCandidate(node) ||
                     hasArrowReturningMultiPropObject(node)
                 ) {

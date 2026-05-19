@@ -1,4 +1,5 @@
 import {rule} from '../rules/recommended/prefer-conditional-return';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -46,6 +47,25 @@ ruleTester.run('prefer-conditional-return', rule, {
                     return isReady ? value : fallback;
                 }
             `,
+        },
+        {
+            code: withCrLf(/* TypeScript */ `
+                function next(): IteratorResult<number> {
+                    if (index < count) {
+                        return {value: index++, done: false};
+                    }
+
+                    return {value: undefined, done: true};
+                }
+            `),
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: withCrLf(/* TypeScript */ `
+                function next(): IteratorResult<number> {
+                    return index < count
+                        ? {value: index++, done: false}
+                        : {value: undefined, done: true};
+                }
+            `),
         },
         {
             code: /* TypeScript */ `
@@ -180,6 +200,29 @@ ruleTester.run('prefer-conditional-return', rule, {
                     );
                 }
             `,
+        },
+        {
+            code: withCrLf(/* TypeScript */ `
+                function hasRegression() {
+                    if (
+                        netPctAbs >= changeThreshold ||
+                        netMsAbs >= NET_ABS_MS_THRESHOLD
+                    ) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            `),
+            errors: [{messageId: 'preferConditionalReturn'}],
+            output: withCrLf(`
+                function hasRegression() {
+                    return (
+                        netPctAbs >= changeThreshold ||
+                        netMsAbs >= NET_ABS_MS_THRESHOLD
+                    );
+                }
+            `),
         },
         {
             code: /* TypeScript */ `

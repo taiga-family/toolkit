@@ -1,6 +1,7 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 import {type RuleFixer, type SourceCode} from '@typescript-eslint/utils/ts-eslint';
 
+import {getLineBreak} from '../ast/spacing';
 import {
     findAngularCoreImportSpecifier,
     findRuntimeAngularCoreImport,
@@ -19,8 +20,10 @@ export function findUntrackedAlias(program: TSESTree.Program): string | null {
 export function buildUntrackedImportFixes(
     program: TSESTree.Program,
     fixer: RuleFixer,
+    sourceCode: SourceCode,
 ): Array<ReturnType<RuleFixer['insertTextBefore']>> {
     const coreImport = findRuntimeAngularCoreImport(program);
+    const lineBreak = getLineBreak(sourceCode.text);
 
     if (!coreImport) {
         const firstStatement = program.body[0];
@@ -29,7 +32,7 @@ export function buildUntrackedImportFixes(
             ? [
                   fixer.insertTextBefore(
                       firstStatement,
-                      "import { untracked } from '@angular/core';\n",
+                      `import { untracked } from '@angular/core';${lineBreak}`,
                   ),
               ]
             : [];
@@ -57,7 +60,7 @@ export function buildUntrackedImportFixes(
         : [
               fixer.insertTextAfter(
                   coreImport,
-                  "\nimport { untracked } from '@angular/core';",
+                  `${lineBreak}import { untracked } from '@angular/core';`,
               ),
           ];
 }

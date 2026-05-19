@@ -8,6 +8,7 @@ import {type Rule} from 'eslint';
 
 import {getAttributeValueSpan} from '../utils/angular/element-attributes';
 import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {isLineBreakCharacter} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_IDS = {
@@ -51,8 +52,7 @@ export const rule = createRule({
                         while (
                             openQuoteOffset >= 0 &&
                             (sourceText[openQuoteOffset] === ' ' ||
-                                sourceText[openQuoteOffset] === '\n' ||
-                                sourceText[openQuoteOffset] === '\r' ||
+                                isLineBreakCharacter(sourceText[openQuoteOffset]) ||
                                 sourceText[openQuoteOffset] === '\t')
                         ) {
                             openQuoteOffset--;
@@ -70,8 +70,7 @@ export const rule = createRule({
                             while (
                                 closeQuoteOffset < sourceText.length &&
                                 (sourceText[closeQuoteOffset] === ' ' ||
-                                    sourceText[closeQuoteOffset] === '\n' ||
-                                    sourceText[closeQuoteOffset] === '\r' ||
+                                    isLineBreakCharacter(sourceText[closeQuoteOffset]) ||
                                     sourceText[closeQuoteOffset] === '\t')
                             ) {
                                 closeQuoteOffset++;

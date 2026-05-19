@@ -6,6 +6,7 @@ import {
 import {type Rule} from 'eslint';
 
 import {sourceSpanToLoc} from '../utils/angular/source-span';
+import {getLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 import {INLINE_HTML_ELEMENTS} from '../utils/html/inline-elements';
 
@@ -50,6 +51,8 @@ export const rule = createRule({
     name: 'element-newline',
     rule: {
         create(context: Rule.RuleContext) {
+            const lineBreak = getLineBreak(context.sourceCode.getText());
+
             return {
                 Element(rawNode: unknown) {
                     const node = rawNode as TmplAstElement;
@@ -81,7 +84,7 @@ export const rule = createRule({
                                         firstChild.sourceSpan.start.offset,
                                         firstChild.sourceSpan.start.offset,
                                     ],
-                                    '\n',
+                                    lineBreak,
                                 ),
                             loc: sourceSpanToLoc(firstChild.sourceSpan),
                             messageId: MESSAGE_ID,
@@ -109,7 +112,7 @@ export const rule = createRule({
                                             child.sourceSpan.end.offset,
                                             child.sourceSpan.end.offset,
                                         ],
-                                        '\n',
+                                        lineBreak,
                                     ),
                                 loc: sourceSpanToLoc(next.sourceSpan),
                                 messageId: MESSAGE_ID,
@@ -132,7 +135,7 @@ export const rule = createRule({
                                         lastChild.sourceSpan.end.offset,
                                         lastChild.sourceSpan.end.offset,
                                     ],
-                                    '\n',
+                                    lineBreak,
                                 ),
                             loc: sourceSpanToLoc(lastChild.sourceSpan),
                             messageId: MESSAGE_ID,

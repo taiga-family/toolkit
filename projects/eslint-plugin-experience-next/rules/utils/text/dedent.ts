@@ -1,3 +1,5 @@
+import {getLineBreak, splitLines} from '../ast/spacing';
+
 /**
  * Removes `extraSpaces` leading spaces from every line of `text` that starts
  * with at least that many spaces.
@@ -9,8 +11,7 @@ export function dedent(text: string, extraSpaces: number): string {
 
     const prefix = ' '.repeat(extraSpaces);
 
-    return text
-        .split('\n')
+    return splitLines(text)
         .map((line) => (line.startsWith(prefix) ? line.slice(extraSpaces) : line))
-        .join('\n');
+        .join(getLineBreak(text));
 }

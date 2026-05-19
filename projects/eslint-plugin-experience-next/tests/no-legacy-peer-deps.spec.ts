@@ -1,5 +1,6 @@
 import {rule} from '../rules/recommended/no-legacy-peer-deps';
 import {parseForESLint} from '../rules/utils/parsers/npmrc-parser';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -26,6 +27,12 @@ ruleTester.run('no-legacy-peer-deps', rule, {
         {
             code: 'save-exact=true\nlegacy-peer-deps=true\nregistry=https://registry.npmjs.org/',
             errors: [{messageId: 'noLegacyPeerDeps'}],
+        },
+        {
+            code: withCrLf(
+                'save-exact=true\nlegacy-peer-deps=true\nregistry=https://registry.npmjs.org/',
+            ),
+            errors: [{column: 1, line: 2, messageId: 'noLegacyPeerDeps'}],
         },
         {
             code: '  legacy-peer-deps=true  ',

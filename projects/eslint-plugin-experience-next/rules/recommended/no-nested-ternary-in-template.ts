@@ -13,7 +13,7 @@ import {
 import {isConditional} from '../utils/angular/template-expressions';
 import {collectTemplateIdentifiers} from '../utils/angular/template-identifiers';
 import {getAvailableIdentifier, isIdentifier} from '../utils/ast/identifiers';
-import {getIndentAtOffset} from '../utils/ast/spacing';
+import {getIndentAtOffset, getLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'noNestedTernaryInTemplate';
@@ -121,17 +121,19 @@ export const rule = createRule({
                                       insertOffset,
                                   );
 
+                                  const lineBreak = getLineBreak(sourceCode.text);
+
                                   const declarations = result.lets
                                       .map(
                                           ({expression, name}, index) =>
                                               `${index === 0 ? '' : indent}@let ${name} = ${expression};`,
                                       )
-                                      .join('\n');
+                                      .join(lineBreak);
 
                                   return [
                                       fixer.insertTextBeforeRange(
                                           [insertOffset, insertOffset],
-                                          `${declarations}\n${indent}`,
+                                          `${declarations}${lineBreak}${indent}`,
                                       ),
                                       fixer.replaceTextRange(
                                           [node.sourceSpan.start, node.sourceSpan.end],

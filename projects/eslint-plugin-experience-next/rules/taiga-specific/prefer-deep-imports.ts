@@ -5,6 +5,7 @@ import {AST_NODE_TYPES} from '@typescript-eslint/types';
 import {ESLintUtils, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 import ts from 'typescript';
 
+import {getLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 const MESSAGE_ID = 'prefer-deep-imports';
@@ -599,7 +600,7 @@ function buildRewrittenImports({
         importStatements.push(remainingImportStatement);
     }
 
-    return importStatements.join('\n');
+    return importStatements.join(getLineBreak(state.sourceCode.text));
 }
 
 function buildNamedImportStatement({

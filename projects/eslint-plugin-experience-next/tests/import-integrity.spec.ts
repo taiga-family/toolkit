@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import {rule} from '../rules/recommended/import-integrity';
+import {withCrLf} from './utils/line-endings';
 
 const RuleTester = require('@typescript-eslint/rule-tester').RuleTester;
 
@@ -146,6 +147,47 @@ ruleTester.run('import-integrity', rule, {
 
                 known();
             `,
+        },
+        {
+            code: withCrLf(/* TypeScript */ `
+                import './namespace-module';
+                import {known} from './namespace-module';
+
+                known();
+            `),
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: withCrLf(/* TypeScript */ `
+                import {known} from './namespace-module';
+
+                known();
+            `),
+        },
+        {
+            code: withCrLf(
+                "import './namespace-module';\nimport {known} from './namespace-module';known();",
+            ),
+            errors: [
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+                {
+                    data: {moduleSpecifier: './namespace-module'},
+                    messageId: 'duplicateImport',
+                },
+            ],
+            filename: fixtureFile('namespace-consumer.ts'),
+            output: withCrLf("import {known} from './namespace-module';\nknown();"),
         },
         {
             code: /* TypeScript */ `

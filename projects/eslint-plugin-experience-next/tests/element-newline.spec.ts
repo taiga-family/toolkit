@@ -1,6 +1,7 @@
 import {RuleTester} from 'eslint';
 
 import elementNewline from '../rules/recommended/element-newline';
+import {withCrLf} from './utils/line-endings';
 
 const ruleTester = new RuleTester({
     languageOptions: {parser: require('@angular-eslint/template-parser')},
@@ -12,6 +13,15 @@ ruleTester.run('element-newline', elementNewline, {
             code: /* HTML */ '<div><section>One</section><section>Two</section></div>',
             errors: [{messageId: 'expectAfter'}],
             output: '<div>\n<section>One</section><section>Two</section></div>',
+        },
+        {
+            code: withCrLf(
+                /* HTML */ '<div>\n<section>One</section><section>Two</section></div>',
+            ),
+            errors: [{messageId: 'expectAfter'}],
+            output: withCrLf(
+                /* HTML */ '<div>\n<section>One</section>\n<section>Two</section></div>',
+            ),
         },
     ],
     valid: [

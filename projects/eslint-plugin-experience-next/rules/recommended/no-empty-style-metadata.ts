@@ -2,6 +2,7 @@ import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/u
 
 import {getDecoratorMetadata} from '../utils/angular/get-decorator-metadata';
 import {getObjectPropertyName} from '../utils/ast/property-names';
+import {getLineStartOffset, getNextLineStartOffset} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
 
 type Options = [];
@@ -167,13 +168,11 @@ function getSinglePropertyRange(text: string, property: TSESTree.Property): Rang
 }
 
 function getLineStart(text: string, index: number): number {
-    return text.lastIndexOf('\n', index - 1) + 1;
+    return getLineStartOffset(text, index);
 }
 
 function getNextLineStart(text: string, index: number): number {
-    const lineEnd = text.indexOf('\n', index);
-
-    return lineEnd === -1 ? index : lineEnd + 1;
+    return getNextLineStartOffset(text, index);
 }
 
 function hasCommentsInRange(
