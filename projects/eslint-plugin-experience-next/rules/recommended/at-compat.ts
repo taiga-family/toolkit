@@ -2,6 +2,7 @@ import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/u
 
 import {hasNonNullAssertionParent} from '../utils/ast/ast-expressions';
 import {isFunctionExpressionLike, walkAst} from '../utils/ast/ast-walk';
+import {isEcmascriptPrivateClassMember} from '../utils/ast/class-members';
 import {
     isConditionTestExpression,
     isEqualityComparisonOperand,
@@ -228,13 +229,11 @@ function getPreferredTemporaryNames(node: TSESTree.Expression): readonly string[
 }
 
 function getClassElementName(member: TSESTree.ClassElement): string | null {
-    if (!('key' in member)) {
-        return null;
+    if (isEcmascriptPrivateClassMember(member)) {
+        return member.key.name;
     }
 
-    return member.key.type === AST_NODE_TYPES.PrivateIdentifier
-        ? member.key.name
-        : getStaticPropertyName(member.key);
+    return 'key' in member ? getStaticPropertyName(member.key) : null;
 }
 
 function hasClassElementName(classBody: TSESTree.ClassBody, name: string): boolean {

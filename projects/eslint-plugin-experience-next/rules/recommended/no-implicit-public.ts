@@ -1,53 +1,123 @@
-import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 
 import {getEnclosingClass} from '../utils/ast/ancestors';
+import {isEcmascriptPrivateClassMember} from '../utils/ast/class-members';
+import {getStaticPropertyName} from '../utils/ast/property-names';
 import {createRule} from '../utils/create-rule';
+
+type ImplicitPublicCandidate =
+    | TSESTree.MethodDefinition
+    | TSESTree.PropertyDefinition
+    | TSESTree.TSParameterProperty;
+
+type ClassMemberCandidate = TSESTree.MethodDefinition | TSESTree.PropertyDefinition;
+
+interface PublicModifierInsertion {
+    readonly range: TSESTree.Range;
+    readonly text: string;
+}
+
+function isClassMemberCandidate(
+    node: ImplicitPublicCandidate,
+): node is ClassMemberCandidate {
+    return (
+        node.type === AST_NODE_TYPES.MethodDefinition ||
+        node.type === AST_NODE_TYPES.PropertyDefinition
+    );
+}
+
+function isConstructorMember(node: ImplicitPublicCandidate): boolean {
+    return node.type === AST_NODE_TYPES.MethodDefinition && node.kind === 'constructor';
+}
+
+function getParameterPropertyName(node: TSESTree.TSParameterProperty): string | null {
+    const {parameter} = node;
+
+    return parameter.type === AST_NODE_TYPES.Identifier
+        ? parameter.name
+        : parameter.left.name;
+}
+
+function getCandidateName(node: ImplicitPublicCandidate): string {
+    return node.type === AST_NODE_TYPES.TSParameterProperty
+        ? (getParameterPropertyName(node) ?? 'member')
+        : (getStaticPropertyName(node.key) ?? 'member');
+}
+
+function getCandidateKind(node: ImplicitPublicCandidate): string {
+    return node.type === AST_NODE_TYPES.MethodDefinition ? node.kind : 'property';
+}
+
+function getFirstNonWhitespaceOffset(text: string, offset: number): number {
+    let index = offset;
+
+    while (index < text.length && text[index]?.trim() === '') {
+        index++;
+    }
+
+    return index;
+}
+
+function getPublicModifierInsertion(options: {
+    node: ImplicitPublicCandidate;
+    sourceCode: Readonly<TSESLint.SourceCode>;
+}): PublicModifierInsertion {
+    const {node, sourceCode} = options;
+    const lastDecoratorIndex = node.decorators.length - 1;
+    const lastDecorator = node.decorators[lastDecoratorIndex];
+
+    if (lastDecorator) {
+        const [, end] = lastDecorator.range;
+        const memberStart = getFirstNonWhitespaceOffset(sourceCode.text, end);
+        const hasWhitespaceAfterDecorator = memberStart > end;
+
+        return {
+            range: [memberStart, memberStart],
+            text: hasWhitespaceAfterDecorator ? 'public ' : ' public ',
+        };
+    }
+
+    return {
+        range: [node.range[0], node.range[0]],
+        text: 'public ',
+    };
+}
 
 export const rule = createRule({
     create(context) {
-        const checkImplicitPublic = (node: any): void => {
+        const sourceCode = context.sourceCode;
+
+        const checkImplicitPublic = (node: ImplicitPublicCandidate): void => {
             const classRef = getEnclosingClass(node);
 
+            if (!classRef) {
+                return;
+            }
+
+            const privateNameCannotBePublic =
+                isClassMemberCandidate(node) && isEcmascriptPrivateClassMember(node);
+
             if (
-                !classRef ||
-                node.kind === 'constructor' ||
-                !!node?.accessibility ||
-                node.key?.type === AST_NODE_TYPES.PrivateIdentifier
+                isConstructorMember(node) ||
+                Boolean(node.accessibility) ||
+                privateNameCannotBePublic
             ) {
                 return;
             }
 
-            const name =
-                node?.key?.name ||
-                node?.parameter?.name ||
-                (node?.key?.type === 'Identifier' ? node.key.name : 'member');
-
-            let range = node?.parameter?.range ??
-                node?.key?.range ??
-                node?.range ?? [0, 0];
-
-            if (node.kind === 'set' || node.kind === 'get') {
-                const [start, end] = node.key.range;
-
-                range = [start - node.kind.length - 1, end - node.kind.length - 1];
-            } else if (node.kind === 'method' && node.key?.object?.name === 'Symbol') {
-                const [start, end] = range;
-
-                range = [start - 1, end - 1];
-            }
-
-            if (node.type === 'PropertyDefinition' && node.decorators?.length > 0) {
-                const [, end] = node.decorators[node.decorators.length - 1].range ?? [];
-
-                range = [end + 1, end + 2];
-            }
-
             context.report({
                 data: {
-                    kind: node.kind || 'property',
-                    name,
+                    kind: getCandidateKind(node),
+                    name: getCandidateName(node),
                 },
-                fix: (fixer) => fixer.insertTextBeforeRange(range, ' public '),
+                fix: (fixer) => {
+                    const {range, text} = getPublicModifierInsertion({
+                        node,
+                        sourceCode,
+                    });
+
+                    return fixer.insertTextBeforeRange(range, text);
+                },
                 messageId: 'implicitPublic',
                 node,
             });

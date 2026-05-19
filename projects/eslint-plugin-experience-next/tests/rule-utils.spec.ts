@@ -46,7 +46,10 @@ import {hasNonNullAssertionParent} from '../rules/utils/ast/ast-expressions';
 import {isFunctionExpressionLike} from '../rules/utils/ast/ast-walk';
 import {collectCallExpressions} from '../rules/utils/ast/call-expressions';
 import {
+    getAccessibilityGroup,
+    isAccessibilityClassMember,
     isAccessorMember,
+    isEcmascriptPrivateClassMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
 } from '../rules/utils/ast/class-members';
@@ -86,6 +89,7 @@ import {
     getLineStartOffset,
     getNextLineStartOffset,
     hasBlankLine,
+    hasBlankLineBetweenNodes,
     hasCommentLikeText,
     hasLineBreak,
     isLineBreakCharacter,
@@ -533,10 +537,13 @@ describe('rule utils', () => {
     it('recognizes field-like and accessor class members for spacing utilities', () => {
         const classDeclaration = parseProgram(`
             abstract class Test {
+                #secret = 1;
                 protected readonly field = 1;
+                protected accessor cached = 0;
                 abstract title: string;
                 get value() { return this.field; }
                 set value(next: number) { this.field = next; }
+                static {}
             }
         `).body[0];
 
@@ -544,9 +551,25 @@ describe('rule utils', () => {
             throw new Error('Expected a class declaration');
         }
 
-        const [field, abstractField, getter, setter] = classDeclaration.body.body;
+        const [
+            secretField,
+            field,
+            accessorProperty,
+            abstractField,
+            getter,
+            setter,
+            staticBlock,
+        ] = classDeclaration.body.body;
 
-        if (!field || !abstractField || !getter || !setter) {
+        if (
+            !secretField ||
+            !field ||
+            !accessorProperty ||
+            !abstractField ||
+            !getter ||
+            !setter ||
+            !staticBlock
+        ) {
             throw new Error('Expected class members');
         }
 
@@ -554,6 +577,21 @@ describe('rule utils', () => {
         expect(isFieldLikeMember(abstractField)).toBe(true);
         expect(isAccessorMember(getter)).toBe(true);
         expect(isAccessorMember(setter)).toBe(true);
+        expect(isEcmascriptPrivateClassMember(secretField)).toBe(true);
+        expect(isAccessibilityClassMember(secretField)).toBe(true);
+        expect(isAccessibilityClassMember(staticBlock)).toBe(false);
+
+        if (
+            !isAccessibilityClassMember(secretField) ||
+            !isAccessibilityClassMember(accessorProperty) ||
+            !isAccessibilityClassMember(abstractField)
+        ) {
+            throw new Error('Expected accessibility class members');
+        }
+
+        expect(getAccessibilityGroup(secretField)).toBe('private');
+        expect(getAccessibilityGroup(accessorProperty)).toBe('protected');
+        expect(getAccessibilityGroup(abstractField)).toBe('public');
         expect(isRelevantSpacingClassMember(getter)).toBe(true);
         expect(isSingleLineNode(field)).toBe(true);
     });
@@ -565,6 +603,9 @@ describe('rule utils', () => {
         expect(hasBlankLine('\n\n    next')).toBe(true);
         expect(hasBlankLine('\r\n\r\n    next')).toBe(true);
         expect(hasBlankLine('\n    next')).toBe(false);
+        expect(hasBlankLineBetweenNodes('\n\n    next')).toBe(true);
+        expect(hasBlankLineBetweenNodes('\n    // note\n    next')).toBe(false);
+        expect(hasBlankLineBetweenNodes('\n\n    // note\n    next')).toBe(true);
         expect(getLineBreak('\r\n    next')).toBe('\r\n');
         expect(getLineBreak('\r    next')).toBe('\r');
         expect(getLineBreak('\n    next')).toBe('\n');
