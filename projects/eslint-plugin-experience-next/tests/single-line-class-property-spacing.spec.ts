@@ -44,18 +44,16 @@ ruleTester.run('single-line-class-property-spacing', rule, {
                     public abstract markdown: string;
                 }
             `,
-            errors: [
-                {messageId: 'unexpectedBlankLineBeforeNextSingleLineField'},
-                {messageId: 'unexpectedBlankLineBeforeNextSingleLineField'},
-                {messageId: 'unexpectedBlankLineBeforeNextSingleLineField'},
-                {messageId: 'unexpectedBlankLineBeforeNextSingleLineField'},
-            ],
+            errors: [{messageId: 'unexpectedBlankLineBeforeNextSingleLineField'}],
             output: `
                 abstract class TestClass {
                     public readonly template = import('./template.md?raw');
+
                     protected readonly component = import('./component.md?raw');
+
                     private readonly styles = import('./styles.less.md?raw');
                     readonly #icons = import('./icons.json.md?raw');
+
                     public abstract markdown: string;
                 }
             `,
@@ -275,6 +273,15 @@ ruleTester.run('single-line-class-property-spacing', rule, {
                     set component(value: Promise<string>) { this.template = value; }
 
                     protected readonly isE2E = inject(TUI_IS_E2E);
+                }
+            `,
+        },
+        {
+            code: `
+                class TuiSelectHarness {
+                    public static hostSelector = 'tui-select';
+
+                    private readonly dropdown = this.locatorFor(TuiDropdownOpenHarness);
                 }
             `,
         },

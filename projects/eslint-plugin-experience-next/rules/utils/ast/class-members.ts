@@ -85,3 +85,10 @@ export function getAccessibilityGroup(
         ? 'private'
         : (member.accessibility ?? 'public');
 }
+
+export function shareAccessibilityGroup(
+    current: AccessibilityClassMember,
+    next: AccessibilityClassMember,
+): boolean {
+    return getAccessibilityGroup(current) === getAccessibilityGroup(next);
+}

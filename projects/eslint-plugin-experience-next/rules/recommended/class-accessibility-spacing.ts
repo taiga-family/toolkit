@@ -1,8 +1,8 @@
 import {type TSESTree} from '@typescript-eslint/utils';
 
 import {
-    getAccessibilityGroup,
     isAccessibilityClassMember,
+    shareAccessibilityGroup,
 } from '../utils/ast/class-members';
 import {
     getSpacingReplacement,
@@ -32,8 +32,10 @@ export const rule = createRule<[], MessageIds>({
                         continue;
                     }
 
-                    const accessibilityGroupChanged =
-                        getAccessibilityGroup(current) !== getAccessibilityGroup(next);
+                    const accessibilityGroupChanged = !shareAccessibilityGroup(
+                        current,
+                        next,
+                    );
 
                     if (!accessibilityGroupChanged) {
                         continue;
