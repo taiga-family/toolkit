@@ -52,6 +52,7 @@ import {
     isEcmascriptPrivateClassMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
+    shareAccessibilityGroup,
 } from '../rules/utils/ast/class-members';
 import {
     getContainingIfStatementForTestExpression,
@@ -584,7 +585,8 @@ describe('rule utils', () => {
         if (
             !isAccessibilityClassMember(secretField) ||
             !isAccessibilityClassMember(accessorProperty) ||
-            !isAccessibilityClassMember(abstractField)
+            !isAccessibilityClassMember(abstractField) ||
+            !isAccessibilityClassMember(getter)
         ) {
             throw new Error('Expected accessibility class members');
         }
@@ -592,6 +594,8 @@ describe('rule utils', () => {
         expect(getAccessibilityGroup(secretField)).toBe('private');
         expect(getAccessibilityGroup(accessorProperty)).toBe('protected');
         expect(getAccessibilityGroup(abstractField)).toBe('public');
+        expect(shareAccessibilityGroup(secretField, accessorProperty)).toBe(false);
+        expect(shareAccessibilityGroup(abstractField, getter)).toBe(true);
         expect(isRelevantSpacingClassMember(getter)).toBe(true);
         expect(isSingleLineNode(field)).toBe(true);
     });

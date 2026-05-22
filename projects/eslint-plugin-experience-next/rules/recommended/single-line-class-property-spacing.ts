@@ -4,6 +4,7 @@ import {
     isAccessorMember,
     isFieldLikeMember,
     isRelevantSpacingClassMember,
+    shareAccessibilityGroup,
 } from '../utils/ast/class-members';
 import {
     getSpacingReplacement,
@@ -48,16 +49,23 @@ export const rule = createRule<[], MessageIds>({
                     }
 
                     const currentIsSingleLine = isSingleLineNode(current);
+                    const nextIsSingleLine = isSingleLineNode(next);
                     const blankLineBetween = hasBlankLine(betweenText);
 
                     const needsSeparatedLine =
                         isAccessorMember(current) || isAccessorMember(next);
 
+                    const fieldsShareAccessibilityGroup = shareAccessibilityGroup(
+                        current,
+                        next,
+                    );
+
                     if (
                         isFieldLikeMember(current) &&
                         isFieldLikeMember(next) &&
                         currentIsSingleLine &&
-                        isSingleLineNode(next) &&
+                        nextIsSingleLine &&
+                        fieldsShareAccessibilityGroup &&
                         blankLineBetween
                     ) {
                         context.report({
@@ -101,7 +109,7 @@ export const rule = createRule<[], MessageIds>({
                         isFieldLikeMember(current) &&
                         isFieldLikeMember(next) &&
                         currentIsSingleLine &&
-                        !isSingleLineNode(next) &&
+                        !nextIsSingleLine &&
                         !blankLineBetween
                     ) {
                         context.report({

@@ -2,11 +2,12 @@
 
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
-Keeps consecutive single-line field-like class members visually grouped, including `abstract` fields. A multiline field
-must be separated from neighboring field-like members with a blank line before it and, when another field follows, a
-blank line after it. `get` and `set` accessors always act as visual boundaries and must be separated from surrounding
-fields by a blank line. This removes noisy empty lines inside simple field groups without flattening longer, wrapped
-initializers or blending fields into accessors.
+Keeps consecutive single-line field-like class members visually grouped inside the same accessibility group, including
+`abstract` fields. A multiline field must be separated from neighboring field-like members with a blank line before it
+and, when another field follows, a blank line after it. `get` and `set` accessors always act as visual boundaries and
+must be separated from surrounding fields by a blank line. This removes noisy empty lines inside simple field groups
+without flattening longer, wrapped initializers, blending fields into accessors, or conflicting with accessibility-group
+spacing.
 
 ```ts
 // ❌ error
