@@ -1,3 +1,20 @@
+### [0.530.0](https://github.com/taiga-family/toolkit/compare/v0.529.0...v0.530.0) (2026-05-22)
+
+### 🐞 Bug Fixes
+
+- update commitlint to v21 ([#1890](https://github.com/taiga-family/toolkit/pull/1890))
+  [(717bd0c)](https://github.com/taiga-family/toolkit/commit/717bd0c901b1fbdfec0f3cdd5c1396efc8f7b58b)
+- **eslint-plugin-experience-next**: regression ([#1888](https://github.com/taiga-family/toolkit/pull/1888))
+  [(e5e6733)](https://github.com/taiga-family/toolkit/commit/e5e67337fe1b4fa98d01e9025f7c9e810059895a)
+- update eslint ecosystem ([#1889](https://github.com/taiga-family/toolkit/pull/1889))
+  [(ec7045f)](https://github.com/taiga-family/toolkit/commit/ec7045ff3fec816f2d039c8fbd88bf928aacbe73)
+- update dependency lint-staged to v17 ([#1887](https://github.com/taiga-family/toolkit/pull/1887))
+  [(5bf4b56)](https://github.com/taiga-family/toolkit/commit/5bf4b56ae887f1e5b5069be758bd489528486d6b)
+- update dependency auto-changelog to ^2.5.1 ([#1886](https://github.com/taiga-family/toolkit/pull/1886))
+  [(79dca77)](https://github.com/taiga-family/toolkit/commit/79dca774d616c2c489c7452ec313c3efad2fbe61)
+- update dependency stylelint to ^17.11.0 ([#1885](https://github.com/taiga-family/toolkit/pull/1885))
+  [(bfb5597)](https://github.com/taiga-family/toolkit/commit/bfb559790b599ecb76c5275346b5de58a3963bc0)
+
 ### [0.529.0](https://github.com/taiga-family/toolkit/compare/v0.528.0...v0.529.0) (2026-05-19)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
