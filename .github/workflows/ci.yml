@@ -18,6 +18,7 @@ jobs:
 
       - run: npm run cspell -- --no-progress
       - run: npx nx run-many --target=build
+      - run: echo "$(git log -1 --pretty=format:"%s")" | npx commitlint --verbose
       - run: |
           if [[ "${{ env.SUPPORT_AUTO_PUSH }}" == "true" ]]; then
               npm run stylelint -- --fix
