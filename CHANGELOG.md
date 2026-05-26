@@ -1,3 +1,12 @@
+### [0.532.0](https://github.com/taiga-family/toolkit/compare/v0.531.0...v0.532.0) (2026-05-26)
+
+### 🐞 Bug Fixes
+
+- **commitlint-config**: use only esm ([#1893](https://github.com/taiga-family/toolkit/pull/1893))
+  [(fe87d80)](https://github.com/taiga-family/toolkit/commit/fe87d8017223bb248db07e34805e7d71ae2281b8)
+- update dependency lint-staged to ^17.0.4 ([#1891](https://github.com/taiga-family/toolkit/pull/1891))
+  [(73ca405)](https://github.com/taiga-family/toolkit/commit/73ca4055062a854ee97333fc88d080a4cddd4a0d)
+
 ### [0.531.0](https://github.com/taiga-family/toolkit/compare/v0.530.0...v0.531.0) (2026-05-22)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
