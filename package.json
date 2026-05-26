@@ -17,7 +17,7 @@
     },
     "commitlint": {
         "extends": [
-            "@taiga-ui/commitlint-config"
+            "./dist/commitlint-config"
         ]
     },
     "lint-staged": {
