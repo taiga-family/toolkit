@@ -1,3 +1,14 @@
+### [0.533.0](https://github.com/taiga-family/toolkit/compare/v0.532.0...v0.533.0) (2026-05-27)
+
+### 🐞 Bug Fixes
+
+- **commitlint-config**: regressions ([#1897](https://github.com/taiga-family/toolkit/pull/1897))
+  [(b259feb)](https://github.com/taiga-family/toolkit/commit/b259febb64a43b78e60a2ad5507c67fa3f00eea3)
+- update commitlint to ^21.0.1 ([#1895](https://github.com/taiga-family/toolkit/pull/1895))
+  [(44bf62a)](https://github.com/taiga-family/toolkit/commit/44bf62a251aa9ad77ac51b333f67045f18bf6448)
+- update @typescript-eslint/\* to v8.59.3 ([#1894](https://github.com/taiga-family/toolkit/pull/1894))
+  [(bece2ff)](https://github.com/taiga-family/toolkit/commit/bece2ff7b2079d94453db0f2b8f62e458a136c4b)
+
 ### [0.532.0](https://github.com/taiga-family/toolkit/compare/v0.531.0...v0.532.0) (2026-05-26)
 
 ### 🐞 Bug Fixes
