@@ -1,4 +1,3 @@
-import {type Declaration} from 'postcss';
 import valueParser from 'postcss-value-parser';
 import stylelint from 'stylelint';
 
@@ -38,6 +37,14 @@ interface LonghandDefinition {
 interface LonghandDeclaration {
     readonly prop: string;
     readonly value: string;
+}
+
+interface ReplaceableDeclaration {
+    readonly important: boolean;
+
+    cloneBefore(overrides: LonghandDeclaration & {readonly important: boolean}): void;
+
+    remove(): void;
 }
 
 interface RepeatMatch {
@@ -551,7 +558,7 @@ function buildLonghands(value: string): LonghandDeclaration[] | null {
 }
 
 function replaceDeclaration(
-    decl: Declaration,
+    decl: ReplaceableDeclaration,
     longhands: readonly LonghandDeclaration[],
 ): void {
     for (const longhand of longhands) {

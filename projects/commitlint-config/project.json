@@ -11,8 +11,8 @@
                 "assets": ["projects/{projectName}/README.md"],
                 "compiler": "tsc",
                 "external": "all",
-                "format": ["esm"],
-                "generateExportsField": true,
+                "format": ["esm", "cjs"],
+                "generateExportsField": false,
                 "main": "projects/{projectName}/index.ts",
                 "outputPath": "{workspaceRoot}/dist/{projectName}",
                 "tsConfig": "projects/{projectName}/tsconfig.json"

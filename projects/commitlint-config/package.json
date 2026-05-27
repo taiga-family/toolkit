@@ -34,10 +34,24 @@
         }
     ],
     "type": "module",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "import": "./index.esm.js",
+            "require": "./index.cjs.js",
+            "default": "./index.esm.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "main": "./index.esm.js",
+    "module": "./index.esm.js",
+    "types": "./index.d.ts",
+    "dependencies": {
+        "@commitlint/config-conventional": "^21.0.0",
+        "conventional-changelog-conventionalcommits": "^9.3.1"
+    },
     "peerDependencies": {
-        "@commitlint/cli": "^21.0.1",
-        "@commitlint/config-conventional": "^21.0.1",
-        "conventional-changelog-conventionalcommits": "^9.3.1",
+        "@commitlint/cli": "^21.0.0",
         "lint-staged": "^17.0.4"
     },
     "publishConfig": {

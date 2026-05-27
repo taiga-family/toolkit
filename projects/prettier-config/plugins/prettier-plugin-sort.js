@@ -12,6 +12,7 @@ const jsonStringifyParser = parsers['json-stringify'];
  * Keys listed here appear first (in this order); remaining keys are sorted alphabetically.
  */
 const COMPILER_OPTIONS_KEY_ORDER = ['baseUrl', 'rootDir', 'strict'];
+const EXPORT_CONDITION_KEY_ORDER = ['types', 'import', 'require', 'default'];
 
 /**
  * Top-level key order for tsconfig files.
@@ -52,6 +53,39 @@ function sortAlphabetically(value) {
         }
 
         return result;
+    }
+
+    return value;
+}
+
+/**
+ * Sorts package.json `exports` while preserving condition priority.
+ * Node and TypeScript resolve condition objects in key order, so `types`
+ * must stay before runtime conditions.
+ *
+ * @param {unknown} value
+ * @returns {unknown}
+ */
+function sortPackageExports(value) {
+    if (Array.isArray(value)) {
+        return value.map(sortPackageExports);
+    }
+
+    if (typeof value === 'object' && value !== null) {
+        /** @type {Record<string, unknown>} */
+        const exportMap = value;
+        const hasKnownExportCondition = EXPORT_CONDITION_KEY_ORDER.some((key) =>
+            Object.prototype.hasOwnProperty.call(exportMap, key),
+        );
+        const sorted = hasKnownExportCondition
+            ? sortKeysByOrder(exportMap, EXPORT_CONDITION_KEY_ORDER)
+            : sortAlphabetically(exportMap);
+
+        for (const key of Object.keys(sorted)) {
+            sorted[key] = sortPackageExports(sorted[key]);
+        }
+
+        return sorted;
     }
 
     return value;
@@ -137,13 +171,20 @@ exports.parsers = {
                 }
 
                 if (typeof sorted[key] === 'object' && sorted[key] !== null) {
-                    sorted[key] =
-                        key === 'compilerOptions'
-                            ? sortKeysByOrder(
-                                  /** @type {Record<string, unknown>} */ sorted[key],
-                                  COMPILER_OPTIONS_KEY_ORDER,
-                              )
-                            : sortAlphabetically(sorted[key]);
+                    if (key === 'exports' && filepath.endsWith('package.json')) {
+                        sorted[key] = sortPackageExports(sorted[key]);
+                        continue;
+                    }
+
+                    if (key === 'compilerOptions') {
+                        sorted[key] = sortKeysByOrder(
+                            /** @type {Record<string, unknown>} */ sorted[key],
+                            COMPILER_OPTIONS_KEY_ORDER,
+                        );
+                        continue;
+                    }
+
+                    sorted[key] = sortAlphabetically(sorted[key]);
                 }
             }
 
