@@ -1,6 +1,5 @@
 import {extname} from 'node:path';
 
-import {type Root} from 'postcss';
 import stylelint from 'stylelint';
 
 const {
@@ -20,7 +19,15 @@ const meta: stylelint.RuleMeta = {
     url: 'https://github.com/taiga-family/toolkit/tree/main/projects/stylelint-config',
 };
 
-function getExpectedExtension(root: Root): string {
+interface RootWithSourceFile {
+    readonly source?: {
+        readonly input: {
+            readonly file?: string;
+        };
+    };
+}
+
+function getExpectedExtension(root: RootWithSourceFile): string {
     const file = root.source?.input.file;
 
     if (!file) {
