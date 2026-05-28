@@ -1,3 +1,15 @@
+### [0.534.0](https://github.com/taiga-family/toolkit/compare/v0.533.0...v0.534.0) (2026-05-28)
+
+### 🐞 Bug Fixes
+
+- **commitlint-config**: regression ([#1901](https://github.com/taiga-family/toolkit/pull/1901))
+  [(610062e)](https://github.com/taiga-family/toolkit/commit/610062e541c79f97588be2ea4ec121099bd06900)
+- update commitlint to ^21.0.1 ([#1899](https://github.com/taiga-family/toolkit/pull/1899))
+  [(96ed274)](https://github.com/taiga-family/toolkit/commit/96ed2744810bf064c9993481b8544f8b0ec9832a)
+- pin dependency conventional-changelog-conventionalcommits to 9.3.1
+  ([#1898](https://github.com/taiga-family/toolkit/pull/1898))
+  [(0db02e3)](https://github.com/taiga-family/toolkit/commit/0db02e32f742cb4ad61ed39671b9322603a1467f)
+
 ### [0.533.0](https://github.com/taiga-family/toolkit/compare/v0.532.0...v0.533.0) (2026-05-27)
 
 ### 🐞 Bug Fixes
