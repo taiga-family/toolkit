@@ -60,7 +60,8 @@
         "@typescript-eslint/rule-tester": "8.59.3"
     },
     "peerDependencies": {
-        "eslint": "^9.39.4"
+        "eslint": "^9.39.4",
+        "typescript": ">=5.8.0 <6.0.0"
     },
     "publishConfig": {
         "access": "public"
