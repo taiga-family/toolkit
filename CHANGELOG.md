@@ -1,3 +1,15 @@
+### [0.535.0](https://github.com/taiga-family/toolkit/compare/v0.534.0...v0.535.0) (2026-05-31)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: keep typescript external
+  ([#1906](https://github.com/taiga-family/toolkit/pull/1906))
+  [(934f4cc)](https://github.com/taiga-family/toolkit/commit/934f4cc513d04a25a0718fb8c7515e6e58956c75)
+- update dependency lint-staged to ^17.0.5 ([#1905](https://github.com/taiga-family/toolkit/pull/1905))
+  [(c40e7b9)](https://github.com/taiga-family/toolkit/commit/c40e7b961840742f57146972cc1bfa59a62f345e)
+- update dependency stylelint to ^17.11.1 ([#1902](https://github.com/taiga-family/toolkit/pull/1902))
+  [(748187e)](https://github.com/taiga-family/toolkit/commit/748187e9af451889fac8e1ea6da936dafd96154c)
+
 ### [0.534.0](https://github.com/taiga-family/toolkit/compare/v0.533.0...v0.534.0) (2026-05-28)
 
 ### 🐞 Bug Fixes
