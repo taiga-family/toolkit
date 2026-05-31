@@ -19,6 +19,17 @@ jobs:
       - run: npm run cspell -- --no-progress
       - run: npx nx run-many --target=build
       - run: echo "$(git log -1 --pretty=format:"%s")" | npx commitlint --verbose
+
+      - name: Check eslint-plugin-experience-next ESM output
+        run: |
+          if grep -R "__filename\|__dirname" dist/eslint-plugin-experience-next; then
+            echo "CommonJS globals must not be bundled into ESM output"
+
+            exit 1
+          fi
+
+          node --input-type=module -e "import('./dist/eslint-plugin-experience-next/index.esm.js').then(() => console.log('esm ok'))"
+
       - run: |
           if [[ "${{ env.SUPPORT_AUTO_PUSH }}" == "true" ]]; then
               npm run stylelint -- --fix
