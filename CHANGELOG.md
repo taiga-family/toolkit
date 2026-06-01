@@ -1,3 +1,12 @@
+### [0.536.0](https://github.com/taiga-family/toolkit/compare/v0.535.0...v0.536.0) (2026-06-01)
+
+### 🐞 Bug Fixes
+
+- update dependency eslint-plugin-playwright to v2.10.3 ([#1908](https://github.com/taiga-family/toolkit/pull/1908))
+  [(4fe0a91)](https://github.com/taiga-family/toolkit/commit/4fe0a9124a146bcc9fe1112126ef61080a9f1ecb)
+- update dependency eslint-plugin-package-json to v1 ([#1907](https://github.com/taiga-family/toolkit/pull/1907))
+  [(8340b87)](https://github.com/taiga-family/toolkit/commit/8340b87329122234bf662661a5f1122c13fb0999)
+
 ### [0.535.0](https://github.com/taiga-family/toolkit/compare/v0.534.0...v0.535.0) (2026-05-31)
 
 ### 🐞 Bug Fixes
