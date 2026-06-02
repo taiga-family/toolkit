@@ -38,7 +38,7 @@
         "@stylistic/stylelint-config": "5.0.0",
         "@stylistic/stylelint-plugin": "5.1.0",
         "@taiga-ui/browserslist-config": "^0.537.0",
-        "postcss": "8.5.14",
+        "postcss": "8.5.15",
         "postcss-less": "6.0.0",
         "postcss-value-parser": "4.2.0",
         "stylelint-config-standard": "40.0.0",
