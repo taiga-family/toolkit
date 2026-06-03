@@ -31,7 +31,7 @@
     ],
     "type": "module",
     "dependencies": {
-        "@eslint/markdown": "8.0.1",
+        "@eslint/markdown": "8.0.2",
         "@smarttools/eslint-plugin-rxjs": "1.0.22",
         "@stylistic/eslint-plugin": "5.10.0",
         "angular-eslint": "20.7.0",
