@@ -1,3 +1,26 @@
+### [0.538.0](https://github.com/taiga-family/toolkit/compare/v0.537.0...v0.538.0) (2026-06-06)
+
+### 🐞 Bug Fixes
+
+- update jest to ^29.4.11 ([#1920](https://github.com/taiga-family/toolkit/pull/1920))
+  [(8e355b6)](https://github.com/taiga-family/toolkit/commit/8e355b63b26bd9846e1b38c4bf44a9f9c4975820)
+- update stylelint dependencies to v5.2.0 ([#1919](https://github.com/taiga-family/toolkit/pull/1919))
+  [(cc70998)](https://github.com/taiga-family/toolkit/commit/cc7099877c5d7a1f36cdd0a8dcfbf28e8d244d39)
+- update eslint ecosystem to v8.0.2 ([#1918](https://github.com/taiga-family/toolkit/pull/1918))
+  [(30b513e)](https://github.com/taiga-family/toolkit/commit/30b513e3f1059bde593e7f0629af609a4d63fc3c)
+- update stylelint dependencies to ^17.12.0 ([#1917](https://github.com/taiga-family/toolkit/pull/1917))
+  [(4dcff50)](https://github.com/taiga-family/toolkit/commit/4dcff507e6e92c04b307bec2a217aff866c69a87)
+- update eslint ecosystem to v2.10.4 ([#1916](https://github.com/taiga-family/toolkit/pull/1916))
+  [(1568ab3)](https://github.com/taiga-family/toolkit/commit/1568ab347be05c4d66f830b5e568ae09263214bb)
+- update dependency postcss to v8.5.15 ([#1914](https://github.com/taiga-family/toolkit/pull/1914))
+  [(a466bec)](https://github.com/taiga-family/toolkit/commit/a466bec758889584ff9cdc355f708e39bc2dc068)
+- update dependency ts-jest to ^29.4.10 ([#1913](https://github.com/taiga-family/toolkit/pull/1913))
+  [(3c9df74)](https://github.com/taiga-family/toolkit/commit/3c9df7409f4680a505784348c130a71ca010ae0e)
+- update dependency eslint-plugin-package-json to v1.1.0 ([#1912](https://github.com/taiga-family/toolkit/pull/1912))
+  [(880bcb8)](https://github.com/taiga-family/toolkit/commit/880bcb85e6a6d0db744720291353055fb749845a)
+- update @typescript-eslint/\* to v8.59.4 ([#1911](https://github.com/taiga-family/toolkit/pull/1911))
+  [(05399fc)](https://github.com/taiga-family/toolkit/commit/05399fc7b2660a5c26311ae5ef7092cacd88ff18)
+
 ### [0.537.0](https://github.com/taiga-family/toolkit/compare/v0.536.0...v0.537.0) (2026-06-01)
 
 ### 🐞 Bug Fixes
