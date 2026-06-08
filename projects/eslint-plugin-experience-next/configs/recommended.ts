@@ -339,6 +339,7 @@ export default defineConfig([
             '@typescript-eslint/prefer-destructuring': 'off',
             '@typescript-eslint/prefer-find': 'error',
             '@typescript-eslint/prefer-for-of': 'error',
+            '@typescript-eslint/prefer-function-type': 'off',
             '@typescript-eslint/prefer-includes': 'error',
             '@typescript-eslint/prefer-nullish-coalescing': 'off', // TODO: ['error', {ignorePrimitives: {boolean: true, number: true, string: true}}]
             '@typescript-eslint/prefer-optional-chain': 'error',
