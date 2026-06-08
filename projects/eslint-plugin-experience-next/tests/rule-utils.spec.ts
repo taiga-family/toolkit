@@ -54,6 +54,7 @@ import {
     isRelevantSpacingClassMember,
     shareAccessibilityGroup,
 } from '../rules/utils/ast/class-members';
+import {removeCommaSeparatedNode} from '../rules/utils/ast/comma-separated';
 import {
     getContainingIfStatementForTestExpression,
     isConditionTestExpression,
@@ -106,6 +107,7 @@ import {
 import {dedent} from '../rules/utils/text/dedent';
 import {supportsBuiltInAt} from '../rules/utils/typescript/compiler-options';
 import {hasNamedDecorator} from '../rules/utils/typescript/decorators';
+import {withCrLf} from './utils/line-endings';
 
 function attachParents(node: TSESTree.Node, parent?: TSESTree.Node): void {
     if (parent) {
@@ -142,6 +144,7 @@ function parseProgram(code: string): TSESTree.Program {
         loc: true,
         range: true,
         sourceType: 'module',
+        tokens: true,
     }).ast as unknown as TSESTree.Program;
 
     attachParents(ast);
@@ -156,6 +159,64 @@ function createSourceCodeText(code: string): Readonly<TSESLint.SourceCode> {
         },
         text: code,
     } as unknown as Readonly<TSESLint.SourceCode>;
+}
+
+function getProgramTokens(program: TSESTree.Program): readonly TSESLint.AST.Token[] {
+    const candidate = program as unknown;
+
+    if (!candidate || typeof candidate !== 'object' || !('tokens' in candidate)) {
+        return [];
+    }
+
+    const {tokens} = candidate as Record<'tokens', unknown>;
+
+    return Array.isArray(tokens) ? (tokens as TSESLint.AST.Token[]) : [];
+}
+
+function createSourceCodeWithTokens(code: string): {
+    readonly program: TSESTree.Program;
+    readonly sourceCode: Readonly<TSESLint.SourceCode>;
+} {
+    const program = parseProgram(code);
+    const tokens = getProgramTokens(program);
+
+    return {
+        program,
+        sourceCode: {
+            getText(node: TSESTree.Node): string {
+                return code.slice(node.range[0], node.range[1]);
+            },
+            getTokenAfter(node: TSESTree.Node): TSESLint.AST.Token | null {
+                return tokens.find((token) => token.range[0] >= node.range[1]) ?? null;
+            },
+            getTokenBefore(node: TSESTree.Node): TSESLint.AST.Token | null {
+                for (let index = tokens.length - 1; index >= 0; index--) {
+                    const token = tokens[index];
+
+                    if (token && token.range[1] <= node.range[0]) {
+                        return token;
+                    }
+                }
+
+                return null;
+            },
+            text: code,
+        } as unknown as Readonly<TSESLint.SourceCode>,
+    };
+}
+
+function createRemoveRangeFixer(): TSESLint.RuleFixer {
+    return {
+        removeRange(range: TSESLint.AST.Range): TSESLint.RuleFix {
+            return {range, text: ''};
+        },
+    } as unknown as TSESLint.RuleFixer;
+}
+
+function applyRuleFix(code: string, fix: TSESLint.RuleFix | null): string | null {
+    return fix
+        ? `${code.slice(0, fix.range[0])}${fix.text}${code.slice(fix.range[1])}`
+        : null;
 }
 
 function parseTemplate(code: string): unknown {
@@ -639,6 +700,80 @@ describe('rule utils', () => {
         expect(getIndentAtOffset('<div>\n    <span></span>', 10)).toBe('    ');
         expect(getIndentAtOffset('<div>\r\n    <span></span>', 11)).toBe('    ');
         expect(getIndentAtOffset('<div>\ntext<span></span>', 10)).toBe('');
+    });
+
+    it('removes inline comma-separated nodes with the following comma', () => {
+        const code = "writeFile(file, content, {encoding: 'utf8'}, callback);";
+        const {program, sourceCode} = createSourceCodeWithTokens(code);
+        const [statement] = program.body;
+
+        if (
+            statement?.type !== AST_NODE_TYPES.ExpressionStatement ||
+            statement.expression.type !== AST_NODE_TYPES.CallExpression
+        ) {
+            throw new Error('Expected a call expression');
+        }
+
+        const [, previousArgument, options, nextArgument] =
+            statement.expression.arguments;
+
+        if (!previousArgument || !options || !nextArgument) {
+            throw new Error('Expected neighboring arguments');
+        }
+
+        const fix = removeCommaSeparatedNode(
+            sourceCode,
+            createRemoveRangeFixer(),
+            options,
+            previousArgument,
+            nextArgument,
+        );
+
+        expect(applyRuleFix(code, fix)).toBe('writeFile(file, content, callback);');
+    });
+
+    it('removes standalone comma-separated lines while preserving CRLF', () => {
+        const code = withCrLf(`
+            const options = {
+                flag: 'wx',
+                encoding: 'utf8',
+            };
+        `);
+
+        const {program, sourceCode} = createSourceCodeWithTokens(code);
+        const [statement] = program.body;
+
+        if (statement?.type !== AST_NODE_TYPES.VariableDeclaration) {
+            throw new Error('Expected a variable declaration');
+        }
+
+        const objectExpression = statement.declarations[0].init;
+
+        if (objectExpression?.type !== AST_NODE_TYPES.ObjectExpression) {
+            throw new Error('Expected an object expression');
+        }
+
+        const [previousProperty, encodingProperty] = objectExpression.properties;
+
+        if (!previousProperty || !encodingProperty) {
+            throw new Error('Expected neighboring properties');
+        }
+
+        const fix = removeCommaSeparatedNode(
+            sourceCode,
+            createRemoveRangeFixer(),
+            encodingProperty,
+            previousProperty,
+            null,
+        );
+
+        expect(applyRuleFix(code, fix)).toBe(
+            withCrLf(`
+            const options = {
+                flag: 'wx',
+            };
+        `),
+        );
     });
 
     it('collects calls and mutation targets from generic AST helpers', () => {

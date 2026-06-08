@@ -32,6 +32,7 @@ import noObsoleteAttrs from './rules/recommended/no-obsolete-attrs';
 import noObsoleteTags from './rules/recommended/no-obsolete-tags';
 import noPlaywrightEmptyFill from './rules/recommended/no-playwright-empty-fill';
 import noProjectAsInNgTemplate from './rules/recommended/no-project-as-in-ng-template';
+import noRedundantFsEncoding from './rules/recommended/no-redundant-fs-encoding';
 import noRedundantTypeAnnotation from './rules/recommended/no-redundant-type-annotation';
 import noRepeatedSignalInConditional from './rules/recommended/no-repeated-signal-in-conditional';
 import noSideEffectsInComputed from './rules/recommended/no-side-effects-in-computed';
@@ -109,6 +110,7 @@ const plugin = {
         'no-obsolete-tags': noObsoleteTags,
         'no-playwright-empty-fill': noPlaywrightEmptyFill,
         'no-project-as-in-ng-template': noProjectAsInNgTemplate,
+        'no-redundant-fs-encoding': noRedundantFsEncoding,
         'no-redundant-type-annotation': noRedundantTypeAnnotation,
         'no-repeated-signal-in-conditional': noRepeatedSignalInConditional,
         'no-restricted-attr-values': noRestrictedAttrValues,
