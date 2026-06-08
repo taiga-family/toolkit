@@ -30,19 +30,10 @@ import {
     TUI_RECOMMENDED_NAMING_CONVENTION,
 } from '../rules/convention';
 import * as npmrcParser from '../rules/utils/parsers/npmrc-parser';
+import {getDefaultParserOptions} from './utils/get-default-parser-options';
 import {angularVersion, modernAngularRules} from './utils/get-ng-version';
-import {projectJsonExist} from './utils/project-json-exist';
 
 export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
-
-const tsconfig = projectJsonExist('tsconfig.eslint.json');
-
-const parserOptions = tsconfig
-    ? {project: [tsconfig]}
-    : {
-          projectService: true,
-          tsconfigRootDir: process.cwd(),
-      };
 
 export default defineConfig([
     progress.configs['recommended-ci'],
@@ -105,7 +96,7 @@ export default defineConfig([
                 errorOnUnknownASTType: true,
                 sourceType: 'module',
                 warnOnUnsupportedTypeScriptVersion: false,
-                ...parserOptions,
+                ...getDefaultParserOptions(),
             },
         },
         settings: {
