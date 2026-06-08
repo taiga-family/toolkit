@@ -1,3 +1,11 @@
+### [0.540.0](https://github.com/taiga-family/toolkit/compare/v0.539.0...v0.540.0) (2026-06-08)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add no-redundant-fs-encoding
+  ([#1925](https://github.com/taiga-family/toolkit/pull/1925))
+  [(90357c1)](https://github.com/taiga-family/toolkit/commit/90357c1b5dbf841ed51130cf1c254d4aa51ab6ae)
+
 ### [0.539.0](https://github.com/taiga-family/toolkit/compare/v0.538.0...v0.539.0) (2026-06-08)
 
 ### 🚀 Features
