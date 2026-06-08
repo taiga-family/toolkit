@@ -1,3 +1,14 @@
+### [0.539.0](https://github.com/taiga-family/toolkit/compare/v0.538.0...v0.539.0) (2026-06-08)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: new behavior for default parse options
+  ([#1926](https://github.com/taiga-family/toolkit/pull/1926))
+  [(18fafe2)](https://github.com/taiga-family/toolkit/commit/18fafe2adc4d2c6cda2a41395fe30ed91eb8d49d)
+- **eslint-plugin-experience-next**: disable prefer-function-type
+  ([#1927](https://github.com/taiga-family/toolkit/pull/1927))
+  [(c4cdfd7)](https://github.com/taiga-family/toolkit/commit/c4cdfd76adc1bc4c792ff546b6f53cec3f6362bc)
+
 ### [0.538.0](https://github.com/taiga-family/toolkit/compare/v0.537.0...v0.538.0) (2026-06-06)
 
 ### 🐞 Bug Fixes
