@@ -18,6 +18,10 @@ const createChangelog = (template) =>
     ].join(' ');
 
 const changelog = createChangelog('template.hbs');
+const changelogRelease = '.auto-changelog-release.md';
+const insertChangelogRelease = path
+    .join(__dirname, 'insert-changelog-release.js')
+    .replaceAll('\\', '/');
 
 module.exports = {
     plugins: {
@@ -57,7 +61,8 @@ module.exports = {
         'after:bump': [
             'git tag v${version}', // for include last tag inside CHANGELOG
             'echo "new version is v${version}"',
-            `${changelog} --prepend --starting-version v$\{version} > /dev/null`,
+            `${changelog} --stdout --starting-version v\${version} > ${changelogRelease}`,
+            `node ${JSON.stringify(insertChangelogRelease)} CHANGELOG.md ${changelogRelease}`,
             'npx prettier CHANGELOG.md --write > /dev/null',
             'git fetch --prune --prune-tags origin',
             'git add CHANGELOG.md',

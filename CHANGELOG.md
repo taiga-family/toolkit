@@ -1,3 +1,7 @@
+## Changelog
+
+All notable changes to this project will be documented in this file.
+
 ### [0.541.0](https://github.com/taiga-family/toolkit/compare/v0.540.0...v0.541.0) (2026-06-10)
 
 ### 🚀 Features
