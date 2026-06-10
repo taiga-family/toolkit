@@ -1,3 +1,16 @@
+### [0.541.0](https://github.com/taiga-family/toolkit/compare/v0.540.0...v0.541.0) (2026-06-10)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: add Angular modern rules
+  ([#1684](https://github.com/taiga-family/toolkit/pull/1684))
+  [(aac9077)](https://github.com/taiga-family/toolkit/commit/aac90771827494f47f49745b6f73d08e0e5b550d)
+
+### 🐞 Bug Fixes
+
+- update @typescript-eslint/\* to v8.60.0 ([#1930](https://github.com/taiga-family/toolkit/pull/1930))
+  [(c3df80e)](https://github.com/taiga-family/toolkit/commit/c3df80e00d9bd95c753b939f9c2bc748790f8399)
+
 ### [0.540.0](https://github.com/taiga-family/toolkit/compare/v0.539.0...v0.540.0) (2026-06-08)
 
 ### 🚀 Features
