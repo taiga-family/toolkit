@@ -1,7 +1,7 @@
 {{! prettier-ignore }}
 {{#each releases}}
     {{#if tag}}
-        ##{{#unless major}}#{{/unless}} [{{#replaceTitle}}{{title}}{{/replaceTitle}}]({{href}}) ({{isoDate}})
+        ## [{{#replaceTitle}}{{title}}{{/replaceTitle}}]({{href}}) ({{isoDate}})
     {{/if}}
 
     {{#commit-parser merges commits}}
