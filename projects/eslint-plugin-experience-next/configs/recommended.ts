@@ -110,8 +110,24 @@ export default defineConfig([
             '@stylistic/function-call-spacing': 'error',
             '@stylistic/lines-between-class-members': [
                 'error',
-                'always',
-                {exceptAfterOverload: true, exceptAfterSingleLine: true},
+                {
+                    enforce: [
+                        {
+                            blankLine: 'always',
+                            next: 'method',
+                            prev: 'field',
+                        },
+                        {
+                            blankLine: 'always',
+                            next: 'method',
+                            prev: 'method',
+                        },
+                    ],
+                },
+                {
+                    exceptAfterOverload: true,
+                    exceptAfterSingleLine: false,
+                },
             ],
             '@stylistic/member-delimiter-style': 'error',
             '@stylistic/padding-line-between-statements': [
