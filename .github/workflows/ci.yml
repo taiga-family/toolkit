@@ -20,16 +20,6 @@ jobs:
       - run: npx nx run-many --target=build
       - run: echo "$(git log -1 --pretty=format:"%s")" | npx commitlint --verbose
 
-      - name: Check eslint-plugin-experience-next ESM output
-        run: |
-          if grep -R "__filename\|__dirname" dist/eslint-plugin-experience-next; then
-            echo "CommonJS globals must not be bundled into ESM output"
-
-            exit 1
-          fi
-
-          node --input-type=module -e "import('./dist/eslint-plugin-experience-next/index.esm.js').then(() => console.log('esm ok'))"
-
       - run: |
           if [[ "${{ env.SUPPORT_AUTO_PUSH }}" == "true" ]]; then
               npm run stylelint -- --fix
@@ -42,6 +32,17 @@ jobs:
               npm run lint
               HTML_ESLINT=true npm run lint -- --no-error-on-unmatched-pattern
           fi
+
+      - name: Check eslint-plugin-experience-next ESM output
+        run: |
+          if grep -R "__filename\|__dirname" dist/eslint-plugin-experience-next; then
+            echo "CommonJS globals must not be bundled into ESM output"
+
+            exit 1
+          fi
+
+          npm --prefix ./dist/eslint-plugin-experience-next install --omit=dev
+          node --input-type=module -e "import('./dist/eslint-plugin-experience-next/index.esm.js').then(() => console.log('esm ok'))"
 
       - uses: taiga-family/ci/actions/auto/push@44fd3eb3c46e9e6c39fd3820479c467aa75c8028 # v1.221.0
         with:
