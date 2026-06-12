@@ -34,7 +34,7 @@
     ],
     "main": "index.json",
     "peerDependencies": {
-        "auto-changelog": "^2.5.1"
+        "auto-changelog": "^2.6.0"
     },
     "publishConfig": {
         "access": "public"
