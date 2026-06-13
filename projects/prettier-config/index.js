@@ -46,6 +46,7 @@ module.exports = {
                 'renovate.json',
                 'default.json',
                 'tsconfig*.json',
+                'nx.json',
             ],
             options: {
                 parser: 'json-stringify',
