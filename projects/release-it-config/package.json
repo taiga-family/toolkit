@@ -34,9 +34,9 @@
     ],
     "main": ".release-it.js",
     "peerDependencies": {
-        "@release-it/conventional-changelog": "^11.0.0",
+        "@release-it/conventional-changelog": "^11.0.1",
         "@taiga-ui/auto-changelog-config": "^0.541.0",
-        "release-it": "^20.0.1"
+        "release-it": "^20.2.0"
     },
     "publishConfig": {
         "access": "public"
