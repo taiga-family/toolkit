@@ -54,10 +54,10 @@
         "eslint-plugin-unicorn": "64.0.0",
         "eslint-plugin-unused-imports": "4.4.1",
         "globals": "17.6.0",
-        "typescript-eslint": "8.60.0"
+        "typescript-eslint": "8.60.1"
     },
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "8.60.0"
+        "@typescript-eslint/rule-tester": "8.60.1"
     },
     "peerDependencies": {
         "eslint": "^9.39.4",
