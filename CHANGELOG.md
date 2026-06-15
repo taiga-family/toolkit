@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.542.0](https://github.com/taiga-family/toolkit/compare/v0.541.0...v0.542.0) (2026-06-15)
+
+### 🚀 Features
+
+- **prettier-config**: sort `nx.json` ([#1937](https://github.com/taiga-family/toolkit/pull/1937))
+  [(054b4a1)](https://github.com/taiga-family/toolkit/commit/054b4a11855972a000c4918d19bf947c98d6bc90)
+
+### 🐞 Bug Fixes
+
+- update dependency lint-staged to ^17.0.7 ([#1942](https://github.com/taiga-family/toolkit/pull/1942))
+  [(bd72a1c)](https://github.com/taiga-family/toolkit/commit/bd72a1cf02f749754321e63f14a1e8b95eda763c)
+- update dependency cspell to ^10.0.1 ([#1941](https://github.com/taiga-family/toolkit/pull/1941))
+  [(0a2f82f)](https://github.com/taiga-family/toolkit/commit/0a2f82f1cd4e9682362db11184a8f1e644199779)
+- update cspell ([#1940](https://github.com/taiga-family/toolkit/pull/1940))
+  [(5589214)](https://github.com/taiga-family/toolkit/commit/5589214f3f3c4da501f2c3c5f06072a98cdf6556)
+- update dependency lint-staged to ^17.0.6 ([#1939](https://github.com/taiga-family/toolkit/pull/1939))
+  [(3edbb15)](https://github.com/taiga-family/toolkit/commit/3edbb15cfff1ddf7cd977412e427b91bf2fd57b1)
+- update release-it ([#1938](https://github.com/taiga-family/toolkit/pull/1938))
+  [(0937547)](https://github.com/taiga-family/toolkit/commit/0937547a7cacc11875e295e8b452167db34d1905)
+- update dependency auto-changelog to ^2.6.0 ([#1936](https://github.com/taiga-family/toolkit/pull/1936))
+  [(d33fb1a)](https://github.com/taiga-family/toolkit/commit/d33fb1adbd19f084a73c1fad6435e5b1f3564fec)
+- update commitlint to ^21.0.2 ([#1935](https://github.com/taiga-family/toolkit/pull/1935))
+  [(1af9383)](https://github.com/taiga-family/toolkit/commit/1af93833fec281013f2937f5b8c1eee0b5533e98)
+- update eslint ecosystem to v1.2.0 ([#1934](https://github.com/taiga-family/toolkit/pull/1934))
+  [(bca1b30)](https://github.com/taiga-family/toolkit/commit/bca1b30e6fa8219f43e5dc0d207afb8aecb65b00)
+- update eslint ecosystem to v5.5.6 ([#1933](https://github.com/taiga-family/toolkit/pull/1933))
+  [(6d5df43)](https://github.com/taiga-family/toolkit/commit/6d5df43c005aa09ce6833df5287462d6cd9d6eb5)
+- **release-it-config**: wrong prepend in CHANGELOG.md ([#1932](https://github.com/taiga-family/toolkit/pull/1932))
+  [(7a3bbf7)](https://github.com/taiga-family/toolkit/commit/7a3bbf7c808829f98fc2a11dd48607a170f258fa)
+- **eslint-plugin-experience-next**: wrong blank line in classes
+  ([#1931](https://github.com/taiga-family/toolkit/pull/1931))
+  [(41d25c9)](https://github.com/taiga-family/toolkit/commit/41d25c9c3a28bf946ac98f37c9202d0f22c286bd)
+
 ### [0.541.0](https://github.com/taiga-family/toolkit/compare/v0.540.0...v0.541.0) (2026-06-10)
 
 ### 🚀 Features
