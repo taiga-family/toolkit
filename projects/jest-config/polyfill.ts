@@ -10,6 +10,16 @@ tuiSwitchNgDevMode(false);
 
 setupZoneTestEnv();
 
+const consoleError = console.error.bind(console);
+
+console.error = (...args: Parameters<typeof console.error>): void => {
+    if (isJsdomLessImportError(args[0])) {
+        return;
+    }
+
+    consoleError(...args);
+};
+
 global.TextEncoder = TextEncoderMock;
 global.TextDecoder = TextDecoderMock;
 global.ResizeObserver = ResizeObserver;
@@ -173,4 +183,25 @@ if (typeof globalThis.setImmediate !== 'function') {
 if (typeof globalThis.clearImmediate !== 'function') {
     globalThis.clearImmediate = ((timeoutId: number | undefined) =>
         clearTimeout(timeoutId)) as unknown as typeof globalThis.clearImmediate;
+}
+
+function isJsdomLessImportError(error: unknown): boolean {
+    if (typeof error !== 'object' || error === null || !('message' in error)) {
+        return false;
+    }
+
+    const {message} = error as Record<'message', unknown>;
+
+    if (message !== 'Could not parse CSS stylesheet' || !('detail' in error)) {
+        return false;
+    }
+
+    const {detail} = error as Record<'detail', unknown>;
+
+    const containsLessImport =
+        typeof detail === 'string' &&
+        detail.includes('@import') &&
+        detail.includes('.less');
+
+    return containsLessImport;
 }
