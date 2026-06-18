@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.543.0](https://github.com/taiga-family/toolkit/compare/v0.542.0...v0.543.0) (2026-06-18)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: ignore `type=button` required for `TuiButtonSelect`
+  ([#1951](https://github.com/taiga-family/toolkit/pull/1951))
+  [(e489e87)](https://github.com/taiga-family/toolkit/commit/e489e875596888bb882ec1f350c438c85a65eb2b)
+
+### 🐞 Bug Fixes
+
+- update dependency sort-package-json to v4 ([#1950](https://github.com/taiga-family/toolkit/pull/1950))
+  [(4454936)](https://github.com/taiga-family/toolkit/commit/445493625b4b83057ad0d7f205783429e7249c22)
+- update dependency sort-package-json to ^3.7.1 ([#1949](https://github.com/taiga-family/toolkit/pull/1949))
+  [(f7e3b51)](https://github.com/taiga-family/toolkit/commit/f7e3b51b48e8961e675efeac23102798bac588a1)
+- update dependency sort-package-json to ^3.7.0 ([#1947](https://github.com/taiga-family/toolkit/pull/1947))
+  [(319c360)](https://github.com/taiga-family/toolkit/commit/319c3608f74fe5895b8330af9a5d146d8a9085f4)
+- update eslint ecosystem to v1.3.0 ([#1946](https://github.com/taiga-family/toolkit/pull/1946))
+  [(54934ac)](https://github.com/taiga-family/toolkit/commit/54934acf7477f63739c5ed2503ee3800ae27550b)
+- update @typescript-eslint/\* to v8.60.1 ([#1945](https://github.com/taiga-family/toolkit/pull/1945))
+  [(1cefad4)](https://github.com/taiga-family/toolkit/commit/1cefad4e4f4a21c1e5409319a776091b460dd1a1)
+
 ## [0.542.0](https://github.com/taiga-family/toolkit/compare/v0.541.0...v0.542.0) (2026-06-15)
 
 ### 🚀 Features
