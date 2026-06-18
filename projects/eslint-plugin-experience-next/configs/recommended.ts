@@ -805,6 +805,7 @@ export default defineConfig([
                 'error',
                 {
                     ignoreWithDirectives: [
+                        'tuiButtonSelect',
                         'tuiButtonClose',
                         'tuiButtonCopy',
                         'tuiAccordion',
