@@ -185,6 +185,7 @@ if (typeof globalThis.clearImmediate !== 'function') {
         clearTimeout(timeoutId)) as unknown as typeof globalThis.clearImmediate;
 }
 
+// https://github.com/jsdom/jsdom/issues/1374
 function isJsdomLessImportError(error: unknown): boolean {
     if (typeof error !== 'object' || error === null || !('message' in error)) {
         return false;
