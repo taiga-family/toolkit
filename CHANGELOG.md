@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.544.0](https://github.com/taiga-family/toolkit/compare/v0.543.0...v0.544.0) (2026-06-18)
+
+### 🚀 Features
+
+- **jest-config**: hide `Could not parse CSS stylesheet` ([#1952](https://github.com/taiga-family/toolkit/pull/1952))
+  [(d36089a)](https://github.com/taiga-family/toolkit/commit/d36089ad885a901834f9db9efbb7c8cca3e5e9b0)
+
 ## [0.543.0](https://github.com/taiga-family/toolkit/compare/v0.542.0...v0.543.0) (2026-06-18)
 
 ### 🚀 Features
