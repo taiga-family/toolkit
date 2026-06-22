@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.545.0](https://github.com/taiga-family/toolkit/compare/v0.544.0...v0.545.0) (2026-06-20)
+
+### 🐞 Bug Fixes
+
+- update stylelint dependencies to ^17.13.0 ([#1955](https://github.com/taiga-family/toolkit/pull/1955))
+  [(773c8d9)](https://github.com/taiga-family/toolkit/commit/773c8d954009daf725e3d9c7fec7cf4909866caf)
+- update stylelint dependencies to v2 ([#1954](https://github.com/taiga-family/toolkit/pull/1954))
+  [(61bf477)](https://github.com/taiga-family/toolkit/commit/61bf4772985db4d90e1b5f41c2b1e91f4fcc1c70)
+
 ## [0.544.0](https://github.com/taiga-family/toolkit/compare/v0.543.0...v0.544.0) (2026-06-18)
 
 ### 🚀 Features
