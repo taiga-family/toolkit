@@ -10,7 +10,7 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
     {
         filter: {
             match: true,
-            regex: String.raw`^(Infinity|NaN|Number|Math)$`,
+            regex: '^(Infinity|NaN|Number|Math)$',
         },
         format: null,
         selector: 'classProperty',
