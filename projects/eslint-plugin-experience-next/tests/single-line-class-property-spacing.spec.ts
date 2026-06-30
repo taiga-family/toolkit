@@ -62,42 +62,16 @@ ruleTester.run('single-line-class-property-spacing', rule, {
             code: `
                 class TestClass {
                     protected readonly template = import('./template.md?raw');
-                    protected readonly component = import('./component.md?raw');
-                    protected readonly exampleIcons = import(
-                        './angular-to-long-text-for-prettier.json.md?raw'
-                    );
-                }
-            `,
-            errors: [{messageId: 'missingBlankLineBeforeMultilineProperty'}],
-            output: `
-                class TestClass {
-                    protected readonly template = import('./template.md?raw');
-                    protected readonly component = import('./component.md?raw');
-
-                    protected readonly exampleIcons = import(
-                        './angular-to-long-text-for-prettier.json.md?raw'
-                    );
-                }
-            `,
-        },
-        {
-            code: `
-                class TestClass {
-                    protected readonly template = import('./template.md?raw');
                     protected readonly exampleIcons = import(
                         './angular-to-long-text-for-prettier.json.md?raw'
                     );
                     protected readonly template2 = import('./template-2.md?raw');
                 }
             `,
-            errors: [
-                {messageId: 'missingBlankLineBeforeMultilineProperty'},
-                {messageId: 'missingBlankLineAfterMultilineProperty'},
-            ],
+            errors: [{messageId: 'missingBlankLineAfterMultilineProperty'}],
             output: `
                 class TestClass {
                     protected readonly template = import('./template.md?raw');
-
                     protected readonly exampleIcons = import(
                         './angular-to-long-text-for-prettier.json.md?raw'
                     );
@@ -234,6 +208,17 @@ ruleTester.run('single-line-class-property-spacing', rule, {
         },
     ],
     valid: [
+        {
+            code: `
+                class TestClass {
+                    protected readonly template = import('./template.md?raw');
+                    protected readonly component = import('./component.md?raw');
+                    protected readonly exampleIcons = import(
+                        './angular-to-long-text-for-prettier.json.md?raw'
+                    );
+                }
+            `,
+        },
         {
             code: `
                 class TestClass {

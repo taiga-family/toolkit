@@ -3,11 +3,11 @@
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
 Keeps consecutive single-line field-like class members visually grouped inside the same accessibility group, including
-`abstract` fields. A multiline field must be separated from neighboring field-like members with a blank line before it
-and, when another field follows, a blank line after it. `get` and `set` accessors always act as visual boundaries and
-must be separated from surrounding fields by a blank line. This removes noisy empty lines inside simple field groups
-without flattening longer, wrapped initializers, blending fields into accessors, or conflicting with accessibility-group
-spacing.
+`abstract` fields. When another field follows a multiline field, it must be separated from that field with a blank line
+after it; a blank line before a multiline field is not required. `get` and `set` accessors always act as visual
+boundaries and must be separated from surrounding fields by a blank line. This removes noisy empty lines inside simple
+field groups without flattening longer, wrapped initializers, blending fields into accessors, or conflicting with
+accessibility-group spacing.
 
 ```ts
 // ❌ error
@@ -24,7 +24,6 @@ class TuiEditorStarter {
 class TuiEditorStarter {
   protected readonly template = import('./import/template.md?raw');
   protected readonly component = import('./import/component.md?raw');
-
   protected readonly exampleIcons =
     import('./import/angular-to-long-long-long-long-long-long-long-text-for-prettier.json.md?raw');
 
