@@ -17,7 +17,6 @@ import {createRule} from '../utils/create-rule';
 type MessageIds =
     | 'missingBlankLineAfterMultilineProperty'
     | 'missingBlankLineAroundAccessor'
-    | 'missingBlankLineBeforeMultilineProperty'
     | 'unexpectedBlankLineBeforeNextSingleLineField';
 
 export const rule = createRule<[], MessageIds>({
@@ -108,31 +107,6 @@ export const rule = createRule<[], MessageIds>({
                     if (
                         isFieldLikeMember(current) &&
                         isFieldLikeMember(next) &&
-                        currentIsSingleLine &&
-                        !nextIsSingleLine &&
-                        !blankLineBetween
-                    ) {
-                        context.report({
-                            fix: (fixer) =>
-                                fixer.replaceTextRange(
-                                    [current.range[1], next.range[0]],
-                                    getSpacingReplacement(
-                                        sourceCode,
-                                        betweenText,
-                                        next.loc.start.line,
-                                        1,
-                                    ),
-                                ),
-                            messageId: 'missingBlankLineBeforeMultilineProperty',
-                            node: next,
-                        });
-
-                        continue;
-                    }
-
-                    if (
-                        isFieldLikeMember(current) &&
-                        isFieldLikeMember(next) &&
                         !currentIsSingleLine &&
                         !blankLineBetween
                     ) {
@@ -166,8 +140,6 @@ export const rule = createRule<[], MessageIds>({
                 'Multiline field-like members should be followed by a blank line before the next field',
             missingBlankLineAroundAccessor:
                 'Getter and setter members should be separated from surrounding fields by a blank line',
-            missingBlankLineBeforeMultilineProperty:
-                'Multiline field-like members should be preceded by a blank line after single-line fields',
             unexpectedBlankLineBeforeNextSingleLineField:
                 'Single-line fields should not be separated by a blank line before the next single-line field',
         },
