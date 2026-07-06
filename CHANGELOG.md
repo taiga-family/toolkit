@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.547.0](https://github.com/taiga-family/toolkit/compare/v0.546.0...v0.547.0) (2026-06-30)
+
+### 🐞 Bug Fixes
+
+- `single-line-class-property-spacing` require blank line only after multiline fields, not before
+  ([#1958](https://github.com/taiga-family/toolkit/pull/1958))
+  [(c41b85e)](https://github.com/taiga-family/toolkit/commit/c41b85eeb4c36b29b3a58681fd429f32830b78b2)
+
 ## [0.546.0](https://github.com/taiga-family/toolkit/compare/v0.545.0...v0.546.0) (2026-06-22)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
