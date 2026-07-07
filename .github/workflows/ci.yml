@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: taiga-family/actions/setup-variables@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
-      - uses: taiga-family/actions/setup-node@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
+      - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
+      - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
           node-version: 22.x
           audit: true
@@ -44,7 +44,7 @@ jobs:
           npm --prefix ./dist/eslint-plugin-experience-next install --omit=dev
           node --input-type=module -e "import('./dist/eslint-plugin-experience-next/index.esm.js').then(() => console.log('esm ok'))"
 
-      - uses: taiga-family/actions/auto-push@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
+      - uses: taiga-family/actions/auto-push@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
           token: ${{ secrets.TAIGA_FAMILY_BOT_PAT }}
 
@@ -52,8 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: taiga-family/actions/setup-variables@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
-      - uses: taiga-family/actions/setup-node@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
+      - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
+      - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
       - run: npx nx build commitlint-config
       - name: Run commitlint
         env:
@@ -71,8 +71,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: taiga-family/actions/setup-variables@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
-      - uses: taiga-family/actions/setup-node@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
+      - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
+      - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
           node-version: 22.x
       - run: npm test
@@ -84,7 +84,7 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-      - uses: taiga-family/actions/setup-node@a11d89eb978fe572206a7b0a026b38ae957acba0 # v2.0.0
+      - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
           node-version: 22.x
       - run: |
