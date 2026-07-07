@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.548.0](https://github.com/taiga-family/toolkit/compare/v0.547.0...v0.548.0) (2026-07-07)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: bump typescript range ([#1960](https://github.com/taiga-family/toolkit/pull/1960))
+  [(2a30d4b)](https://github.com/taiga-family/toolkit/commit/2a30d4b4c4cc2ece5f9f5430afb34e28a144beaf)
+
+### 🐞 Bug Fixes
+
+- update dependency lint-staged to ^17.0.8 ([#1959](https://github.com/taiga-family/toolkit/pull/1959))
+  [(bc6d5d1)](https://github.com/taiga-family/toolkit/commit/bc6d5d1160ec3d4a2f9230fb74a9e2149f1b22a0)
+- update eslint ecosystem to v65 ([#1956](https://github.com/taiga-family/toolkit/pull/1956))
+  [(0b28978)](https://github.com/taiga-family/toolkit/commit/0b28978d4cb300dae48db72680f8fe22674771b9)
+
 ## [0.547.0](https://github.com/taiga-family/toolkit/compare/v0.546.0...v0.547.0) (2026-06-30)
 
 ### 🐞 Bug Fixes
