@@ -86,9 +86,7 @@ export function tuiBumpDeps(options: BumpDepsOptions): void {
         }),
     )) {
         const value = deps[key] as
-            | Record<string, Record<string, string>>
-            | string
-            | undefined;
+            Record<string, Record<string, string>> | string | undefined;
 
         if (typeof value === 'string') {
             deps[key] = isPeerDependency

@@ -63,12 +63,10 @@ export const rule = createRule<Options, MessageIds>({
                                       metadata.range,
                                       removeRanges(
                                           sourceCode.text.slice(...metadata.range),
-                                          ranges.map(
-                                              ([start, end]): Range => [
-                                                  start - metadata.range[0],
-                                                  end - metadata.range[0],
-                                              ],
-                                          ),
+                                          ranges.map(([start, end]): Range => [
+                                              start - metadata.range[0],
+                                              end - metadata.range[0],
+                                          ]),
                                       ),
                                   );
                         },

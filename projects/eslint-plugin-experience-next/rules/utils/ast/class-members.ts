@@ -10,8 +10,7 @@ export {
 } from './spacing';
 
 export type FieldLikeMember =
-    | TSESTree.PropertyDefinition
-    | TSESTree.TSAbstractPropertyDefinition;
+    TSESTree.PropertyDefinition | TSESTree.TSAbstractPropertyDefinition;
 
 export type AccessibilityGroup = 'private' | 'protected' | 'public';
 

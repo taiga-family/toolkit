@@ -192,8 +192,7 @@ export const rule = createRule<Options, MessageIds>({
 
                 if (bodyAny?.type === 'ParenthesizedExpression') {
                     const bodyInner = bodyAny.expression as
-                        | TSESTree.Expression
-                        | undefined;
+                        TSESTree.Expression | undefined;
 
                     if (bodyInner) {
                         const inner = unwrapExpression(bodyInner);
