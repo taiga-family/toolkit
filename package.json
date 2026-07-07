@@ -58,8 +58,8 @@
         "@angular/compiler-cli": "19.2.25",
         "@angular/core": "19.2.25",
         "@angular/platform-browser-dynamic": "19.2.25",
-        "@nx/rollup": "22.7.5",
-        "nx": "22.7.5",
+        "@nx/rollup": "22.7.6",
+        "nx": "22.7.6",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
         "zone.js": "0.15.1"
