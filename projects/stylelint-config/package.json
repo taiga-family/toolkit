@@ -45,7 +45,7 @@
         "stylelint-no-unsupported-browser-features": "8.1.1",
         "stylelint-order": "8.1.1",
         "stylelint-plugin-logical-css": "2.1.0",
-        "stylelint-plugin-use-baseline": "1.4.2",
+        "stylelint-plugin-use-baseline": "1.4.3",
         "stylelint-rem-over-px": "2.0.0",
         "stylelint-use-logical": "2.1.3"
     },
