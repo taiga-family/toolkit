@@ -87,12 +87,8 @@ const ruleTester = new RuleTester({
 });
 
 ruleTester.run('<rule-name>', rule, {
-  invalid: [
-    /* … */
-  ],
-  valid: [
-    /* … */
-  ],
+  invalid: [/* … */],
+  valid: [/* … */],
 });
 ```
 

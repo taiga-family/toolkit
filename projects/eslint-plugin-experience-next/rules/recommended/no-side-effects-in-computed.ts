@@ -254,8 +254,7 @@ function resolveCalledFunctions(
     const resolved = new Map<string, FunctionLikeScope>();
 
     const tsNode = context.esTreeNodeToTSNodeMap.get(node) as
-        | ts.CallLikeExpression
-        | undefined;
+        ts.CallLikeExpression | undefined;
 
     const signature = tsNode ? context.checker.getResolvedSignature(tsNode) : undefined;
     const declarations = new Set<ts.Declaration>();

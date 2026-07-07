@@ -35,6 +35,11 @@ interface StylelintResult {
     readonly results: readonly StylelintLintResult[];
 }
 
+// CI sets TIMING=true, which makes stylelint lazily `await import('./timing.mjs')`.
+// jiti runs that native dynamic import inside Jest's VM, which the runner rejects.
+// The perf report is useless in unit tests, so keep the feature off.
+delete process.env.TIMING;
+
 // Stylelint 17 is ESM-only; jiti keeps tests in-process under the CJS Jest runtime.
 const jiti = createJiti(__filename);
 const stylelint = jiti('stylelint') as StylelintApi;
