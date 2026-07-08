@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.549.0](https://github.com/taiga-family/toolkit/compare/v0.548.0...v0.549.0) (2026-07-08)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: remove deprecated no-conflicting-lifecycle
+  ([#1969](https://github.com/taiga-family/toolkit/pull/1969))
+  [(77e0fc7)](https://github.com/taiga-family/toolkit/commit/77e0fc7b847a22b0c7c1303eb8229831722b189c)
+- **prettier-config**: revert back because the version hasn't been up to 14 days yet
+  ([#1968](https://github.com/taiga-family/toolkit/pull/1968))
+  [(5510799)](https://github.com/taiga-family/toolkit/commit/55107996a51b491989c4247bdc8dfdb84a3f4c9a)
+- update eslint ecosystem ([#1967](https://github.com/taiga-family/toolkit/pull/1967))
+  [(d5f65c4)](https://github.com/taiga-family/toolkit/commit/d5f65c40cf4f2f42e91290a360b890f92d8eb7cd)
+- update dependency globals to v17.7.0 ([#1966](https://github.com/taiga-family/toolkit/pull/1966))
+  [(15e4118)](https://github.com/taiga-family/toolkit/commit/15e41182edc98f9cc940f7aa9e39dace168d97e8)
+- update commitlint to ^21.1.0 ([#1965](https://github.com/taiga-family/toolkit/pull/1965))
+  [(244496e)](https://github.com/taiga-family/toolkit/commit/244496e1d78b412915a37d12cfbdd1cbed76e744)
+- update @typescript-eslint/\* to v8.62.0 ([#1964](https://github.com/taiga-family/toolkit/pull/1964))
+  [(85abd5b)](https://github.com/taiga-family/toolkit/commit/85abd5bf32a264e54c5886e66fb2608a9554ef09)
+- update dependency stylelint-plugin-use-baseline to v1.4.3 ([#1961](https://github.com/taiga-family/toolkit/pull/1961))
+  [(be736ea)](https://github.com/taiga-family/toolkit/commit/be736ea79d06a01485307ad1da90f74262c03618)
+
 ## [0.548.0](https://github.com/taiga-family/toolkit/compare/v0.547.0...v0.548.0) (2026-07-07)
 
 ### 🚀 Features
