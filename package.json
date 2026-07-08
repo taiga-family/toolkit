@@ -49,6 +49,9 @@
         "@angular/core": "19.2.25",
         "@angular/platform-browser-dynamic": "19.2.25"
     },
+    "dependencies": {
+        "rollup": "^4.14.0"
+    },
     "devDependencies": {
         "@angular-devkit/core": "19.2.27",
         "@angular/cdk": "19.2.19",
@@ -58,8 +61,8 @@
         "@angular/compiler-cli": "19.2.25",
         "@angular/core": "19.2.25",
         "@angular/platform-browser-dynamic": "19.2.25",
-        "@nx/rollup": "22.7.6",
-        "nx": "22.7.6",
+        "@nx/rollup": "23.0.1",
+        "nx": "23.0.1",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
         "zone.js": "0.15.1"
