@@ -50,7 +50,7 @@
         "@angular/platform-browser-dynamic": "19.2.25"
     },
     "dependencies": {
-        "rollup": "^4.14.0"
+        "rollup": "4.62.2"
     },
     "devDependencies": {
         "@angular-devkit/core": "19.2.27",
