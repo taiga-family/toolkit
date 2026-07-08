@@ -68,6 +68,8 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     name: Unit tests on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      npm_config_engine_strict: false
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
