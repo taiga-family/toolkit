@@ -4,7 +4,14 @@ import stylelint from 'stylelint';
 type ValueNode = valueParser.Node;
 
 type MaskLayerKey =
-    'clip' | 'composite' | 'image' | 'mode' | 'origin' | 'position' | 'repeat' | 'size';
+    | 'clip'
+    | 'composite'
+    | 'image'
+    | 'mode'
+    | 'origin'
+    | 'position'
+    | 'repeat'
+    | 'size';
 
 interface ValueTerm {
     readonly nodes: ValueNode[];

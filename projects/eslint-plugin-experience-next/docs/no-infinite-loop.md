@@ -33,7 +33,7 @@ for (;;) {
 }
 
 // ✅ ok
-for (; queue.length > 0;) {
+for (; queue.length > 0; ) {
   flush(queue.shift());
 }
 ```

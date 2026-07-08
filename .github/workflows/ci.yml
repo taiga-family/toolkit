@@ -13,7 +13,6 @@ jobs:
       - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
       - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
-          node-version: 22.x
           audit: true
 
       - run: npm run cspell -- --no-progress
@@ -69,12 +68,14 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     name: Unit tests on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      npm_config_engine_strict: false
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: taiga-family/actions/setup-variables@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
       - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
         with:
-          node-version: 22.x
+          node-version: 22.x # validate that we can build with previous node version
       - run: npm test
 
   release-it-check:
@@ -85,8 +86,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - uses: taiga-family/actions/setup-node@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
-        with:
-          node-version: 22.x
       - run: |
           # prevent fatal: ref HEAD is not a symbolic ref
           git checkout -f main > /dev/null
