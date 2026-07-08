@@ -140,12 +140,7 @@ function isDomImperativeCall(
         return true;
     }
 
-    const tsNode = esTreeNodeToTSNodeMap.get(node) as ts.CallLikeExpression | undefined;
-
-    if (!tsNode) {
-        return false;
-    }
-
+    const tsNode = esTreeNodeToTSNodeMap.get(node) as ts.CallLikeExpression;
     const signature = checker.getResolvedSignature(tsNode);
     const declaration = signature?.declaration;
 
@@ -403,9 +398,6 @@ export const rule = createUntrackedRule<[], MessageId>({
             tsNodeToESTreeNodeMap,
         } = getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
-
         function buildFix(
             read: TSESTree.CallExpression,
         ): (fixer: RuleFixer) => Array<ReturnType<RuleFixer['replaceText']>> {
@@ -432,15 +424,15 @@ export const rule = createUntrackedRule<[], MessageId>({
                     const suspicious = collectSuspiciousReads(
                         scope,
                         checker,
-                        signalNodeMap,
-                        estreeNodeMap,
+                        esTreeNodeToTSNodeMap,
+                        tsNodeToESTreeNodeMap,
                         program,
                     );
 
                     const {reads: trackedReads} = collectSignalUsages(
                         scope.callback,
                         checker,
-                        signalNodeMap,
+                        esTreeNodeToTSNodeMap,
                         program,
                     );
 
@@ -461,7 +453,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                                 consumers,
                                 scope,
                                 checker,
-                                signalNodeMap,
+                                esTreeNodeToTSNodeMap,
                             ),
                         );
 

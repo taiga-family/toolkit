@@ -5,7 +5,10 @@
         "allowImportingTsExtensions": false,
         "esModuleInterop": true,
         "module": "esnext",
-        "moduleResolution": "bundler"
+        "moduleResolution": "bundler",
+        "paths": {
+            "typescript": ["../../node_modules/typescript/lib/typescript.d.ts"]
+        }
     },
     "include": ["./*.ts", "**/*.d.ts"],
     "exclude": ["**/*.spec.ts"]

@@ -1,5 +1,5 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
-import {isCallExpression} from 'typescript';
+import type ts from 'typescript';
 
 import {isFunctionExpressionLike} from '../utils/ast/ast-walk';
 import {createRule} from '../utils/create-rule';
@@ -54,6 +54,16 @@ function collectArrayExpressions(node: TSESTree.Node): TSESTree.ArrayExpression[
     return result;
 }
 
+function isCallExpressionNode(node: ts.Node): node is ts.CallExpression {
+    const record = node as unknown as Record<string, unknown>;
+
+    return 'expression' in record && 'arguments' in record;
+}
+
+function typeTextIncludesAny(typeChecker: ts.TypeChecker, type: ts.Type): boolean {
+    return /\bany\b/.test(typeChecker.typeToString(type));
+}
+
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
@@ -78,7 +88,8 @@ export const rule = createRule<Options, MessageId>({
 
             if (
                 typeChecker.typeToString(declaredType) !==
-                typeChecker.typeToString(inferredType)
+                    typeChecker.typeToString(inferredType) ||
+                typeTextIncludesAny(typeChecker, inferredType)
             ) {
                 return;
             }
@@ -117,7 +128,7 @@ export const rule = createRule<Options, MessageId>({
             // type arguments, the type parameters may be inferred from the
             // contextual return type provided by this annotation. Removing the
             // annotation could change the inferred type (e.g., T → unknown).
-            if (isCallExpression(tsValueNode) && !tsValueNode.typeArguments?.length) {
+            if (isCallExpressionNode(tsValueNode) && !tsValueNode.typeArguments?.length) {
                 const sig = typeChecker.getResolvedSignature(tsValueNode);
                 const decl = sig?.declaration;
 

@@ -2,8 +2,30 @@ import {type InterfaceType, type Type, type TypeChecker, TypeFlags} from 'typesc
 
 const NULLISH_TYPE_FLAGS = TypeFlags.Null | TypeFlags.Undefined | TypeFlags.Void;
 
+function getIntrinsicName(type: Type): string | null {
+    const {intrinsicName} = type as unknown as Record<'intrinsicName', unknown>;
+
+    return typeof intrinsicName === 'string' ? intrinsicName : null;
+}
+
+function getUnionTypes(type: Type): readonly Type[] | null {
+    if (type.isUnion()) {
+        return type.types;
+    }
+
+    const {types} = type as unknown as Record<'types', unknown>;
+
+    return Array.isArray(types) ? (types as readonly Type[]) : null;
+}
+
 export function isAnyOrUnknownType(type: Type): boolean {
-    return (type.flags & (TypeFlags.Any | TypeFlags.Unknown)) !== 0;
+    const intrinsicName = getIntrinsicName(type);
+
+    return (
+        (type.flags & (TypeFlags.Any | TypeFlags.Unknown)) !== 0 ||
+        intrinsicName === 'any' ||
+        intrinsicName === 'unknown'
+    );
 }
 
 export function isInterfaceType(type: Type): type is InterfaceType {
@@ -11,11 +33,20 @@ export function isInterfaceType(type: Type): type is InterfaceType {
 }
 
 export function isNullishType(type: Type): boolean {
-    return (type.flags & NULLISH_TYPE_FLAGS) !== 0;
+    const intrinsicName = getIntrinsicName(type);
+
+    return (
+        (type.flags & NULLISH_TYPE_FLAGS) !== 0 ||
+        intrinsicName === 'null' ||
+        intrinsicName === 'undefined' ||
+        intrinsicName === 'void'
+    );
 }
 
 export function hasNullishType(type: Type): boolean {
-    return type.isUnion() ? type.types.some(hasNullishType) : isNullishType(type);
+    const unionTypes = getUnionTypes(type);
+
+    return unionTypes ? unionTypes.some(hasNullishType) : isNullishType(type);
 }
 
 export function isKnownTupleType(

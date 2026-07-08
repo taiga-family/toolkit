@@ -252,12 +252,8 @@ function resolveCalledFunctions(
     context: AnalysisContext,
 ): readonly FunctionLikeScope[] {
     const resolved = new Map<string, FunctionLikeScope>();
-
-    const tsNode = context.esTreeNodeToTSNodeMap.get(node) as
-        | ts.CallLikeExpression
-        | undefined;
-
-    const signature = tsNode ? context.checker.getResolvedSignature(tsNode) : undefined;
+    const tsNode = context.esTreeNodeToTSNodeMap.get(node) as ts.CallLikeExpression;
+    const signature = context.checker.getResolvedSignature(tsNode);
     const declarations = new Set<ts.Declaration>();
 
     if (signature?.declaration) {
@@ -484,9 +480,6 @@ export const rule = createRule<[], MessageId>({
             tsNodeToESTreeNodeMap,
         } = getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
-
         return {
             CallExpression(node: TSESTree.CallExpression) {
                 for (const scope of getReactiveScopes(node, program)) {
@@ -496,10 +489,10 @@ export const rule = createRule<[], MessageId>({
 
                     const analysisContext: AnalysisContext = {
                         checker,
-                        esTreeNodeToTSNodeMap: signalNodeMap,
+                        esTreeNodeToTSNodeMap,
                         program,
                         reported: new Set<string>(),
-                        tsNodeToESTreeNodeMap: estreeNodeMap,
+                        tsNodeToESTreeNodeMap,
                     };
 
                     inspectComputedBody(

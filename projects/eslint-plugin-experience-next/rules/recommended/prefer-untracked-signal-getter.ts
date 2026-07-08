@@ -56,15 +56,17 @@ export const rule = createUntrackedRule<[], MessageId>({
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-
         return {
             CallExpression(node: TSESTree.CallExpression) {
                 if (!isAngularUntrackedCall(node, program)) {
                     return;
                 }
 
-                const getter = getWrappedSignalGetter(node, checker, signalNodeMap);
+                const getter = getWrappedSignalGetter(
+                    node,
+                    checker,
+                    esTreeNodeToTSNodeMap,
+                );
 
                 if (!getter) {
                     return;
