@@ -360,6 +360,11 @@ export const rule = createRule<Options, MessageId>({
 
             try {
                 const tsNode = typeAwareContext.esTreeNodeToTSNodeMap.get(node);
+
+                if (!tsNode) {
+                    return false;
+                }
+
                 const type = typeAwareContext.checker.getTypeAtLocation(tsNode);
 
                 return isBooleanType(type, typeAwareContext.checker);

@@ -140,7 +140,12 @@ function isDomImperativeCall(
         return true;
     }
 
-    const tsNode = esTreeNodeToTSNodeMap.get(node) as ts.CallLikeExpression;
+    const tsNode = esTreeNodeToTSNodeMap.get(node) as ts.CallLikeExpression | undefined;
+
+    if (!tsNode) {
+        return false;
+    }
+
     const signature = checker.getResolvedSignature(tsNode);
     const declaration = signature?.declaration;
 

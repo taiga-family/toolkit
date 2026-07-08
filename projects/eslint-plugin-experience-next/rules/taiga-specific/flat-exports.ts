@@ -171,6 +171,12 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
                     }
 
                     const tsNode = esTreeNodeToTSNodeMap.get(el);
+
+                    if (!tsNode) {
+                        isDirty = true;
+                        continue;
+                    }
+
                     const elType = typeChecker.getTypeAtLocation(tsNode);
                     const isLocalArray = arrays.has(el.name);
 

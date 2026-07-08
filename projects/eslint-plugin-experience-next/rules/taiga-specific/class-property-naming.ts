@@ -28,6 +28,11 @@ export const rule = createRule<[RuleConfig[]], 'invalidName'>({
                 }
 
                 const tsNode = esTreeNodeToTSNodeMap.get(node);
+
+                if (!tsNode) {
+                    return;
+                }
+
                 const nodeType = typeChecker.getTypeAtLocation(tsNode);
                 const fieldTypes = getFieldTypes(nodeType, typeChecker);
 

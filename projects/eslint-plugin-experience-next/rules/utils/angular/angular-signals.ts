@@ -296,6 +296,11 @@ export function isSignalType(
 ): boolean {
     try {
         const tsNode = esTreeNodeToTSNodeMap.get(node);
+
+        if (!tsNode) {
+            return false;
+        }
+
         const type = checker.getTypeAtLocation(tsNode);
 
         if (type.getCallSignatures().length === 0) {
@@ -362,6 +367,11 @@ export function isGetterMemberAccess(
 ): boolean {
     try {
         const tsNode = esTreeNodeToTSNodeMap.get(node);
+
+        if (!tsNode) {
+            return false;
+        }
+
         const symbol = checker.getSymbolAtLocation(tsNode);
 
         return symbol ? !!(symbol.flags & ts.SymbolFlags.GetAccessor) : false;

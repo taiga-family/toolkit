@@ -21,7 +21,7 @@ function isNullableCallType(
     try {
         const tsNode = nodeMap.get(call);
 
-        return hasNullishType(checker.getTypeAtLocation(tsNode));
+        return tsNode ? hasNullishType(checker.getTypeAtLocation(tsNode)) : false;
     } catch {
         return false;
     }

@@ -2,7 +2,7 @@ import {type TSESTree} from '@typescript-eslint/utils';
 import type ts from 'typescript';
 
 export interface NodeMap {
-    get(node: TSESTree.Node): ts.Node;
+    get(node: TSESTree.Node): ts.Node | undefined;
 }
 
 export interface TsNodeToESTreeNodeMap {

@@ -17,18 +17,11 @@ export function isExternalPureTuple(typeChecker: TypeChecker, type: Type): boole
     const typeRef = type as TypeReference;
     const typeArgs = typeChecker.getTypeArguments(typeRef);
 
-    if (typeArgs.length > 0) {
-        return typeArgs.every(
-            (item) =>
-                isClassType(item) || typeChecker.typeToString(item).startsWith('typeof '),
-        );
-    }
-
-    const tupleContent = typeText.replace(/^readonly\s+\[/, '').replace(/\]$/, '');
-    const tupleElements = tupleContent.split(',').map((item) => item.trim());
-
-    return (
-        tupleElements.length > 0 &&
-        tupleElements.every((item) => item.startsWith('typeof '))
-    );
+    return typeArgs.length > 0
+        ? typeArgs.every(
+              (item) =>
+                  isClassType(item) ||
+                  typeChecker.typeToString(item).startsWith('typeof '),
+          )
+        : false;
 }
