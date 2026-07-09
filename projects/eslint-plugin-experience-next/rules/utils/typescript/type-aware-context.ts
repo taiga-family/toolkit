@@ -21,14 +21,21 @@ export function getTypeAwareRuleContext<
 >(context: Readonly<TSESLint.RuleContext<MessageId, Options>>): TypeAwareRuleContext {
     const parserServices = ESLintUtils.getParserServices(context);
     const {sourceCode} = context;
+    const tsProgram = parserServices.program as unknown as ts.Program;
+
+    const esTreeNodeToTSNodeMap =
+        parserServices.esTreeNodeToTSNodeMap as unknown as NodeMap;
+
+    const tsNodeToESTreeNodeMap =
+        parserServices.tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
 
     return {
-        checker: parserServices.program.getTypeChecker(),
-        esTreeNodeToTSNodeMap: parserServices.esTreeNodeToTSNodeMap,
+        checker: tsProgram.getTypeChecker(),
+        esTreeNodeToTSNodeMap,
         parserServices,
         program: sourceCode.ast,
         sourceCode,
-        tsNodeToESTreeNodeMap: parserServices.tsNodeToESTreeNodeMap,
-        tsProgram: parserServices.program,
+        tsNodeToESTreeNodeMap,
+        tsProgram,
     };
 }

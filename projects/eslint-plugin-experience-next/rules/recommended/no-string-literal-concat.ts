@@ -94,7 +94,7 @@ export const rule = createRule<Options, MessageId>({
 
         try {
             parserServices = ESLintUtils.getParserServices(context);
-            checker = parserServices.program.getTypeChecker();
+            checker = (parserServices.program as unknown as ts.Program).getTypeChecker();
         } catch {
             // Type checking not available — only literal concatenation will be checked
         }
@@ -108,9 +108,13 @@ export const rule = createRule<Options, MessageId>({
                 return false;
             }
 
-            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node) as unknown as
+                | ts.Node
+                | undefined;
 
-            return isStringType(checker.getTypeAtLocation(tsNode), checker);
+            return tsNode
+                ? isStringType(checker.getTypeAtLocation(tsNode), checker)
+                : false;
         }
 
         const getText = (n: TSESTree.Node): string => sourceCode.getText(n);

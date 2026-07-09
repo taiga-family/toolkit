@@ -47,8 +47,7 @@
         "@angular/compiler": "19.2.25",
         "@angular/compiler-cli": "19.2.25",
         "@angular/core": "19.2.25",
-        "@angular/platform-browser-dynamic": "19.2.25",
-        "typescript": "5.8.3"
+        "@angular/platform-browser-dynamic": "19.2.25"
     },
     "devDependencies": {
         "@angular-devkit/core": "19.2.27",

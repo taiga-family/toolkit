@@ -566,18 +566,47 @@ function readSourceFile(fileName: string): ts.SourceFile | null {
     }
 }
 
+function hasModifierKind(node: ts.Node, kind: ts.SyntaxKind): boolean {
+    const record = node as unknown as Record<'modifiers', unknown>;
+    const {modifiers} = record;
+
+    return (
+        Array.isArray(modifiers) &&
+        modifiers.some((modifier) => getRecord(modifier)?.['kind'] === kind)
+    );
+}
+
+function statementHasDefaultExportModifier(statement: ts.Statement): boolean {
+    return (
+        hasModifierKind(statement, ts.SyntaxKind.ExportKeyword) &&
+        hasModifierKind(statement, ts.SyntaxKind.DefaultKeyword)
+    );
+}
+
+function isDefaultExportAssignment(statement: ts.Statement): boolean {
+    const record = getRecord(statement);
+
+    return (
+        record !== null &&
+        'expression' in record &&
+        'isExportEquals' in record &&
+        record['isExportEquals'] !== true
+    );
+}
+
 function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
     return sourceFile.statements.some((statement) => {
-        const statementText = statement.getText(sourceFile).trimStart();
-
-        if (statementText.startsWith('export default')) {
-            return true;
-        }
-
         const {exportClause, isTypeOnly} = statement as unknown as Record<
             'exportClause' | 'isTypeOnly',
             unknown
         >;
+
+        if (
+            statementHasDefaultExportModifier(statement) ||
+            isDefaultExportAssignment(statement)
+        ) {
+            return true;
+        }
 
         if (isTypeOnly === true) {
             return false;
