@@ -136,8 +136,6 @@ export const rule = createRule<Options, MessageId>({
         const {checker, esTreeNodeToTSNodeMap, sourceCode} =
             getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-
         function checkNode(
             node: TSESTree.ConditionalExpression | TSESTree.IfStatement,
         ): void {
@@ -159,8 +157,8 @@ export const rule = createRule<Options, MessageId>({
                 if (
                     child.type === AST_NODE_TYPES.CallExpression &&
                     !isOptionalMemberReceiver(child) &&
-                    isSignalReadCall(child, checker, signalNodeMap) &&
-                    isNullableCallType(child, checker, signalNodeMap)
+                    isSignalReadCall(child, checker, esTreeNodeToTSNodeMap) &&
+                    isNullableCallType(child, checker, esTreeNodeToTSNodeMap)
                 ) {
                     const text = sourceCode.getText(child);
                     const list = callsByText.get(text) ?? [];

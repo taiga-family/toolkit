@@ -131,8 +131,6 @@ export const rule = createUntrackedRule<[], MessageId>({
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-
         function isUntrackedUsedElsewhere(
             localName: string,
             excludeNode: TSESTree.CallExpression,
@@ -164,7 +162,11 @@ export const rule = createUntrackedRule<[], MessageId>({
                     findEnclosingReactiveScope(node, program) ||
                     findEnclosingReactiveScopeAfterAsyncBoundary(node, program) ||
                     isAllowedImperativeAngularContext(node) ||
-                    isAllowedDeferredCallbackContext(node, checker, signalNodeMap) ||
+                    isAllowedDeferredCallbackContext(
+                        node,
+                        checker,
+                        esTreeNodeToTSNodeMap,
+                    ) ||
                     isAllowedLazyAngularFactoryContext(node, program)
                 ) {
                     return;

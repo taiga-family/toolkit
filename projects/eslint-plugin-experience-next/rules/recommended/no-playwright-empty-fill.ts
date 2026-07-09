@@ -41,6 +41,11 @@ export const rule = createRule<Options, MessageId>({
 
                 const objectExpression = callee.object;
                 const tsNode = esTreeNodeToTSNodeMap.get(objectExpression);
+
+                if (!tsNode) {
+                    return;
+                }
+
                 const type = checker.getTypeAtLocation(tsNode);
 
                 if (!isPlaywrightLocator(type, checker)) {

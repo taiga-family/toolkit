@@ -6,6 +6,10 @@ export function isClassType(type: ts.Type): boolean {
     return symbol
         ? (symbol
               .getDeclarations()
-              ?.some((d) => ts.isClassDeclaration(d) || ts.isClassExpression(d)) ?? false)
+              ?.some(
+                  (declaration) =>
+                      declaration.kind === ts.SyntaxKind.ClassDeclaration ||
+                      declaration.kind === ts.SyntaxKind.ClassExpression,
+              ) ?? false)
         : false;
 }

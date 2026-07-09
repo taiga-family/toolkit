@@ -112,8 +112,6 @@ export const rule = createUntrackedRule<[], MessageId>({
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-
         function isUntrackedUsedElsewhere(
             localName: string,
             excludeNode: TSESTree.Node,
@@ -139,13 +137,18 @@ export const rule = createUntrackedRule<[], MessageId>({
             const {reads} = collectSignalUsages(
                 callback,
                 checker,
-                signalNodeMap,
+                esTreeNodeToTSNodeMap,
                 program,
             );
 
             if (
                 reads.length > 0 ||
-                hasOpaqueSynchronousCalls(callback, checker, signalNodeMap, program)
+                hasOpaqueSynchronousCalls(
+                    callback,
+                    checker,
+                    esTreeNodeToTSNodeMap,
+                    program,
+                )
             ) {
                 // Snapshot reads inside reactive callbacks are a valid Angular
                 // pattern even when the snapshot later influences branching.

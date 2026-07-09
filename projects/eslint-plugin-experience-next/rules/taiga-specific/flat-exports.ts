@@ -22,12 +22,29 @@ interface ArrayMeta {
     isDirty: boolean;
 }
 
+function isClassValueType(type: ts.Type): boolean {
+    return isClassType(type);
+}
+
+function isArrayLikeValueType(typeChecker: ts.TypeChecker, type: ts.Type): boolean {
+    const typeText = typeChecker.typeToString(type);
+
+    return (
+        typeChecker.isArrayLikeType(type) ||
+        typeChecker.isTupleType(type) ||
+        typeText.endsWith('[]') ||
+        typeText.startsWith('readonly [') ||
+        typeText.startsWith('[')
+    );
+}
+
 export const rule = createRule<[], typeof MESSAGE_ID>({
     create(context) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
             getTypeAwareRuleContext(context);
 
         const arrays = new Map<string, ArrayMeta>();
+        const localClassNames = new Set<string>();
         const purityCache = new WeakMap<ArrayMeta, boolean>();
 
         const isPureArray = (arr: ArrayMeta): boolean => {
@@ -81,6 +98,12 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
         };
 
         return {
+            ClassDeclaration(node) {
+                if (node.id) {
+                    localClassNames.add(node.id.name);
+                }
+            },
+
             'Program:exit'() {
                 for (const [, arr] of arrays) {
                     if (!isPureArray(arr)) {
@@ -126,14 +149,20 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
                 }
 
                 const name = node.id.name;
-                const arrayExpression = getConstArray(node.init);
+                const constArray = getConstArray(node.init);
+
+                const arrayExpression =
+                    constArray ??
+                    (node.init?.type === AST_NODE_TYPES.ArrayExpression
+                        ? node.init
+                        : null);
 
                 if (!arrayExpression) {
                     return;
                 }
 
                 const elements: ElementMeta[] = [];
-                let isDirty = false;
+                let isDirty = !constArray;
 
                 for (const el of arrayExpression.elements) {
                     if (el?.type !== AST_NODE_TYPES.Identifier) {
@@ -142,12 +171,20 @@ export const rule = createRule<[], typeof MESSAGE_ID>({
                     }
 
                     const tsNode = esTreeNodeToTSNodeMap.get(el);
-                    const elType = typeChecker.getTypeAtLocation(tsNode);
-                    const isClass = isClassType(elType);
 
-                    const isArrayLike =
-                        typeChecker.isArrayLikeType(elType) ||
-                        typeChecker.isTupleType(elType);
+                    if (!tsNode) {
+                        isDirty = true;
+                        continue;
+                    }
+
+                    const elType = typeChecker.getTypeAtLocation(tsNode);
+                    const isLocalArray = arrays.has(el.name);
+
+                    const isClass =
+                        localClassNames.has(el.name) ||
+                        (!isLocalArray && isClassValueType(elType));
+
+                    const isArrayLike = isArrayLikeValueType(typeChecker, elType);
 
                     elements.push({
                         isArrayLike,

@@ -484,9 +484,6 @@ export const rule = createRule<[], MessageId>({
             tsNodeToESTreeNodeMap,
         } = getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-        const estreeNodeMap = tsNodeToESTreeNodeMap as unknown as TsNodeToESTreeNodeMap;
-
         return {
             CallExpression(node: TSESTree.CallExpression) {
                 for (const scope of getReactiveScopes(node, program)) {
@@ -496,10 +493,10 @@ export const rule = createRule<[], MessageId>({
 
                     const analysisContext: AnalysisContext = {
                         checker,
-                        esTreeNodeToTSNodeMap: signalNodeMap,
+                        esTreeNodeToTSNodeMap,
                         program,
                         reported: new Set<string>(),
-                        tsNodeToESTreeNodeMap: estreeNodeMap,
+                        tsNodeToESTreeNodeMap,
                     };
 
                     inspectComputedBody(

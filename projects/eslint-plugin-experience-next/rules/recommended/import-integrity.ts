@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import path from 'node:path';
 
 import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
@@ -93,7 +94,12 @@ interface CycleSearchResult {
 }
 
 const importGraphCacheByProgram = new WeakMap<ts.Program, ImportGraphCache>();
-const defaultExportCacheByProgram = new WeakMap<ts.Program, Map<string, boolean>>();
+
+const defaultExportCacheByProgram = new WeakMap<
+    ts.Program,
+    Map<string, boolean | null>
+>();
+
 const fallbackResolutionByProgram = new WeakMap<ts.Program, FallbackResolutionState>();
 const moduleExportNamesCache = new WeakMap<ts.Symbol, ReadonlySet<string>>();
 const sourceFileCacheByProgram = new WeakMap<ts.Program, Map<string, ts.SourceFile>>();
@@ -108,6 +114,61 @@ const ANGULAR_DI_FIRST_ARG_FUNCTIONS = new Set([
     'viewChild',
     'viewChildren',
 ]);
+
+function getRecord(value: unknown): Record<string, unknown> | null {
+    return value && typeof value === 'object' ? (value as Record<string, unknown>) : null;
+}
+
+function getStringLiteralText(value: unknown): string | null {
+    const record = getRecord(value);
+    const {text} = record ?? {};
+
+    return typeof text === 'string' ? text : null;
+}
+
+function isImportDeclarationNode(node: unknown): node is ts.ImportDeclaration {
+    const record = getRecord(node);
+
+    return record !== null && 'importClause' in record && 'moduleSpecifier' in record;
+}
+
+function isExportDeclarationNode(node: unknown): node is ts.ExportDeclaration {
+    const record = getRecord(node);
+
+    return (
+        record !== null &&
+        'exportClause' in record &&
+        'moduleSpecifier' in record &&
+        !('importClause' in record)
+    );
+}
+
+function isImportEqualsDeclarationNode(
+    node: unknown,
+): node is ts.ImportEqualsDeclaration {
+    const record = getRecord(node);
+
+    return (
+        record !== null &&
+        'moduleReference' in record &&
+        'isTypeOnly' in record &&
+        'name' in record
+    );
+}
+
+function isExternalModuleReferenceNode(
+    node: unknown,
+): node is ts.ExternalModuleReference {
+    const record = getRecord(node);
+
+    return record !== null && 'expression' in record;
+}
+
+function isImportSpecifierNode(node: unknown): node is ts.ImportSpecifier {
+    const record = getRecord(node);
+
+    return record !== null && 'name' in record;
+}
 
 function createCanonicalFileName(): (fileName: string) => string {
     const useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
@@ -152,7 +213,7 @@ function getProgramResolutionCache(program: ts.Program): ts.ModuleResolutionCach
         return null;
     }
 
-    const cache: unknown = (getCache as () => unknown).call(program);
+    const cache = (getCache as () => unknown).call(program);
 
     return cache === null ||
         typeof cache !== 'object' ||
@@ -377,10 +438,10 @@ function importDeclarationHasRuntimeEdge(node: ts.ImportDeclaration): boolean {
         return false;
     }
 
-    return ts.isNamespaceImport(namedBindings)
-        ? true
-        : namedBindings.elements.length === 0 ||
-              namedBindings.elements.some((specifier) => !specifier.isTypeOnly);
+    return 'elements' in namedBindings
+        ? namedBindings.elements.length === 0 ||
+              namedBindings.elements.some((specifier) => !specifier.isTypeOnly)
+        : true;
 }
 
 function exportDeclarationHasRuntimeEdge(node: ts.ExportDeclaration): boolean {
@@ -390,40 +451,39 @@ function exportDeclarationHasRuntimeEdge(node: ts.ExportDeclaration): boolean {
 
     const exportClause = node.exportClause;
 
-    return !exportClause || ts.isNamespaceExport(exportClause)
+    return !exportClause || !('elements' in exportClause)
         ? true
         : exportClause.elements.length === 0 ||
               exportClause.elements.some((specifier) => !specifier.isTypeOnly);
 }
 
 function getRuntimeModuleSpecifier(statement: ts.Statement): string | null {
-    if (ts.isImportDeclaration(statement)) {
+    if (isImportDeclarationNode(statement)) {
         const {moduleSpecifier} = statement;
+        const moduleSpecifierText = getStringLiteralText(moduleSpecifier);
 
-        return ts.isStringLiteralLike(moduleSpecifier) &&
-            importDeclarationHasRuntimeEdge(statement)
-            ? moduleSpecifier.text
+        return moduleSpecifierText && importDeclarationHasRuntimeEdge(statement)
+            ? moduleSpecifierText
             : null;
     }
 
-    if (ts.isExportDeclaration(statement)) {
+    if (isExportDeclarationNode(statement)) {
         const {moduleSpecifier} = statement;
+        const moduleSpecifierText = getStringLiteralText(moduleSpecifier);
 
-        return moduleSpecifier &&
-            ts.isStringLiteralLike(moduleSpecifier) &&
-            exportDeclarationHasRuntimeEdge(statement)
-            ? moduleSpecifier.text
+        return moduleSpecifierText && exportDeclarationHasRuntimeEdge(statement)
+            ? moduleSpecifierText
             : null;
     }
 
     if (
-        ts.isImportEqualsDeclaration(statement) &&
+        isImportEqualsDeclarationNode(statement) &&
         !statement.isTypeOnly &&
-        ts.isExternalModuleReference(statement.moduleReference)
+        isExternalModuleReferenceNode(statement.moduleReference)
     ) {
-        const expression = statement.moduleReference.expression;
+        const {expression} = statement.moduleReference;
 
-        return ts.isStringLiteralLike(expression) ? expression.text : null;
+        return getStringLiteralText(expression);
     }
 
     return null;
@@ -455,7 +515,19 @@ function getSourceFileByFileName(
     const normalizedFileName = canonicalFileName(fileName);
 
     if (cached) {
-        return cached.get(normalizedFileName) ?? null;
+        const cachedSourceFile = cached.get(normalizedFileName);
+
+        if (cachedSourceFile) {
+            return cachedSourceFile;
+        }
+
+        const sourceFile = readSourceFile(fileName);
+
+        if (sourceFile) {
+            cached.set(normalizedFileName, sourceFile);
+        }
+
+        return sourceFile;
     }
 
     const sourceFileByFileName = new Map<string, ts.SourceFile>();
@@ -466,53 +538,96 @@ function getSourceFileByFileName(
 
     sourceFileCacheByProgram.set(program, sourceFileByFileName);
 
-    return sourceFileByFileName.get(normalizedFileName) ?? null;
+    const sourceFile = sourceFileByFileName.get(normalizedFileName);
+
+    if (sourceFile) {
+        return sourceFile;
+    }
+
+    const parsedSourceFile = readSourceFile(fileName);
+
+    if (parsedSourceFile) {
+        sourceFileByFileName.set(normalizedFileName, parsedSourceFile);
+    }
+
+    return parsedSourceFile;
 }
 
-function hasModifier(node: ts.Node, kind: ts.SyntaxKind): boolean {
-    return (
-        ts.canHaveModifiers(node) &&
-        (ts.getModifiers(node)?.some((modifier) => modifier.kind === kind) ?? false)
-    );
-}
-
-function hasRuntimeDefaultModifier(statement: ts.Statement): boolean {
-    return (
-        hasModifier(statement, ts.SyntaxKind.ExportKeyword) &&
-        hasModifier(statement, ts.SyntaxKind.DefaultKeyword) &&
-        !ts.isInterfaceDeclaration(statement) &&
-        !ts.isTypeAliasDeclaration(statement)
-    );
-}
-
-function exportsDefaultSpecifier(node: ts.ExportDeclaration): boolean {
-    return node.isTypeOnly || !node.exportClause || !ts.isNamedExports(node.exportClause)
-        ? false
-        : node.exportClause.elements.some(
-              (specifier) => !specifier.isTypeOnly && specifier.name.text === 'default',
-          );
+function readSourceFile(fileName: string): ts.SourceFile | null {
+    try {
+        return ts.createSourceFile(
+            fileName,
+            readFileSync(fileName, 'utf8'),
+            ts.ScriptTarget.Latest,
+            true,
+        );
+    } catch {
+        return null;
+    }
 }
 
 function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
-    return sourceFile.statements.some(
-        (statement) =>
-            (ts.isExportAssignment(statement) && !statement.isExportEquals) ||
-            hasRuntimeDefaultModifier(statement) ||
-            (ts.isExportDeclaration(statement) && exportsDefaultSpecifier(statement)),
-    );
+    return sourceFile.statements.some((statement) => {
+        const statementText = statement.getText(sourceFile).trimStart();
+
+        if (statementText.startsWith('export default')) {
+            return true;
+        }
+
+        const {exportClause, isTypeOnly} = statement as unknown as Record<
+            'exportClause' | 'isTypeOnly',
+            unknown
+        >;
+
+        if (isTypeOnly === true) {
+            return false;
+        }
+
+        const exportClauseRecord =
+            exportClause && typeof exportClause === 'object'
+                ? (exportClause as Record<'elements', unknown>)
+                : null;
+
+        const elements = exportClauseRecord?.elements;
+
+        return (
+            Array.isArray(elements) &&
+            elements.some((specifier) => {
+                if (!specifier || typeof specifier !== 'object') {
+                    return false;
+                }
+
+                const specifierRecord = specifier as Record<
+                    'isTypeOnly' | 'name',
+                    unknown
+                >;
+
+                if (specifierRecord.isTypeOnly === true) {
+                    return false;
+                }
+
+                const nameRecord =
+                    specifierRecord.name && typeof specifierRecord.name === 'object'
+                        ? (specifierRecord.name as Record<'text', unknown>)
+                        : null;
+
+                return nameRecord?.text === 'default';
+            })
+        );
+    });
 }
 
 function isJsonModuleFileName(fileName: string): boolean {
     return path.extname(fileName).toLowerCase() === '.json';
 }
 
-function hasDefaultExport(program: ts.Program, fileName: string): boolean {
+function hasDefaultExport(program: ts.Program, fileName: string): boolean | null {
     const canonicalFileName = createCanonicalFileName();
     const normalizedFileName = canonicalFileName(fileName);
     let cache = defaultExportCacheByProgram.get(program);
 
     if (!cache) {
-        cache = new Map<string, boolean>();
+        cache = new Map<string, boolean | null>();
         defaultExportCacheByProgram.set(program, cache);
     }
 
@@ -523,7 +638,7 @@ function hasDefaultExport(program: ts.Program, fileName: string): boolean {
     }
 
     const sourceFile = getSourceFileByFileName(program, fileName);
-    const hasExport = sourceFile ? sourceFileHasDefaultExport(sourceFile) : false;
+    const hasExport = sourceFile ? sourceFileHasDefaultExport(sourceFile) : null;
 
     cache.set(normalizedFileName, hasExport);
 
@@ -633,7 +748,7 @@ function getDependenciesForFile(
 
         graph.displayFileNameByFileName.set(targetFileName, targetSourceFile.fileName);
         edges.push({
-            isImport: ts.isImportDeclaration(statement),
+            isImport: isImportDeclarationNode(statement),
             moduleSpecifier,
             targetFileName,
         });
@@ -865,7 +980,7 @@ function getNamespaceImportExportNames(
 
     const tsNode = esTreeNodeToTSNodeMap.get(node);
 
-    if (!ts.isImportDeclaration(tsNode)) {
+    if (!isImportDeclarationNode(tsNode)) {
         return null;
     }
 
@@ -881,15 +996,15 @@ function getExportDeclarationModuleExportNames(
 ): ReadonlySet<string> | null {
     const tsNode = esTreeNodeToTSNodeMap.get(node);
 
-    if (
-        !ts.isExportDeclaration(tsNode) ||
-        !tsNode.moduleSpecifier ||
-        !ts.isStringLiteralLike(tsNode.moduleSpecifier)
-    ) {
+    const moduleSpecifier = isExportDeclarationNode(tsNode)
+        ? tsNode.moduleSpecifier
+        : null;
+
+    if (!moduleSpecifier || !getStringLiteralText(moduleSpecifier)) {
         return null;
     }
 
-    const moduleSymbol = checker.getSymbolAtLocation(tsNode.moduleSpecifier);
+    const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
 
     return moduleSymbol ? getModuleExportNames(checker, moduleSymbol) : null;
 }
@@ -901,6 +1016,7 @@ function getExportSpecifierName(
         return name.name;
     }
 
+    // noinspection SuspiciousTypeOfGuard
     return typeof name.value === 'string' ? name.value : null;
 }
 
@@ -1552,7 +1668,7 @@ export const rule = createRule<Options, MessageId>({
 
                 const tsSpecifier = esTreeNodeToTSNodeMap.get(specifier);
 
-                if (!ts.isImportSpecifier(tsSpecifier)) {
+                if (!isImportSpecifierNode(tsSpecifier)) {
                     return null;
                 }
 
@@ -1657,6 +1773,10 @@ export const rule = createRule<Options, MessageId>({
                 tsProgram,
                 resolved.resolvedFileName,
             );
+
+            if (hasResolvedDefaultExport === null) {
+                return;
+            }
 
             if (!hasResolvedDefaultExport) {
                 if (!checkDefaultImports) {
@@ -1792,11 +1912,15 @@ export const rule = createRule<Options, MessageId>({
             const moduleSpecifier = node.source.value;
             const resolved = resolveModule(tsProgram, context.filename, moduleSpecifier);
 
+            const hasResolvedDefaultExport = resolved
+                ? hasDefaultExport(tsProgram, resolved.resolvedFileName)
+                : null;
+
             if (
                 !resolved ||
                 (resolved.isExternalLibraryImport && ignoreExternalDefaultImports) ||
                 isJsonModuleFileName(resolved.resolvedFileName) ||
-                !hasDefaultExport(tsProgram, resolved.resolvedFileName)
+                !hasResolvedDefaultExport
             ) {
                 return;
             }

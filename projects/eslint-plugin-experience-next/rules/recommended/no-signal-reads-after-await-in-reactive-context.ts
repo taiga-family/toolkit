@@ -10,7 +10,6 @@ import {
     ANGULAR_SIGNALS_ASYNC_GUIDE_URL,
     createUntrackedRule,
 } from '../utils/angular/untracked-docs';
-import {type NodeMap} from '../utils/typescript/node-map';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
 
 type MessageId = 'readAfterAwait';
@@ -19,8 +18,6 @@ export const rule = createUntrackedRule<[], MessageId>({
     create(context) {
         const {checker, esTreeNodeToTSNodeMap, program, sourceCode} =
             getTypeAwareRuleContext(context);
-
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
 
         return {
             CallExpression(node: TSESTree.CallExpression) {
@@ -31,7 +28,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                         if (
                             inner.type !== AST_NODE_TYPES.CallExpression ||
                             isAngularUntrackedCall(inner, program) ||
-                            !isSignalReadCall(inner, checker, signalNodeMap)
+                            !isSignalReadCall(inner, checker, esTreeNodeToTSNodeMap)
                         ) {
                             return;
                         }

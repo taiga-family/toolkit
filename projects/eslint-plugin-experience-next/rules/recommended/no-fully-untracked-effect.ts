@@ -9,7 +9,6 @@ import {
     ANGULAR_SIGNALS_UNTRACKED_GUIDE_URL,
     createUntrackedRule,
 } from '../utils/angular/untracked-docs';
-import {type NodeMap} from '../utils/typescript/node-map';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
 
 type MessageId = 'noTrackedReads';
@@ -19,15 +18,13 @@ export const rule = createUntrackedRule<[], MessageId>({
         const {checker, esTreeNodeToTSNodeMap, program} =
             getTypeAwareRuleContext(context);
 
-        const signalNodeMap = esTreeNodeToTSNodeMap as unknown as NodeMap;
-
         return {
             CallExpression(node: TSESTree.CallExpression) {
                 for (const scope of getReactiveScopes(node, program)) {
                     const {reads: trackedReads} = collectSignalUsages(
                         scope.callback,
                         checker,
-                        signalNodeMap,
+                        esTreeNodeToTSNodeMap,
                         program,
                     );
 
@@ -38,7 +35,7 @@ export const rule = createUntrackedRule<[], MessageId>({
                     const untrackedReads = collectSignalReadsInsideUntracked(
                         scope.callback,
                         checker,
-                        signalNodeMap,
+                        esTreeNodeToTSNodeMap,
                         program,
                     );
 

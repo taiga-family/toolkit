@@ -1,14 +1,13 @@
-import {
-    AST_NODE_TYPES,
-    ESLintUtils,
-    type TSESLint,
-    type TSESTree,
-} from '@typescript-eslint/utils';
-import ts from 'typescript';
+import {AST_NODE_TYPES, type TSESLint, type TSESTree} from '@typescript-eslint/utils';
+import type ts from 'typescript';
 
 import {getParenthesizedInner, unwrapParenthesized} from '../utils/ast/parenthesized';
 import {getLineBreak, hasLineBreak} from '../utils/ast/spacing';
 import {createRule} from '../utils/create-rule';
+import {
+    getTypeAwareRuleContext,
+    type TypeAwareRuleContext,
+} from '../utils/typescript/type-aware-context';
 
 type Options = [];
 
@@ -126,10 +125,14 @@ function isKnownBooleanExpression(node: TSESTree.Expression): boolean {
     }
 }
 
-function isBooleanType(type: ts.Type): boolean {
+function isBooleanType(type: ts.Type, checker: ts.TypeChecker): boolean {
+    if (checker.typeToString(type) === 'boolean') {
+        return true;
+    }
+
     const types = type.isUnion() ? type.types : [type];
 
-    return types.every((part) => !!(part.flags & ts.TypeFlags.BooleanLike));
+    return types.every((part) => checker.typeToString(part) === 'boolean');
 }
 
 function getBooleanTestReturnStrategy(
@@ -342,28 +345,29 @@ function renderBooleanTestReturn(
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const {sourceCode} = context;
-
-        let parserServices: ReturnType<typeof ESLintUtils.getParserServices> | null =
-            null;
-
-        let checker: ts.TypeChecker | null = null;
+        let typeAwareContext: TypeAwareRuleContext | null = null;
 
         try {
-            parserServices = ESLintUtils.getParserServices(context);
-            checker = parserServices.program.getTypeChecker();
+            typeAwareContext = getTypeAwareRuleContext(context);
         } catch {
             // Type checking is optional; syntactic boolean detection still works.
         }
 
         function isTypeCheckedBooleanExpression(node: TSESTree.Expression): boolean {
-            if (!parserServices || !checker) {
+            if (!typeAwareContext) {
                 return false;
             }
 
             try {
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+                const tsNode = typeAwareContext.esTreeNodeToTSNodeMap.get(node);
 
-                return isBooleanType(checker.getTypeAtLocation(tsNode));
+                if (!tsNode) {
+                    return false;
+                }
+
+                const type = typeAwareContext.checker.getTypeAtLocation(tsNode);
+
+                return isBooleanType(type, typeAwareContext.checker);
             } catch {
                 return false;
             }

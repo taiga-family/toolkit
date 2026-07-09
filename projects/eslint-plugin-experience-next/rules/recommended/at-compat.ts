@@ -503,6 +503,11 @@ export const rule = createRule<Options, MessageId>({
 
                     const tsObjectNode = esTreeNodeToTSNodeMap.get(node.object);
                     const tsIndexedAccessNode = esTreeNodeToTSNodeMap.get(node);
+
+                    if (!tsObjectNode || !tsIndexedAccessNode) {
+                        return;
+                    }
+
                     const objectType = typeChecker.getTypeAtLocation(tsObjectNode);
 
                     const indexedAccessType =
@@ -559,6 +564,11 @@ export const rule = createRule<Options, MessageId>({
                 }
 
                 const tsObjectNode = esTreeNodeToTSNodeMap.get(node.object);
+
+                if (!tsObjectNode) {
+                    return;
+                }
+
                 const objectType = typeChecker.getTypeAtLocation(tsObjectNode);
 
                 if (!hasBuiltInAtReceiverType(typeChecker, objectType)) {

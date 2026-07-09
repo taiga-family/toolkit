@@ -1,10 +1,10 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
-import {isCallExpression} from 'typescript';
+import ts from 'typescript';
 
 import {isFunctionExpressionLike} from '../utils/ast/ast-walk';
 import {createRule} from '../utils/create-rule';
 import {getTypeAwareRuleContext} from '../utils/typescript/type-aware-context';
-import {isKnownTupleType} from '../utils/typescript/types';
+import {isAnyOrUnknownType, isKnownTupleType} from '../utils/typescript/types';
 
 type Options = [
     {
@@ -54,6 +54,26 @@ function collectArrayExpressions(node: TSESTree.Node): TSESTree.ArrayExpression[
     return result;
 }
 
+function isCallExpressionNode(node: ts.Node): node is ts.CallExpression {
+    const record = node as unknown as Record<string, unknown>;
+
+    return 'expression' in record && 'arguments' in record;
+}
+
+function typeIncludesAnyOrUnknown(typeChecker: ts.TypeChecker, type: ts.Type): boolean {
+    if (isAnyOrUnknownType(type)) {
+        return true;
+    }
+
+    if (type.isUnion() || type.isIntersection()) {
+        return type.types.some((item) => typeIncludesAnyOrUnknown(typeChecker, item));
+    }
+
+    const elementType = typeChecker.getIndexTypeOfType(type, ts.IndexKind.Number);
+
+    return elementType ? isAnyOrUnknownType(elementType) : false;
+}
+
 export const rule = createRule<Options, MessageId>({
     create(context) {
         const {checker: typeChecker, esTreeNodeToTSNodeMap} =
@@ -73,12 +93,18 @@ export const rule = createRule<Options, MessageId>({
 
             const tsNode = esTreeNodeToTSNodeMap.get(node);
             const tsValueNode = esTreeNodeToTSNodeMap.get(value);
+
+            if (!tsNode || !tsValueNode) {
+                return;
+            }
+
             const declaredType = typeChecker.getTypeAtLocation(tsNode);
             const inferredType = typeChecker.getTypeAtLocation(tsValueNode);
 
             if (
                 typeChecker.typeToString(declaredType) !==
-                typeChecker.typeToString(inferredType)
+                    typeChecker.typeToString(inferredType) ||
+                typeIncludesAnyOrUnknown(typeChecker, inferredType)
             ) {
                 return;
             }
@@ -103,6 +129,7 @@ export const rule = createRule<Options, MessageId>({
                     const tsArrayNode = esTreeNodeToTSNodeMap.get(arrayExpression);
 
                     if (
+                        !tsArrayNode ||
                         isKnownTupleType(
                             typeChecker,
                             typeChecker.getTypeAtLocation(tsArrayNode),
@@ -117,7 +144,7 @@ export const rule = createRule<Options, MessageId>({
             // type arguments, the type parameters may be inferred from the
             // contextual return type provided by this annotation. Removing the
             // annotation could change the inferred type (e.g., T → unknown).
-            if (isCallExpression(tsValueNode) && !tsValueNode.typeArguments?.length) {
+            if (isCallExpressionNode(tsValueNode) && !tsValueNode.typeArguments?.length) {
                 const sig = typeChecker.getResolvedSignature(tsValueNode);
                 const decl = sig?.declaration;
 
