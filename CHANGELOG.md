@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.550.0](https://github.com/taiga-family/toolkit/compare/v0.549.0...v0.550.0) (2026-07-09)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: support Angular 22 and TypeScript 6
+  ([#1971](https://github.com/taiga-family/toolkit/pull/1971))
+  [(6330837)](https://github.com/taiga-family/toolkit/commit/63308374ed4a2b51840e59ad5be7e9bfb01dbc05)
+
+### 🐞 Bug Fixes
+
+- pin dependency rollup to 4.62.2 ([#1972](https://github.com/taiga-family/toolkit/pull/1972))
+  [(96b86e8)](https://github.com/taiga-family/toolkit/commit/96b86e8c638ac65ebef699fed4ce10ea40ecb286)
+
 ## [0.549.0](https://github.com/taiga-family/toolkit/compare/v0.548.0...v0.549.0) (2026-07-08)
 
 ### 🐞 Bug Fixes
