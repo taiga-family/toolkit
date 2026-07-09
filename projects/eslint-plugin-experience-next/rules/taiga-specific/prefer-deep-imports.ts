@@ -130,7 +130,9 @@ export const rule = createRule<RuleOptions, MessageIds>({
             }
 
             const parserServices = ESLintUtils.getParserServices(context);
-            const program = parserServices.program;
+            // Parser services and this rule can be typed through different physical
+            // TypeScript copies, while the runtime Program shape stays compatible.
+            const program = parserServices.program as unknown as ts.Program;
 
             state = {
                 allowedPackages,

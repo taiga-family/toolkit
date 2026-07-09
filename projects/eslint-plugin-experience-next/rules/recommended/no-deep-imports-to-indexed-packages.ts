@@ -19,7 +19,9 @@ const indexExportsCache = new Map<string, {mtimeMs: number; set: Set<string>}>()
 export const rule = createRule({
     create(context) {
         const parserServices = ESLintUtils.getParserServices(context);
-        const program = parserServices.program;
+        // Parser services and this rule can be typed through different physical
+        // TypeScript copies, while the runtime Program shape stays compatible.
+        const program = parserServices.program as unknown as ts.Program;
         const compilerOptions = program.getCompilerOptions();
         const compilerHost = ts.createCompilerHost(compilerOptions, true);
         const containingDir = path.dirname(context.filename);

@@ -566,11 +566,31 @@ function readSourceFile(fileName: string): ts.SourceFile | null {
     }
 }
 
+function hasModifierKind(node: ts.Node, kind: ts.SyntaxKind): boolean {
+    const record = node as unknown as Record<'modifiers', unknown>;
+    const {modifiers} = record;
+
+    return (
+        Array.isArray(modifiers) &&
+        modifiers.some((modifier) => getRecord(modifier)?.['kind'] === kind)
+    );
+}
+
+function statementHasDefaultExportModifier(statement: ts.Statement): boolean {
+    return (
+        hasModifierKind(statement, ts.SyntaxKind.ExportKeyword) &&
+        hasModifierKind(statement, ts.SyntaxKind.DefaultKeyword)
+    );
+}
+
 function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
     return sourceFile.statements.some((statement) => {
         const statementText = statement.getText(sourceFile).trimStart();
 
-        if (statementText.startsWith('export default')) {
+        if (
+            statementHasDefaultExportModifier(statement) ||
+            statementText.startsWith('export default')
+        ) {
             return true;
         }
 

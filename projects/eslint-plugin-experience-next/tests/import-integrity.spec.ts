@@ -547,6 +547,10 @@ ruleTester.run('import-integrity', rule, {
             filename: fixtureFile('default-consumer.ts'),
         },
         {
+            code: "import DecoratedDefault from './decorated-default';",
+            filename: fixtureFile('default-consumer.ts'),
+        },
+        {
             code: "import foo from './default-reexport';",
             filename: fixtureFile('default-consumer.ts'),
         },
