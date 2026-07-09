@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.551.0](https://github.com/taiga-family/toolkit/compare/v0.550.0...v0.551.0) (2026-07-09)
+
+### 🚀 Features
+
+- **eslint-plugin-experience-next**: handle decorated default exports and TS interop
+  ([#1974](https://github.com/taiga-family/toolkit/pull/1974))
+  [(048e74f)](https://github.com/taiga-family/toolkit/commit/048e74fd8e965a6d779e1ac39fd547ca092760d1)
+
 ## [0.550.0](https://github.com/taiga-family/toolkit/compare/v0.549.0...v0.550.0) (2026-07-09)
 
 ### 🚀 Features
