@@ -108,12 +108,13 @@ export const rule = createRule<Options, MessageId>({
                 return false;
             }
 
-            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node) as unknown as
+                | ts.Node
+                | undefined;
 
-            return isStringType(
-                checker.getTypeAtLocation(tsNode as unknown as ts.Node),
-                checker,
-            );
+            return tsNode
+                ? isStringType(checker.getTypeAtLocation(tsNode), checker)
+                : false;
         }
 
         const getText = (n: TSESTree.Node): string => sourceCode.getText(n);

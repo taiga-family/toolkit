@@ -583,21 +583,30 @@ function statementHasDefaultExportModifier(statement: ts.Statement): boolean {
     );
 }
 
+function isDefaultExportAssignment(statement: ts.Statement): boolean {
+    const record = getRecord(statement);
+
+    return (
+        record !== null &&
+        'expression' in record &&
+        'isExportEquals' in record &&
+        record['isExportEquals'] !== true
+    );
+}
+
 function sourceFileHasDefaultExport(sourceFile: ts.SourceFile): boolean {
     return sourceFile.statements.some((statement) => {
-        const statementText = statement.getText(sourceFile).trimStart();
-
-        if (
-            statementHasDefaultExportModifier(statement) ||
-            statementText.startsWith('export default')
-        ) {
-            return true;
-        }
-
         const {exportClause, isTypeOnly} = statement as unknown as Record<
             'exportClause' | 'isTypeOnly',
             unknown
         >;
+
+        if (
+            statementHasDefaultExportModifier(statement) ||
+            isDefaultExportAssignment(statement)
+        ) {
+            return true;
+        }
 
         if (isTypeOnly === true) {
             return false;
