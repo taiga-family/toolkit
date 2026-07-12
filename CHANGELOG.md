@@ -4800,11 +4800,6 @@ This release contains internal technical improvements only. No changes to functi
 
 ### [0.95.0](https://github.com/taiga-family/configurations/compare/v0.94.1...v0.95.0) (2024-06-05)
 
-### 🚀 Features
-
-- **cspell-config**: add `tbank`
-  [(f888f85)](https://github.com/taiga-family/configurations/commit/f888f85b233729c9e24597414dedf15406c4d9f3)
-
 ### [0.94.1](https://github.com/taiga-family/configurations/compare/v0.94.0...v0.94.1) (2024-06-05)
 
 ### [0.94.0](https://github.com/taiga-family/configurations/compare/v0.92.0...v0.94.0) (2024-06-04)
