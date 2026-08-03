@@ -1005,7 +1005,16 @@ export default defineConfig([
                     selector: 'function',
                 },
             ],
-            'unicorn/filename-case': ['error', {case: 'camelCase'}],
+        },
+    },
+    {
+        files: ['**/*.{jsx,tsx}'],
+        ignores: ['**/*.cy.{jsx,tsx}'],
+        rules: {
+            'unicorn/filename-case': [
+                'error',
+                {case: 'pascalCase', checkDirectories: false},
+            ],
         },
     },
     {
