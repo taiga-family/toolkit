@@ -109,8 +109,7 @@ export const rule = createRule<Options, MessageId>({
             }
 
             const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node) as unknown as
-                | ts.Node
-                | undefined;
+                ts.Node | undefined;
 
             return tsNode
                 ? isStringType(checker.getTypeAtLocation(tsNode), checker)
