@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.555.0](https://github.com/taiga-family/toolkit/compare/v0.554.0...v0.555.0) (2026-08-13)
+
+### 🚀 Features
+
+- **deps**: bump `@release-it/conventional-changelog` 11 =&gt; 12
+  ([#1979](https://github.com/taiga-family/toolkit/pull/1979))
+  [(211151f)](https://github.com/taiga-family/toolkit/commit/211151f1927fdab85246d9b7fe554089ae3a8463)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: `filename-case` rule uses recommended configuration for React
+  ([#1978](https://github.com/taiga-family/toolkit/pull/1978))
+  [(52d0888)](https://github.com/taiga-family/toolkit/commit/52d0888c306c0eb046c183cadf49d2ad5960a8b3)
+
 ## [0.554.0](https://github.com/taiga-family/toolkit/compare/v0.553.0...v0.554.0) (2026-07-20)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
