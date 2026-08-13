@@ -30,8 +30,7 @@ const AFTER_RENDER_EFFECT_PHASES = new Map([
 ]);
 
 export type ReactiveCallback =
-    | TSESTree.ArrowFunctionExpression
-    | TSESTree.FunctionExpression;
+    TSESTree.ArrowFunctionExpression | TSESTree.FunctionExpression;
 
 export interface ReactiveScope {
     readonly callback: ReactiveCallback;

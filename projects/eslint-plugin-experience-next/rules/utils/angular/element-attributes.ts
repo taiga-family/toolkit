@@ -8,10 +8,7 @@ import {
 } from '@angular-eslint/bundled-angular-compiler';
 
 export type ElementAttributeLike =
-    | TmplAstBoundAttribute
-    | TmplAstBoundEvent
-    | TmplAstReference
-    | TmplAstTextAttribute;
+    TmplAstBoundAttribute | TmplAstBoundEvent | TmplAstReference | TmplAstTextAttribute;
 
 export type ElementAttributeName = string | readonly string[];
 

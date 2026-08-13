@@ -75,7 +75,7 @@ ruleTester.run('no-infinite-loop', rule, {
         },
         {
             code: /* TypeScript */ `
-                for (; isRunning; ) {
+                for (; isRunning;) {
                     process();
                 }
             `,

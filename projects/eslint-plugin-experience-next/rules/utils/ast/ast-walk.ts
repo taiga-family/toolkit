@@ -1,8 +1,7 @@
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/utils';
 
 export type FunctionExpressionLike =
-    | TSESTree.ArrowFunctionExpression
-    | TSESTree.FunctionExpression;
+    TSESTree.ArrowFunctionExpression | TSESTree.FunctionExpression;
 
 export function isFunctionExpressionLike(
     node: TSESTree.Node | null | undefined,

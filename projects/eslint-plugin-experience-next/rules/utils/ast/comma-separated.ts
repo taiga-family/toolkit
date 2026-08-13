@@ -3,9 +3,7 @@ import {type TSESLint, type TSESTree} from '@typescript-eslint/utils';
 import {getLineStartOffset, getNextLineStartOffset} from './spacing';
 
 export type CommaSeparatedNode =
-    | TSESTree.Expression
-    | TSESTree.Property
-    | TSESTree.SpreadElement;
+    TSESTree.Expression | TSESTree.Property | TSESTree.SpreadElement;
 
 function getCommaAfter(
     sourceCode: Readonly<TSESLint.SourceCode>,
