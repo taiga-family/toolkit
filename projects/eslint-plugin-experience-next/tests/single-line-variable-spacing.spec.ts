@@ -23,13 +23,9 @@ ruleTester.run('single-line-variable-spacing', rule, {
                 );
                 let c = 3;
             `,
-            errors: [
-                {messageId: 'missingBlankLineBeforeMultilineVariable'},
-                {messageId: 'missingBlankLineAfterMultilineVariable'},
-            ],
+            errors: [{messageId: 'missingBlankLineAfterMultilineVariable'}],
             output: `
                 let a = 1;
-
                 const b = Math.max(
                     validatedTimeString.length - value.length - paddedZeroes,
                     0,
@@ -178,28 +174,20 @@ ruleTester.run('single-line-variable-spacing', rule, {
         },
         {
             code: `
-                class Example {
-                    static {
-                        const a = 1;
-                        const b = Math.max(
-                            value,
-                            0,
-                        );
-                    }
-                }
+                export const a = 1;
+                const b = Math.max(
+                    value,
+                    0,
+                );
             `,
-            errors: [{messageId: 'missingBlankLineBeforeMultilineVariable'}],
+            errors: [{messageId: 'missingBlankLineBetweenVariableGroups'}],
             output: `
-                class Example {
-                    static {
-                        const a = 1;
+                export const a = 1;
 
-                        const b = Math.max(
-                            value,
-                            0,
-                        );
-                    }
-                }
+                const b = Math.max(
+                    value,
+                    0,
+                );
             `,
         },
         {
@@ -289,6 +277,30 @@ ruleTester.run('single-line-variable-spacing', rule, {
                 );
 
                 let c = 3;
+            `,
+        },
+        {
+            code: /* TypeScript */ `
+                let a = 1;
+                const b = Math.max(
+                    validatedTimeString.length - value.length - paddedZeroes,
+                    0,
+                );
+
+                let c = 3;
+            `,
+        },
+        {
+            code: `
+                class Example {
+                    static {
+                        const a = 1;
+                        const b = Math.max(
+                            value,
+                            0,
+                        );
+                    }
+                }
             `,
         },
         {

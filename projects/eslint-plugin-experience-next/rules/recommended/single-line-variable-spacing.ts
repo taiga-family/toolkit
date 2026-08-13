@@ -11,7 +11,6 @@ import {createRule} from '../utils/create-rule';
 
 type MessageIds =
     | 'missingBlankLineAfterMultilineVariable'
-    | 'missingBlankLineBeforeMultilineVariable'
     | 'missingBlankLineBetweenVariableGroups'
     | 'unexpectedBlankLineBeforeNextSingleLineVariable';
 
@@ -145,12 +144,7 @@ export const rule = createRule<[], MessageIds>({
                     continue;
                 }
 
-                if (
-                    currentIsSingleLine &&
-                    nextIsSingleLine &&
-                    !sameExportGroup &&
-                    !blankLineBetween
-                ) {
+                if (currentIsSingleLine && !sameExportGroup && !blankLineBetween) {
                     context.report({
                         fix: (fixer) =>
                             fixer.replaceTextRange(
@@ -163,23 +157,6 @@ export const rule = createRule<[], MessageIds>({
                                 ),
                             ),
                         messageId: 'missingBlankLineBetweenVariableGroups',
-                        node: next.node,
-                    });
-                }
-
-                if (currentIsSingleLine && !nextIsSingleLine && !blankLineBetween) {
-                    context.report({
-                        fix: (fixer) =>
-                            fixer.replaceTextRange(
-                                [current.node.range[1], next.node.range[0]],
-                                getSpacingReplacement(
-                                    sourceCode,
-                                    betweenText,
-                                    next.node.loc.start.line,
-                                    1,
-                                ),
-                            ),
-                        messageId: 'missingBlankLineBeforeMultilineVariable',
                         node: next.node,
                     });
 
@@ -236,8 +213,6 @@ export const rule = createRule<[], MessageIds>({
         messages: {
             missingBlankLineAfterMultilineVariable:
                 'Multiline variable declarations should be followed by a blank line before the next variable declaration',
-            missingBlankLineBeforeMultilineVariable:
-                'Multiline variable declarations should be preceded by a blank line after single-line variable declarations',
             missingBlankLineBetweenVariableGroups:
                 'Exported and non-exported variable declarations should be separated by a blank line',
             unexpectedBlankLineBeforeNextSingleLineVariable:

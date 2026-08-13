@@ -2,11 +2,12 @@
 
 <sup>`✅ Recommended`</sup> <sup>`Fixable`</sup>
 
-Keeps consecutive single-line variable declarations visually grouped. A multiline variable declaration must be separated
-from neighboring variable declarations with a blank line before it and, when another variable follows, a blank line
-after it. Exported and non-exported variable declarations are separate visual groups. Variable declarations initialized
-with direct `require(...)` or dynamic `import(...)` calls are ignored as import boundaries, so the rule does not add or
-remove blank lines around them.
+Keeps consecutive single-line variable declarations visually grouped. When another variable declaration follows a
+multiline variable declaration, it must be separated from that declaration with a blank line after it; a blank line
+before a multiline variable declaration is not required. Exported and non-exported variable declarations are separate
+visual groups and must still be separated by a blank line. Variable declarations initialized with direct `require(...)`
+or dynamic `import(...)` calls are ignored as import boundaries, so the rule does not add or remove blank lines around
+them.
 
 ```ts
 // ❌ error
@@ -19,7 +20,6 @@ let c = 3;
 
 // ✅ after autofix
 let a = 1;
-
 const b = Math.max(
   validatedTimeStringLooooooooooongvalidatedTimeStringLooooooooooong.length - value.length - paddedZeroes,
   0,
