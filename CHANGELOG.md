@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.556.0](https://github.com/taiga-family/toolkit/compare/v0.555.0...v0.556.0) (2026-08-14)
+
+### 🐞 Bug Fixes
+
+- `single-line-variable-spacing` require blank line only after multiline declarations, not before
+  ([#1980](https://github.com/taiga-family/toolkit/pull/1980))
+  [(aa777e2)](https://github.com/taiga-family/toolkit/commit/aa777e24e0cd7795d03b1e44c831be3654f504f2)
+
 ## [0.555.0](https://github.com/taiga-family/toolkit/compare/v0.554.0...v0.555.0) (2026-08-13)
 
 ### 🚀 Features
