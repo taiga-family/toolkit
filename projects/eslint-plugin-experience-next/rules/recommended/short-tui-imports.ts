@@ -27,6 +27,7 @@ const DEFAULT_EXCEPTIONS: ShortImportsException[] = [
     {from: 'TuiTextfieldOptionsDirective', to: 'TuiTextfield'},
     {from: 'TuiPreviewDialogDirective', to: 'TuiPreview'},
     {from: 'TuiAccountComponent', to: 'TuiAccountComponent'},
+    {from: 'TuiMonthComponent', to: 'TuiMonthComponent'},
     {from: 'TuiIslandDirective', to: 'TuiIsland'},
     {from: 'TuiTableBarsHostComponent', to: 'TuiTableBarsHost'},
 ];
