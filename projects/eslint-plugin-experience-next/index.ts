@@ -2,6 +2,7 @@ import {readFileSync} from 'node:fs';
 
 import {type ConfigArray} from 'typescript-eslint';
 
+import jest from './configs/jest';
 import recommended, {ALL_TS_JS_FILES} from './configs/recommended';
 import taigaSpecific from './configs/taiga-specific';
 import atCompat from './rules/recommended/at-compat';
@@ -71,6 +72,7 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 
 
 const plugin = {
     configs: {} as unknown as {
+        readonly jest: ConfigArray;
         readonly recommended: ConfigArray;
         readonly ['taiga-specific']: ConfigArray;
     },
@@ -148,6 +150,7 @@ const plugin = {
 // https://eslint.org/docs/latest/extend/plugins#configs-in-plugins
 // assign configs here so we can reference `plugin`
 Object.assign(plugin.configs, {
+    jest,
     recommended: [
         {files: ALL_TS_JS_FILES, plugins: {'@taiga-ui/experience-next': plugin}},
         {files: ['**/*.html'], plugins: {'@taiga-ui/experience-next': plugin}},

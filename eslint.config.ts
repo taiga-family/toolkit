@@ -4,6 +4,7 @@ import taiga, {
 
 export default [
     ...taiga.configs.recommended,
+    ...taiga.configs.jest,
     ...taiga.configs['taiga-specific'],
     {
         files: ['**/*.{ts,js}'],

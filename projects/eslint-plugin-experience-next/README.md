@@ -13,6 +13,7 @@ import taiga from '@taiga-ui/eslint-plugin-experience-next';
 
 export default [
   ...taiga.configs.recommended,
+  ...taiga.configs.jest,
   // custom rules
   {
     files: ['**/legacy/**/*.ts'],
@@ -26,7 +27,6 @@ export default [
       '@angular-eslint/template/button-has-type': 'off',
       '@angular-eslint/template/elements-content': 'off',
       '@typescript-eslint/max-params': 'off',
-      'jest/prefer-importing-jest-globals': 'off',
       'sonarjs/prefer-nullish-coalescing': 'off',
     },
   },
@@ -38,6 +38,9 @@ export default [
 `taiga.configs.recommended` combines the Taiga UI rules listed below with external ESLint presets and individual rules
 from third-party plugins. The exact severities and file globs live in
 [`configs/recommended.ts`](https://github.com/taiga-family/toolkit/blob/main/projects/eslint-plugin-experience-next/configs/recommended.ts).
+
+Jest rules are optional. Add `...taiga.configs.jest` after `...taiga.configs.recommended` when the project uses Jest;
+omit it for Vitest projects.
 
 | Package                                                                                                                                            | What is included in `recommended`                                                                                 |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -54,7 +57,6 @@ from third-party plugins. The exact severities and file globs live in
 | [eslint-plugin-decorator-position](https://github.com/NullVoxPopuli/eslint-plugin-decorator-position/blob/master/docs/rules/decorator-position.md) | Individual `decorator-position/*` rules for JS/TS files                                                           |
 | [eslint-plugin-file-progress](https://github.com/sibiraj-s/eslint-plugin-file-progress#readme)                                                     | `progress.configs['recommended-ci']`                                                                              |
 | [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import#rules)                                                                    | `flatConfigs.recommended`, `flatConfigs.typescript`, and individual `import/*` rules for JS/TS files              |
-| [eslint-plugin-jest](https://github.com/jest-community/eslint-plugin-jest#rules)                                                                   | `jest.configs['flat/recommended']` and individual `jest/*` rules for `**/*.spec.ts`                               |
 | [eslint-plugin-package-json](https://github.com/michaelfaith/eslint-plugin-package-json#supported-rules)                                           | `packageJsonConfigs.recommended` and individual `package-json/*` rules for `**/package.json`                      |
 | [eslint-plugin-perfectionist](https://perfectionist.dev/rules)                                                                                     | Individual `perfectionist/*` sorting rules for JS/TS files                                                        |
 | [eslint-plugin-playwright](https://github.com/mskelton/eslint-plugin-playwright#rules)                                                             | `playwright.configs['flat/recommended']` and individual `playwright/*` rules for `**/*.pw.spec.ts`                |
