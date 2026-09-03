@@ -6,7 +6,6 @@ export default defineConfig([
         files: ['**/*.spec.ts'],
         extends: [jest.configs['flat/recommended']],
         rules: {
-            '@typescript-eslint/no-extraneous-class': 'off',
             'jest/expect-expect': 'off',
             'jest/max-expects': 'off',
             'jest/max-nested-describe': 'off',
@@ -21,8 +20,6 @@ export default defineConfig([
             'jest/prefer-expect-assertions': 'off',
             'jest/prefer-expect-resolves': 'off',
             'jest/prefer-hooks-on-top': 'off',
-            'max-nested-callbacks': 'off',
-            'sonarjs/no-clear-text-protocols': 'off',
             /**
              * If enabled we have
              * Expected to be running in 'ProxyZone', but it was not found

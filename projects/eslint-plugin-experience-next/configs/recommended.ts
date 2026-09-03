@@ -919,6 +919,14 @@ export default defineConfig([
         },
     },
     {
+        files: ['**/*.spec.ts'],
+        rules: {
+            '@typescript-eslint/no-extraneous-class': 'off',
+            'max-nested-callbacks': 'off',
+            'sonarjs/no-clear-text-protocols': 'off',
+        },
+    },
+    {
         files: ['**/*.ts'],
         rules: {
             '@typescript-eslint/naming-convention': [
