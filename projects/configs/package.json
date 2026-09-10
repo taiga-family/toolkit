@@ -42,6 +42,11 @@
         "@taiga-ui/syncer": "^0.560.0",
         "@taiga-ui/tsconfig": "^0.560.0"
     },
+    "peerDependenciesMeta": {
+        "@taiga-ui/jest-config": {
+            "optional": true
+        }
+    },
     "publishConfig": {
         "access": "public"
     }
