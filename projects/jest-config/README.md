@@ -8,7 +8,7 @@ The package ships two logically separate presets so that non-Angular projects do
 - `@taiga-ui/jest-config/angular` — for Angular projects (uses `jest-preset-angular`, jsdom, zone.js).
 - `@taiga-ui/jest-config/node` — for plain Node / TypeScript projects (uses `ts-jest`, `testEnvironment: 'node'`).
 
-The bare `@taiga-ui/jest-config` preset is kept as an alias for the Angular preset for backward compatibility.
+Pick the preset explicitly — there is no bare `@taiga-ui/jest-config` preset.
 
 ## Usage
 
