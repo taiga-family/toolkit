@@ -33,6 +33,26 @@
         }
     ],
     "type": "module",
+    "exports": {
+        "./angular": {
+            "types": "./angular/jest-preset.d.ts",
+            "default": "./angular/jest-preset.js"
+        },
+        "./angular/jest-preset": {
+            "types": "./angular/jest-preset.d.ts",
+            "default": "./angular/jest-preset.js"
+        },
+        "./angular/polyfill.js": "./angular/polyfill.js",
+        "./node": {
+            "types": "./node/jest-preset.d.ts",
+            "default": "./node/jest-preset.js"
+        },
+        "./node/jest-preset": {
+            "types": "./node/jest-preset.d.ts",
+            "default": "./node/jest-preset.js"
+        },
+        "./package.json": "./package.json"
+    },
     "peerDependencies": {
         "@types/jest": "^29.5.14",
         "jest": "^29.7.0",
