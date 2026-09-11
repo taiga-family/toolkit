@@ -1,0 +1,61 @@
+import {readFileSync} from 'node:fs';
+import {cpus} from 'node:os';
+import {resolve} from 'node:path';
+
+import {type JestConfigWithTsJest, pathsToModuleNameMapper} from 'ts-jest';
+import {type MapLike} from 'typescript';
+
+process.env.TZ = 'Europe/Moscow';
+process.env.FORCE_COLOR = 'true';
+process.env.TS_JEST_DISABLE_VER_CHECKER = 'true';
+
+const {compilerOptions} = readTsConfig();
+const maxParallel = cpus().length / 2;
+
+/**
+ * Shared Jest configuration that is not tied to Angular.
+ *
+ * Both the `@taiga-ui/jest-config/node` and `@taiga-ui/jest-config/angular`
+ * presets extend this object and add their environment-specific parts
+ * (transforms, test environment, polyfills).
+ */
+export const tuiBaseJestConfig = {
+    bail: 1,
+    cacheDirectory: '<rootDir>/node_modules/.cache/jest',
+    collectCoverage: true,
+    collectCoverageFrom: ['<rootDir>/**/*.ts'],
+    coverageDirectory: '<rootDir>/coverage',
+    coveragePathIgnorePatterns: ['node_modules', 'schematics', '.spec.ts', '.cy.ts'],
+    coverageReporters: ['lcov', 'clover'],
+    extensionsToTreatAsEsm: ['.ts'],
+    maxConcurrency: maxParallel,
+    maxWorkers: maxParallel,
+    moduleNameMapper: pathsToModuleNameMapper(
+        (compilerOptions?.paths as MapLike<string[]> | undefined) ?? {},
+        {
+            prefix: `<rootDir>/${compilerOptions?.baseUrl}/`
+                .replaceAll('./', '/')
+                .replaceAll(/\/{2,}/g, '/'),
+        },
+    ),
+    modulePathIgnorePatterns: ['.cache', 'dist', '<rootDir>/dist/'],
+    passWithNoTests: true,
+    reporters: ['default'],
+    rootDir: process.cwd(),
+    testMatch: ['<rootDir>/projects/**/*.spec.ts'],
+    testPathIgnorePatterns: [
+        '/cypress/',
+        '/playwright/',
+        '/node_modules/',
+        '.pw.spec.ts',
+    ],
+    verbose: !process.env.CI,
+} satisfies JestConfigWithTsJest;
+
+function readTsConfig(): Record<string, Record<string, unknown>> {
+    try {
+        return JSON.parse(readFileSync(resolve(process.cwd(), 'tsconfig.json'), 'utf-8'));
+    } catch {
+        return {compilerOptions: {}};
+    }
+}
