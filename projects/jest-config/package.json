@@ -53,6 +53,16 @@
         },
         "./package.json": "./package.json"
     },
+    "typesVersions": {
+        "*": {
+            "angular": [
+                "./angular/jest-preset.d.ts"
+            ],
+            "node": [
+                "./node/jest-preset.d.ts"
+            ]
+        }
+    },
     "peerDependencies": {
         "@types/jest": "^29.5.14",
         "jest": "^29.7.0",
