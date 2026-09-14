@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.561.0](https://github.com/taiga-family/toolkit/compare/v0.560.0...v0.561.0) (2026-09-14)
+
+### 🐞 Bug Fixes
+
+- **cspell-config**: drop brand name from allowed words
+  [(7951418)](https://github.com/taiga-family/toolkit/commit/79514182dd74c9848ca1a68dbf7bc185947ac571)
+
 ## [0.560.0](https://github.com/taiga-family/toolkit/compare/v0.559.0...v0.560.0) (2026-09-07)
 
 ### 🚀 Features
