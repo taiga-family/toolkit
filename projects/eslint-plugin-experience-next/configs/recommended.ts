@@ -801,18 +801,7 @@ export default defineConfig([
         rules: {
             '@angular-eslint/template/button-has-type': [
                 'error',
-                {
-                    ignoreWithDirectives: [
-                        'tuiButtonSelect',
-                        'tuiButtonClose',
-                        'tuiButtonCopy',
-                        'tuiAccordion',
-                        'tuiButtonX',
-                        'tuiOption',
-                        'tuiStep',
-                        'tuiTab',
-                    ],
-                },
+                {ignoreWithDirectives: ['/^tui/']},
             ],
             '@angular-eslint/template/click-events-have-key-events': 'off',
             '@angular-eslint/template/elements-content': [
