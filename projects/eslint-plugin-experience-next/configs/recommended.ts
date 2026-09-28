@@ -32,7 +32,7 @@ import * as npmrcParser from '../rules/utils/parsers/npmrc-parser';
 import {getDefaultParserOptions} from './utils/get-default-parser-options';
 import {angularVersion, modernAngularRules} from './utils/get-ng-version';
 
-export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,tsx,jsx}'];
+export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,cts,tsx,jsx}'];
 
 export default defineConfig([
     progress.configs['recommended-ci'],
