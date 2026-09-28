@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.563.0](https://github.com/taiga-family/toolkit/compare/v0.562.0...v0.563.0) (2026-09-28)
+
+### 🚀 Features
+
+- **add-cts-support**: add support for .cts files in eslint config
+  ([#1987](https://github.com/taiga-family/toolkit/pull/1987))
+  [(30260fb)](https://github.com/taiga-family/toolkit/commit/30260fbe5e016cac5e3e0c5f653cf361297b1a7a)
+
 ## [0.562.0](https://github.com/taiga-family/toolkit/compare/v0.561.0...v0.562.0) (2026-09-14)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
