@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.564.0](https://github.com/taiga-family/toolkit/compare/v0.563.0...v0.564.0) (2026-09-28)
+
+This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
+
 ## [0.563.0](https://github.com/taiga-family/toolkit/compare/v0.562.0...v0.563.0) (2026-09-28)
 
 ### 🚀 Features
