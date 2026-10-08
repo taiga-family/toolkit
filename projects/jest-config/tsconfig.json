@@ -3,13 +3,14 @@
     "compilerOptions": {
         "baseUrl": ".",
         "rootDir": ".",
-        "allowImportingTsExtensions": false,
+        "allowImportingTsExtensions": true,
         "declaration": true,
         "incremental": null,
         "module": "esnext",
         "moduleResolution": "bundler",
-        "outDir": "../../dist/jest-config"
+        "outDir": "../../dist/jest-config",
+        "rewriteRelativeImportExtensions": true
     },
-    "include": ["./*.ts"],
-    "exclude": ["./tests/*.spec.ts"]
+    "include": ["./**/*.ts"],
+    "exclude": ["./tests/**/*.ts"]
 }

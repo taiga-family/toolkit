@@ -12,7 +12,14 @@ process.env.TS_JEST_DISABLE_VER_CHECKER = 'true';
 const {compilerOptions} = readTsConfig();
 const maxParallel = cpus().length / 2;
 
-export default {
+/**
+ * Shared Jest configuration that is not tied to Angular.
+ *
+ * Both the `@taiga-ui/jest-config/node` and `@taiga-ui/jest-config/angular`
+ * presets extend this object and add their environment-specific parts
+ * (transforms, test environment, polyfills).
+ */
+export const tuiBaseJestConfig = {
     bail: 1,
     cacheDirectory: '<rootDir>/node_modules/.cache/jest',
     collectCoverage: true,
@@ -33,11 +40,8 @@ export default {
     ),
     modulePathIgnorePatterns: ['.cache', 'dist', '<rootDir>/dist/'],
     passWithNoTests: true,
-    preset: 'jest-preset-angular',
     reporters: ['default'],
     rootDir: process.cwd(),
-    setupFilesAfterEnv: ['<rootDir>/node_modules/@taiga-ui/jest-config/polyfill.js'],
-    testEnvironment: 'jsdom',
     testMatch: ['<rootDir>/projects/**/*.spec.ts'],
     testPathIgnorePatterns: [
         '/cypress/',
@@ -45,29 +49,8 @@ export default {
         '/node_modules/',
         '.pw.spec.ts',
     ],
-    transform: {
-        '^.+\\.(ts|js|mjs|html|svg)$': [
-            'jest-preset-angular',
-            {
-                diagnostics: true,
-                stringifyContentPathRegex: String.raw`\.html$`,
-                tsconfig: resolve(process.cwd(), 'tsconfig.spec.json'),
-            },
-        ],
-    },
-    transformIgnorePatterns: [
-        'node_modules/(?!@angular|rxjs|ngx-highlightjs|@ngrx|@maskito|parse5|@ng-web-apis|@taiga-ui|vscode-.+).+',
-    ],
     verbose: !process.env.CI,
 } satisfies JestConfigWithTsJest;
-
-declare const global: (Record<any, any> & Window) | undefined;
-
-export function tuiSwitchNgDevMode(enable: boolean): void {
-    if (global) {
-        global.ngDevMode = enable;
-    }
-}
 
 function readTsConfig(): Record<string, Record<string, unknown>> {
     try {
