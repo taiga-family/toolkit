@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.565.0](https://github.com/taiga-family/toolkit/compare/v0.564.0...v0.565.0) (2026-10-12)
+
+### 🚀 Features
+
+- **tsconfig**: add `"moduleResolution": "node"` to `ts-node`
+  ([#1996](https://github.com/taiga-family/toolkit/pull/1996))
+  [(a1ee834)](https://github.com/taiga-family/toolkit/commit/a1ee8340324117c10ec24b3b70c67708d1129d17)
+
 ## [0.564.0](https://github.com/taiga-family/toolkit/compare/v0.563.0...v0.564.0) (2026-09-28)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
