@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/toolkit",
-    "version": "0.565.0",
+    "version": "0.566.0",
     "private": true,
     "license": "Apache-2.0",
     "workspaces": [
