@@ -43,12 +43,12 @@
         "resize-observer-polyfill": "^1.5.1",
         "ts-jest": "^29.4.11"
     },
-    "publishConfig": {
-        "access": "public"
-    },
     "peerDependenciesMeta": {
         "jest-preset-angular": {
             "optional": true
         }
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
