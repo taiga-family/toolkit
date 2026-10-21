@@ -10,7 +10,8 @@ Common Jest configuration for taiga-ui projects
 npm i --save-dev @taiga-ui/jest-config jest-preset-angular
 ```
 
-The preset uses Angular, so `jest-preset-angular` must be installed explicitly. It is not a peer dependency of `@taiga-ui/jest-config` to avoid pulling Angular into projects that only use `@taiga-ui/configs`.
+The preset uses Angular, so `jest-preset-angular` must be installed explicitly. It is not a peer dependency of
+`@taiga-ui/jest-config` to avoid pulling Angular into projects that only use `@taiga-ui/configs`.
 
 2. Add to `package.json`
 
