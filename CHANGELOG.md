@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.567.0](https://github.com/taiga-family/toolkit/compare/v0.566.0...v0.567.0) (2026-10-21)
+
+### 🐞 Bug Fixes
+
+- **jest-config**: set `jest-preset-angular` as optional peer dependency
+  ([#1998](https://github.com/taiga-family/toolkit/pull/1998))
+  [(d2d0815)](https://github.com/taiga-family/toolkit/commit/d2d0815bf7d6a29d43714d7aea3a175686b73c14)
+
 ## [0.566.0](https://github.com/taiga-family/toolkit/compare/v0.565.0...v0.566.0) (2026-10-15)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
