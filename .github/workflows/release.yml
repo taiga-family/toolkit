@@ -19,15 +19,18 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'chore(release)')"
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
-      - uses: taiga-family/actions/release-it@a12b79beab3aea8bd840e48e902a2084d282e1a6 # v2.5.0
+      - uses: taiga-family/actions/release-it@81cb55a2c1685e45ea591772e6bc9fd1d6b83765 # v2.24.0
         with:
           ref: ${{ github.ref }}
           mode: ${{ github.event.inputs.mode || 'minor' }}
-          npmToken: ${{ secrets.TAIGA_UI_SCOPE_NPM_TOKEN }}
+          npmTrustedPublishing: true
           githubToken: ${{ secrets.TAIGA_FAMILY_BOT_PAT }}
 
 concurrency:
