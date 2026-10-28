@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.568.0](https://github.com/taiga-family/toolkit/compare/v0.567.0...v0.568.0) (2026-10-28)
+
+### 🐞 Bug Fixes
+
+- **eslint-plugin-experience-next**: allow build constants ([#1999](https://github.com/taiga-family/toolkit/pull/1999))
+  [(7f5df9b)](https://github.com/taiga-family/toolkit/commit/7f5df9bf3320b1d0c9f58b5c2b5e6e041c79c943)
+
 ## [0.567.0](https://github.com/taiga-family/toolkit/compare/v0.566.0...v0.567.0) (2026-10-21)
 
 ### 🐞 Bug Fixes
