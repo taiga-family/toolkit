@@ -34,6 +34,21 @@ ruleTester.run('Recommended naming convention', rule, {
             options: recommended,
         },
         {
+            code: /* TypeScript */ 'declare let __APP_RELEASE__: string;',
+            errors: 1,
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ 'declare const __app_release__: string;',
+            errors: 1,
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ 'declare const __APP_RELEASE_: string;',
+            errors: 1,
+            options: recommended,
+        },
+        {
             code: /* TypeScript */ 'const snake_case_var = 42;',
             errors: [{messageId: 'doesNotMatchFormat'}],
             options: recommended,
@@ -63,6 +78,18 @@ ruleTester.run('Recommended naming convention', rule, {
         },
         {
             code: /* TypeScript */ 'const testVariable = 42;',
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ 'declare const __APP_RELEASE__: string | undefined;',
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ 'declare const __BUILD_ID_2__: number;',
+            options: recommended,
+        },
+        {
+            code: /* TypeScript */ 'const __FEATURE_FLAG__ = true;',
             options: recommended,
         },
         {

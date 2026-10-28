@@ -25,6 +25,15 @@ export const TUI_RECOMMENDED_NAMING_CONVENTION = [
         selector: 'variable',
     },
     {
+        filter: {
+            match: true,
+            regex: '^__[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*__$',
+        },
+        format: null,
+        modifiers: ['const'],
+        selector: 'variable',
+    },
+    {
         custom: {
             match: true,
             regex: String.raw`^[\x00-\x7F]+$`,
