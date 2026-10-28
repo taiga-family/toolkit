@@ -59,6 +59,7 @@
         "@angular/core": "19.2.25",
         "@angular/platform-browser-dynamic": "19.2.25",
         "@nx/rollup": "23.0.1",
+        "jest-preset-angular": "14.6.2",
         "nx": "23.0.1",
         "rollup": "4.62.2",
         "ts-node": "10.9.2",
