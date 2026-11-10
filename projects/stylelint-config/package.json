@@ -1,6 +1,6 @@
 {
     "name": "@taiga-ui/stylelint-config",
-    "version": "0.569.0",
+    "version": "0.570.0",
     "description": "Taiga UI stylelint config",
     "keywords": [
         "stylelint",
@@ -37,7 +37,7 @@
     "dependencies": {
         "@stylistic/stylelint-config": "5.0.0",
         "@stylistic/stylelint-plugin": "5.2.0",
-        "@taiga-ui/browserslist-config": "^0.569.0",
+        "@taiga-ui/browserslist-config": "^0.570.0",
         "postcss": "8.5.32",
         "postcss-less": "7.0.1",
         "postcss-value-parser": "4.2.0",
