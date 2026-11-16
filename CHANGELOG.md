@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.571.0](https://github.com/taiga-family/toolkit/compare/v0.570.0...v0.571.0) (2026-11-11)
+
+### 🐞 Bug Fixes
+
+- **stylelint-config**: support Less media query interpolation
+  ([#2001](https://github.com/taiga-family/toolkit/pull/2001))
+  [(50b23b3)](https://github.com/taiga-family/toolkit/commit/50b23b39221a43ab644f49493475ded6aba7f90e)
+
 ## [0.570.0](https://github.com/taiga-family/toolkit/compare/v0.569.0...v0.570.0) (2026-11-02)
 
 This release contains internal technical improvements only. No changes to functionality, UI, or APIs.
