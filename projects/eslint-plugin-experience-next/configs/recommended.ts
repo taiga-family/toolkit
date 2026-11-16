@@ -879,6 +879,8 @@ export default defineConfig([
             '@taiga-ui/experience-next/require-title': 'error',
             '@taiga-ui/experience-next/single-line-let-spacing':
                 angularVersion >= modernAngularRules.templateLet ? 'error' : 'off',
+            '@taiga-ui/experience-next/template-block-spacing':
+                angularVersion >= modernAngularRules.preferControlFlow ? 'error' : 'off',
         },
     },
     {
