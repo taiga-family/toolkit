@@ -61,6 +61,7 @@ import singleLineClassPropertySpacing from './rules/recommended/single-line-clas
 import singleLineLetSpacing from './rules/recommended/single-line-let-spacing';
 import singleLineVariableSpacing from './rules/recommended/single-line-variable-spacing';
 import standaloneImportsSort from './rules/recommended/standalone-imports-sort';
+import templateBlockSpacing from './rules/recommended/template-block-spacing';
 import arrayAsConst from './rules/taiga-specific/array-as-const';
 import classPropertyNaming from './rules/taiga-specific/class-property-naming';
 import flatExports from './rules/taiga-specific/flat-exports';
@@ -144,6 +145,7 @@ const plugin = {
         'single-line-variable-spacing': singleLineVariableSpacing,
         'standalone-imports-sort': standaloneImportsSort,
         'strict-tui-doc-example': strictTuiDocExample,
+        'template-block-spacing': templateBlockSpacing,
     },
 };
 
