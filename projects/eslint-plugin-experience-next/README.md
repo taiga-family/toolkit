@@ -1,7 +1,7 @@
 ### `@taiga-ui/eslint-plugin-experience-next`
 
 ```bash
-npm i -D eslint @taiga-ui/eslint-plugin-experience-next
+npm i -D eslint@^10.14.0 @taiga-ui/eslint-plugin-experience-next
 ```
 
 `eslint.config.ts`
@@ -42,6 +42,9 @@ from third-party plugins. The exact severities and file globs live in
 Jest rules are optional. Add `...taiga.configs.jest` after `...taiga.configs.recommended` when the project uses Jest;
 omit it for Vitest projects.
 
+Import rule IDs use the `import/*` prefix. Use `unicorn/prefer-node-protocol` in place of
+`import/enforce-node-protocol-usage` and the `import-x/*` prefix for resolver settings.
+
 | Package                                                                                                                                            | What is included in `recommended`                                                                                 |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | [ESLint core](https://eslint.org/docs/latest/rules/)                                                                                               | `eslint.configs.recommended` and individual core rules for JS/TS files                                            |
@@ -56,7 +59,7 @@ omit it for Vitest projects.
 | [eslint-plugin-de-morgan](https://github.com/azat-io/eslint-plugin-de-morgan#rules)                                                                | `deMorganConfigs.recommended` for JS/TS files                                                                     |
 | [eslint-plugin-decorator-position](https://github.com/NullVoxPopuli/eslint-plugin-decorator-position/blob/master/docs/rules/decorator-position.md) | Individual `decorator-position/*` rules for JS/TS files                                                           |
 | [eslint-plugin-file-progress](https://github.com/sibiraj-s/eslint-plugin-file-progress#readme)                                                     | `progress.configs['recommended-ci']`                                                                              |
-| [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import#rules)                                                                    | `flatConfigs.recommended`, `flatConfigs.typescript`, and individual `import/*` rules for JS/TS files              |
+| [eslint-plugin-import-x](https://github.com/un-ts/eslint-plugin-import-x#rules)                                                                    | Individual `import/*` rules for JS/TS files                                                                       |
 | [eslint-plugin-package-json](https://github.com/michaelfaith/eslint-plugin-package-json#supported-rules)                                           | `packageJsonConfigs.recommended` and individual `package-json/*` rules for `**/package.json`                      |
 | [eslint-plugin-perfectionist](https://perfectionist.dev/rules)                                                                                     | Individual `perfectionist/*` sorting rules for JS/TS files                                                        |
 | [eslint-plugin-playwright](https://github.com/mskelton/eslint-plugin-playwright#rules)                                                             | `playwright.configs['flat/recommended']` and individual `playwright/*` rules for `**/*.pw.spec.ts`                |
