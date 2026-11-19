@@ -31,6 +31,7 @@
     ],
     "type": "module",
     "dependencies": {
+        "@eslint/js": "10.0.1",
         "@eslint/markdown": "8.0.2",
         "@smarttools/eslint-plugin-rxjs": "1.0.22",
         "@stylistic/eslint-plugin": "5.10.0",
@@ -40,8 +41,8 @@
         "eslint-plugin-cypress": "6.4.1",
         "eslint-plugin-de-morgan": "2.1.2",
         "eslint-plugin-decorator-position": "6.1.0",
-        "eslint-plugin-file-progress": "3.0.2",
-        "eslint-plugin-import": "2.32.0",
+        "eslint-plugin-file-progress": "4.0.0",
+        "eslint-plugin-import-x": "4.17.1",
         "eslint-plugin-jest": "29.15.2",
         "eslint-plugin-package-json": "1.5.0",
         "eslint-plugin-perfectionist": "5.9.1",
@@ -60,7 +61,7 @@
         "@typescript-eslint/rule-tester": "8.62.0"
     },
     "peerDependencies": {
-        "eslint": "^9.39.4",
+        "eslint": "^10.14.0",
         "typescript": ">=5.7.0 <7.0.0"
     },
     "publishConfig": {

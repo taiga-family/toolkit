@@ -1,5 +1,4 @@
 import angular from 'angular-eslint';
-import {type Rule} from 'eslint';
 
 import {createRule} from '../utils/create-rule';
 
@@ -14,7 +13,7 @@ if (!noDuplicateAttributesRule) {
 
 export const rule = createRule({
     name: 'no-duplicate-attrs',
-    rule: noDuplicateAttributesRule as Rule.RuleModule,
+    rule: noDuplicateAttributesRule,
 });
 
 export default rule;
