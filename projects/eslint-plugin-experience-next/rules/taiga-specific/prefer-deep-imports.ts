@@ -174,7 +174,7 @@ export const rule = createRule<RuleOptions, MessageIds>({
                 const currentState = getState();
 
                 const rootEntryDirectory = getCachedRootEntryDirectory({
-                    fromFile: context.getFilename(),
+                    fromFile: context.filename,
                     importPath: rawImportPath,
                     state: currentState,
                 });

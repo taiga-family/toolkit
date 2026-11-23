@@ -37,7 +37,7 @@ export const rule = createRule<Options, MessageIds>({
         context,
         [{decorators = DEFAULT_DECORATORS, exceptions = DEFAULT_EXCEPTIONS}],
     ) {
-        const sourceCode = context.getSourceCode();
+        const {sourceCode} = context;
         const allowedDecorators = new Set(decorators);
 
         const importedFromTaiga: Record<

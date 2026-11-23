@@ -10,7 +10,7 @@ import cypress from 'eslint-plugin-cypress';
 import {configs as deMorganConfigs} from 'eslint-plugin-de-morgan';
 import decoratorPosition from 'eslint-plugin-decorator-position';
 import progress from 'eslint-plugin-file-progress';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import packageJson, {configs as packageJsonConfigs} from 'eslint-plugin-package-json';
 import perfectionist from 'eslint-plugin-perfectionist';
 import playwright from 'eslint-plugin-playwright';
@@ -33,6 +33,8 @@ import {getDefaultParserOptions} from './utils/get-default-parser-options';
 import {angularVersion, modernAngularRules} from './utils/get-ng-version';
 
 export const ALL_TS_JS_FILES = ['**/*.{js,mjs,ts,cjs,cts,tsx,jsx}'];
+
+const importSettings = importPlugin.flatConfigs.typescript.settings;
 
 export default defineConfig([
     progress.configs['recommended-ci'],
@@ -65,6 +67,7 @@ export default defineConfig([
         plugins: {
             '@stylistic': stylistic,
             'decorator-position': decoratorPosition,
+            import: importPlugin,
             perfectionist,
             prettier,
             regexp,
@@ -75,8 +78,6 @@ export default defineConfig([
         },
         extends: [
             deMorganConfigs.recommended,
-            importPlugin.flatConfigs.recommended,
-            importPlugin.flatConfigs.typescript,
             promise.configs['flat/recommended'],
             compat.configs['flat/recommended'],
             regexpConfigs['flat/recommended'],
@@ -101,6 +102,10 @@ export default defineConfig([
         settings: {
             browserslistOpts: {env: 'modern'},
             ignoreConditionalChecks: false,
+            ...importSettings,
+            'import-x/resolver': {
+                node: {extensions: importSettings?.['import-x/extensions']},
+            },
             lintAllEsApis: true,
             polyfills: ['Array.prototype.at', 'String.prototype.at'],
             regexp: {allowedCharacterRanges: ['all']},
@@ -402,9 +407,9 @@ export default defineConfig([
             'guard-for-in': 'error',
             'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
             'import/default': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
-            'import/enforce-node-protocol-usage': ['error', 'always'],
             'import/export': 'off',
             'import/first': 'error',
+            'import/named': 'off',
             'import/namespace': 'off', // Covered by @taiga-ui/experience-next/import-integrity.
             'import/newline-after-import': ['error', {count: 1}],
             'import/no-absolute-path': 'error',
@@ -626,6 +631,7 @@ export default defineConfig([
             'unicorn/no-useless-undefined': ['error', {checkArguments: false}],
             'unicorn/prefer-dom-node-append': 'off', // TODO: should be error?
             'unicorn/prefer-logical-operator-over-ternary': 'error',
+            'unicorn/prefer-node-protocol': 'error',
             'unicorn/prefer-number-properties': 'error',
             'unicorn/prefer-prototype-methods': 'error',
             'unicorn/prefer-query-selector': 'error',
